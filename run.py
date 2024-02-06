@@ -12,6 +12,7 @@ def selectEnum(enum, find):
             return constant
     raise ValueError("no value")
 
+
 def run():
     """
     1. Register 생성
@@ -54,6 +55,3 @@ def run():
     Register.addItem(RegisterItem)
     
     Register.getRegisterItem()
-
-if __name__ == "__main__":
-    run()

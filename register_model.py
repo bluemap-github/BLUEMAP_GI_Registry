@@ -67,7 +67,7 @@ class S100_RE_Register:
     def getRegisterItem(self):
         R_items = self.s100_RE_RegisterItem
         if R_items:
-            print("This is a list of items.")
+            print("This is a list of registered Items.")
             print("------------------")
             for item in R_items:
                 print(item.name)
