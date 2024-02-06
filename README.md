@@ -48,6 +48,7 @@
 - date 자료형은 클래스를 선언할 때 자료형을 지정해주지 않아서, 데이터를 입력하는 단계에서 validation을 거친 후 데이터를 저장하는 식으로 처리하였습니다. (`validation.py`)
 -  `viewItem()` 메서드로 등록한 데이터를 조회할 수 있게 했습니다.
 <br>
+
 ### run.py
 
 - `main.py` 함수를 실행하면  `run.py > run()` 을 호출합니다.
@@ -71,6 +72,7 @@
 	```
 
 <br>
+
 ### validation.py
 - `enumValid` : 입력한 값이 enum에 있는지를 검증하고, 없으면 ValueError를 발생시킵니다.
 - `dateValid` : 입력한 값이 datetime 자료형인지 검증하고, 아니면 ValueError를 발생시킵니다.
