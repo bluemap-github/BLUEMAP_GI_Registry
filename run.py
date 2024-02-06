@@ -1,16 +1,11 @@
 from sample_data import Register_data, Registerltem_data, Managementinfo_data
 import register_model
+from validation import enumValid
 
 proposal_type = register_model.S100_RE_ProposalType
 proposal_status = register_model.S100_RE_ProposalStatus
 similarity_to_source = register_model.S100_RE_SimilarityToSource
 item_status = register_model.S100_RE_ItemStatus
-
-def selectEnum(enum, find):
-    for constant in enum:
-        if constant.value == find:
-            return constant
-    raise ValueError("no value")
 
 
 def run():
@@ -32,18 +27,18 @@ def run():
     """
     print("2. RegisterItem 생성\n")
     Managementinfo = register_model.S100_RE_ManagementInfo(
-        selectEnum(proposal_type, Managementinfo_data["proposal Type"]),
+        enumValid(proposal_type, Managementinfo_data["proposal Type"]),
         Managementinfo_data["submittingOrganisation"],
         Managementinfo_data["proposedChange"],
         Managementinfo_data["dateProposed"],
         Managementinfo_data["dateAmended"],
-        selectEnum(proposal_status, Managementinfo_data["proposal Status"])
+        enumValid(proposal_status, Managementinfo_data["proposal Status"])
     )
 
     RegisterItem = register_model.S100_RE_RegisterItem(
         Registerltem_data["itemIdentifier"],
         Registerltem_data["name"],
-        selectEnum(item_status, Registerltem_data["itemStatus"]),
+        enumValid(item_status, Registerltem_data["itemStatus"]),
         Managementinfo
     )
     RegisterItem.viewItem()

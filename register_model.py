@@ -1,10 +1,5 @@
 from enum import Enum
-import datetime
-
-def dateValid(value):
-    if not isinstance(value, datetime.date): 
-        raise ValueError("datetime Error")
-    return value
+from validation import dateValid
 
 class S100_RE_ProposalType(Enum):
     ADDITION = "addition"
@@ -48,7 +43,7 @@ class S100_RE_Register:
         self.operatingLanguage = operatingLanguage
         self.contentSummary = contentSummary
         self.uniformResourceIdentifier = uniformResourceIdentifier
-        self.dateOfLastChange = dateValid(dateOfLastChange)
+        self.dateOfLastChange = dateValid(dateOfLastChange)  # date 자료형 검증 후 저장
         self.s100_RE_RegisterItem = []  # 0..*
     
     def addItem(self, item):
