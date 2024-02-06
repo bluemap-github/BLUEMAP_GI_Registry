@@ -27,8 +27,9 @@
 
 `\S100-Register` 경로에서 다음의 코드를 실행시킵니다. 
 
-`python main.py`
-
+```
+python main.py
+```
 
 <br>
 
