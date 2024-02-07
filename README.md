@@ -1,4 +1,4 @@
-# S100-Registery system
+# S100-Registry system
 - s-100의 registry 클래스 다이어그램을 파이썬으로 구현하였습니다.
 - 개발환경 : python 3.9
 
