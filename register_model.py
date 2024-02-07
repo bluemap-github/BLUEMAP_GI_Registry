@@ -122,7 +122,7 @@ class S100_RE_RegisterItem:
     
     def viewItem(self):
         RI_dict = self.__dict__
-        print("This is information about the register item.")
+        print("This is information about the registered Item.")
         print("------------------------------------------")
         for info in RI_dict:
             print(f"{info} : {RI_dict[info]}")
