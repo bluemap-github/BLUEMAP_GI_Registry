@@ -31,7 +31,7 @@ class S100_RE_ItemStatus(Enum):
     PROCESSING = "processing"
     VALID = "valid"
     SUPERSEDED = "superseded"
-    NOT_VALIED = "notValid"
+    NOT_VALID = "notValid"
     RETIRED = "retired"
     CLARIFIED = "clarified"
 
@@ -70,6 +70,16 @@ class S100_RE_Register:
             print()
         else:
             print("The list is empty.")
+    
+    def addRemarksToItem(self, item_name, remarks):
+        """
+        등록된 RegisterItem의 속성 "remarks"를 추가하는 메서드
+        :param item_name: remarks를 추가할 RegisterItem의 이름
+        :param remarks: 추가할 remarks 내용
+        """
+        for item in self.s100_RE_RegisterItem:
+            if item.name == item_name:
+                item.addRemarks(remarks)
 
 class S100_RE_RegisterItem:
     def __init__(self, itemIdentifier, name, itemStatus, s100_RE_ManagementInfo):

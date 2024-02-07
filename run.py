@@ -50,3 +50,15 @@ def run():
     Register.addItem(RegisterItem)
     
     Register.getRegisterItem()
+
+
+    """
+    4. 등록된 RegisterItem의 속성"remarks" 추가
+    """
+    print("4. 등록된 RegisterItem의 속성remarks 추가\n")
+    for item in Register.s100_RE_RegisterItem:
+        if item.name == "item1":
+            item.addRemarks("remarks1")
+            item.viewItem()
+    
+    
