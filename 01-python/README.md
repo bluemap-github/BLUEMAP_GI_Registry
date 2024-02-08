@@ -37,7 +37,7 @@ python main.py
 
 - 다음의 내용을 반영하여 구현하였습니다.
 
-![](img/classDiagram.PNG)
+![](../img/classDiagram.PNG)
 <br>
 
 ### register_model.py
