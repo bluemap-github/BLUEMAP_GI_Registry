@@ -75,7 +75,7 @@ class S100_RE_ManagementInfo(models.Model):
 
 class S100_RE_Reference(models.Model):
     s100_RE_RegisterItem = models.OneToOneField('S100_RE_RegisterItem', on_delete=models.CASCADE)
-    referenceldentifier = models.CharField(max_length=100, blank=True, null=True)
+    referenceIdentifier = models.CharField(max_length=100, blank=True, null=True)
     sourceDocument = models.CharField(max_length=100)
     similarity = models.CharField(max_length=100, choices=[(element.value, element.value) for element in S100_RE_SimilarityToSource])# Enum - S100_RE_SimilarityToSource
 
@@ -83,5 +83,5 @@ class S100_RE_Reference(models.Model):
 
 class S100_RE_ReferenceSource(models.Model):
     s100_RE_RegisterItem = models.ForeignKey('S100_RE_RegisterItem', on_delete=models.CASCADE)
-    referenceldentifier = models.CharField(max_length=100, blank=True, null=True)
+    referenceIdentifier = models.CharField(max_length=100, blank=True, null=True)
     sourceDocument = models.CharField(max_length=100)
