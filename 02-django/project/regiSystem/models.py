@@ -1,6 +1,14 @@
 from django.db import models
 from enum import Enum
 
+class S100_RE_ItemStatus(Enum):
+    PROCESSING = "processing"
+    VALID = "valid"
+    SUPERSEDED = "superseded"
+    NOT_VALID = "notValid"
+    RETIRED = "retired"
+    CLARIFIED = "clarified"
+
 class S100_RE_ProposalType(Enum):
     ADDITION = "addition"
     CLARIFICATION = "clarification"
@@ -27,29 +35,53 @@ class S100_RE_SimilarityToSource(Enum):
     SPECIALIZATION = "specialization"
     UNSPECIFIED = "unspecified"
 
-class S100_RE_ItemStatus(Enum):
-    PROCESSING = "processing"
-    VALID = "valid"
-    SUPERSEDED = "superseded"
-    NOT_VALID = "notValid"
-    RETIRED = "retired"
-    CLARIFIED = "clarified"
+
+class S100_RE_Register(models.Model):
+    name = models.CharField(max_length=100)
+    operatingLanguage = models.CharField(max_length=100)
+    contentSummary = models.TextField()
+    uniformResourceIdentifier = models.CharField(max_length=100)
+    dateOfLastChange = models.DateField()
 
 
 class S100_RE_RegisterItem(models.Model):
-    itemIdentifier = models.CharField(max_length=50)
-    name = models.CharField(max_length=50)
-    definition = models.CharField(max_length=100, null=True, blank=True)
-    remarks = models.CharField(max_length=100, null=True, blank=True)
-    itemStatus = models.CharField(max_length=50)
-    # alias = models.ForeignKey(Alias, on_delete=models.CASCADE, null=True)  # 0..1
-    camelCase = models.CharField(max_length=100, null=True, blank=True)
-    definitionSource = models.CharField(max_length=100, null=True, blank=True)
-    reference = models.CharField(max_length=100, null=True, blank=True)
-    similarityToSource = models.CharField(max_length=100, null=True, blank=True)
-    justification = models.CharField(max_length=100, null=True, blank=True)
-    proposedChange = models.CharField(max_length=100, null=True, blank=True)
+    s100_RE_Register = models.ForeignKey('S100_RE_Register', on_delete=models.CASCADE)
+    itemIdentifier = models.IntegerField()
+    name = models.CharField(max_length=100)
+    definition = models.TextField(blank=True, null=True)
+    remarks = models.TextField(blank=True, null=True)
+    itemStatus = models.CharField(max_length=50, choices=[(element.value, element.value) for element in S100_RE_ItemStatus])# Enum - S100_RE_ItemStatus
+    alias = models.JSONField(default=list, null=True) 
+    camelCase = models.CharField(max_length=100, blank=True, null=True)
+    definitionSource = models.CharField(max_length=100, blank=True, null=True)
+    reference = models.CharField(max_length=100, blank=True, null=True)
+    similarityToSource = models.CharField(max_length=100, blank=True, null=True)
+    justification = models.CharField(max_length=100, blank=True, null=True)
+    proposedChange = models.CharField(max_length=100, blank=True, null=True)
 
-    # s100_RE_ManagementInfo = models.ForeignKey(Alias, on_delete=models.CASCADE)
-    # s100_RE_Reference = models.ForeignKey(Alias, on_delete=models.CASCADE, null=True)
-    # s100_RE_ReferenceSource = models.ForeignKey(Alias, on_delete=models.CASCADE, null=True)
+
+
+class S100_RE_ManagementInfo(models.Model):
+    s100_RE_RegisterItem = models.ForeignKey('S100_RE_RegisterItem', on_delete=models.CASCADE)
+    proposalType = models.CharField(max_length=100, choices=[(element.value, element.value) for element in S100_RE_ProposalType])# Enum - S100_RE_ProposalType
+    submittingOrganisation = models.CharField(max_length=100)
+    proposedChange = models.CharField(max_length=100)
+    dateAccepted = models.DateField(null=True)
+    dateProposed = models.DateField()
+    dateAmended = models.DateField()
+    proposalStatus = models.CharField(max_length=100, choices=[(element.value, element.value) for element in S100_RE_ProposalStatus])# Enum - S100_RE_ProposalStatus
+    controlBodyNotes = models.JSONField(default=list, null=True) 
+
+
+class S100_RE_Reference(models.Model):
+    s100_RE_RegisterItem = models.OneToOneField('S100_RE_RegisterItem', on_delete=models.CASCADE)
+    referenceldentifier = models.CharField(max_length=100, blank=True, null=True)
+    sourceDocument = models.CharField(max_length=100)
+    similarity = models.CharField(max_length=100, choices=[(element.value, element.value) for element in S100_RE_SimilarityToSource])# Enum - S100_RE_SimilarityToSource
+
+    
+
+class S100_RE_ReferenceSource(models.Model):
+    s100_RE_RegisterItem = models.ForeignKey('S100_RE_RegisterItem', on_delete=models.CASCADE)
+    referenceldentifier = models.CharField(max_length=100, blank=True, null=True)
+    sourceDocument = models.CharField(max_length=100)

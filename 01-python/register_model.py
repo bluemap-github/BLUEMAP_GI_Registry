@@ -88,7 +88,7 @@ class S100_RE_RegisterItem:
         self.definition = None  # 0..1
         self.remarks = None
         self.itemStatus = itemStatus
-        self.alias = []
+        self.alias = [] 
         self.camelCase = None
         self.definitionSource = None
         self.reference = None
