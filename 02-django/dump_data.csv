@@ -1,0 +1,25 @@
+# S100_RE_Register,,,,,,,,,,,,
+name,operatingLanguage,contentSummary,uniformResourceIdentifier,dateOfLastChange,,,,,,,,
+Sample Register,English,This is a sample register content summary.,http://example.com/sample-register,2024-02-13,,,,,,,,
+,,,,,,,,,,,,
+# S100_RE_RegisterItem,,,,,,,,,,,,
+s100_RE_Register_id,itemIdentifier,name,definition,remarks,itemStatus,alias,camelCase,definitionSource,reference,similarityToSource,justification,proposedChange
+1,1,Item 1,Definition of Item 1,Remarks for Item 1,processing,[],itemOne,Source for definition of Item 1,Reference for Item 1,identical,Justification for Item 1,Proposed change for Item 1
+1,2,Item 2,Definition of Item 2,Remarks for Item 2,valid,[],itemTwo,Source for definition of Item 2,Reference for Item 2,restyled,Justification for Item 2,Proposed change for Item 2
+1,3,Item 3,Definition of Item 3,Remarks for Item 3,superseded,[],itemThree,Source for definition of Item 3,Reference for Item 3,contextAdded,Justification for Item 3,Proposed change for Item 3
+1,4,Item 4,Definition of Item 4,Remarks for Item 4,notValid,[],itemFour,Source for definition of Item 4,Reference for Item 4,generalization,Justification for Item 4,Proposed change for Item 4
+1,5,Item 5,Definition of Item 5,Remarks for Item 5,retired,[],itemFive,Source for definition of Item 5,Reference for Item 5,specialization,Justification for Item 5,Proposed change for Item 5
+,,,,,,,,,,,,
+# S100_RE_ManagementInfo,,,,,,,,,,,,
+s100_RE_RegisterItem_id,proposalType,submittingOrganisation,proposedChange,dateAccepted,dateProposed,dateAmended,proposalStatus,controlBodyNotes,,,,
+1,addition,Organization 1,Proposed change for Item 1,2024-02-13,2024-02-12,2024-02-14,notYetDetermined,[],,,,
+2,clarification,Organization 2,Proposed change for Item 2,,2024-02-10,2024-02-12,transferred,[],,,,
+3,supersession,Organization 3,Proposed change for Item 3,,2024-02-09,2024-02-11,accepted,[],,,,
+4,retirement,Organization 4,Proposed change for Item 4,2024-02-11,2024-02-08,2024-02-10,rejected,[],,,,
+5,addition,Organization 5,Proposed change for Item 5,2024-02-10,2024-02-07,2024-02-09,withdrawn,[],,,,
+,,,,,,,,,,,,
+# S100_RE_Reference,,,,,,,,,,,,
+s100_RE_RegisterItem_id,referenceldentifier,sourceDocument,similarity,,,,,,,,,
+1,Reference1,Document1,identical,,,,,,,,,
+2,Reference2,Document2,restyled,,,,,,,,,
+3,Reference3,Document3,contextAdded,,,,,,,,,
