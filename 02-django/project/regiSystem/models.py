@@ -60,7 +60,6 @@ class S100_RE_RegisterItem(models.Model):
     proposedChange = models.CharField(max_length=100, blank=True, null=True)
 
 
-
 class S100_RE_ManagementInfo(models.Model):
     s100_RE_RegisterItem = models.ForeignKey('S100_RE_RegisterItem', on_delete=models.CASCADE)
     proposalType = models.CharField(max_length=100, choices=[(element.value, element.value) for element in S100_RE_ProposalType])# Enum - S100_RE_ProposalType
@@ -73,15 +72,18 @@ class S100_RE_ManagementInfo(models.Model):
     controlBodyNotes = models.JSONField(default=list, null=True) 
 
 
-class S100_RE_Reference(models.Model):
+class S100_RE_ReferenceSource(models.Model):
     s100_RE_RegisterItem = models.OneToOneField('S100_RE_RegisterItem', on_delete=models.CASCADE)
     referenceIdentifier = models.CharField(max_length=100, blank=True, null=True)
     sourceDocument = models.CharField(max_length=100)
     similarity = models.CharField(max_length=100, choices=[(element.value, element.value) for element in S100_RE_SimilarityToSource])# Enum - S100_RE_SimilarityToSource
 
-    
 
-class S100_RE_ReferenceSource(models.Model):
+class S100_RE_Reference(models.Model):
     s100_RE_RegisterItem = models.ForeignKey('S100_RE_RegisterItem', on_delete=models.CASCADE)
     referenceIdentifier = models.CharField(max_length=100, blank=True, null=True)
     sourceDocument = models.CharField(max_length=100)
+    
+    
+
+

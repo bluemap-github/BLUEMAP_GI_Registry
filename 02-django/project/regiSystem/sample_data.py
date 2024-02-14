@@ -135,7 +135,7 @@ management_info_data = [ # 5개
     }
 ]
 
-reference_data = [ # 3개
+reference_source_data = [ # 3개
     {
         "s100_RE_RegisterItem_id": "1",
         "sourceDocument": "Document1",
@@ -155,7 +155,7 @@ reference_data = [ # 3개
     }
 ]
 
-reference_source_data = [ # 4개
+reference_data = [ # 4개
     {
         "s100_RE_RegisterItem_id": "1",
         "referenceIdentifier": "reference_source_data1",
