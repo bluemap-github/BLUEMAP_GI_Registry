@@ -35,7 +35,6 @@ class S100_RE_SimilarityToSource(Enum):
     SPECIALIZATION = "specialization"
     UNSPECIFIED = "unspecified"
 
-
 class S100_RE_Register(models.Model):
     name = models.CharField(max_length=100)
     operatingLanguage = models.CharField(max_length=100)

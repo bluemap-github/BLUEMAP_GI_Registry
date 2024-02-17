@@ -1,0 +1,425 @@
+{
+	"info": {
+		"_postman_id": "c6d50e21-733e-4442-ada4-8dd27bddf193",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "20596429"
+	},
+	"item": [
+		{
+			"name": "register_detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/v1/register/1/"
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/v1/register/1/"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 12:09:00 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.9.9"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept, Cookie"
+						},
+						{
+							"key": "Allow",
+							"value": "OPTIONS, GET"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "222"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"name\": \"Sample Register\",\n    \"operatingLanguage\": \"English\",\n    \"contentSummary\": \"This is a sample register content summary.\",\n    \"uniformResourceIdentifier\": \"http://example.com/sample-register\",\n    \"dateOfLastChange\": \"2024-02-13\"\n}"
+				}
+			]
+		},
+		{
+			"name": "item_list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/v1/itemList/"
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/v1/itemList/"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 12:06:10 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.9.9"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept, Cookie"
+						},
+						{
+							"key": "Allow",
+							"value": "OPTIONS, GET"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2066"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"itemIdentifier\": 1,\n        \"name\": \"Item 1\",\n        \"definition\": \"Definition of Item 1\",\n        \"remarks\": \"Remarks for Item 1\",\n        \"itemStatus\": \"processing\",\n        \"alias\": [],\n        \"camelCase\": \"itemOne\",\n        \"definitionSource\": \"Source for definition of Item 1\",\n        \"reference\": \"Reference for Item 1\",\n        \"similarityToSource\": \"identical\",\n        \"justification\": \"Justification for Item 1\",\n        \"proposedChange\": \"Proposed change for Item 1\",\n        \"s100_RE_Register\": 1\n    },\n    {\n        \"id\": 2,\n        \"itemIdentifier\": 2,\n        \"name\": \"Item 2\",\n        \"definition\": \"Definition of Item 2\",\n        \"remarks\": \"Remarks for Item 2\",\n        \"itemStatus\": \"valid\",\n        \"alias\": {\n            \"alias\": [\n                \"eleven\"\n            ]\n        },\n        \"camelCase\": \"itemTwo\",\n        \"definitionSource\": \"Source for definition of Item 2\",\n        \"reference\": \"Reference for Item 2\",\n        \"similarityToSource\": \"restyled\",\n        \"justification\": \"Justification for Item 2\",\n        \"proposedChange\": \"Proposed change for Item 2\",\n        \"s100_RE_Register\": 1\n    },\n    {\n        \"id\": 3,\n        \"itemIdentifier\": 3,\n        \"name\": \"Item 3\",\n        \"definition\": \"Definition of Item 3\",\n        \"remarks\": \"Remarks for Item 3\",\n        \"itemStatus\": \"superseded\",\n        \"alias\": [],\n        \"camelCase\": \"itemThree\",\n        \"definitionSource\": \"Source for definition of Item 3\",\n        \"reference\": \"Reference for Item 3\",\n        \"similarityToSource\": \"contextAdded\",\n        \"justification\": \"Justification for Item 3\",\n        \"proposedChange\": \"Proposed change for Item 3\",\n        \"s100_RE_Register\": 1\n    },\n    {\n        \"id\": 4,\n        \"itemIdentifier\": 4,\n        \"name\": \"Item 4\",\n        \"definition\": \"Definition of Item 4\",\n        \"remarks\": \"Remarks for Item 4\",\n        \"itemStatus\": \"notValid\",\n        \"alias\": {\n            \"alias\": [\n                \"alias1\",\n                \"alias2\",\n                \"alias3\"\n            ]\n        },\n        \"camelCase\": \"itemFour\",\n        \"definitionSource\": \"Source for definition of Item 4\",\n        \"reference\": \"Reference for Item 4\",\n        \"similarityToSource\": \"generalization\",\n        \"justification\": \"Justification for Item 4\",\n        \"proposedChange\": \"Proposed change for Item 4\",\n        \"s100_RE_Register\": 1\n    },\n    {\n        \"id\": 5,\n        \"itemIdentifier\": 5,\n        \"name\": \"Item 5\",\n        \"definition\": \"Definition of Item 5\",\n        \"remarks\": \"Remarks for Item 5\",\n        \"itemStatus\": \"retired\",\n        \"alias\": [],\n        \"camelCase\": \"itemFive\",\n        \"definitionSource\": \"Source for definition of Item 5\",\n        \"reference\": \"Reference for Item 5\",\n        \"similarityToSource\": \"specialization\",\n        \"justification\": \"Justification for Item 5\",\n        \"proposedChange\": \"Proposed change for Item 5\",\n        \"s100_RE_Register\": 1\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "item_detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/v1/registerItem/<int:pk>/"
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/v1/registerItem/1/"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 12:11:14 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.9.9"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept, Cookie"
+						},
+						{
+							"key": "Allow",
+							"value": "OPTIONS, GET"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1017"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"item\": {\n        \"id\": 1,\n        \"itemIdentifier\": 1,\n        \"name\": \"Item 1\",\n        \"definition\": \"Definition of Item 1\",\n        \"remarks\": \"Remarks for Item 1\",\n        \"itemStatus\": \"processing\",\n        \"alias\": [],\n        \"camelCase\": \"itemOne\",\n        \"definitionSource\": \"Source for definition of Item 1\",\n        \"reference\": \"Reference for Item 1\",\n        \"similarityToSource\": \"identical\",\n        \"justification\": \"Justification for Item 1\",\n        \"proposedChange\": \"Proposed change for Item 1\",\n        \"s100_RE_Register\": 1\n    },\n    \"management_infos\": [\n        {\n            \"id\": 1,\n            \"proposalType\": \"addition\",\n            \"submittingOrganisation\": \"Organization 1\",\n            \"proposedChange\": \"Proposed change for Item 1\",\n            \"dateAccepted\": \"2024-02-13\",\n            \"dateProposed\": \"2024-02-12\",\n            \"dateAmended\": \"2024-02-14\",\n            \"proposalStatus\": \"notYetDetermined\",\n            \"controlBodyNotes\": {\n                \"controlBodyNotes\": [\n                    \"one\",\n                    \"two\",\n                    \"three\"\n                ]\n            },\n            \"s100_RE_RegisterItem\": 1\n        }\n    ],\n    \"reference_sources\": [\n        {\n            \"id\": 1,\n            \"referenceIdentifier\": null,\n            \"sourceDocument\": \"Document1\",\n            \"similarity\": \"identical\",\n            \"s100_RE_RegisterItem\": 1\n        }\n    ],\n    \"references\": [\n        {\n            \"id\": 1,\n            \"referenceIdentifier\": \"reference_source_data1\",\n            \"sourceDocument\": \"Doc11\",\n            \"s100_RE_RegisterItem\": 1\n        }\n    ]\n}"
+				},
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/v1/registerItem/2/"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 12:11:30 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.9.9"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept, Cookie"
+						},
+						{
+							"key": "Allow",
+							"value": "OPTIONS, GET"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1103"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"item\": {\n        \"id\": 2,\n        \"itemIdentifier\": 2,\n        \"name\": \"Item 2\",\n        \"definition\": \"Definition of Item 2\",\n        \"remarks\": \"Remarks for Item 2\",\n        \"itemStatus\": \"valid\",\n        \"alias\": {\n            \"alias\": [\n                \"eleven\"\n            ]\n        },\n        \"camelCase\": \"itemTwo\",\n        \"definitionSource\": \"Source for definition of Item 2\",\n        \"reference\": \"Reference for Item 2\",\n        \"similarityToSource\": \"restyled\",\n        \"justification\": \"Justification for Item 2\",\n        \"proposedChange\": \"Proposed change for Item 2\",\n        \"s100_RE_Register\": 1\n    },\n    \"management_infos\": [\n        {\n            \"id\": 2,\n            \"proposalType\": \"clarification\",\n            \"submittingOrganisation\": \"Organization 2\",\n            \"proposedChange\": \"Proposed change for Item 2\",\n            \"dateAccepted\": null,\n            \"dateProposed\": \"2024-02-10\",\n            \"dateAmended\": \"2024-02-12\",\n            \"proposalStatus\": \"transferred\",\n            \"controlBodyNotes\": [],\n            \"s100_RE_RegisterItem\": 2\n        }\n    ],\n    \"reference_sources\": [\n        {\n            \"id\": 2,\n            \"referenceIdentifier\": \"Reference2\",\n            \"sourceDocument\": \"Document2\",\n            \"similarity\": \"restyled\",\n            \"s100_RE_RegisterItem\": 2\n        }\n    ],\n    \"references\": [\n        {\n            \"id\": 2,\n            \"referenceIdentifier\": \"reference_source_data32\",\n            \"sourceDocument\": \"Document28\",\n            \"s100_RE_RegisterItem\": 2\n        },\n        {\n            \"id\": 4,\n            \"referenceIdentifier\": \"reference_source_data556\",\n            \"sourceDocument\": \"Doc121\",\n            \"s100_RE_RegisterItem\": 2\n        }\n    ]\n}"
+				},
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/v1/registerItem/3/"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 12:11:38 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.9.9"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept, Cookie"
+						},
+						{
+							"key": "Allow",
+							"value": "OPTIONS, GET"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "987"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"item\": {\n        \"id\": 3,\n        \"itemIdentifier\": 3,\n        \"name\": \"Item 3\",\n        \"definition\": \"Definition of Item 3\",\n        \"remarks\": \"Remarks for Item 3\",\n        \"itemStatus\": \"superseded\",\n        \"alias\": [],\n        \"camelCase\": \"itemThree\",\n        \"definitionSource\": \"Source for definition of Item 3\",\n        \"reference\": \"Reference for Item 3\",\n        \"similarityToSource\": \"contextAdded\",\n        \"justification\": \"Justification for Item 3\",\n        \"proposedChange\": \"Proposed change for Item 3\",\n        \"s100_RE_Register\": 1\n    },\n    \"management_infos\": [\n        {\n            \"id\": 3,\n            \"proposalType\": \"supersession\",\n            \"submittingOrganisation\": \"Organization 3\",\n            \"proposedChange\": \"Proposed change for Item 3\",\n            \"dateAccepted\": null,\n            \"dateProposed\": \"2024-02-09\",\n            \"dateAmended\": \"2024-02-11\",\n            \"proposalStatus\": \"accepted\",\n            \"controlBodyNotes\": [],\n            \"s100_RE_RegisterItem\": 3\n        }\n    ],\n    \"reference_sources\": [\n        {\n            \"id\": 3,\n            \"referenceIdentifier\": \"Reference3\",\n            \"sourceDocument\": \"Document3\",\n            \"similarity\": \"contextAdded\",\n            \"s100_RE_RegisterItem\": 3\n        }\n    ],\n    \"references\": [\n        {\n            \"id\": 3,\n            \"referenceIdentifier\": \"reference_source_data5\",\n            \"sourceDocument\": \"Document334\",\n            \"s100_RE_RegisterItem\": 3\n        }\n    ]\n}"
+				},
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/v1/registerItem/4/"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 12:11:47 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.9.9"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept, Cookie"
+						},
+						{
+							"key": "Allow",
+							"value": "OPTIONS, GET"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "892"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"item\": {\n        \"id\": 4,\n        \"itemIdentifier\": 4,\n        \"name\": \"Item 4\",\n        \"definition\": \"Definition of Item 4\",\n        \"remarks\": \"Remarks for Item 4\",\n        \"itemStatus\": \"notValid\",\n        \"alias\": {\n            \"alias\": [\n                \"alias1\",\n                \"alias2\",\n                \"alias3\"\n            ]\n        },\n        \"camelCase\": \"itemFour\",\n        \"definitionSource\": \"Source for definition of Item 4\",\n        \"reference\": \"Reference for Item 4\",\n        \"similarityToSource\": \"generalization\",\n        \"justification\": \"Justification for Item 4\",\n        \"proposedChange\": \"Proposed change for Item 4\",\n        \"s100_RE_Register\": 1\n    },\n    \"management_infos\": [\n        {\n            \"id\": 4,\n            \"proposalType\": \"retirement\",\n            \"submittingOrganisation\": \"Organization 4\",\n            \"proposedChange\": \"Proposed change for Item 4\",\n            \"dateAccepted\": \"2024-02-11\",\n            \"dateProposed\": \"2024-02-08\",\n            \"dateAmended\": \"2024-02-10\",\n            \"proposalStatus\": \"rejected\",\n            \"controlBodyNotes\": {\n                \"controlBodyNotes\": [\n                    \"controlBodyNotes1\",\n                    \"controlBodyNotes2\",\n                    \"controlBodyNotes3\",\n                    \"controlBodyNotes4\"\n                ]\n            },\n            \"s100_RE_RegisterItem\": 4\n        }\n    ],\n    \"reference_sources\": [],\n    \"references\": []\n}"
+				},
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/v1/registerItem/5/"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Feb 2024 12:11:59 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "WSGIServer/0.2 CPython/3.9.9"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept, Cookie"
+						},
+						{
+							"key": "Allow",
+							"value": "OPTIONS, GET"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "754"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"item\": {\n        \"id\": 5,\n        \"itemIdentifier\": 5,\n        \"name\": \"Item 5\",\n        \"definition\": \"Definition of Item 5\",\n        \"remarks\": \"Remarks for Item 5\",\n        \"itemStatus\": \"retired\",\n        \"alias\": [],\n        \"camelCase\": \"itemFive\",\n        \"definitionSource\": \"Source for definition of Item 5\",\n        \"reference\": \"Reference for Item 5\",\n        \"similarityToSource\": \"specialization\",\n        \"justification\": \"Justification for Item 5\",\n        \"proposedChange\": \"Proposed change for Item 5\",\n        \"s100_RE_Register\": 1\n    },\n    \"management_infos\": [\n        {\n            \"id\": 5,\n            \"proposalType\": \"addition\",\n            \"submittingOrganisation\": \"Organization 5\",\n            \"proposedChange\": \"Proposed change for Item 5\",\n            \"dateAccepted\": \"2024-02-10\",\n            \"dateProposed\": \"2024-02-07\",\n            \"dateAmended\": \"2024-02-09\",\n            \"proposalStatus\": \"withdrawn\",\n            \"controlBodyNotes\": [],\n            \"s100_RE_RegisterItem\": 5\n        }\n    ],\n    \"reference_sources\": [],\n    \"references\": []\n}"
+				}
+			]
+		}
+	]
+}
