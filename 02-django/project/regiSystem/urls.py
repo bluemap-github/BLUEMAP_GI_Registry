@@ -1,26 +1,53 @@
 from django.urls import path
-from . import views
+from .views import (get, post, put, delete)
 
 app_name = 'movies'
 urlpatterns = [
-    # GET
-    path('createRegistry/', views.create_sample),
-    path('register/<int:pk>/', views.register_detail),
-    path('itemList/', views.item_list),
-    path('registerItem/<int:pk>/', views.item_detail),
-    # POST
-    path('registerItem/add/', views.create_item),
-    path('registerItem/<int:pk>/managementInfo/add/', views.create_managemant_info),
-    path('registerItem/<int:pk>/referenceSource/add/', views.create_reference_source),
-    path('registerItem/<int:pk>/reference/add/', views.create_reference),
-    # PUT
-    path('registerItem/<int:pk>/put/', views.put_item),
-    path('registerItem/managementInfo/<int:pk>/put/', views.put_managemant_info),
-    path('registerItem/referenceSource/<int:pk>/put/', views.put_reference_source),
-    path('registerItem/reference/<int:pk>/put/', views.put_reference),
-    #DELETE
-    path('registerItem/<int:pk>/delete/', views.delete_item),
-    path('registerItem/managementInfo/<int:pk>/delete/', views.delete_managemant_info),
-    path('registerItem/referenceSource/<int:pk>/delete/', views.delete_reference_source),
-    path('registerItem/reference/<int:pk>/delete/', views.delete_reference),
+    # Register
+    ## 레지스터 리스트 조회 (임시)
+    path('registerList/', get.register_list),  
+    ## 레지스터 정보 조회
+    path('register/<int:pk>/', get.register_detail),  
+    ## 레지스터 생성
+    path('register/post/', post.register), 
+    ## 레지스터 변경
+    path('register/<int:pk>/put/', put.register),  
+    ## 레지스터 삭제
+    path('register/<int:pk>/delete/', delete.register),  
+
+    # RegisterItem
+    ## 레지스터에 등록된 아이템 리스트 조회
+    path('register/<int:pk>/itemList/', get.register_itemList), 
+    ## 아이템 개별 조회
+    path('registerItem/<int:pk>/', get.item_detail), 
+    ## 아이템 생성
+    path('registerItem/<int:pk>/post/', post.item),
+    ## 아이템 수정
+    path('registerItem/<int:pk>/put/', put.item),
+    ## 아이템 삭제
+    path('registerItem/<int:pk>/delete/', delete.item),
+
+    # ManagementInfo
+    ## ManagementInfo 생성
+    path('registerItem/<int:pk>/managementInfo/post/', post.managemant_info),
+    ## ManagementInfo 수정
+    path('registerItem/managementInfo/<int:pk>/put/', put.managemant_info),
+    ## ManagementInfo 삭제
+    path('registerItem/managementInfo/<int:pk>/delete/', delete.managemant_info),
+
+    # ReferenceSource
+    ## ReferenceSource 생성
+    path('registerItem/<int:pk>/referenceSource/post/', post.reference_source),
+    ## ReferenceSource 수정
+    path('registerItem/referenceSource/<int:pk>/put/', put.reference_source),
+    ## ReferenceSource 삭제
+    path('registerItem/referenceSource/<int:pk>/delete/', delete.reference_source),
+
+    # Reference
+    ## Reference 생성
+    path('registerItem/<int:pk>/reference/post/', post.reference),
+    ## Reference 수정
+    path('registerItem/reference/<int:pk>/put/', put.reference),
+    ## Reference 삭제
+    path('registerItem/reference/<int:pk>/delete/', delete.reference),
 ]

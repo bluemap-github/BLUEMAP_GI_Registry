@@ -28,3 +28,5 @@ We suggest that you begin by typing:
 
 Happy hacking!
 ```
+
+package.json 이 있는 곳에서 npm install
