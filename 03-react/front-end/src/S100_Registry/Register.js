@@ -6,10 +6,6 @@ import { REGISTER_ITEM_LIST_URL } from './api';
 function Register() {
   const [itemList, setItemList] = useState([]);
 
-  useEffect(() => {
-    fetchItemList();
-  }, []);
-
   const fetchItemList = async () => {
     try {
       const response = await axios.get(REGISTER_ITEM_LIST_URL);
@@ -19,29 +15,39 @@ function Register() {
     }
   };
 
+  useEffect(() => {
+    fetchItemList();
+  }, []);
+
+  
+
   return (
-    <div className="container">
-      <h1 className="text-center">Register Page</h1>
+    <div className="container mt-5">
       <div>
-        <div className="row justify-content-center">
-          <button className="btn btn-primary" onClick={fetchItemList} style={{ maxWidth: '200px', width: '100%' }}>get data</button>
-        </div>
+      <h1 className='mb-3'>Concept Register</h1>
         <div>
-          <h2>Item List:</h2>
-          <ul className="list-group">
-            {itemList.map(item => (
-              <Link to={`/detail/${item.id}`}>
-                <li className="list-group-item card mb-3" key={item.id}>
-                  <div className="card-body">
-                    <h5 className="card-title">{item.name}</h5>
-                    <p className="card-text">{JSON.stringify(item)}</p>
-                  </div>
-                </li>
-              </Link>
-            ))}
-          </ul>
+          <div>GET : {REGISTER_ITEM_LIST_URL}</div>
         </div>
+        <button onClick={fetchItemList} className="btn btn-secondary mt-3 mb-3" style={{ maxWidth: '100px', width: '100%' }}>get data</button>
       </div>
+      <div className="row align-items-center">
+          {itemList.map(item => (
+            <li key={item.id} className="card m-1 justify-content-center">
+              <Link to={`/detail/${item.id}`} style={{ textDecoration: 'none', color: 'black'}}>
+                <div className="card-body">
+                  <div className="row align-items-center">
+                    <div className="col">
+                      <h5 className="card-title">{item.id} {item.name}</h5>
+                    </div>
+                    <div className="col">
+                      <p className="card-text">{item.camelCase}</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </div>
     </div>
   );
 }
