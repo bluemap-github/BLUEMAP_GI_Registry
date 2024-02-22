@@ -14,7 +14,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 def register(request, pk):
     register = get_object_or_404(S100_RE_Register, pk=pk)
     if request.method == 'PUT':
-        serializer = S100_RE_Register(data=request.data)
+        serializer = RegisterSerializer(register, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=HTTP_201_CREATED)

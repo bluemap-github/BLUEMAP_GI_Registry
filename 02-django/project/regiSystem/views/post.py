@@ -13,15 +13,15 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 @api_view(['POST'])
 def register(request):
     if request.method == 'POST':
-        serializer = S100_RE_Register(data=request.data)
+        serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
-def item(request):
-    regi = get_object_or_404(S100_RE_Register, pk=1)
+def item(request, pk):
+    regi = get_object_or_404(S100_RE_Register, pk=pk)
     if request.method == 'POST':
         serializer = RegisterItemSerializer(data=request.data)
         if serializer.is_valid():

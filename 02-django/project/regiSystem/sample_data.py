@@ -1,9 +1,9 @@
 register_data = {
-    'name': 'Sample Register',
-    'operatingLanguage': 'English',
-    'contentSummary': 'This is a sample register content summary.',
-    'uniformResourceIdentifier': 'http://example.com/sample-register',
-    'dateOfLastChange': '2024-02-13',
+    "name": "Sample Register",
+    "operatingLanguage": "English",
+    "contentSummary": "This is a sample register content summary.",
+    "uniformResourceIdentifier": "http://example.com/sample-register",
+    "dateOfLastChange": "2024-02-13",
 }
 
 item_data = [
@@ -201,24 +201,6 @@ management_info_data = [
 
 
 reference_source_data = [
-    {
-      "s100_RE_RegisterItem_id": 1,
-      "referenceIdentifier": "IHO S-102 Project Team",
-      "sourceDocument": "IHO S-102 Project Team",
-      "similarity": "Unspecified"
-    },
-    {
-      "s100_RE_RegisterItem_id": 2,
-      "referenceIdentifier": "IHO S-102 Project Team",
-      "sourceDocument": "IHO S-102 Project Team",
-      "similarity": "Unspecified"
-    },
-    {
-      "s100_RE_RegisterItem_id": 3,
-      "referenceIdentifier": "IHO S-102 Project Team",
-      "sourceDocument": "IHO S-102 Project Team",
-      "similarity": "Unspecified"
-    },
     {
       "s100_RE_RegisterItem_id": 4,
       "referenceIdentifier": "Edition 1.2.0, clause 28.24",
