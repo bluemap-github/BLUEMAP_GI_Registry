@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (get, post, put, delete)
+from .views import (get, post, put, delete, sample)
 
 app_name = 'movies'
 urlpatterns = [
@@ -50,4 +50,7 @@ urlpatterns = [
     path('registerItem/reference/<int:pk>/put/', put.reference),
     ## Reference 삭제
     path('registerItem/reference/<int:pk>/delete/', delete.reference),
+
+    ## sample
+    path('sample/', sample.create)
 ]

@@ -6,175 +6,310 @@ register_data = {
     'dateOfLastChange': '2024-02-13',
 }
 
-item_data = [ ## 5개
+item_data = [
     {
-        "s100_RE_Register_id": "1",
-        "itemIdentifier": "1",
-        "name": "Item 1",
-        "definition": "Definition of Item 1",
-        "remarks": "Remarks for Item 1",
-        "itemStatus": "processing",
-        "alias": [],
-        "camelCase": "itemOne",
-        "definitionSource": "Source for definition of Item 1",
-        "reference": "Reference for Item 1",
-        "similarityToSource": "identical",
-        "justification": "Justification for Item 1",
-        "proposedChange": "Proposed change for Item 1"
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 1,
+      "name": "Feature Size Variable",
+      "definition": "Percentage of depth that a feature of such size could be detected.",
+      "remarks": "Set to zero if the feature detection size does not scale with depth.",
+      "itemStatus": "valid",
+      "justification": "",
+      "proposedChange": "New"
     },
     {
-        "s100_RE_Register_id": "1",
-        "itemIdentifier": "2",
-        "name": "Item 2",
-        "definition": "Definition of Item 2",
-        "remarks": "Remarks for Item 2",
-        "itemStatus": "valid",
-        "alias": {"alias" : ["eleven"]},
-        "camelCase": "itemTwo",
-        "definitionSource": "Source for definition of Item 2",
-        "reference": "Reference for Item 2",
-        "similarityToSource": "restyled",
-        "justification": "Justification for Item 2",
-        "proposedChange": "Proposed change for Item 2"
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 2,
+      "name": "Source Survey ID",
+      "definition": "The survey filename or ID.",
+      "itemStatus": "valid"
     },
     {
-        "s100_RE_Register_id": "1",
-        "itemIdentifier": "3",
-        "name": "Item 3",
-        "definition": "Definition of Item 3",
-        "remarks": "Remarks for Item 3",
-        "itemStatus": "superseded",
-        "camelCase": "itemThree",
-        "definitionSource": "Source for definition of Item 3",
-        "reference": "Reference for Item 3",
-        "similarityToSource": "contextAdded",
-        "justification": "Justification for Item 3",
-        "proposedChange": "Proposed change for Item 3"
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 3,
+      "name": "CUBE Standard Deviation",
+      "definition": "Standard deviation of soundings captured by a CUBE hypothesis (that is, CUBE’s standard output of uncertainty).",
+      "remarks": "The Combined Uncertainty and Bathymetric Estimator (CUBE) algorithm makes use of the elevation and associated total propagated uncertainty for each contributing sounding to compute one or many hypotheses for an area of interest. The resulting hypotheses are used to estimate statistical representative depths at each nodal position.",
+      "itemStatus": "valid"
     },
     {
-        "s100_RE_Register_id": "1",
-        "itemIdentifier": "4",
-        "name": "Item 4",
-        "definition": "Definition of Item 4",
-        "remarks": "Remarks for Item 4",
-        "itemStatus": "notValid",
-        "alias": {"alias" : ["alias1", "alias2", "alias3"]},
-        "camelCase": "itemFour",
-        "definitionSource": "Source for definition of Item 4",
-        "reference": "Reference for Item 4",
-        "similarityToSource": "generalization",
-        "justification": "Justification for Item 4",
-        "proposedChange": "Proposed change for Item 4"
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 4,
+      "name": "Update Type",
+      "definition": "An action performed when the contents of a dataset are changed.",
+      "itemStatus": "valid",
+      "definitionSource": "Edition 1.2.0, clause 28.24",
+      "similarityToSource": "Identical",
+      "justification": "Required doe S-101 (Edition 1.2.0)."
     },
     {
-        "s100_RE_Register_id": "1",
-        "itemIdentifier": "5",
-        "name": "Item 5",
-        "definition": "Definition of Item 5",
-        "remarks": "Remarks for Item 5",
-        "itemStatus": "retired",
-        "camelCase": "itemFive",
-        "definitionSource": "Source for definition of Item 5",
-        "reference": "Reference for Item 5",
-        "similarityToSource": "specialization",
-        "justification": "Justification for Item 5",
-        "proposedChange": "Proposed change for Item 5"
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 5,
+      "name": "Insert",
+      "definition": "To put or introduce into the body of something.",
+      "itemStatus": "valid",
+      "definitionSource": "https://www.merriam-webster.com/dictionary/insert",
+      "reference": "Merriam-Webster's Collegiate Dictionary",
+      "similarityToSource": "Identical",
+      "proposedChange": "Add new Item."
+    },
+    {
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 6,
+      "name": "Modify",
+      "definition": "To make basic or fundamental changes to the characteristics of something, often to give a new orientation to or to serve a new end.",
+      "itemStatus": "valid",
+      "definitionSource": "https://www.merriam-webster.com/dictionary/modify",
+      "reference": "Merriam-Webster's Collegiate Dictionary",
+      "similarityToSource": "Identical"
+    },
+    {
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 7,
+      "name": "Optimum Display Scale",
+      "definition": "The largest intended viewing scale for the data.",
+      "itemStatus": "valid",
+      "definitionSource": "Edition 1.0.0, Clause 28.8",
+      "proposedChange": "Add new Item."
+    },
+    {
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 8,
+      "name": "Maximum Display Scale",
+      "definition": "The value considered by the Data Producer to be the maximum (largest) scale at which the data is to be displayed before it can be considered to be 'grossly overscaled'.",
+      "itemStatus": "valid",
+      "definitionSource": "Edition 1.2.0, Clause 28.8",
+      "reference": "S-101 IHO Electronic Navigational Chart Product Specification",
+      "proposedChange": "Amended definition."
+    },
+    {
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 9,
+      "name": "Text Rotation",
+      "definition": "A statement that expresses if text associated with a feature is to be rotated in the ECDIS display or not.",
+      "itemStatus": "valid",
+      "definitionSource": "Edition 1.2.0, Clause 27.178",
+      "similarityToSource": "Identical"
+    },
+    {
+      "s100_RE_Register_id": 1,
+      "itemIdentifier": 10,
+      "name": "Text Offset Distance",
+      "definition": "The distance that text associated with a feature is positioned from the feature in an end-user system.",
+      "itemStatus": "valid",
+      "definitionSource": "Annex A Edition 1.2.0, clause 27.177",
+      "proposedChange": "Amended Name and Definition from Text Offset Mm."
     }
 ]
 
-management_info_data = [ # 5개
+
+
+management_info_data = [
     {
-        "s100_RE_RegisterItem_id": "1",
-        "proposalType": "addition",
-        "submittingOrganisation": "Organization 1",
-        "proposedChange": "Proposed change for Item 1",
-        "dateAccepted": "2024-02-13",
-        "dateProposed": "2024-02-12",
-        "dateAmended": "2024-02-14",
-        "proposalStatus": "notYetDetermined",
-        "controlBodyNotes": {"controlBodyNotes" : ["one", "two", "three"]}
+      "s100_RE_RegisterItem_id": 1,
+      "proposalType": "addition",
+      "submittingOrganisation": "IHO Secretariat",
+      "proposedChange": "New",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
     },
     {
-        "s100_RE_RegisterItem_id": "2",
-        "proposalType": "clarification",
-        "submittingOrganisation": "Organization 2",
-        "proposedChange": "Proposed change for Item 2",
-        "dateProposed": "2024-02-10",
-        "dateAmended": "2024-02-12",
-        "proposalStatus": "transferred"
+      "s100_RE_RegisterItem_id": 2,
+      "proposalType": "addition",
+      "submittingOrganisation": "IHO Secretariat",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
     },
     {
-        "s100_RE_RegisterItem_id": "3",
-        "proposalType": "supersession",
-        "submittingOrganisation": "Organization 3",
-        "proposedChange": "Proposed change for Item 3",
-        "dateProposed": "2024-02-09",
-        "dateAmended": "2024-02-11",
-        "proposalStatus": "accepted"
+      "s100_RE_RegisterItem_id": 3,
+      "proposalType": "addition",
+      "submittingOrganisation": "IHO Secretariat",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
     },
     {
-        "s100_RE_RegisterItem_id": "4",
-        "proposalType": "retirement",
-        "submittingOrganisation": "Organization 4",
-        "proposedChange": "Proposed change for Item 4",
-        "dateAccepted": "2024-02-11",
-        "dateProposed": "2024-02-08",
-        "dateAmended": "2024-02-10",
-        "proposalStatus": "rejected",
-        "controlBodyNotes": {"controlBodyNotes" : ["controlBodyNotes1", "controlBodyNotes2", "controlBodyNotes3", "controlBodyNotes4"]}
+      "s100_RE_RegisterItem_id": 4,
+      "proposalType": "addition",
+      "submittingOrganisation": "IHO Secretariat",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
     },
     {
-        "s100_RE_RegisterItem_id": "5",
-        "proposalType": "addition",
-        "submittingOrganisation": "Organization 5",
-        "proposedChange": "Proposed change for Item 5",
-        "dateAccepted": "2024-02-10",
-        "dateProposed": "2024-02-07",
-        "dateAmended": "2024-02-09",
-        "proposalStatus": "withdrawn"
+      "s100_RE_RegisterItem_id": 5,
+      "proposalType": "addition",
+      "submittingOrganisation": "IHO Secretariat",
+      "proposedChange": "Add new Item.",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
+    },
+    {
+      "s100_RE_RegisterItem_id": 6,
+      "proposalType": "addition",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
+    },
+    {
+      "s100_RE_RegisterItem_id": 7,
+      "proposalType": "addition",
+      "proposedChange": "Add new Item.",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
+    },
+    {
+      "s100_RE_RegisterItem_id": 8,
+      "proposalType": "addition",
+      "proposedChange": "Amended definition.",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
+    },
+    {
+      "s100_RE_RegisterItem_id": 9,
+      "proposalType": "addition",
+      "submittingOrganisation": "IHO Secretariat",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
+    },
+    {
+      "s100_RE_RegisterItem_id": 10,
+      "proposalType": "addition",
+      "proposedChange": "Amended Name and Definition from Text Offset Mm.",
+      "dateAccepted": "2024-01-23",
+      "dateProposed": "2023-10-27",
+      "dateAmended": "2024-01-23",
+      "proposalStatus": "notYetDetermined"
     }
 ]
 
-reference_source_data = [ # 3개
+
+
+reference_source_data = [
     {
-        "s100_RE_RegisterItem_id": "1",
-        "sourceDocument": "Document1",
-        "similarity": "identical"
+      "s100_RE_RegisterItem_id": 1,
+      "referenceIdentifier": "IHO S-102 Project Team",
+      "sourceDocument": "IHO S-102 Project Team",
+      "similarity": "Unspecified"
     },
     {
-        "s100_RE_RegisterItem_id": "2",
-        "referenceIdentifier": "Reference2",
-        "sourceDocument": "Document2",
-        "similarity": "restyled"
+      "s100_RE_RegisterItem_id": 2,
+      "referenceIdentifier": "IHO S-102 Project Team",
+      "sourceDocument": "IHO S-102 Project Team",
+      "similarity": "Unspecified"
     },
     {
-        "s100_RE_RegisterItem_id": "3",
-        "referenceIdentifier": "Reference3",
-        "sourceDocument": "Document3",
-        "similarity": "contextAdded"
+      "s100_RE_RegisterItem_id": 3,
+      "referenceIdentifier": "IHO S-102 Project Team",
+      "sourceDocument": "IHO S-102 Project Team",
+      "similarity": "Unspecified"
+    },
+    {
+      "s100_RE_RegisterItem_id": 4,
+      "referenceIdentifier": "Edition 1.2.0, clause 28.24",
+      "sourceDocument": "Edition 1.2.0, clause 28.24",
+      "similarity": "Identical"
+    },
+    {
+      "s100_RE_RegisterItem_id": 5,
+      "referenceIdentifier": "Merriam-Webster's Collegiate Dictionary",
+      "sourceDocument": "Merriam-Webster's Collegiate Dictionary",
+      "similarity": "Identical"
+    },
+    {
+      "s100_RE_RegisterItem_id": 6,
+      "referenceIdentifier": "Merriam-Webster's Collegiate Dictionary",
+      "sourceDocument": "Merriam-Webster's Collegiate Dictionary",
+      "similarity": "Identical"
+    },
+    {
+      "s100_RE_RegisterItem_id": 7,
+      "referenceIdentifier": "S-101 IHO Electronic Navigational Chart Product Specification",
+      "sourceDocument": "IHO S-102 Project Team",
+      "similarity": "Unspecified"
+    },
+    {
+      "s100_RE_RegisterItem_id": 8,
+      "referenceIdentifier": "Revised modeling of scales (S-101 Edition 1.2.0).",
+      "sourceDocument": "S-101 IHO Electronic Navigational Chart Product Specification",
+      "similarity": "Unspecified"
+    },
+    {
+      "s100_RE_RegisterItem_id": 9,
+      "referenceIdentifier": "Edition 1.2.0, Clause 27.178",
+      "sourceDocument": "Edition 1.2.0, Clause 27.178",
+      "similarity": "Identical"
+    },
+    {
+      "s100_RE_RegisterItem_id": 10,
+      "referenceIdentifier": "S-101PT discussions (S-101PT10). Required for S-101 Edition 1.2.0.",
+      "sourceDocument": "Annex A Edition 1.2.0, clause 27.177",
+      "similarity": "Unspecified"
     }
 ]
 
-reference_data = [ # 4개
+
+reference_data = [
     {
-        "s100_RE_RegisterItem_id": "1",
-        "referenceIdentifier": "reference_source_data1",
-        "sourceDocument": "Doc11"
+      "s100_RE_RegisterItem_id": 1,
+      "sourceDocument": "IHO S-102 Project Team"
     },
     {
-        "s100_RE_RegisterItem_id": "2",
-        "referenceIdentifier": "reference_source_data32",
-        "sourceDocument": "Document28"
+      "s100_RE_RegisterItem_id": 2,
+      "sourceDocument": "IHO S-102 Project Team"
     },
     {
-        "s100_RE_RegisterItem_id": "3",
-        "referenceIdentifier": "reference_source_data5",
-        "sourceDocument": "Document334"
+      "s100_RE_RegisterItem_id": 3,
+      "sourceDocument": "IHO S-102 Project Team"
     },
     {
-        "s100_RE_RegisterItem_id": "2",
-        "referenceIdentifier": "reference_source_data556",
-        "sourceDocument": "Doc121"
+      "s100_RE_RegisterItem_id": 4,
+      "referenceIdentifier": "Edition 1.2.0, clause 28.24",
+      "sourceDocument": ""
+    },
+    {
+      "s100_RE_RegisterItem_id": 5,
+      "sourceDocument": "Merriam-Webster's Collegiate Dictionary"
+    },
+    {
+      "s100_RE_RegisterItem_id": 6,
+      "referenceIdentifier": "Merriam-Webster's Collegiate Dictionary",
+      "sourceDocument": ""
+    },
+    {
+      "s100_RE_RegisterItem_id": 7,
+      "sourceDocument": "IHO S-102 Project Team"
+    },
+    {
+      "s100_RE_RegisterItem_id": 8,
+      "sourceDocument": "S-101 IHO Electronic Navigational Chart Product Specification"
+    },
+    {
+      "s100_RE_RegisterItem_id": 9,
+      "referenceIdentifier": "Edition 1.2.0, Clause 27.178",
+      "sourceDocument": ""
+    },
+    {
+      "s100_RE_RegisterItem_id": 10,
+      "referenceIdentifier": "Annex A Edition 1.2.0, clause 27.177",
+      "sourceDocument": ""
     }
 ]
+
+
 
