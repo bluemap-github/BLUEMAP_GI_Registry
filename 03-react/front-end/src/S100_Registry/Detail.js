@@ -77,7 +77,7 @@ function MyComponent() {
           </div>
         </div>
         <div>
-          <Link to="/register">
+          <Link to="/">
               <button className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>
           </Link>
         </div>

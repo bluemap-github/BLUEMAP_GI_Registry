@@ -25,14 +25,14 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from './S100_Registry/Register';
 import Detail from './S100_Registry/Detail';
-import Home from './Home';
+// import Home from './Home';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
+        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/" element={<Register />} />
         <Route path="/detail/:id" element={<Detail />} />
         {/* 다른 경로들을 필요에 따라 추가할 수 있습니다 */}
       </Routes>
