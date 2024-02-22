@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'rest_framework',    # pip install djangorestframework
     'django_extensions', # pip install django-extensions
     'corsheaders',       # python -m pip install django-cors-headers
-    'debug_toolbar',     # 디버깅 툴
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,7 +48,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware', 
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -163,5 +161,3 @@ CORS_ALLOW_HEADERS = [  # 실제 요청을 할 때 사용될 수 있는 non-stan
 ]
 
 APPEND_SLASH = False # / 관련 에러 제거
-
-INTERNAL_IPS = ('127.0.0.1') # 디버깅 툴 적용

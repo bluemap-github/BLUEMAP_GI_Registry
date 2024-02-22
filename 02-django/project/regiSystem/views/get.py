@@ -1,12 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-
 from ..models import S100_RE_Register, S100_RE_RegisterItem, S100_RE_ManagementInfo, S100_RE_Reference, S100_RE_ReferenceSource
 from ..serializers import RegisterSerializer, ManagementInfoSerializer, ReferenceSourceSerializer, ReferenceSerializer, RegisterItemSerializer
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 
 from django.shortcuts import get_object_or_404, get_list_or_404
 
@@ -14,6 +10,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 def register_list(request):
     if request.method == 'GET':
         regist_list = get_list_or_404(S100_RE_Register)
+        print("sd")
         serializer = RegisterSerializer(regist_list, many=True)
         return Response(serializer.data)
 
