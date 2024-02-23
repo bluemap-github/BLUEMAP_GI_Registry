@@ -3,12 +3,15 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ITEM_DETAIL_URL } from './api';
 
-function MyComponent() {
+function Detail() {
+  // 동적 라우팅 변수 - 내장함수 useParams 사용
   const { id } = useParams();
 
+  // // setItemList 함수가 샐행될때마다 itemList가 업데이트 됨
   const [itemList, setItemList] = useState(null);
 
   useEffect(() => {
+    // fetchItemList 함수를 useEffect 안으로 넣어서 컴포넌트가 렌더링될때마다 호출하도록 함 - id 값을 먼저 받아와야 하기 때문
     const fetchItemList = async () => {
       try {
         const response = await axios.get(`${ITEM_DETAIL_URL}${id}/`);
@@ -85,4 +88,4 @@ function MyComponent() {
   );
 }
 
-export default MyComponent;
+export default Detail;
