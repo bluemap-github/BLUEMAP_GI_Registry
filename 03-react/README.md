@@ -5,13 +5,14 @@
 ## 디렉토리 구성
 
 ```
-📁 src
-ㄴ App.js
-ㄴ index.js
-ㄴ 📁 S100_Registry
-  ㄴ api.js
-  ㄴ Register.js
-  ㄴ Detail.js
+📁front-end
+ㄴ📁 src
+  ㄴ App.js
+  ㄴ index.js
+  ㄴ 📁 S100_Registry
+    ㄴ api.js
+    ㄴ Register.js
+    ㄴ Detail.js
 ```
 
 - index.js는 프로젝트 시작점 파일이며, App.js를 렌더링합니다.
