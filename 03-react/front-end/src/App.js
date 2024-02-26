@@ -1,15 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from './S100_Registry/Register';
-import Detail from './S100_Registry/Detail';
+import Detail from './S100_Registry/Detail/Detail';
+import InsertItem from './S100_Registry/Insert/Item';
+import Navbar from './S100_Registry/Navbar';
 
 function App() {
   return (
     <Router>
+      <Navbar/>
       <Routes>
-        {/* 하위 페이지들을 렌더링하고 url을 명시함 */}
         <Route path="/" element={<Register />} />
         <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/create" element={<InsertItem />} />
       </Routes>
     </Router>
   );
