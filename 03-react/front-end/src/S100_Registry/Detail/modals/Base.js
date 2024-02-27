@@ -1,9 +1,11 @@
 import React from 'react';
 import ItemUpdate from './ItemUpdate';
 import ManagementInfoUpdate from './ManagementInfoUpdate';
+import ReferenceSourceUpdate from './ReferenceSourceUpdate';
+import ReferenceUpdate from './ReferenceUpdate';
 
 
-function Base({ isOpen, onClose, selectedForm  }) {
+function Base({ itemList, isOpen, onClose, selectedForm  }) {
   if (!isOpen) {
     return null;
   }
@@ -11,10 +13,17 @@ function Base({ isOpen, onClose, selectedForm  }) {
   let formComponent;
   switch (selectedForm) {
     case 1:
-      formComponent = <ItemUpdate />;
+      formComponent = <ItemUpdate items={itemList.item} onClose={onClose}/>;
       break;
     case 2:
-      formComponent = <ManagementInfoUpdate />;
+      formComponent = <ManagementInfoUpdate managementInfos={itemList.management_infos} onClose={onClose}/>;
+      break;
+
+    case 3:
+      formComponent = <ReferenceSourceUpdate referenceSources={itemList.reference_sources} onClose={onClose}/>;
+      break;
+    case 4:
+      formComponent = <ReferenceUpdate references={itemList.references} onClose={onClose}/>;
       break;
     default:
       formComponent = null;
@@ -46,7 +55,6 @@ function Base({ isOpen, onClose, selectedForm  }) {
         }}
       >
         {formComponent}
-        <button onClick={onClose}>Close</button>
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ function Detail() {
   const [itemList, setItemList] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [numModal, setModalNumber] = useState(2);
+  // const [] = useState(0)
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -52,17 +53,17 @@ function Detail() {
   else return (
     <div className="container mt-5">
       
-        <Base isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} />  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
+        <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} />  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
         <h1 className='mb-3'>Concept Register</h1>
         <div>
           <div className='mb-3 mt-3'>GET : {ITEM_DETAIL_URL}{id}/</div>
         </div>
         <div className="row">
           <div className="col">
-            <ItemDetail itemList = {itemList} handleUpdateButtonClick={handleUpdateButtonClick} />
-            <ManagementInfoDetail itemList = {itemList} handleUpdateButtonClick={handleUpdateButtonClick} />
-            <ReferenceSourceDetail itemList = {itemList}/>
-            <ReferenceDetail itemList={itemList}/>
+            <ItemDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} />
+            <ManagementInfoDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} />
+            <ReferenceSourceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick}/>
+            <ReferenceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick}/>
           </div>
         </div>
         <div>

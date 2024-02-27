@@ -1,6 +1,9 @@
 import React from 'react';
 
-function ReferenceSourceDetail({itemList}){
+function ReferenceSourceDetail({itemList, handleUpdateButtonClick}){
+    const handleClick = () => {
+        handleUpdateButtonClick(3);
+    }
     return (
         <div className='mt-1 mb-3 p-3' style={{backgroundColor : '#f5f4f2'}}>
             <h4>Reference Sources</h4>
@@ -9,7 +12,7 @@ function ReferenceSourceDetail({itemList}){
                     <h5>source {idx+1}</h5>
                     <div>Source Document : {source.sourceDocument}</div>
                     <div>Similarity : {source.similarity}</div>
-                    <button style={{maxWidth:"70px"}}>Update</button>
+                    <button style={{maxWidth:"70px"}} onClick={handleClick}>Update</button>
                 </li>
             ))}
         </div>
