@@ -16,7 +16,8 @@ function Detail() {
   const [itemList, setItemList] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [numModal, setModalNumber] = useState(2);
-  // const [] = useState(0)
+  const [followIdx, setFollowIdx] = useState(1);
+  const [keyIdx, setKeyIdx] = useState(0);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -30,6 +31,14 @@ function Detail() {
     openModal();
     setModalNumber(int);
   };
+
+  const handleFollowIdx = (int) => {
+    setFollowIdx(int);
+  }
+  const handleKeyIdx = (int) => {
+    setKeyIdx(int)
+  }
+
   useEffect(() => {
     // fetchItemList 함수를 useEffect 안으로 넣어서 컴포넌트가 렌더링될때마다 호출하도록 함 - id 값을 먼저 받아와야 하기 때문
     const fetchItemList = async () => {
@@ -53,17 +62,17 @@ function Detail() {
   else return (
     <div className="container mt-5">
       
-        <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} />  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
+        <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
         <h1 className='mb-3'>Concept Register</h1>
         <div>
           <div className='mb-3 mt-3'>GET : {ITEM_DETAIL_URL}{id}/</div>
         </div>
         <div className="row">
           <div className="col">
-            <ItemDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} />
-            <ManagementInfoDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} />
-            <ReferenceSourceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick}/>
-            <ReferenceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick}/>
+            <ItemDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
+            <ManagementInfoDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
+            <ReferenceSourceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
+            <ReferenceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
           </div>
         </div>
         <div>

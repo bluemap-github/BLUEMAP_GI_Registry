@@ -5,22 +5,22 @@ const putMIUrl = (MIId) => {
     return `http://127.0.0.1:8000/api/v1/registerItem/managementInfo/${MIId}/put/`;
 };
 
-function ManagementInfoUpdate({managementInfos, onClose}){
-
-    const str = JSON.stringify(managementInfos[0])
+function ManagementInfoUpdate({itemList, onClose, followIdx}){
+    const str = JSON.stringify(itemList.management_infos[followIdx])
     const [MI, setMI] = useState(str);
-    
+    console.log(followIdx)
     const MIChange = (event) => {
         setMI(event.target.value);
     };
 
     const handleSubmitItem = async () => {
         try {
-            const MIId = managementInfos[0].id;
+            const MIId = itemList.management_infos[followIdx].id;
             const UpdatedMIData = JSON.parse(MI);
             const MIResponse = await axios.put(putMIUrl(MIId), UpdatedMIData);
             console.log('Item data successfully put:', MIResponse.data);
             onClose()
+            window.location.reload();
         } catch (error) {
             console.error('Error posting data:', error);
         }

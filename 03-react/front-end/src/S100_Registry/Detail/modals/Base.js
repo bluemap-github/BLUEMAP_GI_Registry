@@ -1,29 +1,66 @@
 import React from 'react';
-import ItemUpdate from './ItemUpdate';
-import ManagementInfoUpdate from './ManagementInfoUpdate';
-import ReferenceSourceUpdate from './ReferenceSourceUpdate';
-import ReferenceUpdate from './ReferenceUpdate';
+import ItemUpdate from './Update/ItemUpdate';
+import ManagementInfoUpdate from './Update/ManagementInfoUpdate';
+import ReferenceSourceUpdate from './Update/ReferenceSourceUpdate';
+import ReferenceUpdate from './Update/ReferenceUpdate';
+import ManagementInfoAdd from './Add/ManagementInfoAdd';
+import ReferenceSourceAdd from './Add/ReferenceSourceAdd';
+import ReferenceAdd from './Add/ReferenceAdd';
+import Delete from './Delete';
 
+const delItemUrl = (idx) => {
+  return `http://127.0.0.1:8000/api/v1/registerItem/${idx}/delete/`;
+};
 
-function Base({ itemList, isOpen, onClose, selectedForm  }) {
+const delMIUrl = (idx) => {
+  return `http://127.0.0.1:8000/api/v1/registerItem/managementInfo/${idx}/delete/`;
+};
+
+const delRSUrl = (idx) => {
+  return `http://127.0.0.1:8000/api/v1/registerItem/referenceSource/${idx}/delete/`;
+};
+
+const delRUrl = (idx) => {
+  return `http://127.0.0.1:8000/api/v1/registerItem/reference/${idx}/delete/`;
+};
+function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx}) {
   if (!isOpen) {
     return null;
   }
-
   let formComponent;
   switch (selectedForm) {
     case 1:
       formComponent = <ItemUpdate items={itemList.item} onClose={onClose}/>;
       break;
     case 2:
-      formComponent = <ManagementInfoUpdate managementInfos={itemList.management_infos} onClose={onClose}/>;
+      formComponent = <ManagementInfoUpdate itemList={itemList} onClose={onClose} followIdx={followIdx}/>;
       break;
-
     case 3:
       formComponent = <ReferenceSourceUpdate referenceSources={itemList.reference_sources} onClose={onClose}/>;
       break;
     case 4:
-      formComponent = <ReferenceUpdate references={itemList.references} onClose={onClose}/>;
+      formComponent = <ReferenceUpdate itemList={itemList} onClose={onClose} followIdx={followIdx}/>;
+      break;
+    case 5:
+      formComponent = <ManagementInfoAdd onClose={onClose} itemId={itemList.item.id}/>;
+      break;
+    case 6:
+      formComponent = <ReferenceSourceAdd onClose={onClose} itemId={itemList.item.id}/>;
+      break;
+    case 7:
+      formComponent = <ReferenceAdd onClose={onClose} itemId={itemList.item.id}/>;
+      break;
+    case 8: // del item 
+      formComponent = <Delete onClose={onClose} selectedForm={delItemUrl(keyIdx)} keyIdx={selectedForm} />;
+      break;
+    case 9: // del MI
+      formComponent = <Delete onClose={onClose} selectedForm={delMIUrl(keyIdx)} keyIdx={selectedForm} />;
+      break;
+    case 10:// del RS
+      formComponent = <Delete onClose={onClose} selectedForm={delRSUrl(keyIdx)} keyIdx={selectedForm} />;
+      break;
+    case 11:// del R
+      formComponent = <Delete onClose={onClose} selectedForm={delRUrl(keyIdx)} keyIdx={selectedForm} />;
       break;
     default:
       formComponent = null;

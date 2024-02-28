@@ -22,6 +22,7 @@ function ItemUpdate({items, onClose}){
             const itemResponse = await axios.put(putItemUrl(itemId), UpdatedItemData);
             console.log('Item data successfully put:', itemResponse.data);
             onClose()
+            window.location.reload();
         } catch (error) {
             console.error('Error posting data:', error);
         }
