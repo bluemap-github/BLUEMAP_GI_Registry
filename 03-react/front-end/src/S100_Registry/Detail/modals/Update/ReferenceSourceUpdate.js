@@ -1,47 +1,74 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 const putRSUrl = (RSId) => {
     return `http://127.0.0.1:8000/api/v1/registerItem/referenceSource/${RSId}/put/`;
 };
 
-function ReferenceSourceUpdte({referenceSources, onClose}){
-    const str = JSON.stringify(referenceSources[0])
-    const [RS, setRS] = useState(str);
-    
+function ReferenceSourceUpdate({ referenceSources, onClose }) {
+    const [RS, setRS] = useState(referenceSources[0]);
+
     const RChange = (event) => {
-        setRS(event.target.value)
-    }
+        const { name, value } = event.target;
+        setRS(prevRS => ({
+            ...prevRS,
+            [name]: value
+        }));
+    };
 
     const handleSubmitItem = async () => {
         try {
-            const RSId = referenceSources[0].id;
-            const UpdatedRSData = JSON.parse(RS);
-            const RSResponse = await axios.put(putRSUrl(RSId), UpdatedRSData);
+            const RSId = RS.id;
+            const RSResponse = await axios.put(putRSUrl(RSId), RS);
             console.log('Item data successfully put:', RSResponse.data);
-            onClose()
+            onClose();
             window.location.reload();
         } catch (error) {
             console.error('Error posting data:', error);
         }
-    }
+    };
+
     return (
         <div>
             <div>
-                <textarea
-                    className='mt-3'
-                    style={{
-                        width: "100%",
-                        height: "18rem",
-                    }}
-                    value={RS}
-                    onChange={(event) => RChange(event)}
-                ></textarea>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>referenceIdentifier</span>
+                    <input
+                        value={RS.referenceIdentifier} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="referenceIdentifier"
+                        name="referenceIdentifier"
+                        onChange={RChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>sourceDocument</span>
+                    <input
+                        value={RS.sourceDocument} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="sourceDocument"
+                        name="sourceDocument"
+                        onChange={RChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>similarity</span>
+                    <input
+                        value={RS.similarity} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="similarity"
+                        name="similarity"
+                        onChange={RChange} // 변경 핸들러 설정
+                    />
+                </div>
                 <button onClick={handleSubmitItem}>update</button>
             </div>
             <button onClick={onClose}>Close</button>
         </div>
-    )
+    );
 }
 
-export default ReferenceSourceUpdte;
+export default ReferenceSourceUpdate;

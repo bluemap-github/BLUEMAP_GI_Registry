@@ -1,49 +1,176 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const putItemUrl = (itemId) => {
     return `http://127.0.0.1:8000/api/v1/registerItem/${itemId}/put/`;
 };
 
-function ItemUpdate({items, onClose}){
+function ItemUpdate({ items, onClose }) {
+    const [item, setItem] = useState(items);
 
-    const str = JSON.stringify(items)
-    const [item, setItem] = useState(str);
-
+    useEffect(() => {
+        setItem(items); // props로 받은 items를 초기 상태로 설정
+    }, [items]);
 
     const ItemChange = (event) => {
-        setItem(event.target.value);
+        // 이전 상태 복제
+        const updatedItem = { ...item };
+        // 새로운 값을 추가하거나 업데이트
+        updatedItem[event.target.name] = event.target.value;
+        // 업데이트된 상태 설정
+        setItem(updatedItem);
     };
 
     const handleSubmitItem = async () => {
         try {
             const itemId = items.id;
-            const UpdatedItemData = JSON.parse(item);
-            const itemResponse = await axios.put(putItemUrl(itemId), UpdatedItemData);
+            const itemResponse = await axios.put(putItemUrl(itemId), item);
             console.log('Item data successfully put:', itemResponse.data);
-            onClose()
+            onClose();
             window.location.reload();
         } catch (error) {
             console.error('Error posting data:', error);
         }
-    }
+    };
 
-    return(
+    return (
         <div>
+            <button onClick={onClose}>Close</button>
             <div>
-                <textarea 
-                    className='mt-3'
-                    style={{ 
-                        width: "100%",
-                        height: "18rem",
-                        }}
-                    value={item}
-                    onChange={ItemChange}
-                    placeholder={item}
-                ></textarea>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*itemIdentifier</span>
+                    <input
+                        value={item.itemIdentifier} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="itemIdentifier"
+                        name="itemIdentifier"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*name</span>
+                    <input
+                        value={item.name} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="name"
+                        name="name"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>definition</span>
+                    <input
+                        value={item.definition} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="definition"
+                        name="definition"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>remarks</span>
+                    <input
+                        value={item.remarks} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="remarks"
+                        name="remarks"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*itemStatus</span>
+                    <input
+                        value={item.itemStatus} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="itemStatus"
+                        name="itemStatus"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>alias</span>
+                    <input
+                        value={item.alias} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="alias"
+                        name="alias"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>camelCase</span>
+                    <input
+                        value={item.camelCase} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="camelCase"
+                        name="camelCase"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>definitionSource</span>
+                    <input
+                        value={item.definitionSource} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="definitionSource"
+                        name="definitionSource"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>reference</span>
+                    <input
+                        value={item.reference} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="reference"
+                        name="reference"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>similarityToSource</span>
+                    <input
+                        value={item.similarityToSource} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="similarityToSource"
+                        name="similarityToSource"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>justification</span>
+                    <input
+                        value={item.justification} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="justification"
+                        name="justification"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>proposedChange</span>
+                    <input
+                        value={item.proposedChange} // 객체의 해당 속성에 접근
+                        type="text"
+                        className="form-control"
+                        placeholder="proposedChange"
+                        name="proposedChange"
+                        onChange={ItemChange} // 변경 핸들러 설정
+                    />
+                </div>
                 <button onClick={handleSubmitItem}>update</button>
             </div>
-            <button onClick={onClose}>Close</button>
         </div>
     )
 }
