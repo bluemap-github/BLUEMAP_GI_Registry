@@ -9,13 +9,16 @@ const createReferenceUrl = (itemId) => {
 function ReferenceAdd({onClose, itemId}){
     const [reference, setReference] = useState('');
     const RChange = (event) => {
-        setReference(event.target.value);
+        const {name, value} = event.target;
+        setReference((prevR) => ({
+            ...prevR,
+            [name]:value
+        }));
     }
     const handleSubmitItem = async () => {
         try {
             const RUrl = createReferenceUrl(itemId);
-            const referenceData = JSON.parse(reference);
-            const RResponse = await axios.post(RUrl, referenceData);
+            const RResponse = await axios.post(RUrl, reference);
             console.log('Management Info data successfully posted:', RResponse);
             onClose();
             window.location.reload();
@@ -25,6 +28,9 @@ function ReferenceAdd({onClose, itemId}){
     }
     return (
         <div>
+            <div className='text-end mb-3'>
+                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+            </div>
             <div>
                 <textarea
                     className='mt-3'
@@ -32,13 +38,20 @@ function ReferenceAdd({onClose, itemId}){
                         width: "100%",
                         height: "18rem",
                     }}
-                    value={reference}
+                    value={JSON.stringify(reference)}
                     onChange={(event) => RChange(event)}
                     placeholder='R 쓰는 곳'
                 ></textarea>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>*referenceIdentifier</span>
+                    <input type="text" className="form-control" placeholder="referenceIdentifier" name="referenceIdentifier" onChange={RChange} />
+                </div>
+                <div className='input-group '>
+                    <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>*sourceDocument</span>
+                    <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={RChange} />
+                </div>
                 <button onClick={handleSubmitItem}>Add</button>
             </div>
-            <button onClick={onClose}>Close</button>
         </div>
     )
 }

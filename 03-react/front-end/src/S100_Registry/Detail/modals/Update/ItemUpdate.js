@@ -35,7 +35,9 @@ function ItemUpdate({ items, onClose }) {
 
     return (
         <div>
-            <button onClick={onClose}>Close</button>
+            <div className='text-end mb-3'>
+                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+            </div>
             <div>
                 <div className='input-group '>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*itemIdentifier</span>

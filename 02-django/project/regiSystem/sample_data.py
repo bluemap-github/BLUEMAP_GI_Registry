@@ -13,6 +13,7 @@ item_data = [
       "name": "Feature Size Variable",
       "definition": "Percentage of depth that a feature of such size could be detected.",
       "remarks": "Set to zero if the feature detection size does not scale with depth.",
+      "camelCase": "featureSizeVariable",
       "itemStatus": "valid",
       "justification": "",
       "proposedChange": "New"
@@ -22,12 +23,14 @@ item_data = [
       "itemIdentifier": 2,
       "name": "Source Survey ID",
       "definition": "The survey filename or ID.",
+      "camelCase": "sourceSurveyID",
       "itemStatus": "valid"
     },
     {
       "s100_RE_Register_id": 1,
       "itemIdentifier": 3,
       "name": "CUBE Standard Deviation",
+      "camelCase": "CUBEStandardDeviation",
       "definition": "Standard deviation of soundings captured by a CUBE hypothesis (that is, CUBE’s standard output of uncertainty).",
       "remarks": "The Combined Uncertainty and Bathymetric Estimator (CUBE) algorithm makes use of the elevation and associated total propagated uncertainty for each contributing sounding to compute one or many hypotheses for an area of interest. The resulting hypotheses are used to estimate statistical representative depths at each nodal position.",
       "itemStatus": "valid"
@@ -36,6 +39,7 @@ item_data = [
       "s100_RE_Register_id": 1,
       "itemIdentifier": 4,
       "name": "Update Type",
+      "camelCase": "updateType",
       "definition": "An action performed when the contents of a dataset are changed.",
       "itemStatus": "valid",
       "definitionSource": "Edition 1.2.0, clause 28.24",
@@ -46,6 +50,7 @@ item_data = [
       "s100_RE_Register_id": 1,
       "itemIdentifier": 5,
       "name": "Insert",
+      "camelCase": "Insert",
       "definition": "To put or introduce into the body of something.",
       "itemStatus": "valid",
       "definitionSource": "https://www.merriam-webster.com/dictionary/insert",
@@ -56,6 +61,7 @@ item_data = [
     {
       "s100_RE_Register_id": 1,
       "itemIdentifier": 6,
+      "camelCase": "Modify",
       "name": "Modify",
       "definition": "To make basic or fundamental changes to the characteristics of something, often to give a new orientation to or to serve a new end.",
       "itemStatus": "valid",
@@ -67,6 +73,7 @@ item_data = [
       "s100_RE_Register_id": 1,
       "itemIdentifier": 7,
       "name": "Optimum Display Scale",
+      "camelCase": "optimumDisplayScale",
       "definition": "The largest intended viewing scale for the data.",
       "itemStatus": "valid",
       "definitionSource": "Edition 1.0.0, Clause 28.8",
@@ -75,6 +82,7 @@ item_data = [
     {
       "s100_RE_Register_id": 1,
       "itemIdentifier": 8,
+      "camelCase": "maximum Display Scale",
       "name": "Maximum Display Scale",
       "definition": "The value considered by the Data Producer to be the maximum (largest) scale at which the data is to be displayed before it can be considered to be 'grossly overscaled'.",
       "itemStatus": "valid",
@@ -85,6 +93,7 @@ item_data = [
     {
       "s100_RE_Register_id": 1,
       "itemIdentifier": 9,
+      "camelCase": "textRotation",
       "name": "Text Rotation",
       "definition": "A statement that expresses if text associated with a feature is to be rotated in the ECDIS display or not.",
       "itemStatus": "valid",
@@ -94,6 +103,7 @@ item_data = [
     {
       "s100_RE_Register_id": 1,
       "itemIdentifier": 10,
+      "camelCase": "textOffsetDistance",
       "name": "Text Offset Distance",
       "definition": "The distance that text associated with a feature is positioned from the feature in an end-user system.",
       "itemStatus": "valid",

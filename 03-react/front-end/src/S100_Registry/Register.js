@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { REGISTER_ITEM_LIST_URL } from './api';
 
@@ -21,9 +20,8 @@ function Register() {
         console.error('Error fetching item list:', error);
       }
     };
-
     fetchItemList();
-  }, []);
+  }, []); 
 
   useEffect(() => {
     const checkedCount = Object.values(checkedItems).filter(Boolean).length;
@@ -48,32 +46,28 @@ function Register() {
 
   const deleteItem = async (idx) => {
     try {
-      const response = await axios.delete(delItemUrl(idx));
-      setItemList(response.data.register_items);
-    } catch (error) {
-      console.error('Error deleting item list:', error);
-    }
-  };
-  
-  const debug = () => { console.log(checkedItems); };
-
-  const deleteAll = async () => { 
-    try {
-      for (const key in checkedItems) {
-        const value = checkedItems[key];
-        console.log(`Key: ${key}, Value: ${value}`);
-        if (value) await deleteItem(key);
-      }
-      const fetchUpdatedItemList = async () => {
+      await axios.delete(delItemUrl(idx));
+      const fetchItemList = async () => {
         try {
           const response = await axios.get(REGISTER_ITEM_LIST_URL);
           setItemList(response.data.register_items);
         } catch (error) {
-          console.error('Error fetching updated item list:', error);
+          console.error('Error fetching item list:', error);
         }
       };
+      fetchItemList();
 
-      fetchUpdatedItemList();
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
+  
+  const deleteAll = async () => { 
+    try {
+      for (const key in checkedItems) {
+        const value = checkedItems[key];
+        if (value) await deleteItem(key);
+      }
     } catch (error) {
       console.error('Error deleting items:', error);
     }
@@ -86,42 +80,47 @@ function Register() {
         <div>
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>
         </div>
-        <button onClick={debug}>검사</button>
-        <input 
-          type="checkbox" 
-          checked={checkedAll} 
-          onChange={handleCheckboxAll}
-          style={{transform: "scale(1.5)"}}
-          className='m-3'
-        />
-        <button onClick={deleteAll} className="btn btn-danger m-3" style={{ maxWidth: '130px', width: '100%' }}>select delete</button>
+        
+        <button onClick={deleteAll} className="btn btn-danger mt-3 mb-3" style={{ maxWidth: '130px', width: '100%' }}>select delete</button>
       </div>
-      <div className=" list-group list-group-flush row align-items-center">
+      <table className="table table-hover table-bordered table-striped">
+        <thead>
+          <tr>
+            <th scope="col" className='text-center'>
+              <input 
+                type="checkbox" 
+                checked={checkedAll} 
+                onChange={handleCheckboxAll}
+                style={{transform: "scale(1.5)"}}
+              />
+            </th>
+            <th scope="col">No</th>
+            <th scope="col">Name</th>
+            <th scope="col">camelCase</th>
+            <th scope="col">Definition</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
         {itemList.map(item => (
-          <li key={item.id} className="list-group-item m-1 justify-content-center">
-            <div>
-              <div className="row align-items-center">
-                <div className="col" style={{maxWidth: "10px"}}>
-                  <input 
-                    type="checkbox" 
-                    checked={checkedItems[item.id]} 
-                    onChange={() => handleCheckboxChange(item.id)}
-                    style={{transform: "scale(1.5)"}}
-                  />
-                </div>
-                <Link className="col" to={`/detail/${item.id}`} style={{ textDecoration: 'none', color: 'black'}}>
-                  <div className="col">
-                    <h5 className="card-title">{item.id} {item.name}</h5>
-                  </div>
-                  <div className="col">
-                    <p className="card-text">{item.camelCase}</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </li>
+          <tr key={item.id} style={{ cursor: 'pointer' }}>
+              <th scope="row" className='text-center' style={{width: '3%'}}>
+                <input 
+                  type="checkbox" 
+                  checked={!!checkedItems[item.id]} 
+                  onChange={() => handleCheckboxChange(item.id)}
+                  style={{transform: "scale(1.5)"}}
+                />
+              </th>
+              <td onClick={() => window.location=`/detail/${item.id}`} className='text-center' style={{width: '3%'}}>{item.id}</td>
+              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
+              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
+              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '55%'}}>{item.definition}</td>
+              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '5%'}}>{item.itemStatus}</td>
+          </tr>
         ))}
-      </div>
+        </tbody>
+      </table>
     </div>
   );
 }

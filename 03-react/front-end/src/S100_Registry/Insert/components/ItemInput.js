@@ -47,35 +47,35 @@ function ItemInput({ onFormSubmit }) {
             </div>
             <div className='input-group mt-3'>
                 <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>*itemStatus</span>
-                <input type="text" className="form-control" placeholder="itemStatus" name="remarks" onChange={handleChange} />
+                <input type="text" className="form-control" placeholder="itemStatus" name="itemStatus" onChange={handleChange} />
             </div>
             <div className='input-group mt-3'>
                 <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>alias</span>
-                <input type="text" className="form-control" placeholder="alias" name="remarks" onChange={handleChange} />
+                <input type="text" className="form-control" placeholder="alias" name="alias" onChange={handleChange} />
             </div>
             <div className='input-group mt-3'>
                 <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>camelCase</span>
-                <input type="text" className="form-control" placeholder="camelCase" name="remarks" onChange={handleChange} />
+                <input type="text" className="form-control" placeholder="camelCase" name="camelCase" onChange={handleChange} />
             </div>
             <div className='input-group mt-3'>
                 <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>definitionSource</span>
-                <input type="text" className="form-control" placeholder="definitionSource" name="remarks" onChange={handleChange} />
+                <input type="text" className="form-control" placeholder="definitionSource" name="definitionSource" onChange={handleChange} />
             </div>
             <div className='input-group mt-3'>
                 <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>reference</span>
-                <input type="text" className="form-control" placeholder="reference" name="remarks" onChange={handleChange} />
+                <input type="text" className="form-control" placeholder="reference" name="reference" onChange={handleChange} />
             </div>
             <div className='input-group mt-3'>
                 <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>similarityToSource</span>
-                <input type="text" className="form-control" placeholder="similarityToSource" name="remarks" onChange={handleChange} />
+                <input type="text" className="form-control" placeholder="similarityToSource" name="similarityToSource" onChange={handleChange} />
             </div>
             <div className='input-group mt-3'>
                 <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>justification</span>
-                <input type="text" className="form-control" placeholder="justification" name="remarks" onChange={handleChange} />
+                <input type="text" className="form-control" placeholder="justification" name="justification" onChange={handleChange} />
             </div>
             <div className='input-group mt-3'>
                 <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>proposedChange</span>
-                <input type="text" className="form-control" placeholder="proposedChange" name="remarks" onChange={handleChange} />
+                <input type="text" className="form-control" placeholder="proposedChange" name="proposedChange" onChange={handleChange} />
             </div>
         </div>
     );

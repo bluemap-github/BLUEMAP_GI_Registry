@@ -6,16 +6,20 @@ const createManagementInfoUrl = (itemId) => {
 };
 
 
-function ManagementInfoAdd({onClose, itemId}){
-    const [managementInfo, setManagementInfo] = useState('');
-    const MIChange = (event) => {
-        setManagementInfo(event.target.value);
-    }
+function ManagementInfoAdd({onClose, itemId}) {
+    const [managementInfo, setManagementInfo] = useState([]);
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setManagementInfo((prevMI) => ({
+          ...prevMI,
+          [name]: value,
+        }));
+      };
     const handleSubmitItem = async () => {
         try {
             const miUrl = createManagementInfoUrl(itemId);
-            const managementInfoData = JSON.parse(managementInfo);
-            const MIResponse = await axios.post(miUrl, managementInfoData);
+            const MIResponse = await axios.post(miUrl, managementInfo);
             console.log('Management Info data successfully posted:', MIResponse);
             onClose();
             window.location.reload();
@@ -25,6 +29,9 @@ function ManagementInfoAdd({onClose, itemId}){
     }
     return (
         <div>
+            <div className='text-end mb-3'>
+                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+            </div>
             <div>
                 <textarea 
                     className='mt-3'
@@ -32,13 +39,45 @@ function ManagementInfoAdd({onClose, itemId}){
                         width: "100%",
                         height: "18rem",
                     }}
-                    // value={managementInfo}
-                    onChange={MIChange}
+                    value={JSON.stringify(managementInfo)}
                     placeholder='MI 쓰는 곳'
                 ></textarea>
+                <div>
+                    <div className='input-group mt-3'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*proposalType</span>
+                        <input type="text" className="form-control" placeholder="proposalType" name="proposalType" onChange={handleChange} />
+                    </div>
+                    <div className='input-group mt-3'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*submittingOrganisation</span>
+                        <input type="text" className="form-control" placeholder="submittingOrganisation" name="submittingOrganisation" onChange={handleChange} />
+                    </div>
+                    <div className='input-group mt-3'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*proposedChange</span>
+                        <input type="text" className="form-control" placeholder="proposedChange" name="proposedChange" onChange={handleChange} />
+                    </div>
+                    <div className='input-group mt-3'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>dateAccepted</span>
+                        <input type="text" className="form-control" placeholder="dateAccepted" name="dateAccepted" onChange={handleChange} />
+                    </div>
+                    <div className='input-group mt-3'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*dateProposed</span>
+                        <input type="text" className="form-control" placeholder="dateProposed" name="dateProposed" onChange={handleChange} />
+                    </div>
+                    <div className='input-group mt-3'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*dateAmended</span>
+                        <input type="text" className="form-control" placeholder="dateAmended" name="dateAmended" onChange={handleChange} />
+                    </div>
+                    <div className='input-group mt-3'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*proposalStatus</span>
+                        <input type="text" className="form-control" placeholder="proposalStatus" name="proposalStatus" onChange={handleChange} />
+                    </div>
+                    <div className='input-group mt-3'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>controlBodyNotes</span>
+                        <input type="text" className="form-control" placeholder="controlBodyNotes" name="controlBodyNotes" onChange={handleChange} />
+                    </div>
+                </div>
                 <button onClick={handleSubmitItem}>Add</button>
             </div>
-            <button onClick={onClose}>Close</button>
         </div>
     )
 }

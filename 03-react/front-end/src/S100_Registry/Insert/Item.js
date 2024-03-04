@@ -48,7 +48,8 @@ function Item() {
 
             // RS에 대해 작업
             console.log("dlrj")
-            console.log(referenceSource)
+            console.log(referenceSource) // 데이터 없으면 에러 
+            
             if (referenceSource) {
                 const rsUrl = createReferenceSourceUrl(itemId);
                 const RSResponse = await axios.post(rsUrl, referenceSource);
@@ -56,13 +57,14 @@ function Item() {
             }
 
             // 모든 R에 대해 작업
-            for(const reference of references) {
-                if (reference) {
-                    const rUrl = createReferenceUrl(itemId);
-                    const RResponse = await axios.post(rUrl, reference);
-                    console.log('Reference data successfully posted:', RResponse);
-                }
-            }
+            console.log(references)
+            // for(const reference of references) {
+            //     if (reference) {
+            //         const rUrl = createReferenceUrl(itemId);
+            //         const RResponse = await axios.post(rUrl, reference);
+            //         console.log('Reference data successfully posted:', RResponse);
+            //     }
+            // }
 
         } catch (error) {
             console.error('Error posting data:', error);

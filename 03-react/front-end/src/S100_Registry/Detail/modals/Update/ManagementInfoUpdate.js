@@ -31,8 +31,10 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
 
     return (
         <div>
+            <div className='text-end mb-3'>
+                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+            </div>
             <div>
-
                 <div className='input-group'>
                     <span className="input-group-text" style={{ width: "40%" }}>*proposalType</span>
                     <input
@@ -124,7 +126,6 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
 
                 <button onClick={handleSubmitItem}>update</button>
             </div>
-            <button onClick={onClose}>Close</button>
         </div>
     );
 }

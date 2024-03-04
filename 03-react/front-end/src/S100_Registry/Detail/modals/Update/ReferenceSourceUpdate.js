@@ -30,6 +30,9 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
 
     return (
         <div>
+            <div className='text-end mb-3'>
+                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+            </div>
             <div>
                 <div className='input-group '>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>referenceIdentifier</span>
@@ -66,7 +69,6 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
                 </div>
                 <button onClick={handleSubmitItem}>update</button>
             </div>
-            <button onClick={onClose}>Close</button>
         </div>
     );
 }
