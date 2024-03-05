@@ -4,6 +4,7 @@ import Register from './S100_Registry/Register';
 import Detail from './S100_Registry/Detail/Detail';
 import InsertItem from './S100_Registry/Insert/Item';
 import Navbar from './S100_Registry/Navbar';
+import './App.css' ;
 
 function App() {
   return (

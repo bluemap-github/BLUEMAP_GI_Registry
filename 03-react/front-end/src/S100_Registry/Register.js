@@ -102,7 +102,7 @@ function Register() {
           </tr>
         </thead>
         <tbody>
-        {itemList.map(item => (
+        {itemList.map((item, index) => (
           <tr key={item.id} style={{ cursor: 'pointer' }}>
               <th scope="row" className='text-center' style={{width: '3%'}}>
                 <input 
@@ -112,7 +112,7 @@ function Register() {
                   style={{transform: "scale(1.5)"}}
                 />
               </th>
-              <td onClick={() => window.location=`/detail/${item.id}`} className='text-center' style={{width: '3%'}}>{item.id}</td>
+              <td onClick={() => window.location=`/detail/${item.id}`} className='text-center' style={{width: '3%'}}>{index+1}</td>
               <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
               <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
               <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '55%'}}>{item.definition}</td>

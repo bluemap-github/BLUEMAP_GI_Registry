@@ -6,6 +6,7 @@ import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
 import ReferenceInput from './components/ReferenceInput';
 
+
 // CREATE_MI_URL을 동적으로 생성하는 함수
 const createManagementInfoUrl = (itemId) => {
     return `http://127.0.0.1:8000/api/v1/registerItem/${itemId}/managementInfo/post/`;
@@ -87,13 +88,20 @@ function Item() {
 
     return (
         <div className="container mt-5">
-            <div>
+            <div className='mt-5'>
+                <div>.</div>
+            </div>
+            <div className='datePicker-calendar'>$</div>
+            <div className='mt-5'>
                 <ItemInput item={item} onFormSubmit={ItemChange}/>
                 <ManagementInfoInput onFormSubmit={MIChange}/>
                 <ReferenceSourceInput onFormSubmit={RSChange}/>
                 <ReferenceInput onFormSubmit={RChange}/>
             </div>
-            <button className='mt-3' onClick={handleSubmitItem}>Submit</button>
+            <div className='text-end'>
+                <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button>
+            </div>
+            <div style={{height: '200px'}}></div>
         </div>
     );
 }
