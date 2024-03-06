@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const putItemUrl = (itemId) => {
-    return `http://127.0.0.1:8000/api/v1/registerItem/${itemId}/put/`;
+    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/put/`;
 };
 
 function ItemUpdate({ items, onClose }) {

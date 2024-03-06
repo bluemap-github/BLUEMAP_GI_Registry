@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const putMIUrl = (MIId) => {
-    return `http://127.0.0.1:8000/api/v1/registerItem/managementInfo/${MIId}/put/`;
+    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/managementInfo/${MIId}/put/`;
 };
 
 function ManagementInfoUpdate({ itemList, onClose, followIdx }) {

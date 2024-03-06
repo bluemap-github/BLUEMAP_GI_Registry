@@ -9,17 +9,17 @@ import ReferenceInput from './components/ReferenceInput';
 
 // CREATE_MI_URL을 동적으로 생성하는 함수
 const createManagementInfoUrl = (itemId) => {
-    return `http://127.0.0.1:8000/api/v1/registerItem/${itemId}/managementInfo/post/`;
+    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/managementInfo/post/`;
 };
 
 // CREATE_MI_URL을 동적으로 생성하는 함수
 const createReferenceSourceUrl = (itemId) => {
-    return `http://127.0.0.1:8000/api/v1/registerItem/${itemId}/referenceSource/post/`;
+    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/referenceSource/post/`;
 };
 
 // CREATE_MI_URL을 동적으로 생성하는 함수
 const createReferenceUrl = (itemId) => {
-    return `http://127.0.0.1:8000/api/v1/registerItem/${itemId}/reference/post/`;
+    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/reference/post/`;
 };
 
 function Item() {

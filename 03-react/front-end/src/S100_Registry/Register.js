@@ -3,7 +3,7 @@ import axios from 'axios';
 import { REGISTER_ITEM_LIST_URL } from './api';
 
 const delItemUrl = (idx) => {
-  return `http://127.0.0.1:8000/api/v1/registerItem/${idx}/delete/`;
+  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${idx}/delete/`;
 };
 
 function Register() {

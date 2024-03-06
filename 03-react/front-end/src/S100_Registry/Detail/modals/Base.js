@@ -9,19 +9,19 @@ import ReferenceAdd from './Add/ReferenceAdd';
 import Delete from './Delete';
 
 const delItemUrl = (idx) => {
-  return `http://127.0.0.1:8000/api/v1/registerItem/${idx}/delete/`;
+  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${idx}/delete/`;
 };
 
 const delMIUrl = (idx) => {
-  return `http://127.0.0.1:8000/api/v1/registerItem/managementInfo/${idx}/delete/`;
+  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/managementInfo/${idx}/delete/`;
 };
 
 const delRSUrl = (idx) => {
-  return `http://127.0.0.1:8000/api/v1/registerItem/referenceSource/${idx}/delete/`;
+  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/referenceSource/${idx}/delete/`;
 };
 
 const delRUrl = (idx) => {
-  return `http://127.0.0.1:8000/api/v1/registerItem/reference/${idx}/delete/`;
+  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/reference/${idx}/delete/`;
 };
 function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx}) {
   if (!isOpen) {
