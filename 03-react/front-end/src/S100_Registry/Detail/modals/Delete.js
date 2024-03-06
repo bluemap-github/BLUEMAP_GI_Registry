@@ -22,19 +22,19 @@ function Delete({onClose, selectedForm, keyIdx}){
             console.error('Error deleting data:', error);
         }
     }
-
-    
     return (
-        <div>
-            <div>
-                <div>Delete</div>
-                <div>selectedForm : {selectedForm}</div>
-                <div>keyIdx : {keyIdx}</div>
-                <button className='btn btn-danger' onClick={handleDelete}>Delete</button>
+        <div style={{height: "200px"}} className="p-2">
+            <div className='text-end' style={{height: "10%"}}>
+                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
             </div>
-            <button onClick={onClose}>Close</button>
+            <h3>Delete {}</h3>
+            <div style={{height: "50%", display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <div>Are you sure you want to delete?</div>
+            </div>
+            <div className='text-end' style={{height: "10%"}}>
+                <button onClick={handleDelete}>Delete</button>
+            </div>
         </div>
     )
 }
-
 export default Delete;

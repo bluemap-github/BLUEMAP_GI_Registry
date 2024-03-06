@@ -32,29 +32,22 @@ function ReferenceSourceAdd({onClose, itemId}){
                 <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div>
-                <textarea 
-                    className='mt-3'
-                    style={{ 
-                        width: "100%",
-                        height: "18rem",
-                    }}
-                    value={JSON.stringify(referenceSource)}
-                    onChange={(event) => RSChange(event)}
-                    placeholder='RS 쓰는 곳'
-                ></textarea>
-                <div className='input-group mt-3'>
-                    <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>*referenceIdentifier</span>
+            <h3 className='mb-2'>Add Reference Source</h3>
+                <div className='input-group input-group-sm mt-2'>
+                    <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>*referenceIdentifier</span>
                     <input type="text" className="form-control" placeholder="referenceIdentifier" name="referenceIdentifier" onChange={RSChange} />
                 </div>
-                <div className='input-group mt-3'>
-                    <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>*sourceDocument</span>
+                <div className='input-group input-group-sm mt-2'>
+                    <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>*sourceDocument</span>
                     <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={RSChange} />
                 </div>
-                <div className='input-group mt-3'>
-                    <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>*similarity</span>
+                <div className='input-group input-group-sm mt-2'>
+                    <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>*similarity</span>
                     <input type="text" className="form-control" placeholder="similarity" name="similarity" onChange={RSChange} />
                 </div>
-                <button onClick={handleSubmitItem}>Add</button>
+                <div className='text-end'>
+                    <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>Add</button>
+                </div>
             </div>
         </div>
     )

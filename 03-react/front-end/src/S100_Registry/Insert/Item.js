@@ -25,7 +25,7 @@ const createReferenceUrl = (itemId) => {
 function Item() {
     const [item, setItem] = useState('');
     const [managementInfos, setManagementInfos] = useState(['']); // 관리 정보 입력 창 배열
-    const [referenceSource, setReferenceSource] = useState([]);
+    const [referenceSource, setReferenceSource] = useState(null);
     const [references, setReferences] = useState(null);
 
     const handleSubmitItem = async () => {
@@ -48,9 +48,6 @@ function Item() {
             }
 
             // RS에 대해 작업
-            console.log("dlrj")
-            console.log(referenceSource) // 데이터 없으면 에러 
-            
             if (referenceSource) {
                 const rsUrl = createReferenceSourceUrl(itemId);
                 const RSResponse = await axios.post(rsUrl, referenceSource);
@@ -58,15 +55,15 @@ function Item() {
             }
 
             // 모든 R에 대해 작업
-            console.log(references)
-            // for(const reference of references) {
-            //     if (reference) {
-            //         const rUrl = createReferenceUrl(itemId);
-            //         const RResponse = await axios.post(rUrl, reference);
-            //         console.log('Reference data successfully posted:', RResponse);
-            //     }
-            // }
-
+            if (references != null) {
+                for(const reference of references) {
+                    if (reference) {
+                        const rUrl = createReferenceUrl(itemId);
+                        const RResponse = await axios.post(rUrl, reference);
+                        console.log('Reference data successfully posted:', RResponse);
+                    }
+                }
+            }
         } catch (error) {
             console.error('Error posting data:', error);
             console.log(item)
@@ -88,10 +85,10 @@ function Item() {
 
     return (
         <div className="container mt-5">
-            <div className='mt-5'>
-                <div>.</div>
+            <div style={{height: '70px'}}></div>
+            <div>
+                <h1>Regist Data</h1>
             </div>
-            <div className='datePicker-calendar'>$</div>
             <div className='mt-5'>
                 <ItemInput item={item} onFormSubmit={ItemChange}/>
                 <ManagementInfoInput onFormSubmit={MIChange}/>

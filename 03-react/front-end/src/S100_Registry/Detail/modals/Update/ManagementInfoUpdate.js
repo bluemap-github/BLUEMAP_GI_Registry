@@ -31,12 +31,13 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
 
     return (
         <div>
-            <div className='text-end mb-3'>
+            <div className='text-end'>
                 <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div>
-                <div className='input-group'>
-                    <span className="input-group-text" style={{ width: "40%" }}>*proposalType</span>
+                <h3 className='mb-2'>Update management Info</h3>
+                <div className='input-group input-group-sm mt-2'>
+                    {/* <span className="input-group-text" style={{ width: "40%" }}>*proposalType</span>
                     <input
                         value={MI.proposalType}
                         type="text"
@@ -44,9 +45,17 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         placeholder="proposalType"
                         name="proposalType"
                         onChange={MIChange}
-                    />
+                    /> */}
+                    <label style={{ width: "40%" }} class="input-group-text" for="proposalType">*proposalType</label>
+                    <select class="form-select" id="proposalType" name="proposalType" onChange={MIChange}>
+                        <option selected>{MI.proposalType}</option>
+                        <option value="addition">addition</option>
+                        <option value="clarification">clarification</option>
+                        <option value="supersession">supersession</option>
+                        <option value="retirement">retirement</option>
+                    </select>
                 </div>
-                <div className='input-group'>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" style={{ width: "40%" }}>*submittingOrganisation</span>
                     <input
                         value={MI.submittingOrganisation}
@@ -57,7 +66,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         onChange={MIChange}
                     />
                 </div>
-                <div className='input-group'>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" style={{ width: "40%" }}>*proposedChange</span>
                     <input
                         value={MI.proposedChange}
@@ -68,7 +77,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         onChange={MIChange}
                     />
                 </div>
-                <div className='input-group'>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" style={{ width: "40%" }}>dateAccepted</span>
                     <input
                         value={MI.dateAccepted}
@@ -79,7 +88,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         onChange={MIChange}
                     />
                 </div>
-                <div className='input-group'>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" style={{ width: "40%" }}>*dateProposed</span>
                     <input
                         value={MI.dateProposed}
@@ -90,7 +99,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         onChange={MIChange}
                     />
                 </div>
-                <div className='input-group'>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" style={{ width: "40%" }}>*dateAmended</span>
                     <input
                         value={MI.dateAmended}
@@ -101,18 +110,23 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         onChange={MIChange}
                     />
                 </div>
-                <div className='input-group'>
-                    <span className="input-group-text" style={{ width: "40%" }}>*proposalStatus</span>
-                    <input
-                        value={MI.proposalStatus}
-                        type="text"
-                        className="form-control"
-                        placeholder="proposalStatus"
-                        name="proposalStatus"
-                        onChange={MIChange}
-                    />
+                <div className='input-group input-group-sm mt-2'>
+                    <label style={{ width: "40%" }} class="input-group-text" for="proposalStatus">*proposalStatus</label>
+                    <select class="form-select" id="proposalStatus" name="proposalStatus" onChange={MIChange}>
+                        <option selected>{MI.proposalStatus}</option>
+                        <option value="notYetDetermined">notYetDetermined</option>
+                        <option value="transferred">transferred</option>
+                        <option value="accepted">accepted</option>
+                        <option value="rejected">rejected</option>
+                        <option value="withdrawn">withdrawn</option>
+                        <option value="negotiation">negotiation</option>
+                        <option value="appeal">appeal</option>
+                        <option value="appealTransferred">appealTransferred</option>
+                        <option value="appealAccepted">appealAccepted</option>
+                        <option value="appealRejected">appealRejected</option>
+                    </select>
                 </div>
-                <div className='input-group'>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" style={{ width: "40%" }}>controlBodyNotes</span>
                     <input
                         value={MI.controlBodyNotes}
@@ -123,8 +137,9 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         onChange={MIChange}
                     />
                 </div>
-
-                <button onClick={handleSubmitItem}>update</button>
+                <div className='text-end'>
+                    <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>update</button>
+                </div>
             </div>
         </div>
     );

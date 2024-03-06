@@ -30,11 +30,12 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
 
     return (
         <div>
-            <div className='text-end mb-3'>
+            <div className='text-end'>
                 <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
             </div>
+            <h3 className='mb-2'>Update reference Source</h3>
             <div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>referenceIdentifier</span>
                     <input
                         value={RS.referenceIdentifier} // 객체의 해당 속성에 접근
@@ -45,7 +46,7 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
                         onChange={RChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>sourceDocument</span>
                     <input
                         value={RS.sourceDocument} // 객체의 해당 속성에 접근
@@ -56,7 +57,7 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
                         onChange={RChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>similarity</span>
                     <input
                         value={RS.similarity} // 객체의 해당 속성에 접근
@@ -67,7 +68,9 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
                         onChange={RChange} // 변경 핸들러 설정
                     />
                 </div>
-                <button onClick={handleSubmitItem}>update</button>
+                <div className='text-end'>
+                    <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>update</button>
+                </div>
             </div>
         </div>
     );

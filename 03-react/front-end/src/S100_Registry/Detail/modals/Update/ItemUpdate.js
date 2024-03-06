@@ -35,11 +35,12 @@ function ItemUpdate({ items, onClose }) {
 
     return (
         <div>
-            <div className='text-end mb-3'>
+            <div className='text-end'>
                 <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div>
-                <div className='input-group '>
+                <h3 className='mb-2'>Update Item</h3>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*itemIdentifier</span>
                     <input
                         value={item.itemIdentifier} // 객체의 해당 속성에 접근
@@ -50,7 +51,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*name</span>
                     <input
                         value={item.name} // 객체의 해당 속성에 접근
@@ -61,7 +62,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>definition</span>
                     <input
                         value={item.definition} // 객체의 해당 속성에 접근
@@ -72,7 +73,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>remarks</span>
                     <input
                         value={item.remarks} // 객체의 해당 속성에 접근
@@ -83,7 +84,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*itemStatus</span>
                     <input
                         value={item.itemStatus} // 객체의 해당 속성에 접근
@@ -94,7 +95,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>alias</span>
                     <input
                         value={item.alias} // 객체의 해당 속성에 접근
@@ -105,7 +106,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>camelCase</span>
                     <input
                         value={item.camelCase} // 객체의 해당 속성에 접근
@@ -116,7 +117,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>definitionSource</span>
                     <input
                         value={item.definitionSource} // 객체의 해당 속성에 접근
@@ -127,7 +128,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>reference</span>
                     <input
                         value={item.reference} // 객체의 해당 속성에 접근
@@ -138,7 +139,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>similarityToSource</span>
                     <input
                         value={item.similarityToSource} // 객체의 해당 속성에 접근
@@ -149,7 +150,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>justification</span>
                     <input
                         value={item.justification} // 객체의 해당 속성에 접근
@@ -160,7 +161,7 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>proposedChange</span>
                     <input
                         value={item.proposedChange} // 객체의 해당 속성에 접근
@@ -171,7 +172,10 @@ function ItemUpdate({ items, onClose }) {
                         onChange={ItemChange} // 변경 핸들러 설정
                     />
                 </div>
-                <button onClick={handleSubmitItem}>update</button>
+                <div className='text-end'>
+                    <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>update</button>
+                </div>
+                
             </div>
         </div>
     )

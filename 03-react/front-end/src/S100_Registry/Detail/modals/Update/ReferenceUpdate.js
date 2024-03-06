@@ -31,11 +31,12 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
 
     return (
         <div>
-            <div className='text-end mb-3'>
+            <div className='text-end'>
                 <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div>
-                <div className='input-group '>
+                <h3 className='mb-2'>Update reference</h3>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*referenceIdentifier</span>
                     <input
                         value={R.referenceIdentifier} // 객체의 해당 속성에 접근
@@ -46,7 +47,7 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
                         onChange={RChange} // 변경 핸들러 설정
                     />
                 </div>
-                <div className='input-group '>
+                <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*sourceDocument</span>
                     <input
                         value={R.sourceDocument} // 객체의 해당 속성에 접근
@@ -57,7 +58,9 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
                         onChange={RChange} // 변경 핸들러 설정
                     />
                 </div>
-                <button onClick={handleSubmitItem}>update</button>
+                <div className='text-end'>
+                    <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>update</button>
+                </div>
             </div>
         </div>
     );

@@ -16,7 +16,7 @@ const managementInfoInit = {
 
 function ManagementInfoInput({ onFormSubmit }) {
     const [managementInfos, setManagementInfos] = useState([managementInfoInit]);
-    const [toggleOpened, setToggleOpened] = useState(false);
+    const [toggleOpened, setToggleOpened] = useState(true);
 
     const handleChange = (event, idx) => {
         const { name, value } = event.target;
@@ -121,7 +121,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             name="dateAccepted" 
                                             selected={managementInfo.dateAccepted} 
                                             onChange={(date) => handleChange({ target: { name: 'dateAccepted', value: formatDate(date) } }, index)} 
-                                            customInput={<ExampleCustomInput />}
+                                            // customInput={<ExampleCustomInput />}
                                         />
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>

@@ -75,8 +75,9 @@ function Register() {
 
   return (
     <div className="container mt-5">
+      <div style={{height: '70px'}}></div>
       <div>
-        <h1 className='mb-3'>Concept Register</h1>
+        <h1 className='mb-3'>GI Register</h1>
         <div>
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>
         </div>
@@ -107,7 +108,7 @@ function Register() {
               <th scope="row" className='text-center' style={{width: '3%'}}>
                 <input 
                   type="checkbox" 
-                  checked={!!checkedItems[item.id]} 
+                  checked={checkedItems[item.id]} 
                   onChange={() => handleCheckboxChange(item.id)}
                   style={{transform: "scale(1.5)"}}
                 />
@@ -115,12 +116,13 @@ function Register() {
               <td onClick={() => window.location=`/detail/${item.id}`} className='text-center' style={{width: '3%'}}>{index+1}</td>
               <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
               <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
-              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '55%'}}>{item.definition}</td>
-              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '5%'}}>{item.itemStatus}</td>
+              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '40%'}}>{item.definition}</td>
+              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '9%'}}>{item.itemStatus}</td>
           </tr>
         ))}
         </tbody>
       </table>
+      <div style={{height: '200px'}}></div>
     </div>
   );
 }

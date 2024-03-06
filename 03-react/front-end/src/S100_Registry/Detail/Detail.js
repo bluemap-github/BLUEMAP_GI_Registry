@@ -61,25 +61,26 @@ function Detail() {
 
   else return (
     <div className="container mt-5">
-      
-        <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
-        <h1 className='mb-3'>Concept Register</h1>
-        <div>
-          <div className='mb-3 mt-3'>GET : {ITEM_DETAIL_URL}{id}/</div>
+      <div style={{height: '70px'}}></div>
+      <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
+      <h1 className='mb-3'>GI Register</h1>
+      <div>
+        <div className='mb-3 mt-3'>GET : {ITEM_DETAIL_URL}{id}/</div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <ItemDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
+          <ManagementInfoDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
+          <ReferenceSourceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
+          <ReferenceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
         </div>
-        <div className="row">
-          <div className="col">
-            <ItemDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
-            <ManagementInfoDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
-            <ReferenceSourceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
-            <ReferenceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
-          </div>
-        </div>
-        <div>
-          <Link to="/">
-              <button className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>
-          </Link>
-        </div>
+      </div>
+      <div>
+        <Link to="/">
+            <button className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>
+        </Link>
+      </div>
+      <div style={{height: '200px'}}></div>
     </div>
   );
 }
