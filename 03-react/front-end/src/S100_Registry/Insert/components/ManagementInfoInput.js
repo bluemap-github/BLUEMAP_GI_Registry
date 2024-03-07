@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from "react";
-
+import Base from '../modals/Base'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -15,6 +15,15 @@ const managementInfoInit = {
 };
 
 function ManagementInfoInput({ onFormSubmit }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = () => {
+        setIsModalOpen(true);
+      };
+    
+      const closeModal = () => {
+        setIsModalOpen(false);
+      };
+
     const [managementInfos, setManagementInfos] = useState([managementInfoInit]);
     const [toggleOpened, setToggleOpened] = useState(true);
 
@@ -29,6 +38,7 @@ function ManagementInfoInput({ onFormSubmit }) {
         onFormSubmit(updatedManagementInfos);
         console.log(updatedManagementInfos)
     };
+
 
     const addMIInput = () => {
         setManagementInfos([...managementInfos, managementInfoInit]);
@@ -53,7 +63,9 @@ function ManagementInfoInput({ onFormSubmit }) {
     };
     const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
         <div onClick={onClick}>
-            <input type="text" className="form-control" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-fill" viewBox="0 0 16 16">
+                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5"/>
+            </svg>
         </div>
       ));
 
@@ -93,7 +105,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                             <div className='row'>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="proposalType">*proposalType</label>
+                                        <label class="input-group-text" for="proposalType" style={{ width: "40%" }}>*proposalType</label>
                                         <select class="form-select" id="proposalType" name="proposalType" onChange={(event) => handleChange(event, index)}>
                                             <option selected>Choose</option>
                                             <option value="addition">addition</option>
@@ -114,44 +126,48 @@ function ManagementInfoInput({ onFormSubmit }) {
                                 <div className='col'>
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>dateAccepted</span>
-                                        <DatePicker 
-                                            dateFormat='yyyy-MM-dd'
-                                            className="form-control date-picker-style" 
-                                            placeholder="dateAccepted" 
-                                            name="dateAccepted" 
-                                            selected={managementInfo.dateAccepted} 
-                                            onChange={(date) => handleChange({ target: { name: 'dateAccepted', value: formatDate(date) } }, index)} 
-                                            // customInput={<ExampleCustomInput />}
-                                        />
+                                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                            <input  type="text" className="date-input" placeholder="dateAccepted" name="dateAccepted" value={managementInfo.dateAccepted} />
+                                            <DatePicker 
+                                                name="dateAccepted" 
+                                                selected={managementInfo.dateAccepted} 
+                                                onChange={(date) => handleChange({ target: { name: 'dateAccepted', value: formatDate(date) } }, index)} 
+                                                customInput={<ExampleCustomInput />}
+                                            />
+                                        </div>
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*dateProposed</span>
-                                        <DatePicker 
-                                            dateFormat='yyyy-MM-dd'
-                                            className="form-control date-picker-style" 
-                                            placeholder="dateProposed" 
-                                            name="dateProposed" 
-                                            selected={managementInfo.dateProposed} 
-                                            onChange={(date) => handleChange({ target: { name: 'dateProposed', value: formatDate(date) } }, index)} 
-                                        />
+                                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                            <input type="text" className="date-input" placeholder="dateProposed" name="dateProposed" value={managementInfo.dateProposed} />
+                                            <DatePicker 
+                                                name="dateProposed" 
+                                                selected={managementInfo.dateProposed} 
+                                                onChange={(date) => handleChange({ target: { name: 'dateProposed', value: formatDate(date) } }, index)} 
+                                                customInput={<ExampleCustomInput />}
+                                            />
+                                        </div>
+                                        
+                                        
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*dateAmended</span>
-                                        <DatePicker 
-                                            dateFormat='yyyy-MM-dd'
-                                            className="form-control date-picker-style" 
-                                            placeholder="dateAmended" 
-                                            name="dateAmended" 
-                                            selected={managementInfo.dateAmended} 
-                                            onChange={(date) => handleChange({ target: { name: 'dateAmended', value: formatDate(date) } }, index)} 
-                                        />
+                                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                            <input type="text" className="date-input" placeholder="dateAmended" name="dateAmended" value={managementInfo.dateAmended} />
+                                            <DatePicker 
+                                                name="dateAmended" 
+                                                selected={managementInfo.dateAmended} 
+                                                onChange={(date) => handleChange({ target: { name: 'dateAmended', value: formatDate(date) } }, index)} 
+                                                customInput={<ExampleCustomInput />}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div className='row'>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="proposalStatus">*proposalStatus</label>
+                                        <label class="input-group-text" for="proposalStatus" style={{ width: "40%" }}>*proposalStatus</label>
                                         <select class="form-select" id="proposalStatus" name="proposalStatus" onChange={(event) => handleChange(event, index)}>
                                             <option selected>Choose</option>
                                             <option value="notYetDetermined">notYetDetermined</option>
@@ -167,10 +183,19 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         </select>
                                     </div>
                                 </div>
+                                <Base isOpen={isModalOpen} onClose={closeModal} selectedForm={2}/>
                                 <div className='col'>
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>controlBodyNotes</span>
-                                        <input type="text" className="form-control" placeholder="controlBodyNotes" name="controlBodyNotes" onChange={(event) => handleChange(event, index)} />
+                                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                            <input className='date-input' placeholder="controlBodyNotes" name="controlBodyNotes" disabled />
+                                            <div onClick={openModal}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                                </svg>  
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -74,7 +74,7 @@ function ReferenceSourceInput({onFormSubmit}) {
                                 </div>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="similarity">*similarity</label>
+                                        <label style={{ width: "20%" }} class="input-group-text" for="similarity">*similarity</label>
                                         <select class="form-select" id="similarity" name="similarity" onChange={handleChange}>
                                             <option selected>Choose</option>
                                             <option value="identical">identical</option>

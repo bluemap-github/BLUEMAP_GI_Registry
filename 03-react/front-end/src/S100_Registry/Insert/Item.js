@@ -64,6 +64,7 @@ function Item() {
                     }
                 }
             }
+            window.location.href = `/detail/${itemId}`;
         } catch (error) {
             console.error('Error posting data:', error);
             console.log(item)

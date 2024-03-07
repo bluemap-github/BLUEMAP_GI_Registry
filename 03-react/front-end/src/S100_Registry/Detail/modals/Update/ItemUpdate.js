@@ -43,8 +43,8 @@ function ItemUpdate({ items, onClose }) {
                 <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*itemIdentifier</span>
                     <input
+                        type='number'
                         value={item.itemIdentifier} // 객체의 해당 속성에 접근
-                        type="text"
                         className="form-control"
                         placeholder="itemIdentifier"
                         name="itemIdentifier"

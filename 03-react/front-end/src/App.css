@@ -52,3 +52,16 @@ li {
   height: 31px;
   width: 100% !important;
 }
+
+.date-input{
+  border: none;
+  height: 20px;
+  width: 1000%;
+}
+input:focus {
+  /* 여기에 선택되었을 때 표시될 스타일을 추가하세요 */
+  outline: none; /* 선택 표시 제거 */
+}
+.bi:hover {
+  cursor: pointer;
+}

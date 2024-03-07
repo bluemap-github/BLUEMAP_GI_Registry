@@ -42,8 +42,16 @@ function ReferenceSourceAdd({onClose, itemId}){
                     <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={RSChange} />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>*similarity</span>
-                    <input type="text" className="form-control" placeholder="similarity" name="similarity" onChange={RSChange} />
+                    <label class="input-group-text" for="similarity" style={{width:"40%"}}>*similarity</label>
+                    <select class="form-select" id="similarity" name="similarity" onChange={RSChange}>
+                        <option selected>Choose</option>
+                        <option value="identical">identical</option>
+                        <option value="restyled">restyled</option>
+                        <option value="contextAdded">contextAdded</option>
+                        <option value="generalization">generalization</option>
+                        <option value="specialization">specialization</option>
+                        <option value="unspecified">unspecified</option>
+                    </select>
                 </div>
                 <div className='text-end'>
                     <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>Add</button>
