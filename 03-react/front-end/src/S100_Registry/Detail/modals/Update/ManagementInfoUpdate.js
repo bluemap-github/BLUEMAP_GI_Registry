@@ -55,7 +55,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
             <div>
                 <h3 className='mb-2'>Update management Info</h3>
                 <div className='input-group input-group-sm mt-2'>
-                    <label style={{ width: "40%" }} class="input-group-text" for="proposalType">*proposalType</label>
+                    <label style={{ width: "40%", fontWeight: "bold" }} class="input-group-text" for="proposalType">*proposalType</label>
                     <select class="form-select" id="proposalType" name="proposalType" onChange={MIChange}>
                         <option selected>{MI.proposalType}</option>
                         <option value="addition">addition</option>
@@ -65,7 +65,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                     </select>
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" style={{ width: "40%" }}>*submittingOrganisation</span>
+                    <span className="input-group-text" style={{ width: "40%", fontWeight: "bold" }}>*submittingOrganisation</span>
                     <input
                         value={MI.submittingOrganisation}
                         type="text"
@@ -76,7 +76,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" style={{ width: "40%" }}>*proposedChange</span>
+                    <span className="input-group-text" style={{ width: "40%", fontWeight: "bold" }}>*proposedChange</span>
                     <input
                         value={MI.proposedChange}
                         type="text"
@@ -89,24 +89,26 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                 <div className='input-group input-group-sm mt-2'>
                     <span className="input-group-text" style={{ width: "40%" }}>dateAccepted</span>
                     <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <input
-                        value={MI.dateAccepted}
-                        type="text"
-                        className="date-input"
-                        placeholder="dateAccepted"
-                        name="dateAccepted"
-                        onChange={MIChange}
-                    />
-                    <DatePicker 
-                        name="dateAccepted" 
-                        selected={MI.dateAccepted} 
-                        onChange={(date) => MIChange({ target: { name: 'dateAccepted', value: formatDate(date) } })} 
-                        customInput={<ExampleCustomInput />}
-                    />
+                        <input
+                            value={MI.dateAccepted}
+                            type="text"
+                            className="date-input"
+                            placeholder="dateAccepted"
+                            name="dateAccepted"
+                            onChange={MIChange}
+                        />
+                        <DatePicker 
+                            name="dateAccepted" 
+                            selected={MI.dateAccepted} 
+                            onChange={(date) => {
+                                MIChange({ target: { name: 'dateAccepted', value: formatDate(date) } });
+                            }} 
+                            customInput={<ExampleCustomInput />}
+                        />
                     </div>
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" style={{ width: "40%" }}>*dateProposed</span>
+                    <span className="input-group-text" style={{ width: "40%", fontWeight: "bold" }}>*dateProposed</span>
                     <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                         <input
                             value={MI.dateProposed}
@@ -125,7 +127,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                     </div>
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" style={{ width: "40%" }}>*dateAmended</span>
+                    <span className="input-group-text" style={{ width: "40%", fontWeight: "bold" }}>*dateAmended</span>
                     <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                         <input
                             value={MI.dateAmended}
@@ -137,14 +139,14 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         />
                         <DatePicker 
                             name="dateAmended" 
-                            selected={MI.dateProposed} 
+                            selected={MI.dateAmended} 
                             onChange={(date) => MIChange({ target: { name: 'dateAmended', value: formatDate(date) } })} 
                             customInput={<ExampleCustomInput />}
                         />
                     </div>
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <label style={{ width: "40%" }} class="input-group-text" for="proposalStatus">*proposalStatus</label>
+                    <label style={{ width: "40%", fontWeight: "bold" }} class="input-group-text" for="proposalStatus">*proposalStatus</label>
                     <select class="form-select" id="proposalStatus" name="proposalStatus" onChange={MIChange}>
                         <option selected>{MI.proposalStatus}</option>
                         <option value="notYetDetermined">notYetDetermined</option>

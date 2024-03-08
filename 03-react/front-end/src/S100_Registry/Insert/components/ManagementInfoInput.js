@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import React, { useState, forwardRef, useEffect } from "react";
 import Base from '../modals/Base'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,15 +11,17 @@ const managementInfoInit = {
     dateProposed: '',
     dateAmended: '',
     proposalStatus: '',
-    controlBodyNotes: ''
+    controlBodyNotes: []
 };
 
 function ManagementInfoInput({ onFormSubmit }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => {
+    const [CBNIdx, setCBNIdx] = useState(0);
+    const openModal = (idx) => {
         setIsModalOpen(true);
-      };
-    
+        setCBNIdx(idx);
+        // 빈 리스트를 aliasList에 추가
+    };
       const closeModal = () => {
         setIsModalOpen(false);
       };
@@ -36,12 +38,37 @@ function ManagementInfoInput({ onFormSubmit }) {
         };
         setManagementInfos(updatedManagementInfos);
         onFormSubmit(updatedManagementInfos);
-        console.log(updatedManagementInfos)
+    };
+
+
+    const [aliasList, setAliasList] = useState([["init"]]);
+    const [formattedAliasList, setFormattedAliasList] = useState([""]);
+
+    const handleCheck = (newAliasList, index) => {
+        const newformattedAliasList = newAliasList.join('; ');
+        setFormattedAliasList((prevFormattedAliasList) => [...prevFormattedAliasList, newformattedAliasList]);
+    
+        const updatedAliasList = [...aliasList];
+        updatedAliasList[index] = newAliasList;
+        setAliasList(updatedAliasList);
+    
+        const updatedManagementInfos = [...managementInfos];
+        updatedManagementInfos[index] = {
+            ...updatedManagementInfos[index],
+            controlBodyNotes: newAliasList
+        };
+        setManagementInfos(updatedManagementInfos);
+        onFormSubmit(updatedManagementInfos);
+
+        console.log(aliasList)
+        console.log(formattedAliasList)
     };
 
 
     const addMIInput = () => {
         setManagementInfos([...managementInfos, managementInfoInit]);
+        setAliasList([...aliasList, ["init"]]);
+        setFormattedAliasList([...formattedAliasList, ""]);
     };
 
     const popMIInput = (index) => {
@@ -49,6 +76,14 @@ function ManagementInfoInput({ onFormSubmit }) {
         newManagementInfos.splice(index, 1);
         setManagementInfos(newManagementInfos);
         onFormSubmit(newManagementInfos);
+
+        const newAliasList = [...aliasList];
+        newAliasList.splice(index, 1);
+        setAliasList(newAliasList);
+
+        const newformattedAliasList = [...formattedAliasList];
+        newformattedAliasList.splice(index, 1);
+        setFormattedAliasList(newformattedAliasList);
     };
 
     const toggleOpen = () => {
@@ -61,6 +96,7 @@ function ManagementInfoInput({ onFormSubmit }) {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
+
     const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
         <div onClick={onClick}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-fill" viewBox="0 0 16 16">
@@ -71,6 +107,14 @@ function ManagementInfoInput({ onFormSubmit }) {
 
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
+            <Base 
+                onformdata={((data) => {handleCheck(data, CBNIdx)})}
+                isOpen={isModalOpen} 
+                onClose={closeModal} 
+                selectedForm={2} 
+                id={CBNIdx}
+                CBNData={aliasList[CBNIdx]}
+            />
             {toggleOpened ? (
                 <div>
                     <div className='' style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -96,16 +140,12 @@ function ManagementInfoInput({ onFormSubmit }) {
                     
                     {managementInfos.map((managementInfo, index) => (
                         <div key={index} className='p-3'>
-                            {index !== 0 && <hr></hr>}
-                            {index !== 0 && 
-                                <div className='text-end'>
-                                    <button className='btn btn-sm btn-outline-danger' onClick={() => popMIInput(index)}>Remove</button>
-                                </div>
-                            }
+                            {index !== 0 && <hr style={{margin: "5px"}}></hr>}
+                            
                             <div className='row'>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="proposalType" style={{ width: "40%" }}>*proposalType</label>
+                                        <label class="input-group-text" for="proposalType" style={{ width: "45%" ,fontWeight: "bold"}}>*proposalType</label>
                                         <select class="form-select" id="proposalType" name="proposalType" onChange={(event) => handleChange(event, index)}>
                                             <option selected>Choose</option>
                                             <option value="addition">addition</option>
@@ -115,19 +155,26 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         </select>
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*submittingOrganisation</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>*submittingOrganisation</span>
                                         <input type="text" className="form-control" placeholder="submittingOrganisation" name="submittingOrganisation" onChange={(event) => handleChange(event, index)} />
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*proposedChange</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>*proposedChange</span>
                                         <input type="text" className="form-control" placeholder="proposedChange" name="proposedChange" onChange={(event) => handleChange(event, index)} />
                                     </div>
                                 </div>
                                 <div className='col'>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>dateAccepted</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" }}>dateAccepted</span>
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                                            <input  type="text" className="date-input" placeholder="dateAccepted" name="dateAccepted" value={managementInfo.dateAccepted} />
+                                            <input  
+                                                type="text" 
+                                                className="date-input" 
+                                                placeholder="dateAccepted" 
+                                                name="dateAccepted" 
+                                                value={managementInfo.dateAccepted} 
+                                                onChange={(e) => handleChange(e, index)}
+                                            />
                                             <DatePicker 
                                                 name="dateAccepted" 
                                                 selected={managementInfo.dateAccepted} 
@@ -136,10 +183,18 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             />
                                         </div>
                                     </div>
+
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*dateProposed</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>*dateProposed</span>
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                                            <input type="text" className="date-input" placeholder="dateProposed" name="dateProposed" value={managementInfo.dateProposed} />
+                                            <input  
+                                                type="text" 
+                                                className="date-input" 
+                                                placeholder="dateProposed" 
+                                                name="dateProposed" 
+                                                value={managementInfo.dateProposed} 
+                                                onChange={(e) => handleChange(e, index)}
+                                            />
                                             <DatePicker 
                                                 name="dateProposed" 
                                                 selected={managementInfo.dateProposed} 
@@ -147,13 +202,19 @@ function ManagementInfoInput({ onFormSubmit }) {
                                                 customInput={<ExampleCustomInput />}
                                             />
                                         </div>
-                                        
-                                        
                                     </div>
+
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*dateAmended</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>*dateAmended</span>
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                                            <input type="text" className="date-input" placeholder="dateAmended" name="dateAmended" value={managementInfo.dateAmended} />
+                                            <input  
+                                                type="text" 
+                                                className="date-input" 
+                                                placeholder="dateAmended" 
+                                                name="dateAmended" 
+                                                value={managementInfo.dateAmended} 
+                                                onChange={(e) => handleChange(e, index)}
+                                            />
                                             <DatePicker 
                                                 name="dateAmended" 
                                                 selected={managementInfo.dateAmended} 
@@ -162,12 +223,13 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             />
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                             <div className='row'>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="proposalStatus" style={{ width: "40%" }}>*proposalStatus</label>
+                                        <label class="input-group-text" for="proposalStatus" style={{ width: "45%" ,fontWeight: "bold"}}>*proposalStatus</label>
                                         <select class="form-select" id="proposalStatus" name="proposalStatus" onChange={(event) => handleChange(event, index)}>
                                             <option selected>Choose</option>
                                             <option value="notYetDetermined">notYetDetermined</option>
@@ -183,13 +245,13 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         </select>
                                     </div>
                                 </div>
-                                <Base isOpen={isModalOpen} onClose={closeModal} selectedForm={2}/>
+                                
                                 <div className='col'>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>controlBodyNotes</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" }}>controlBodyNotes</span>
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                                            <input className='date-input' placeholder="controlBodyNotes" name="controlBodyNotes" disabled />
-                                            <div onClick={openModal}>
+                                            <input className='date-input' placeholder="controlBodyNotes" name="controlBodyNotes" value={formattedAliasList[index]} disabled />
+                                            <div onClick={(() => openModal(index))}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
@@ -199,6 +261,11 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     </div>
                                 </div>
                             </div>
+                            {index !== 0 && 
+                                <div className='text-end mt-2'>
+                                    <button className='btn btn-sm btn-outline-danger' onClick={() => popMIInput(index)}>Remove</button>
+                                </div>
+                            }
                         </div>
                     ))}
                 </div>

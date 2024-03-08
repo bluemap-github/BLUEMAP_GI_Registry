@@ -13,12 +13,12 @@ function ItemInput({ onFormSubmit }) {
 
 
     const [formData, setFormData] = useState({
-        itemIdentifier: '',
+        itemIdentifier: '2',
         name: '',
         definition: '',
         remarks: '',
         itemStatus: '',
-        alias: '',
+        alias: [],
         camelCase: '',
         definitionSource: '',
         reference: '',
@@ -27,6 +27,8 @@ function ItemInput({ onFormSubmit }) {
         proposedChange: ''
     });
     const [aliasList, setAliasList] = useState([]);
+    const [formattedAliasList, setFormattedAliasList] = useState('');
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         const updatedFormData = {
@@ -36,12 +38,16 @@ function ItemInput({ onFormSubmit }) {
         setFormData(updatedFormData);
         onFormSubmit(updatedFormData);
     };
-
-    const addAlias = (addData) => {
-        const updateAliasList = [...aliasList, ...addData];
-        setAliasList(updateAliasList)
-        console.log(updateAliasList);
-    }
+    
+    const handleCheck = (newAliasList) => {
+        const formattedAliasList = newAliasList.join('; ');
+        setAliasList(newAliasList); 
+        setFormattedAliasList(formattedAliasList);
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            alias: newAliasList
+        }));
+    };
 
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
@@ -50,11 +56,7 @@ function ItemInput({ onFormSubmit }) {
                 <div className='row'>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>*itemIdentifier</span>
-                            <input type='number' className="form-control" placeholder="itemIdentifier" name="itemIdentifier" onChange={handleChange}/>
-                        </div>
-                        <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>*name</span>
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%" ,fontWeight: "bold"}}>*name</span>
                             <input type="text" className="form-control" placeholder="name" name="name" onChange={handleChange} />
                         </div>
                     </div>
@@ -63,10 +65,10 @@ function ItemInput({ onFormSubmit }) {
                             <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>camelCase</span>
                             <input type="text" className="form-control" placeholder="camelCase" name="camelCase" onChange={handleChange} />
                         </div>
-                        <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>definitionSource</span>
-                            <input type="text" className="form-control" placeholder="definitionSource" name="definitionSource" onChange={handleChange} />
-                        </div>
+                    </div>
+                    <div className='input-group input-group-sm mt-2'>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"19.5%"}}>definitionSource</span>
+                        <input type="text" className="form-control" placeholder="definitionSource" name="definitionSource" onChange={handleChange} />
                     </div>
                 </div>
                 <div>
@@ -80,12 +82,18 @@ function ItemInput({ onFormSubmit }) {
                     </div>
                 </div>
                 <div className='row'>
-                    <Base isOpen={isModalOpen} onClose={closeModal} selectedForm={1}/>
+                <Base 
+                    isOpen={isModalOpen} 
+                    onClose={closeModal} 
+                    selectedForm={1} 
+                    onformdata={handleCheck}
+                    aliasData={aliasList}
+                />
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
                             <span className="input-group-text" id="basic-addon1" style={{width:"20.5%"}}>alias</span>
                             <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                                <input className='date-input' placeholder="alias" name="alias" disabled />
+                            <input className='date-input' placeholder="alias" name="alias" value={formattedAliasList} disabled />
                                 <div onClick={openModal}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
@@ -96,7 +104,7 @@ function ItemInput({ onFormSubmit }) {
                             
                         </div>
                         <div class="input-group input-group-sm mt-2">
-                            <label class="input-group-text" for="itemStatus" style={{width:"40%"}}>*itemStatus</label>
+                            <label class="input-group-text" for="itemStatus" style={{width:"40%" ,fontWeight: "bold"}}>*itemStatus</label>
                             <select class="form-select" id="itemStatus" name="itemStatus" onChange={handleChange}>
                                 <option selected>Choose</option>
                                 <option value="processing">processing</option>

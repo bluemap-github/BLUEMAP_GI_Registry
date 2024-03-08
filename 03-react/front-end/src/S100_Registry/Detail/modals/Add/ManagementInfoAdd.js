@@ -54,7 +54,7 @@ function ManagementInfoAdd({onClose, itemId}) {
                 <div>
                     <h3 className='mb-2'>Add management Info</h3>
                     <div className='input-group input-group-sm mt-2'>
-                        <label style={{width:"50%"}} class="input-group-text" for="proposalType">*proposalType</label>
+                        <label style={{width:"50%", fontWeight: "bold"}} class="input-group-text" for="proposalType">*proposalType</label>
                         <select class="form-select" id="proposalType" name="proposalType" onChange={handleChange}>
                             <option selected>Choose</option>
                             <option value="addition">addition</option>
@@ -64,11 +64,11 @@ function ManagementInfoAdd({onClose, itemId}) {
                         </select>
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*submittingOrganisation</span>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%", fontWeight: "bold"}}>*submittingOrganisation</span>
                         <input type="text" className="form-control" placeholder="submittingOrganisation" name="submittingOrganisation" onChange={handleChange} />
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*proposedChange</span>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%", fontWeight: "bold"}}>*proposedChange</span>
                         <input type="text" className="form-control" placeholder="proposedChange" name="proposedChange" onChange={handleChange} />
                     </div>
                     <div className='input-group input-group-sm mt-2'>
@@ -91,7 +91,7 @@ function ManagementInfoAdd({onClose, itemId}) {
                         </div>
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*dateProposed</span>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%", fontWeight: "bold"}}>*dateProposed</span>
                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                             <input 
                                 type="text" 
@@ -110,7 +110,7 @@ function ManagementInfoAdd({onClose, itemId}) {
                         </div>
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{width:"50%"}}>*dateAmended</span>
+                        <span className="input-group-text" id="basic-addon1" style={{width:"50%", fontWeight: "bold"}}>*dateAmended</span>
                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                             <input 
                                 type="text" 
@@ -129,7 +129,7 @@ function ManagementInfoAdd({onClose, itemId}) {
                         </div>
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <label style={{ width: "50%" }} class="input-group-text" for="proposalStatus">*proposalStatus</label>
+                        <label style={{ width: "50%" , fontWeight: "bold"}} class="input-group-text" for="proposalStatus">*proposalStatus</label>
                         <select class="form-select" id="proposalStatus" name="proposalStatus" onChange={handleChange}>
                             <option selected>Choose</option>
                             <option value="notYetDetermined">notYetDetermined</option>

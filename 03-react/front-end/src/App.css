@@ -65,3 +65,6 @@ input:focus {
 .bi:hover {
   cursor: pointer;
 }
+hr {
+  margin: 0;
+}

@@ -65,16 +65,16 @@ function ReferenceSourceInput({onFormSubmit}) {
                     {referenceSource ? (
                             <div className='p-3 mt-2' >
                                 <div className='input-group input-group-sm'>
-                                    <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>*referenceIdentifier</span>
+                                    <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>*referenceIdentifier</span>
                                     <input type="text" className="form-control" placeholder="referenceIdentifier" name="referenceIdentifier" onChange={handleChange} />
                                 </div>
                                 <div className='input-group input-group-sm mt-2'>
-                                    <span className="input-group-text" id="basic-addon1" style={{width:"20%"}}>*sourceDocument</span>
+                                    <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>*sourceDocument</span>
                                     <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={handleChange} />
                                 </div>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
-                                        <label style={{ width: "20%" }} class="input-group-text" for="similarity">*similarity</label>
+                                        <label style={{ width: "20%" ,fontWeight: "bold"}} class="input-group-text" for="similarity">*similarity</label>
                                         <select class="form-select" id="similarity" name="similarity" onChange={handleChange}>
                                             <option selected>Choose</option>
                                             <option value="identical">identical</option>

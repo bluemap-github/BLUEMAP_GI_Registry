@@ -1,24 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import AddAlias from './AddAlias';
 import AddControlBodyNotes from './AddControlBodyNotes';
 
-function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx}) {
+function Base({ isOpen, onClose, selectedForm, onformdata, aliasData, id, CBNData}) {
+  const handleCheck = (newAliasList) => {
+      onformdata(newAliasList)
+  };
+  
   if (!isOpen) {
     return null;
   }
   let formComponent;
   switch (selectedForm) {
     case 1:
-      formComponent = <AddAlias />;
+      formComponent = <AddAlias onClose={onClose} onAliasSubmit={handleCheck} aliasData={aliasData}/>;
       break;
     case 2:
-      formComponent = <AddControlBodyNotes />;
+      formComponent = <AddControlBodyNotes onClose={onClose} onCBNList={handleCheck} id={id} CBNData={CBNData}/>;
       break;
     default:
       formComponent = null;
   }
 
+  
   return (
     <div 
       className="modal"
@@ -35,11 +40,10 @@ function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx}) {
         zIndex : "9999" /* 다른 요소 위에 위치하도록 설정 */
       }}
     >
-      
       <div 
         className="modal-content"
         style={{
-          maxWidth: "50rem",
+          maxWidth: "40rem",
           maxHeight: "40rem",
           backgroundColor: "white", /* 모달 내용 배경 색상 */
           padding: "20px", /* 내용 패딩 설정 */

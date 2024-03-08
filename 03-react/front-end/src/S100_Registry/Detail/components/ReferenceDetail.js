@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function ReferenceDetail({itemList, handleUpdateButtonClick, handleFollowIdx, handleKeyIdx}) {
-    const [toggleOpened, setToggleOpened] = useState(false);
+    const [toggleOpened, setToggleOpened] = useState(true);
 
     const handleClick = (idx) => {
         handleUpdateButtonClick(4);

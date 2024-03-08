@@ -1,6 +1,6 @@
 import React from 'react';
 function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
-
+    
     const handleClick = () => {
         // handleUpdateButtonClick 함수를 호출할 때 변수를 함께 전달
         handleUpdateButtonClick(1);
@@ -47,7 +47,9 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
                         </tr>
                         <tr>
                         <th className='text-center' scope="row">alias</th>
-                        <td>{itemList.item.alias}</td>
+                        <td>
+                            {Object.values(itemList.item.alias).map((item, index) => (<span key={index}>{item}; </span>))}
+                        </td>
                         </tr>
                         <tr>
                         <th className='text-center' scope="row">camelCase</th>

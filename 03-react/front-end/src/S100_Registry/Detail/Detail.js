@@ -45,6 +45,7 @@ function Detail() {
       try {
         const response = await axios.get(`${ITEM_DETAIL_URL}${id}/`);
         setItemList(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error('Error fetching item list:', error);
       }

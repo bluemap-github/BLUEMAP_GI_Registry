@@ -63,19 +63,19 @@ function ReferenceInput({onFormSubmit}) {
                     { references.length > 0 ? (
                         <div>
                             {references.map((reference, index) => (
-                                <div key={index} className='p-3'>
-                                    {index !== 0 && <hr></hr>}
-                                    <div className='text-end'>
-                                        <button  className="btn btn-sm btn-outline-danger" onClick={() => popRInput(index)}>Remove</button>
-                                    </div>
+                                <div key={index} className='p-2'>
+                                    {index !== 0 && <hr style={{margin: "5px"}}></hr>}
                                     <div className='row'>
-                                        <div className='col input-group input-group-sm mt-2'>
-                                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>*referenceIdentifier</span>
+                                        <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
+                                            <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>*referenceIdentifier</span>
                                             <input type="text" className="form-control" placeholder="referenceIdentifier" name="referenceIdentifier" onChange={(event) => handleChange(event, index)} />
                                         </div>
-                                        <div className='col input-group input-group-sm mt-2'>
-                                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>*sourceDocument</span>
+                                        <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
+                                            <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>*sourceDocument</span>
                                             <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={(event) => handleChange(event, index)} />
+                                        </div>
+                                        <div className='text-end mt-2 col-1' style={{width:"10%"}}>
+                                            <button  className="btn btn-sm btn-outline-danger" onClick={() => popRInput(index)}>Remove</button>
                                         </div>
                                     </div>
                                 </div>

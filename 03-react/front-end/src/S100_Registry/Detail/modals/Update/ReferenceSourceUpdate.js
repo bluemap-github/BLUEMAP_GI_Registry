@@ -58,7 +58,7 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <label class="input-group-text" for="similarity" style={{ width: "40%" }}>*similarity</label>
+                    <label class="input-group-text" for="similarity" style={{ width: "40%", fontWeight: "bold" }}>*similarity</label>
                     <select class="form-select" id="similarity" name="similarity" onChange={RChange} >
                         <option selected>{RS.similarity}</option>
                         <option value="identical">identical</option>
