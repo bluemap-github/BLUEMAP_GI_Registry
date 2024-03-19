@@ -32,7 +32,7 @@ function AddAlias({ onClose, onAliasSubmit, aliasData}) {
                 </div>
             </div>
             <div className='mb-3'>
-                <h5>Registered alias</h5>
+                <h5>Registered Alias</h5>
                 {aliasList.length > 0? (
                     <div className='p-2 wrap' style={{ display: 'flex', flexWrap: 'wrap', width: "100%", backgroundColor: '#F8F8F8', alignItems: 'center', marginRight: '10px' }}>
                         {aliasList.map((alias) => (

@@ -20,7 +20,6 @@ function ManagementInfoInput({ onFormSubmit }) {
     const openModal = (idx) => {
         setIsModalOpen(true);
         setCBNIdx(idx);
-        // 빈 리스트를 aliasList에 추가
     };
       const closeModal = () => {
         setIsModalOpen(false);
@@ -41,16 +40,27 @@ function ManagementInfoInput({ onFormSubmit }) {
     };
 
 
-    const [aliasList, setAliasList] = useState([["init"]]);
-    const [formattedAliasList, setFormattedAliasList] = useState([""]);
+    const [aliasList, setAliasList] = useState([["init889"]]);
+    const [formattedAliasList, setFormattedAliasList] = useState(["init889"]);
 
     const handleCheck = (newAliasList, index) => {
-        const newformattedAliasList = newAliasList.join('; ');
-        setFormattedAliasList((prevFormattedAliasList) => [...prevFormattedAliasList, newformattedAliasList]);
-    
         const updatedAliasList = [...aliasList];
         updatedAliasList[index] = newAliasList;
         setAliasList(updatedAliasList);
+        console.log(updatedAliasList)
+
+        const newFALIst = formattedAliasList;
+        for (let i = 0; i < newFALIst.length; i++) {
+            if (i === index) {
+                console.log("이거");
+                newFALIst[i] = updatedAliasList[i].join();
+            }
+            console.log(newFALIst);
+        }
+        setFormattedAliasList(newFALIst);
+        
+        
+        
     
         const updatedManagementInfos = [...managementInfos];
         updatedManagementInfos[index] = {
@@ -59,16 +69,15 @@ function ManagementInfoInput({ onFormSubmit }) {
         };
         setManagementInfos(updatedManagementInfos);
         onFormSubmit(updatedManagementInfos);
-
-        console.log(aliasList)
-        console.log(formattedAliasList)
     };
 
 
     const addMIInput = () => {
         setManagementInfos([...managementInfos, managementInfoInit]);
-        setAliasList([...aliasList, ["init"]]);
-        setFormattedAliasList([...formattedAliasList, ""]);
+        const updatedAliasList = [...aliasList, ["init889"]];
+        setAliasList(updatedAliasList);
+        const updatedFormattedAliasList = [...formattedAliasList, "init889"];
+        setFormattedAliasList(updatedFormattedAliasList);
     };
 
     const popMIInput = (index) => {
@@ -105,6 +114,10 @@ function ManagementInfoInput({ onFormSubmit }) {
         </div>
       ));
 
+    const debug = () => {
+        console.log(aliasList);
+        console.log(formattedAliasList);
+    }
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
             <Base 
@@ -113,8 +126,9 @@ function ManagementInfoInput({ onFormSubmit }) {
                 onClose={closeModal} 
                 selectedForm={2} 
                 id={CBNIdx}
-                CBNData={aliasList[CBNIdx]}
+                CBNData={aliasList}
             />
+            <button onClick={debug}>beg</button>
             {toggleOpened ? (
                 <div>
                     <div className='' style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>

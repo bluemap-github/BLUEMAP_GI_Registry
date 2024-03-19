@@ -7,7 +7,6 @@ const referenceInit = {
 
 function ReferenceInput({onFormSubmit}) {
     const [references, setReferences] = useState([]);
-    console.log(references)
 
     const handleChange = (event, idx) => {
         const { name, value } = event.target;
