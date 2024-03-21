@@ -112,10 +112,10 @@ function ManagementInfoInput({ onFormSubmit }) {
         </div>
       ));
 
-    const debug = () => {
-        console.log(aliasList);
-        console.log(formattedAliasList);
-    }
+    // const debug = () => {
+    //     console.log(aliasList);
+    //     console.log(formattedAliasList);
+    // }
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
             <Base 
@@ -126,7 +126,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                 id={CBNIdx}
                 CBNData={aliasList}
             />
-            <button onClick={debug}>beg</button>
+            {/* <button onClick={debug}>beg</button> */}
             {toggleOpened ? (
                 <div>
                     <div className='' style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
