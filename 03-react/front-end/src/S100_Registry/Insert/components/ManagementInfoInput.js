@@ -40,19 +40,17 @@ function ManagementInfoInput({ onFormSubmit }) {
     };
 
 
-    const [aliasList, setAliasList] = useState([["init889"]]);
-    const [formattedAliasList, setFormattedAliasList] = useState(["init889"]);
+    const [aliasList, setAliasList] = useState([["controlBodyNotes;"]]);
+    const [formattedAliasList, setFormattedAliasList] = useState(["controlBodyNotes;"]);
 
     const handleCheck = (newAliasList, index) => {
         const updatedAliasList = [...aliasList];
         updatedAliasList[index] = newAliasList;
         setAliasList(updatedAliasList);
-        console.log(updatedAliasList)
 
         const newFALIst = formattedAliasList;
         for (let i = 0; i < newFALIst.length; i++) {
             if (i === index) {
-                console.log("이거");
                 newFALIst[i] = updatedAliasList[i].join();
             }
             console.log(newFALIst);
@@ -74,9 +72,9 @@ function ManagementInfoInput({ onFormSubmit }) {
 
     const addMIInput = () => {
         setManagementInfos([...managementInfos, managementInfoInit]);
-        const updatedAliasList = [...aliasList, ["init889"]];
+        const updatedAliasList = [...aliasList, ["controlBodyNotes;"]];
         setAliasList(updatedAliasList);
-        const updatedFormattedAliasList = [...formattedAliasList, "init889"];
+        const updatedFormattedAliasList = [...formattedAliasList, "controlBodyNotes;"];
         setFormattedAliasList(updatedFormattedAliasList);
     };
 

@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 function AddControlBodyNotes({id, onCBNList, onClose, CBNData}) {
-    const [cbList, setCbList] = useState([...CBNData[id]]);
+    const newData = [...CBNData[id]];
+    for (let i = newData.length - 1; i >= 0; i--) {
+        if (newData[i] === "controlBodyNotes;") {
+            newData.splice(i, 1);
+        }
+    }
+
+    const [cbList, setCbList] = useState(newData);
     const addAlias = (event) => {
         event.preventDefault();
         const newAlias = event.target.previousElementSibling.value.trim(); // 입력 필드에서 값을 가져옴
@@ -35,6 +42,7 @@ function AddControlBodyNotes({id, onCBNList, onClose, CBNData}) {
                 {cbList.length > 0? (
                     <div className='p-2 wrap' style={{ display: 'flex', flexWrap: 'wrap', width: "100%", backgroundColor: '#F8F8F8', alignItems: 'center', marginRight: '10px' }}>
                         {cbList.map((controlBodyNotes) => (
+                            
                                 <div 
                                     key={controlBodyNotes} 
                                     style={{ 
