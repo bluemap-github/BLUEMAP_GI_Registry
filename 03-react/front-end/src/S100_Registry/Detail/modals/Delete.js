@@ -32,7 +32,7 @@ function Delete({onClose, selectedForm, keyIdx}){
                 <div>Are you sure you want to delete?</div>
             </div>
             <div className='text-end' style={{height: "10%"}}>
-                <button onClick={handleDelete}>Delete</button>
+                <button className="btn btn-sm btn-danger" onClick={handleDelete}>Delete</button>
             </div>
         </div>
     )

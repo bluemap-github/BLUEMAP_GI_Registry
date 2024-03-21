@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { REGISTER_ITEM_LIST_URL } from './api';
+import Toast from './Toast';
 
 const delItemUrl = (idx) => {
   return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${idx}/delete/`;
@@ -51,12 +52,12 @@ function Register() {
         try {
           const response = await axios.get(REGISTER_ITEM_LIST_URL);
           setItemList(response.data.register_items);
+          deleteToast();
         } catch (error) {
           console.error('Error fetching item list:', error);
         }
       };
-      fetchItemList();
-
+      await fetchItemList();
     } catch (error) {
       console.error('Error deleting item:', error);
     }
@@ -73,8 +74,16 @@ function Register() {
     }
   };
 
+
+  const [toast, setToast] = useState(false);
+  const deleteToast = () => {
+    setToast(true);
+  };
+
   return (
     <div className="container mt-5">
+      {toast && <Toast setToast={setToast} text="Item is Deleted." />}
+      <button  onClick={deleteToast}>넹</button>
       <div style={{height: '70px'}}></div>
       <div>
         <h1 className='mb-3'>GI Register</h1>

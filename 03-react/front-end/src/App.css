@@ -68,3 +68,15 @@ input:focus {
 hr {
   margin: 0;
 }
+
+
+.toast-cls {
+  /* background-color: tomato; */
+  width: 370px;
+  height: 70px;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  z-index: 9999;
+  border-radius: 10px;
+}
