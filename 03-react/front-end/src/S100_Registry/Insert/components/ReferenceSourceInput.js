@@ -73,7 +73,7 @@ function ReferenceSourceInput({onFormSubmit}) {
                     </div>
                     {referenceSource ? (
                             <div className='p-3 mt-2' >
-                                <div className='input-group input-group-sm'>
+                                <div className='input-group input-group-sm' style={{zIndex: '0'}}>
                                     <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>*referenceIdentifier</span>
                                     <input 
                                         type="text" 
@@ -81,7 +81,7 @@ function ReferenceSourceInput({onFormSubmit}) {
                                         placeholder="referenceIdentifier" 
                                         name="referenceIdentifier" onChange={handleChange} />
                                 </div>
-                                <div className='input-group input-group-sm mt-2'>
+                                <div className='input-group input-group-sm mt-2' style={{zIndex: '0'}}>
                                     <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>*sourceDocument</span>
                                     <input 
                                         type="text" 
@@ -91,7 +91,7 @@ function ReferenceSourceInput({onFormSubmit}) {
                                         onChange={handleChange} />
                                 </div>
                                 <div className='col'>
-                                    <div class="input-group input-group-sm mt-2">
+                                    <div class="input-group input-group-sm mt-2" style={{zIndex: '0'}}>
                                         <label style={{ width: "20%" ,fontWeight: "bold"}} class="input-group-text" for="similarity">*similarity</label>
                                         <select 
                                             class={`form-select ${mandatoryFields.includes('similarity') && referenceSource.similarity.trim() === '' ? 'is-invalid' : ''}`}

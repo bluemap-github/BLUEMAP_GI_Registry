@@ -207,7 +207,9 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     </div>
                                 </div>
                                 <div className='col'>
-                                    <div className='input-group input-group-sm mt-2'>
+                                    <div 
+                                        className='input-group input-group-sm mt-2'
+                                        style={{zIndex: '3'}}>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%" }}>dateAccepted</span>
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
@@ -228,7 +230,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         </div>
                                     </div>
 
-                                    <div className='input-group input-group-sm mt-2'>
+                                    <div className='input-group input-group-sm mt-2' style={{zIndex: '2'}}>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>*dateProposed</span>
                                         <div 
                                             class={`form-control ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'is-invalid' : ''}`} 
@@ -251,7 +253,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         </div>
                                     </div>
 
-                                    <div className='input-group input-group-sm mt-2'>
+                                    <div className='input-group input-group-sm mt-2' style={{zIndex: '1'}}>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>*dateAmended</span>
                                         <div 
                                             // className="form-control" 
