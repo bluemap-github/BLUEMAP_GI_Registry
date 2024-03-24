@@ -7,6 +7,7 @@ const referenceInit = {
 
 function ReferenceInput({onFormSubmit}) {
     const [references, setReferences] = useState([]);
+    const mandatoryFields = ["referenceIdentifier", "sourceDocument"];
 
     const handleChange = (event, idx) => {
         const { name, value } = event.target;
@@ -16,6 +17,13 @@ function ReferenceInput({onFormSubmit}) {
             [name]: value
         };
         setReferences(updatedReferences);
+
+        if (mandatoryFields.includes(name) && value.trim() === '') {
+            event.target.classList.add('is-invalid');
+        } else {
+            event.target.classList.remove('is-invalid');
+        }
+
         onFormSubmit(updatedReferences);
     };
 
@@ -67,11 +75,23 @@ function ReferenceInput({onFormSubmit}) {
                                     <div className='row'>
                                         <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
                                             <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>*referenceIdentifier</span>
-                                            <input type="text" className="form-control" placeholder="referenceIdentifier" name="referenceIdentifier" onChange={(event) => handleChange(event, index)} />
+                                            <input 
+                                                type="text" 
+                                                // className="form-control"
+                                                class={`form-control ${mandatoryFields.includes('referenceIdentifier') && reference.referenceIdentifier.trim() === '' ? 'is-invalid' : ''}`} 
+                                                placeholder="referenceIdentifier" 
+                                                name="referenceIdentifier" 
+                                                onChange={(event) => handleChange(event, index)} />
                                         </div>
                                         <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
                                             <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>*sourceDocument</span>
-                                            <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={(event) => handleChange(event, index)} />
+                                            <input 
+                                                type="text" 
+                                                class={`form-control ${mandatoryFields.includes('sourceDocument') && reference.sourceDocument.trim() === '' ? 'is-invalid' : ''}`}
+                                                placeholder="sourceDocument" 
+                                                name="sourceDocument" 
+                                                onChange={(event) => handleChange(event, index)} 
+                                            />
                                         </div>
                                         <div className='text-end mt-2 col-1' style={{width:"10%"}}>
                                             <button  className="btn btn-sm btn-outline-danger" onClick={() => popRInput(index)}>Remove</button>

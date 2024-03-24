@@ -16,6 +16,8 @@ const managementInfoInit = {
 
 function ManagementInfoInput({ onFormSubmit }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const mandatoryFields = ["proposalType", "submittingOrganisation", "proposedChange", "proposalStatus"];
+    const mandatoryDateFields = ["dateProposed", "dateAmended"];
     const [CBNIdx, setCBNIdx] = useState(0);
     const openModal = (idx) => {
         setIsModalOpen(true);
@@ -36,6 +38,22 @@ function ManagementInfoInput({ onFormSubmit }) {
             [name]: value
         };
         setManagementInfos(updatedManagementInfos);
+
+        if (mandatoryFields.includes(name)) {
+            if (value.trim() === '') {
+                event.target.classList.add('is-invalid');
+            } else {
+                event.target.classList.remove('is-invalid');
+            }
+        }
+        // if (mandatoryDateFields.includes(name)) {
+        //     if (value.trim() == '') {
+        //         event.target.classList.add('is-invalid');
+        //     } else {
+        //         event.target.classList.remove('is-invalid');
+        //     }
+        // }
+
         onFormSubmit(updatedManagementInfos);
     };
 
@@ -112,10 +130,6 @@ function ManagementInfoInput({ onFormSubmit }) {
         </div>
       ));
 
-    // const debug = () => {
-    //     console.log(aliasList);
-    //     console.log(formattedAliasList);
-    // }
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
             <Base 
@@ -158,7 +172,12 @@ function ManagementInfoInput({ onFormSubmit }) {
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
                                         <label class="input-group-text" for="proposalType" style={{ width: "45%" ,fontWeight: "bold"}}>*proposalType</label>
-                                        <select class="form-select" id="proposalType" name="proposalType" onChange={(event) => handleChange(event, index)}>
+                                        <select 
+                                            // class="form-select" 
+                                            class={`form-select ${mandatoryFields.includes('proposalType') && managementInfo.proposalType.trim() === '' ? 'is-invalid' : ''}`} 
+                                            id="proposalType" 
+                                            name="proposalType" 
+                                            onChange={(event) => handleChange(event, index)}>
                                             <option selected>Choose</option>
                                             <option value="addition">addition</option>
                                             <option value="clarification">clarification</option>
@@ -168,11 +187,23 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>*submittingOrganisation</span>
-                                        <input type="text" className="form-control" placeholder="submittingOrganisation" name="submittingOrganisation" onChange={(event) => handleChange(event, index)} />
+                                        <input 
+                                            type="text" 
+                                            className="form-control" 
+                                            class={`form-control ${mandatoryFields.includes('submittingOrganisation') && managementInfo.submittingOrganisation.trim() === '' ? 'is-invalid' : ''}`}
+                                            placeholder="submittingOrganisation" 
+                                            name="submittingOrganisation" 
+                                            onChange={(event) => handleChange(event, index)} />
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>*proposedChange</span>
-                                        <input type="text" className="form-control" placeholder="proposedChange" name="proposedChange" onChange={(event) => handleChange(event, index)} />
+                                        <input 
+                                            type="text"
+                                            className="form-control" 
+                                            class={`form-control ${mandatoryFields.includes('proposedChange') && managementInfo.proposedChange.trim() === '' ? 'is-invalid' : ''}`} 
+                                            placeholder="proposedChange" 
+                                            name="proposedChange" 
+                                            onChange={(event) => handleChange(event, index)} />
                                     </div>
                                 </div>
                                 <div className='col'>
@@ -186,6 +217,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                                 name="dateAccepted" 
                                                 value={managementInfo.dateAccepted} 
                                                 onChange={(e) => handleChange(e, index)}
+                                                disabled
                                             />
                                             <DatePicker 
                                                 name="dateAccepted" 
@@ -198,7 +230,9 @@ function ManagementInfoInput({ onFormSubmit }) {
 
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>*dateProposed</span>
-                                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                        <div 
+                                            class={`form-control ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'is-invalid' : ''}`} 
+                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
                                                 type="text" 
                                                 className="date-input" 
@@ -206,6 +240,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                                 name="dateProposed" 
                                                 value={managementInfo.dateProposed} 
                                                 onChange={(e) => handleChange(e, index)}
+                                                disabled
                                             />
                                             <DatePicker 
                                                 name="dateProposed" 
@@ -218,7 +253,10 @@ function ManagementInfoInput({ onFormSubmit }) {
 
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>*dateAmended</span>
-                                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                        <div 
+                                            // className="form-control" 
+                                            class={`form-control ${mandatoryDateFields.includes('dateAmended') && managementInfo.dateAmended.trim() === '' ? 'is-invalid' : ''}`} 
+                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
                                                 type="text" 
                                                 className="date-input" 
@@ -226,6 +264,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                                 name="dateAmended" 
                                                 value={managementInfo.dateAmended} 
                                                 onChange={(e) => handleChange(e, index)}
+                                                disabled
                                             />
                                             <DatePicker 
                                                 name="dateAmended" 
@@ -242,7 +281,12 @@ function ManagementInfoInput({ onFormSubmit }) {
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
                                         <label class="input-group-text" for="proposalStatus" style={{ width: "45%" ,fontWeight: "bold"}}>*proposalStatus</label>
-                                        <select class="form-select" id="proposalStatus" name="proposalStatus" onChange={(event) => handleChange(event, index)}>
+                                        <select 
+                                            // class="form-select" 
+                                            class={`form-select ${mandatoryFields.includes('proposalStatus') && managementInfo.proposalStatus.trim() === '' ? 'is-invalid' : ''}`} 
+                                            id="proposalStatus" 
+                                            name="proposalStatus" 
+                                            onChange={(event) => handleChange(event, index)}>
                                             <option selected>Choose</option>
                                             <option value="notYetDetermined">notYetDetermined</option>
                                             <option value="transferred">transferred</option>

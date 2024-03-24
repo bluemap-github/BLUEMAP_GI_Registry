@@ -3,6 +3,8 @@ import Base from '../modals/Base'
 
 function ItemInput({ onFormSubmit }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const mandatoryFields = ["name", "itemStatus"];
+
     const openModal = () => {
         setIsModalOpen(true);
       };
@@ -36,6 +38,13 @@ function ItemInput({ onFormSubmit }) {
             [name]: value
         };
         setFormData(updatedFormData);
+
+        if (mandatoryFields.includes(name) && value.trim() === '') {
+            event.target.classList.add('is-invalid');
+        } else {
+            event.target.classList.remove('is-invalid');
+        }
+
         onFormSubmit(updatedFormData);
     };
     
@@ -57,7 +66,13 @@ function ItemInput({ onFormSubmit }) {
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
                             <span className="input-group-text" id="basic-addon1" style={{width:"40%" ,fontWeight: "bold"}}>*name</span>
-                            <input type="text" className="form-control" placeholder="name" name="name" onChange={handleChange} />
+                            <input 
+                                type="text" 
+                                className={`form-control ${mandatoryFields.includes('name') && formData.name.trim() === '' ? 'is-invalid' : ''}`}
+                                placeholder="name" 
+                                name="name" 
+                                onChange={handleChange} 
+                            />
                         </div>
                     </div>
                     <div className='col'>
@@ -105,7 +120,11 @@ function ItemInput({ onFormSubmit }) {
                         </div>
                         <div class="input-group input-group-sm mt-2">
                             <label class="input-group-text" for="itemStatus" style={{width:"40%" ,fontWeight: "bold"}}>*itemStatus</label>
-                            <select class="form-select" id="itemStatus" name="itemStatus" onChange={handleChange}>
+                            <select 
+                                class={`form-select ${mandatoryFields.includes('itemStatus') && formData.itemStatus.trim() === '' ? 'is-invalid' : ''}`} 
+                                id="itemStatus" 
+                                name="itemStatus" 
+                                onChange={handleChange}>
                                 <option selected>Choose</option>
                                 <option value="processing">processing</option>
                                 <option value="valid">valid</option>
