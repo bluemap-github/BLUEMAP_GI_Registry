@@ -80,3 +80,14 @@ hr {
   z-index: 9999;
   border-radius: 10px;
 }
+
+.form-control.is-invalid, .was-validated .form-control:invalid{
+  padding-right: .5rem !important;
+  background-image: none !important;
+  color: var(--bs-form-invalid-border-color); 
+}
+
+.form-select.is-invalid, .was-validated .form-control:invalid{
+  padding-right: .5rem !important;
+  background-image: none !important;
+}
