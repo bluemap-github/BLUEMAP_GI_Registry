@@ -101,3 +101,20 @@ hr {
 .toggle-button-style:hover {
   cursor: pointer;
 }
+.regi-menu {
+  display: flex;
+  padding-left: 25px;
+  align-items: center;
+}
+.regi-menu:hover {
+  background-color: tomato;
+  cursor: pointer;
+}
+.title-menu {
+  margin-top: 70px;
+  height: 100px;
+  font-size: 30px;
+  border: bold;
+  text-align: center;
+  text-decoration: none;
+}
