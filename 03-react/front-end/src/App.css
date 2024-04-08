@@ -91,3 +91,13 @@ hr {
   padding-right: .5rem !important;
   background-image: none !important;
 }
+
+.toggle-button-style {
+  position: fixed;
+  top: 0;
+  z-index: 1010;
+  margin: 10px;
+}
+.toggle-button-style:hover {
+  cursor: pointer;
+}
