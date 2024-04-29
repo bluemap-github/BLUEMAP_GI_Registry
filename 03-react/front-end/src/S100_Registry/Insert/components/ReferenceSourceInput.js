@@ -74,25 +74,25 @@ function ReferenceSourceInput({onFormSubmit}) {
                     {referenceSource ? (
                             <div className='p-3 mt-2' >
                                 <div className='input-group input-group-sm' style={{zIndex: '0'}}>
-                                    <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>*referenceIdentifier</span>
+                                    <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>* Reference Identifier</span>
                                     <input 
                                         type="text" 
                                         class={`form-control ${mandatoryFields.includes('referenceIdentifier') && referenceSource.referenceIdentifier.trim() === '' ? 'is-invalid' : ''}`}
-                                        placeholder="referenceIdentifier" 
+                                        placeholder="Reference Identifier" 
                                         name="referenceIdentifier" onChange={handleChange} />
                                 </div>
                                 <div className='input-group input-group-sm mt-2' style={{zIndex: '0'}}>
-                                    <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>*sourceDocument</span>
+                                    <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>* Source Document</span>
                                     <input 
                                         type="text" 
                                         class={`form-control ${mandatoryFields.includes('sourceDocument') && referenceSource.sourceDocument.trim() === '' ? 'is-invalid' : ''}`}
-                                        placeholder="sourceDocument" 
+                                        placeholder="Source Document" 
                                         name="sourceDocument" 
                                         onChange={handleChange} />
                                 </div>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2" style={{zIndex: '0'}}>
-                                        <label style={{ width: "20%" ,fontWeight: "bold"}} class="input-group-text" for="similarity">*similarity</label>
+                                        <label style={{ width: "20%" ,fontWeight: "bold"}} class="input-group-text" for="similarity">* Similarity</label>
                                         <select 
                                             class={`form-select ${mandatoryFields.includes('similarity') && referenceSource.similarity.trim() === '' ? 'is-invalid' : ''}`}
                                             id="similarity" 

@@ -74,21 +74,21 @@ function ReferenceInput({onFormSubmit}) {
                                     {index !== 0 && <hr style={{margin: "5px"}}></hr>}
                                     <div className='row'>
                                         <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
-                                            <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>*referenceIdentifier</span>
+                                            <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>* Reference Identifier</span>
                                             <input 
                                                 type="text" 
                                                 // className="form-control"
                                                 class={`form-control ${mandatoryFields.includes('referenceIdentifier') && reference.referenceIdentifier.trim() === '' ? 'is-invalid' : ''}`} 
-                                                placeholder="referenceIdentifier" 
+                                                placeholder="Reference Identifier" 
                                                 name="referenceIdentifier" 
                                                 onChange={(event) => handleChange(event, index)} />
                                         </div>
                                         <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
-                                            <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>*sourceDocument</span>
+                                            <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>* Source Document</span>
                                             <input 
                                                 type="text" 
                                                 class={`form-control ${mandatoryFields.includes('sourceDocument') && reference.sourceDocument.trim() === '' ? 'is-invalid' : ''}`}
-                                                placeholder="sourceDocument" 
+                                                placeholder="Source Document" 
                                                 name="sourceDocument" 
                                                 onChange={(event) => handleChange(event, index)} 
                                             />

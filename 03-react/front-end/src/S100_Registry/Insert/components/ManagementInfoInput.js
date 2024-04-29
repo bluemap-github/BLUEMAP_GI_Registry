@@ -58,8 +58,8 @@ function ManagementInfoInput({ onFormSubmit }) {
     };
 
 
-    const [aliasList, setAliasList] = useState([["controlBodyNotes;"]]);
-    const [formattedAliasList, setFormattedAliasList] = useState(["controlBodyNotes;"]);
+    const [aliasList, setAliasList] = useState([["Control Body Notes;"]]);
+    const [formattedAliasList, setFormattedAliasList] = useState(["Control Body Notes;"]);
 
     const handleCheck = (newAliasList, index) => {
         const updatedAliasList = [...aliasList];
@@ -90,9 +90,9 @@ function ManagementInfoInput({ onFormSubmit }) {
 
     const addMIInput = () => {
         setManagementInfos([...managementInfos, managementInfoInit]);
-        const updatedAliasList = [...aliasList, ["controlBodyNotes;"]];
+        const updatedAliasList = [...aliasList, ["Control Body Notes;"]];
         setAliasList(updatedAliasList);
-        const updatedFormattedAliasList = [...formattedAliasList, "controlBodyNotes;"];
+        const updatedFormattedAliasList = [...formattedAliasList, "Control Body Notes;"];
         setFormattedAliasList(updatedFormattedAliasList);
     };
 
@@ -171,7 +171,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                             <div className='row'>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="proposalType" style={{ width: "45%" ,fontWeight: "bold"}}>*proposalType</label>
+                                        <label class="input-group-text" for="proposalType" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposal Type</label>
                                         <select 
                                             // class="form-select" 
                                             class={`form-select ${mandatoryFields.includes('proposalType') && managementInfo.proposalType.trim() === '' ? 'is-invalid' : ''}`} 
@@ -186,22 +186,22 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         </select>
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>*submittingOrganisation</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>* Submitting Organisation</span>
                                         <input 
                                             type="text" 
                                             className="form-control" 
                                             class={`form-control ${mandatoryFields.includes('submittingOrganisation') && managementInfo.submittingOrganisation.trim() === '' ? 'is-invalid' : ''}`}
-                                            placeholder="submittingOrganisation" 
+                                            placeholder="Submitting Organisation" 
                                             name="submittingOrganisation" 
                                             onChange={(event) => handleChange(event, index)} />
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>*proposedChange</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposed Change</span>
                                         <input 
                                             type="text"
                                             className="form-control" 
                                             class={`form-control ${mandatoryFields.includes('proposedChange') && managementInfo.proposedChange.trim() === '' ? 'is-invalid' : ''}`} 
-                                            placeholder="proposedChange" 
+                                            placeholder="Proposed Change" 
                                             name="proposedChange" 
                                             onChange={(event) => handleChange(event, index)} />
                                     </div>
@@ -210,12 +210,12 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     <div 
                                         className='input-group input-group-sm mt-2'
                                         style={{zIndex: '3'}}>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" }}>dateAccepted</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" }}>Accepted Date</span>
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
                                                 type="text" 
                                                 className="date-input" 
-                                                placeholder="dateAccepted" 
+                                                placeholder="Accepted Date" 
                                                 name="dateAccepted" 
                                                 value={managementInfo.dateAccepted} 
                                                 onChange={(e) => handleChange(e, index)}
@@ -231,14 +231,14 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     </div>
 
                                     <div className='input-group input-group-sm mt-2' style={{zIndex: '2'}}>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>*dateProposed</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>* Proposed Date</span>
                                         <div 
                                             class={`form-control ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'is-invalid' : ''}`} 
                                             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
                                                 type="text" 
                                                 className="date-input" 
-                                                placeholder="dateProposed" 
+                                                placeholder="Proposed Date" 
                                                 name="dateProposed" 
                                                 value={managementInfo.dateProposed} 
                                                 onChange={(e) => handleChange(e, index)}
@@ -254,7 +254,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     </div>
 
                                     <div className='input-group input-group-sm mt-2' style={{zIndex: '1'}}>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>*dateAmended</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>* Amended Date</span>
                                         <div 
                                             // className="form-control" 
                                             class={`form-control ${mandatoryDateFields.includes('dateAmended') && managementInfo.dateAmended.trim() === '' ? 'is-invalid' : ''}`} 
@@ -262,7 +262,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             <input  
                                                 type="text" 
                                                 className="date-input" 
-                                                placeholder="dateAmended" 
+                                                placeholder="Amended Date" 
                                                 name="dateAmended" 
                                                 value={managementInfo.dateAmended} 
                                                 onChange={(e) => handleChange(e, index)}
@@ -282,7 +282,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                             <div className='row'>
                                 <div className='col'>
                                     <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="proposalStatus" style={{ width: "45%" ,fontWeight: "bold"}}>*proposalStatus</label>
+                                        <label class="input-group-text" for="proposalStatus" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposal Status</label>
                                         <select 
                                             // class="form-select" 
                                             class={`form-select ${mandatoryFields.includes('proposalStatus') && managementInfo.proposalStatus.trim() === '' ? 'is-invalid' : ''}`} 
@@ -306,9 +306,9 @@ function ManagementInfoInput({ onFormSubmit }) {
                                 
                                 <div className='col'>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" }}>controlBodyNotes</span>
+                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" }}>Control Body Notes</span>
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                                            <input className='date-input' placeholder="controlBodyNotes" name="controlBodyNotes" value={formattedAliasList[index]} disabled />
+                                            <input className='date-input' placeholder="Control Body Notes" name="controlBodyNotes" value={formattedAliasList[index]} disabled />
                                             <div onClick={(() => openModal(index))}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>

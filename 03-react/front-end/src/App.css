@@ -94,7 +94,7 @@ hr {
 
 
 .title-menu {
-  margin-top: 70px;
+  margin-top: 50px;
   height: 100px;
   font-size: 30px;
   border: bold;
@@ -105,40 +105,37 @@ hr {
   display: flex;
 }
 .sidebard {
-  width: 250px;
+  width: 200px;
+  min-width: 200px;
   height: 100%;
   border-right: 1px solid #ccc;
-  background-color: #217b94;
 }
 .sidebar {
-  width: 250px;
+  width: 200px;
   height: 100%;
   border-right: 1px solid #ccc;
-  background-color: #6672756b;
   position: fixed; /* Navbar를 화면에 고정 */
 }
 
 .main-content {
   flex: 1; /* 나머지 영역을 채우기 위해 flex를 사용 */
   margin-left: 250px; /* Navbar의 너비만큼 왼쪽 여백 추가 */
-  padding: 20px; /* 추가적인 패딩을 주어 겹치지 않게 함 */
-  overflow-y: auto; /* 스크롤이 필요할 때만 스크롤이 가능하도록 설정 */
+  padding: 20px;
 }
 .sidebar .title-menu {
   font-size: 25px;
   height: 70px;
 }
-
-.sidebar .regi-menu {
-  font-size: 16px;
-  padding: 10px 20px;
+.regi-menu {
+  background-color: #61dafb;
+  height: 50px;
 }
+
 
 .sidebar .regi-menu a {
   display: block;
   color: black;
   text-decoration: none;
-  margin-bottom: 10px;
 }
 
 .sidebar .regi-menu a:hover {

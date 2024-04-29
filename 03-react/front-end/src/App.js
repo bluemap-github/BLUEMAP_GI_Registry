@@ -11,7 +11,7 @@ function App() {
     <Router>
       <div className="app-container">
         <Navbar />
-        <div className='sidebard'>sp</div>
+        <div className='sidebard'></div>
         <Routes>
           <Route path="/" element={<Register />} />
           <Route path="/detail/:id" element={<Detail />} />

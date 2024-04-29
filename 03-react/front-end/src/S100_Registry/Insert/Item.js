@@ -85,8 +85,8 @@ function Item() {
     const RChange = (formData) => {setReferences(formData);};
 
     return (
-        <div className="container mt-5">
-            <div style={{height: '70px'}}></div>
+        <div className="container p-5">
+            {/* <div style={{height: '70px'}}></div> */}
             <div>
                 <h1>Regist Data</h1>
             </div>

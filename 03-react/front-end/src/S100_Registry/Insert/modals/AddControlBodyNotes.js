@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 function AddControlBodyNotes({id, onCBNList, onClose, CBNData}) {
     const newData = [...CBNData[id]];
     for (let i = newData.length - 1; i >= 0; i--) {
-        if (newData[i] === "controlBodyNotes;") {
+        if (newData[i] === "Control Body Notes;") {
             newData.splice(i, 1);
         }
     }

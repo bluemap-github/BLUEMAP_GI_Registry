@@ -81,12 +81,12 @@ function Register() {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container p-5">
       {toast && <Toast setToast={setToast} text="Item is Deleted." />}
       {/* <button  onClick={deleteToast}>넹</button> */}
-      <div style={{height: '70px'}}></div>
+      {/* <div style={{height: '70px'}}></div> */}
       <div>
-        <h1 className='mb-3'>GI Register</h1>
+        <h1 className='mb-3'>Concept Register</h1>
         <div>
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>
         </div>

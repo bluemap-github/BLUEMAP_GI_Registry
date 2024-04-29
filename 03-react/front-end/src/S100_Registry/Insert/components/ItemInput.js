@@ -65,11 +65,11 @@ function ItemInput({ onFormSubmit }) {
                 <div className='row'>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%" ,fontWeight: "bold"}}>*name</span>
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%" ,fontWeight: "bold"}}>* Name</span>
                             <input 
                                 type="text" 
                                 className={`form-control ${mandatoryFields.includes('name') && formData.name.trim() === '' ? 'is-invalid' : ''}`}
-                                placeholder="name" 
+                                placeholder="Name" 
                                 name="name" 
                                 onChange={handleChange} 
                             />
@@ -77,23 +77,23 @@ function ItemInput({ onFormSubmit }) {
                     </div>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>camelCase</span>
-                            <input type="text" className="form-control" placeholder="camelCase" name="camelCase" onChange={handleChange} />
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Camel Case</span>
+                            <input type="text" className="form-control" placeholder="Camel Case" name="camelCase" onChange={handleChange} />
                         </div>
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{width:"19.5%"}}>definitionSource</span>
-                        <input type="text" className="form-control" placeholder="definitionSource" name="definitionSource" onChange={handleChange} />
+                        <span className="input-group-text" id="basic-addon1" style={{width:"19.5%"}}>Source Of Definition</span>
+                        <input type="text" className="form-control" placeholder="Source Of Definition" name="definitionSource" onChange={handleChange} />
                     </div>
                 </div>
                 <div>
                     <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{width:"10%"}}>definition</span>
-                        <textarea type="text" className="form-control" placeholder="definition" name="definition" onChange={handleChange} />
+                        <span className="input-group-text" id="basic-addon1" style={{width:"10%"}}>Definition</span>
+                        <textarea type="text" className="form-control" placeholder="Definition" name="definition" onChange={handleChange} />
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{width:"10%"}}>remarks</span>
-                        <textarea type="text" className="form-control" placeholder="remarks" name="remarks" onChange={handleChange} />
+                        <span className="input-group-text" id="basic-addon1" style={{width:"10%"}}>Remarks</span>
+                        <textarea type="text" className="form-control" placeholder="Remarks" name="remarks" onChange={handleChange} />
                     </div>
                 </div>
                 <div className='row'>
@@ -106,9 +106,9 @@ function ItemInput({ onFormSubmit }) {
                 />
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"20.5%"}}>alias</span>
+                            <span className="input-group-text" id="basic-addon1" style={{width:"20.5%"}}>Alias</span>
                             <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                            <input className='date-input' placeholder="alias" name="alias" value={formattedAliasList} disabled />
+                            <input className='date-input' placeholder="Alias" name="alias" value={formattedAliasList} disabled />
                                 <div onClick={openModal}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
@@ -119,7 +119,7 @@ function ItemInput({ onFormSubmit }) {
                             
                         </div>
                         <div class="input-group input-group-sm mt-2">
-                            <label class="input-group-text" for="itemStatus" style={{width:"40%" ,fontWeight: "bold"}}>*itemStatus</label>
+                            <label class="input-group-text" for="itemStatus" style={{width:"40%" ,fontWeight: "bold"}}>* Item Status</label>
                             <select 
                                 class={`form-select ${mandatoryFields.includes('itemStatus') && formData.itemStatus.trim() === '' ? 'is-invalid' : ''}`} 
                                 id="itemStatus" 
@@ -135,22 +135,22 @@ function ItemInput({ onFormSubmit }) {
                             </select>
                         </div>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>reference</span>
-                            <input type="text" className="form-control" placeholder="reference" name="reference" onChange={handleChange} />
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Reference</span>
+                            <input type="text" className="form-control" placeholder="Reference" name="reference" onChange={handleChange} />
                         </div>
                     </div>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>similarityToSource</span>
-                            <input type="text" className="form-control" placeholder="similarityToSource" name="similarityToSource" onChange={handleChange} />
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Similarity To Source</span>
+                            <input type="text" className="form-control" placeholder="Similarity To Source" name="similarityToSource" onChange={handleChange} />
                         </div>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>justification</span>
-                            <input type="text" className="form-control" placeholder="justification" name="justification" onChange={handleChange} />
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Justification</span>
+                            <input type="text" className="form-control" placeholder="Justification" name="justification" onChange={handleChange} />
                         </div>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>proposedChange</span>
-                            <input type="text" className="form-control" placeholder="proposedChange" name="proposedChange" onChange={handleChange} />
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Proposed Change</span>
+                            <input type="text" className="form-control" placeholder="Proposed Change" name="proposedChange" onChange={handleChange} />
                         </div>
                     </div>
                 </div>

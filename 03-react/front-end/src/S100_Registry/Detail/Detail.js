@@ -62,7 +62,7 @@ function Detail() {
 
   else return (
     <div className="container mt-5">
-      <div style={{height: '70px'}}></div>
+      {/* <div style={{height: '70px'}}></div> */}
       <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
       <h1 className='mb-3'>GI Register</h1>
       <div>
