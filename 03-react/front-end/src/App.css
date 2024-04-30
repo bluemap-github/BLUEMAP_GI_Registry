@@ -127,10 +127,18 @@ hr {
   height: 70px;
 }
 .regi-menu {
-  background-color: #61dafb;
-  height: 50px;
+  height: 38px;
+  display: flex;
+  align-items: center; 
+  padding: 5px;
+}
+.active {
+  background-color: #F7F7F7;
 }
 
+.regi-menu:hover{
+  background-color: #F7F7F7;
+}
 
 .sidebar .regi-menu a {
   display: block;

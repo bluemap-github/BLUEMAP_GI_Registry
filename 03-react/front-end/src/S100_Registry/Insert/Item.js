@@ -87,8 +87,9 @@ function Item() {
     return (
         <div className="container p-5">
             {/* <div style={{height: '70px'}}></div> */}
-            <div>
-                <h1>Regist Data</h1>
+            <div style={{display: "flex"}}>
+                <h1>Create Concept Data</h1>
+                <button onClick={() => window.location='/concept'}>back</button>
             </div>
             <div className='mt-5'>
                 <ItemInput item={item} onFormSubmit={ItemChange}/>

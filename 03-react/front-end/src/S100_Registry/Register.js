@@ -86,7 +86,10 @@ function Register() {
       {/* <button  onClick={deleteToast}>넹</button> */}
       {/* <div style={{height: '70px'}}></div> */}
       <div>
-        <h1 className='mb-3'>Concept Register</h1>
+        <div style={{display: "flex"}}>
+          <h1 className='mb-3'>Concept Register</h1>
+          <button onClick={() => window.location='/concept/create'}>add</button>
+        </div>
         <div>
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>
         </div>
@@ -122,11 +125,11 @@ function Register() {
                   style={{transform: "scale(1.5)"}}
                 />
               </th>
-              <td onClick={() => window.location=`/detail/${item.id}`} className='text-center' style={{width: '3%'}}>{index+1}</td>
-              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
-              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
-              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '40%'}}>{item.definition}</td>
-              <td onClick={() => window.location=`/detail/${item.id}`} className='th-inner sortable both' style={{width: '9%'}}>{item.itemStatus}</td>
+              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='text-center' style={{width: '3%'}}>{index+1}</td>
+              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
+              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
+              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='th-inner sortable both' style={{width: '40%'}}>{item.definition}</td>
+              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='th-inner sortable both' style={{width: '9%'}}>{item.itemStatus}</td>
           </tr>
         ))}
         </tbody>
