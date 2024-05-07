@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const putItemUrl = (itemId) => {
-    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/put/`;
-};
+import { PUT_ITEM_URL } from '../../../api';
 
 function ItemUpdate({ items, onClose }) {
     const [item, setItem] = useState(items);
@@ -24,8 +21,7 @@ function ItemUpdate({ items, onClose }) {
     const handleSubmitItem = async () => {
         try {
             const itemId = items.id;
-            const itemResponse = await axios.put(putItemUrl(itemId), item);
-            console.log('Item data successfully put:', itemResponse.data);
+            await axios.put(PUT_ITEM_URL(itemId), item);
             onClose();
             window.location.reload();
         } catch (error) {

@@ -8,21 +8,8 @@ import ReferenceSourceAdd from './Add/ReferenceSourceAdd';
 import ReferenceAdd from './Add/ReferenceAdd';
 import Delete from './Delete';
 
-const delItemUrl = (idx) => {
-  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${idx}/delete/`;
-};
+import {DEL_ITEM_URL, DEL_MI_URL, DEL_RS_URL, DEL_R_URL} from '../../api'
 
-const delMIUrl = (idx) => {
-  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/managementInfo/${idx}/delete/`;
-};
-
-const delRSUrl = (idx) => {
-  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/referenceSource/${idx}/delete/`;
-};
-
-const delRUrl = (idx) => {
-  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/reference/${idx}/delete/`;
-};
 function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx}) {
   if (!isOpen) {
     return null;
@@ -51,16 +38,16 @@ function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx}) {
       formComponent = <ReferenceAdd onClose={onClose} itemId={itemList.item.id}/>;
       break;
     case 8: // del item 
-      formComponent = <Delete onClose={onClose} selectedForm={delItemUrl(keyIdx)} keyIdx={selectedForm} />;
+      formComponent = <Delete onClose={onClose} selectedForm={DEL_ITEM_URL(keyIdx)} keyIdx={selectedForm} />;
       break;
     case 9: // del MI
-      formComponent = <Delete onClose={onClose} selectedForm={delMIUrl(keyIdx)} keyIdx={selectedForm} />;
+      formComponent = <Delete onClose={onClose} selectedForm={DEL_MI_URL(keyIdx)} keyIdx={selectedForm} />;
       break;
     case 10:// del RS
-      formComponent = <Delete onClose={onClose} selectedForm={delRSUrl(keyIdx)} keyIdx={selectedForm} />;
+      formComponent = <Delete onClose={onClose} selectedForm={DEL_RS_URL(keyIdx)} keyIdx={selectedForm} />;
       break;
     case 11:// del R
-      formComponent = <Delete onClose={onClose} selectedForm={delRUrl(keyIdx)} keyIdx={selectedForm} />;
+      formComponent = <Delete onClose={onClose} selectedForm={DEL_R_URL(keyIdx)} keyIdx={selectedForm} />;
       break;
     default:
       formComponent = null;

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { REGISTER_ITEM_LIST_URL } from './api';
+import { REGISTER_ITEM_LIST_URL, DEL_ITEM_URL } from './api';
 import Toast from './Toast';
 
-const delItemUrl = (idx) => {
-  return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${idx}/delete/`;
-};
 
 function Register() {
   const [itemList, setItemList] = useState([]);
@@ -47,7 +44,7 @@ function Register() {
 
   const deleteItem = async (idx) => {
     try {
-      await axios.delete(delItemUrl(idx));
+      await axios.delete(DEL_ITEM_URL(idx));
       const fetchItemList = async () => {
         try {
           const response = await axios.get(REGISTER_ITEM_LIST_URL);
