@@ -87,4 +87,17 @@ class S100_RE_Reference(models.Model):
 
 
 from mongo_driver import db
+# test - 곧 삭제 예정
 collections = db['collections0417']
+
+
+# 스키마 변경중
+S100_Register = db['S100_Register']
+S100_Concept_Item = db['S100_Concept_Item']
+S100_Concept_ManagementInfo = db['S100_Concept_ManagementInfo']
+S100_Concept_ReferenceSource = db['S100_Concept_ReferenceSource']
+S100_Concept_Reference = db['S100_Concept_Reference']
+
+S100_DataDictionary_Item = db['S100_DataDictionary_Item']
+
+S100_Portrayal_Item = db['S100_Portrayal_Item']
