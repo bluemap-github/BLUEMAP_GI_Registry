@@ -1,6 +1,9 @@
 // const DEPLOY_URL = 'https://hjk0815.pythonanywhere.com';
 const DEPLOY_URL = 'http://127.0.0.1:8000';
 
+// S100_Registry > Test.js
+export const MONGO_DB_TEST  = `${DEPLOY_URL}/api/v1/sample/`;
+
 // S100_Registry > Register.js
 export const REGISTER_ITEM_LIST_URL = `${DEPLOY_URL}/api/v1/register/1/itemList/`;
 
@@ -69,6 +72,5 @@ export const DEL_R_URL  = (idx) => {
 
 
 
-export const TEST = (itemId) => {
-    return `안녕 ${itemId}`;
-};
+
+
