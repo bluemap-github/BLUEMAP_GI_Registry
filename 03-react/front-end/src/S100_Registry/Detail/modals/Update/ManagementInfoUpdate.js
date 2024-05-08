@@ -1,12 +1,10 @@
 import React, { useState, forwardRef } from "react";
 import axios from 'axios';
+import { PUT_MI_URL  } from '../../../api';
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const putMIUrl = (MIId) => {
-    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/managementInfo/${MIId}/put/`;
-};
 
 function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
     const initialMI = itemList.management_infos[followIdx];
@@ -23,8 +21,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
     const handleSubmitItem = async () => {
         try {
             const MIId = itemList.management_infos[followIdx].id;
-            const MIResponse = await axios.put(putMIUrl(MIId), MI);
-            console.log('Item data successfully put:', MIResponse.data);
+            await axios.put(PUT_MI_URL (MIId), MI);
             onClose();
             window.location.reload();
         } catch (error) {

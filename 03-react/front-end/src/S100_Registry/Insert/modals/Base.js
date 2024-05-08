@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import AddAlias from './AddAlias';
 import AddControlBodyNotes from './AddControlBodyNotes';
+// import SubmitModal from './SubmitModal';
 
 function Base({ isOpen, onClose, selectedForm, onformdata, aliasData, id, CBNData}) {
   const handleCheck = (newAliasList) => {
@@ -19,10 +20,11 @@ function Base({ isOpen, onClose, selectedForm, onformdata, aliasData, id, CBNDat
     case 2:
       formComponent = <AddControlBodyNotes onClose={onClose} onCBNList={handleCheck} id={id} CBNData={CBNData}/>;
       break;
+    // case 3:
+    //   formComponent = <SubmitModal />;
     default:
       formComponent = null;
   }
-
   
   return (
     <div 

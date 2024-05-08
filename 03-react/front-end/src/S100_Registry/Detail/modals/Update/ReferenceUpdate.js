@@ -1,9 +1,7 @@
 import React, {useState}from "react";
 import axios from 'axios';
+import { PUT_R_URL } from '../../../api';
 
-const putRUrl = (RId) => {
-    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/reference/${RId}/put/`;
-};
 
 function ReferenceUpdate({ itemList, onClose, followIdx }) {
     const str = JSON.stringify(itemList.references[followIdx]);
@@ -20,8 +18,7 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
     const handleSubmitItem = async () => {
         try {
             const RId = itemList.references[followIdx].id;
-            const RResponse = await axios.put(putRUrl(RId), R);
-            console.log('Item data successfully put:', RResponse.data);
+            await axios.put(PUT_R_URL(RId), R);
             onClose();
             window.location.reload();
         } catch (error) {

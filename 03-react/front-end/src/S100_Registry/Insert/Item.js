@@ -5,28 +5,15 @@ import ItemInput from './components/ItemInput';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
 import ReferenceInput from './components/ReferenceInput';
-
-
-// CREATE_MI_URL을 동적으로 생성하는 함수
-const createManagementInfoUrl = (itemId) => {
-    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/managementInfo/post/`;
-};
-
-// CREATE_MI_URL을 동적으로 생성하는 함수
-const createReferenceSourceUrl = (itemId) => {
-    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/referenceSource/post/`;
-};
-
-// CREATE_MI_URL을 동적으로 생성하는 함수
-const createReferenceUrl = (itemId) => {
-    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/reference/post/`;
-};
+import {CREATE_MANAGEMENT_INFO_URL, CREATE_REFERENCE_SOURCE_URL, CREATE_REFERENCE_URL } from '../api';
 
 function Item() {
     const [item, setItem] = useState('');
     const [managementInfos, setManagementInfos] = useState(['']); // 관리 정보 입력 창 배열
     const [referenceSource, setReferenceSource] = useState(null);
     const [references, setReferences] = useState(null);
+
+    
 
     const handleSubmitItem = async () => {
         try {
@@ -42,29 +29,26 @@ function Item() {
                 // if (managementInfo.trim() === '') continue; // 빈 데이터는 무시
 
                 // Management Info를 저장할 URL 생성 후 POST
-                const miUrl = createManagementInfoUrl(itemId);
-                const MIResponse = await axios.post(miUrl, managementInfo);
-                console.log('Management Info data successfully posted:', MIResponse);
+                const miUrl = CREATE_MANAGEMENT_INFO_URL(itemId);
+                await axios.post(miUrl, managementInfo);
             }
 
             // RS에 대해 작업
             if (referenceSource) {
-                const rsUrl = createReferenceSourceUrl(itemId);
-                const RSResponse = await axios.post(rsUrl, referenceSource);
-                console.log('Reference Source data successfully posted:', RSResponse);
+                const rsUrl = CREATE_REFERENCE_SOURCE_URL(itemId);
+                await axios.post(rsUrl, referenceSource);
             }
 
             // 모든 R에 대해 작업
             if (references != null) {
                 for(const reference of references) {
                     if (reference) {
-                        const rUrl = createReferenceUrl(itemId);
-                        const RResponse = await axios.post(rUrl, reference);
-                        console.log('Reference data successfully posted:', RResponse);
+                        const rUrl = CREATE_REFERENCE_URL(itemId);
+                        await axios.post(rUrl, reference);
                     }
                 }
             }
-            window.location.href = `/detail/${itemId}`;
+            window.location.href = `/concept/detail/${itemId}`;
         } catch (error) {
             console.error('Error posting data:', error);
             console.log(item)

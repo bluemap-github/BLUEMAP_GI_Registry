@@ -3,10 +3,8 @@ import React, { useState, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import { CREATE_MANAGEMENT_INFO_URL } from '../../../api';
 
-const createManagementInfoUrl = (itemId) => {
-    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/managementInfo/post/`;
-};
 
 
 function ManagementInfoAdd({onClose, itemId}) {
@@ -21,9 +19,8 @@ function ManagementInfoAdd({onClose, itemId}) {
       };
     const handleSubmitItem = async () => {
         try {
-            const miUrl = createManagementInfoUrl(itemId);
-            const MIResponse = await axios.post(miUrl, managementInfo);
-            console.log('Management Info data successfully posted:', MIResponse);
+            const miUrl = CREATE_MANAGEMENT_INFO_URL(itemId);
+            await axios.post(miUrl, managementInfo);
             onClose();
             window.location.reload();
         } catch (error) {

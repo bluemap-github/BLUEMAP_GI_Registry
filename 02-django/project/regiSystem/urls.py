@@ -52,5 +52,5 @@ urlpatterns = [
     path('registerItem/reference/<int:pk>/delete/', delete.reference),
 
     ## sample
-    path('sample/', sample.create)
+    path('sample/', sample.create_student_info)
 ]

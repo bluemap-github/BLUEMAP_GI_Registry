@@ -1,9 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
-
-const createReferenceUrl = (itemId) => {
-    return `https://hjk0815.pythonanywhere.com/api/v1/registerItem/${itemId}/reference/post/`;
-};
+import {CREATE_REFERENCE_URL} from '../../../api';
 
 
 function ReferenceAdd({onClose, itemId}){
@@ -17,9 +14,8 @@ function ReferenceAdd({onClose, itemId}){
     }
     const handleSubmitItem = async () => {
         try {
-            const RUrl = createReferenceUrl(itemId);
-            const RResponse = await axios.post(RUrl, reference);
-            console.log('Management Info data successfully posted:', RResponse);
+            const RUrl = CREATE_REFERENCE_URL(itemId);
+            await axios.post(RUrl, reference);
             onClose();
             window.location.reload();
         } catch (error) {

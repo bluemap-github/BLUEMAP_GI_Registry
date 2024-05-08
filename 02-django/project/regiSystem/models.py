@@ -86,3 +86,5 @@ class S100_RE_Reference(models.Model):
     
 
 
+from mongo_driver import db
+collections = db['collections0417']
