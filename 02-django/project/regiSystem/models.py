@@ -89,6 +89,10 @@ class S100_RE_Reference(models.Model):
 from mongo_driver import db
 # test - 곧 삭제 예정
 collections = db['collections0417']
+collections0417 = db.collections0417
+
+post_classroom = db['classRoom']
+getClassroom = db.classRoom
 
 
 # 스키마 변경중

@@ -2,7 +2,8 @@
 const DEPLOY_URL = 'http://127.0.0.1:8000';
 
 // S100_Registry > Test.js
-export const MONGO_DB_TEST  = `${DEPLOY_URL}/api/v1/sample/`;
+export const MONGO_DB_POST  = `${DEPLOY_URL}/api/v1/sample_post/`;
+export const MONGO_DB_GET_ALL  = `${DEPLOY_URL}/api/v1/sample_get/`;
 
 // S100_Registry > Register.js
 export const REGISTER_ITEM_LIST_URL = `${DEPLOY_URL}/api/v1/register/1/itemList/`;
