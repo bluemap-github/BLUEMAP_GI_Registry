@@ -1,25 +1,61 @@
-from ..models import S100_RE_Register, S100_RE_RegisterItem, S100_RE_ManagementInfo, S100_RE_Reference, S100_RE_ReferenceSource
-from ..serializers import RegisterSerializer, ManagementInfoSerializer, ReferenceSourceSerializer, ReferenceSerializer, RegisterItemSerializer
+from bson.objectid import ObjectId
+from ..models import (
+    S100_RE_Register, 
+    S100_RE_RegisterItem, 
+    S100_RE_ManagementInfo, 
+    S100_RE_Reference, 
+    S100_RE_ReferenceSource,
+)
+from ..models import (
+    S100_Concept_Register,
+    S100_Concept_Item,
+
+)
+from ..serializers import (
+    RegisterSerializer, 
+    ManagementInfoSerializer, 
+    ReferenceSourceSerializer, 
+    ReferenceSerializer, 
+    RegisterItemSerializer,
+
+    ConceptSerializer,
+    ConceptItemSerializer,
+)
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
-from django.shortcuts import get_object_or_404, get_list_or_404
-
-@api_view(['GET'])
-def register_list(request):
-    if request.method == 'GET':
-        regist_list = get_list_or_404(S100_RE_Register)
-        print("sd")
-        serializer = RegisterSerializer(regist_list, many=True)
-        return Response(serializer.data)
+from rest_framework.status import (
+        HTTP_400_BAD_REQUEST, 
+        HTTP_404_NOT_FOUND,
+        HTTP_405_METHOD_NOT_ALLOWED
+    )
 
 @api_view(['GET'])
-def register_detail(request, pk):
+def concept_register_list(request):
     if request.method == 'GET':
-        register = get_object_or_404(S100_RE_Register, pk=pk)
-        serializer = RegisterSerializer(register)
-        return Response(serializer.data)
+        try :
+            cursor = S100_Concept_Register.find()
+            serializer = ConceptSerializer(cursor, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def concept_register_detail(request, _id):
+    if request.method == 'GET':
+        try:
+            c_register = S100_Concept_Register.find_one({'_id': ObjectId(_id)})
+            if c_register:
+                serializer = ConceptSerializer(c_register)
+                return Response(serializer.data)
+            else:
+                return Response({'error': 'Register not found'}, status=HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
+    return Response(status=HTTP_405_METHOD_NOT_ALLOWED)
 
 
 @api_view(['GET'])
@@ -39,12 +75,33 @@ def register_itemList(request, pk):
         }
         return Response(response_data)
 
+@api_view(['GET'])
+def concept_item_list(request, _id): #레지스터 시리얼넘버가 들어감
+    if request.method == 'GET':
+        try:
+            c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(_id)}))
+            serializer = ConceptItemSerializer(c_item_list, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def concept_item_detail(request, _id):
+    if request.method == 'GET':
+        try:
+            c_item = S100_Concept_Item.find_one({'_id': ObjectId(_id)})
+            serializer = ConceptItemSerializer(c_item)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 def item_detail(request, pk):
     if request.method == 'GET':
         item = get_object_or_404(S100_RE_RegisterItem, pk=pk)
         item_serializer = RegisterItemSerializer(item)
+        print("이거", item_serializer.data)
         
         management_infos = S100_RE_ManagementInfo.objects.filter(s100_RE_RegisterItem=item)
         reference_sources = S100_RE_ReferenceSource.objects.filter(s100_RE_RegisterItem=item)

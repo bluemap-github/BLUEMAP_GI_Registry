@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { REGISTER_ITEM_LIST_URL, DEL_ITEM_URL } from './api';
-import Toast from './Toast';
+import Toast from '../Toast';
 
 
 function Register() {

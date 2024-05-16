@@ -1,8 +1,21 @@
+from bson.objectid import ObjectId
 from django.shortcuts import render
 from django.http import HttpResponse
 
 from ..models import S100_RE_Register, S100_RE_RegisterItem, S100_RE_ManagementInfo, S100_RE_Reference, S100_RE_ReferenceSource
-from ..serializers import RegisterSerializer, ManagementInfoSerializer, ReferenceSourceSerializer, ReferenceSerializer, RegisterItemSerializer
+from ..models import (
+        S100_Concept_Register,
+        S100_Concept_Item,
+    )
+from ..serializers import (
+        ManagementInfoSerializer, 
+        ReferenceSourceSerializer, 
+        ReferenceSerializer, 
+        RegisterItemSerializer,
+
+        ConceptSerializer,
+        ConceptItemSerializer,
+    )
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -11,12 +24,13 @@ from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CON
 from django.shortcuts import get_object_or_404, get_list_or_404
 
 @api_view(['POST'])
-def register(request):
+def concept_register(request):
     if request.method == 'POST':
-        serializer = RegisterSerializer(data=request.data)
+        serializer = ConceptSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=HTTP_201_CREATED)
+            validated_data = serializer.validated_data
+            S100_Concept_Register.insert_one(validated_data) 
+            return Response(serializer.data, status=HTTP_201_CREATED) # 이 부분을 "직접 응답 데이터"라고 말함
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
@@ -30,6 +44,18 @@ def item(request, pk):
             serializer.save()
             return Response(serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def concept_item(request):
+    serializer = ConceptItemSerializer(data=request.data)
+    if serializer.is_valid():
+        # validated_data를 사용하여 classroom_id를 ObjectId로 변환
+        validated_data = serializer.validated_data
+        validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+        
+        S100_Concept_Item.insert_one(validated_data) 
+        return Response(serializer.data, status=HTTP_201_CREATED)
+    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

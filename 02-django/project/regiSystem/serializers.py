@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from bson import ObjectId
 from .models import (
     S100_RE_Register,
     S100_RE_RegisterItem,
@@ -6,11 +7,23 @@ from .models import (
     S100_RE_Reference,
     S100_RE_ReferenceSource
 )
-# Registery
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = S100_RE_Register
-        fields = '__all__'
+
+# Serializer field for Django REST Framework to handle MongoDB ObjectId.
+class ObjectIdField(serializers.Field):
+    def to_representation(self, value):
+        if isinstance(value, ObjectId):
+            return str(value)
+        return value
+
+    def to_internal_value(self, data):
+        try:
+            return ObjectId(data)
+        except:
+            raise serializers.ValidationError("Invalid ObjectId")
+
+
+
+
 
 # Register Item
 class RegisterItemSerializer(serializers.ModelSerializer):
@@ -19,6 +32,38 @@ class RegisterItemSerializer(serializers.ModelSerializer):
         exclude = (
             's100_RE_Register',
         )
+
+class ConceptItemSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    concept_id = serializers.CharField()
+    itemIdentifier = serializers.IntegerField()
+    name = serializers.CharField(max_length=100)
+    definition = serializers.CharField(allow_blank=True)
+    remarks = serializers.CharField(allow_blank=True)
+    itemStatus = serializers.CharField()# Enum - S100_RE_ItemStatus
+    alias = serializers.JSONField(default=list) 
+    camelCase = serializers.CharField(max_length=100, allow_blank=True)
+    definitionSource = serializers.CharField(max_length=100, allow_blank=True)
+    reference = serializers.CharField(max_length=100, allow_blank=True)
+    similarityToSource = serializers.CharField(max_length=100, allow_blank=True)
+    justification = serializers.CharField(max_length=100, allow_blank=True)
+    proposedChange = serializers.CharField(max_length=100, allow_blank=True)
+
+
+# Registery
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = S100_RE_Register
+        fields = '__all__'
+
+class ConceptSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    name = serializers.CharField(max_length=100)
+    operatingLanguage = serializers.CharField(max_length=100)
+    contentSummary = serializers.CharField()
+    uniformResourceIdentifier = serializers.CharField(max_length=100)
+    dateOfLastChange = serializers.CharField()
+    
 
 
 # Managemant Info 
@@ -44,8 +89,5 @@ class ReferenceSerializer(serializers.ModelSerializer):
         exclude = (
             's100_RE_RegisterItem',
         )
-
-
-
 
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Register from './S100_Registry/Register';
+import ConceptRegister from './S100_Registry/Concept/ConceptRegister';
 import Home from './S100_Registry/Home';
-import Detail from './S100_Registry/Detail/Detail';
-import InsertItem from './S100_Registry/Insert/Item';
+import Detail from './S100_Registry/Concept/Detail/Detail';
+import InsertItem from './S100_Registry/Concept/Insert/Item';
 import Navbar from './S100_Registry/Navbar';
 import './App.css';
 
@@ -15,7 +15,7 @@ function App() {
         <div className='sidebard'></div>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/concept" element={<Register />} />
+          <Route path="/concept" element={<ConceptRegister />} />
           <Route path="/concept/detail/:id" element={<Detail />} />
           <Route path="/concept/create" element={<InsertItem />} />
         </Routes>

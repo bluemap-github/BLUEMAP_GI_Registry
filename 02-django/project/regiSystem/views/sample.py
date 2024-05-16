@@ -1,3 +1,4 @@
+from bson.objectid import ObjectId
 from rest_framework.response import Response
 from ..models import (
         collections, 
@@ -7,7 +8,14 @@ from ..models import (
     )
 from rest_framework.decorators import api_view
 from ..sampleSerializers import StudentSerializer, ClassroomSerializer
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
+from rest_framework.status import (
+        HTTP_200_OK, 
+        HTTP_201_CREATED, 
+        HTTP_204_NO_CONTENT, 
+        HTTP_400_BAD_REQUEST, 
+        HTTP_404_NOT_FOUND,
+        HTTP_405_METHOD_NOT_ALLOWED
+    )
 
 
 @api_view(['POST'])
@@ -28,13 +36,28 @@ def create_student_info(request):
 
 
 @api_view(['GET'])
-def get_student_info(request):
+def get_student_list(request):
     if request.method == 'GET':
         cursor = collections0417.find()
         serializer = StudentSerializer(cursor, many=True)
         return Response(serializer.data)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-    
+
+
+@api_view(['GET'])
+def get_student_info(request, student_id):  
+    if request.method == 'GET':
+        try:
+            student = collections0417.find_one({'_id': ObjectId(student_id)})
+            if student:
+                serializer = StudentSerializer(student)
+                return Response(serializer.data)
+            else:
+                return Response({'error': 'Student not found'}, status=HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
+    return Response(status=HTTP_405_METHOD_NOT_ALLOWED)
+
 
 @api_view(['POST'])
 def create_classroom(request):
@@ -45,7 +68,7 @@ def create_classroom(request):
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-from bson.objectid import ObjectId
+
 @api_view(['GET'])
 def get_classroom(request):
     if request.method == 'GET':

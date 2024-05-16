@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MONGO_DB_POST, MONGO_DB_GET_ALL } from './api';
+import { MONGO_DB_POST, MONGO_DB_GET_ALL } from './Concept/api';
 import axios from 'axios';
 
 const Test = () => {
