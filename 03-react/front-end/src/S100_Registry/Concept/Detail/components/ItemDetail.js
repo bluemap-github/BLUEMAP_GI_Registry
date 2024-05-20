@@ -13,11 +13,11 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
     return (
         <div className='mt-1 mb-3 p-3' style={{backgroundColor : '#F8F8F8'}}>
             <div className="mt-3 mb-3 card p-3">
-                <table class="table table-sm">
+                <table className="table table-sm">
                     <thead>
                         <tr>
                         <th 
-                            colspan="2" 
+                            colSpan="2" 
                             className='text-center table-dark' 
                             scope="col" style={{width: '25%'}}
                         >
@@ -81,7 +81,7 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
             </div>
             <div className='text-end'>
                 <button className='btn btn-secondary btn-sm' onClick={handleClick}>Update</button>
-                <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(itemList.item.id)}>Delete</button>
+                <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(itemList.item._id)}>Delete</button>
             </div>
             
         </div>

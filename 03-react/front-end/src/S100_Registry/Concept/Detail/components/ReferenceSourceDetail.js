@@ -56,12 +56,12 @@ function ReferenceSourceDetail({itemList, handleUpdateButtonClick, handleKeyIdx}
                     {itemList.reference_sources.length > 0 ? (
                         <div>
                             {itemList.reference_sources.map((source, idx) => (
-                                <li key={source.id} className="mt-3 mb-3 card p-3" style={{listStyle: 'none'}}>
-                                    <table class="table table-sm">
+                                <li key={source._id} className="mt-3 mb-3 card p-3" style={{listStyle: 'none'}}>
+                                    <table className="table table-sm">
                                         <thead>
                                             <tr>
                                             <th 
-                                                colspan="2" 
+                                                colSpan="2" 
                                                 className='text-center table-dark' 
                                                 scope="col" style={{width: '25%'}}
                                             >
@@ -86,7 +86,7 @@ function ReferenceSourceDetail({itemList, handleUpdateButtonClick, handleKeyIdx}
                                     </table>
                                     <div className='text-end'>
                                         <button className='btn btn-secondary btn-sm' style={{maxWidth:"70px"}} onClick={handleClick}>Update</button>
-                                        <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(source.id)}>Delete</button>
+                                        <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(source._id)}>Delete</button>
                                     </div>
                                 </li>
                             ))}

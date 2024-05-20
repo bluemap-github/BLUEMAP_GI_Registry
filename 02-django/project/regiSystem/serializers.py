@@ -8,6 +8,7 @@ from .models import (
     S100_RE_ReferenceSource
 )
 
+# [New]
 # Serializer field for Django REST Framework to handle MongoDB ObjectId.
 class ObjectIdField(serializers.Field):
     def to_representation(self, value):
@@ -33,6 +34,7 @@ class RegisterItemSerializer(serializers.ModelSerializer):
             's100_RE_Register',
         )
 
+# [New]
 class ConceptItemSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
     concept_id = serializers.CharField()
@@ -56,6 +58,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = S100_RE_Register
         fields = '__all__'
 
+# [New]
 class ConceptSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
     name = serializers.CharField(max_length=100)
@@ -73,6 +76,18 @@ class ManagementInfoSerializer(serializers.ModelSerializer):
         exclude = (
             's100_RE_RegisterItem',
         )
+# [New]
+class ConceptManagementInfoSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    # concept_item_id = serializers.CharField()
+    proposalType = serializers.CharField()# Enum - S100_RE_ProposalType
+    submittingOrganisation = serializers.CharField(max_length=100)
+    proposedChange = serializers.CharField(max_length=100)
+    dateAccepted = serializers.CharField(allow_blank=True) # DateTime
+    dateProposed = serializers.CharField() # DateTime
+    dateAmended = serializers.CharField() # DateTime
+    proposalStatus = serializers.CharField()# Enum - S100_RE_ProposalStatus
+    controlBodyNotes = serializers.JSONField(default=list) 
 
 # Reference Source 
 class ReferenceSourceSerializer(serializers.ModelSerializer):
@@ -81,6 +96,13 @@ class ReferenceSourceSerializer(serializers.ModelSerializer):
         exclude = (
             's100_RE_RegisterItem',
         )
+# [New]
+class ConceptReferenceSourceSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    # concept_item_id = serializers.CharField()
+    referenceIdentifier = serializers.CharField(max_length=100, allow_blank=True)
+    sourceDocument = serializers.CharField(max_length=100)
+    similarity = serializers.CharField()# Enum - S100_RE_SimilarityToSource
 
 # Reference 
 class ReferenceSerializer(serializers.ModelSerializer):
@@ -89,5 +111,10 @@ class ReferenceSerializer(serializers.ModelSerializer):
         exclude = (
             's100_RE_RegisterItem',
         )
-
+# [New]
+class ConceptReferenceSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    # concept_item_id = serializers.CharField()
+    referenceIdentifier = serializers.CharField(max_length=100, allow_blank=True)
+    sourceDocument = serializers.CharField(max_length=100)
 

@@ -17,7 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/concept" element={<ConceptRegister />} />
           <Route path="/concept/detail/:id" element={<Detail />} />
-          <Route path="/concept/create" element={<InsertItem />} />
+          <Route path="/concept/create/:register_id" element={<InsertItem />} />
         </Routes>
       </div>
     </Router>

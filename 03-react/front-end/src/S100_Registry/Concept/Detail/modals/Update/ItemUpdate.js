@@ -20,7 +20,7 @@ function ItemUpdate({ items, onClose }) {
 
     const handleSubmitItem = async () => {
         try {
-            const itemId = items.id;
+            const itemId = items._id;
             await axios.put(PUT_ITEM_URL(itemId), item);
             onClose();
             window.location.reload();

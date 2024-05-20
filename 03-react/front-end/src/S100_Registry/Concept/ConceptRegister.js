@@ -30,7 +30,7 @@ function Register() {
     const nextState = !checkedAll;
     const updatedCheckedItems = {};
     itemList.forEach(item => {
-      updatedCheckedItems[item.id] = nextState;
+      updatedCheckedItems[item._id] = nextState;
     });
     setCheckedItems(updatedCheckedItems);
   };
@@ -85,7 +85,7 @@ function Register() {
       <div>
         <div style={{display: "flex"}}>
           <h1 className='mb-3'>Concept Register</h1>
-          <button onClick={() => window.location='/concept/create'}>add</button>
+          <button onClick={() => window.location='/concept/create/664571b089ef3a5ddd535e1d'}>add</button>
         </div>
         <div>
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>
@@ -113,20 +113,20 @@ function Register() {
         </thead>
         <tbody>
         {itemList.map((item, index) => (
-          <tr key={item.id} style={{ cursor: 'pointer' }}>
+          <tr key={item._id} style={{ cursor: 'pointer' }}>
               <th scope="row" className='text-center' style={{width: '3%'}}>
                 <input 
                   type="checkbox" 
-                  checked={checkedItems[item.id]} 
-                  onChange={() => handleCheckboxChange(item.id)}
+                  checked={checkedItems[item._id]} 
+                  onChange={() => handleCheckboxChange(item._id)}
                   style={{transform: "scale(1.5)"}}
                 />
               </th>
-              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='text-center' style={{width: '3%'}}>{index+1}</td>
-              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
-              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
-              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='th-inner sortable both' style={{width: '40%'}}>{item.definition}</td>
-              <td onClick={() => window.location=`/concept/detail/${item.id}`} className='th-inner sortable both' style={{width: '9%'}}>{item.itemStatus}</td>
+              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='text-center' style={{width: '3%'}}>{index+1}</td>
+              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
+              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
+              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='th-inner sortable both' style={{width: '40%'}}>{item.definition}</td>
+              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='th-inner sortable both' style={{width: '9%'}}>{item.itemStatus}</td>
           </tr>
         ))}
         </tbody>

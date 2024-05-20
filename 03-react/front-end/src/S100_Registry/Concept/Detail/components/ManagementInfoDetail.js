@@ -26,7 +26,7 @@ function ManagementInfoDetail({itemList, handleUpdateButtonClick, handleFollowId
                         <div className='' style={{ display: 'flex', alignItems: 'center'}}>
                             <h4>Management Details</h4>
                             <button className='btn' onClick={toggleOpen}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
                                     <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                                 </svg>
                             </button>
@@ -34,12 +34,12 @@ function ManagementInfoDetail({itemList, handleUpdateButtonClick, handleFollowId
                         {toggleOpened && <button className='btn btn-outline-secondary btn-sm' onClick={handleAddClick}>+ Add</button>}
                     </div>  
                     {itemList.management_infos.map((info, idx) => (
-                    <li key={info.id} className="mt-3 mb-3 card p-3" style={{listStyle: 'none'}}>
-                        <table class="table table-sm">
+                    <li key={info._id} className="mt-3 mb-3 card p-3" style={{listStyle: 'none'}}>
+                        <table className="table table-sm">
                             <thead>
                                 <tr>
                                 <th 
-                                    colspan="2" 
+                                    colSpan="2" 
                                     className='text-center table-dark' 
                                     scope="col" style={{width: '25%'}}
                                 >   
@@ -96,7 +96,7 @@ function ManagementInfoDetail({itemList, handleUpdateButtonClick, handleFollowId
                                 style={{maxWidth:"70px"}} 
                                 onClick={() => handleClick(idx)}
                             >Update</button>
-                            {itemList.management_infos.length > 1 && <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(info.id)}>Delete</button>}
+                            {itemList.management_infos.length > 1 && <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(info._id)}>Delete</button>}
                         </div>
                     </li>
                     ))}
@@ -108,7 +108,7 @@ function ManagementInfoDetail({itemList, handleUpdateButtonClick, handleFollowId
             <div className='' style={{ display: 'flex', alignItems: 'center'}}>
                 <h4>Management Details</h4>
                 <button className='btn' onClick={toggleOpen}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16" >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16" >
                         <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                     </svg>
                 </button>

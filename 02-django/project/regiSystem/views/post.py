@@ -6,6 +6,9 @@ from ..models import S100_RE_Register, S100_RE_RegisterItem, S100_RE_ManagementI
 from ..models import (
         S100_Concept_Register,
         S100_Concept_Item,
+        S100_Concept_ManagementInfo,
+        S100_Concept_ReferenceSource,
+        S100_Concept_Reference
     )
 from ..serializers import (
         ManagementInfoSerializer, 
@@ -15,6 +18,9 @@ from ..serializers import (
 
         ConceptSerializer,
         ConceptItemSerializer,
+        ConceptManagementInfoSerializer,
+        ConceptReferenceSourceSerializer,
+        ConceptReferenceSerializer
     )
 
 from rest_framework.decorators import api_view
@@ -69,6 +75,17 @@ def managemant_info(request, pk):
             return Response(serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def concept_managemant_info(request, I_id):
+    serializer = ConceptManagementInfoSerializer(data=request.data)
+    if serializer.is_valid():
+        validated_data = serializer.validated_data
+        validated_data['concept_item_id'] = ObjectId(I_id)
+
+        S100_Concept_ManagementInfo.insert_one(validated_data)
+        return Response(serializer.data, status=HTTP_201_CREATED)
+    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 def reference_source(request, pk):
@@ -83,6 +100,17 @@ def reference_source(request, pk):
 
 
 @api_view(['POST'])
+def concept_reference_source(request, I_id):
+    serializer = ConceptReferenceSourceSerializer(data=request.data)
+    if serializer.is_valid():
+        validated_data = serializer.validated_data
+        validated_data['concept_item_id'] = ObjectId(I_id)
+        
+        S100_Concept_ReferenceSource.insert_one(validated_data)
+        return Response(serializer.data, status=HTTP_201_CREATED)
+    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
 def reference(request, pk):
     item_obj = get_object_or_404(S100_RE_RegisterItem, pk=pk)
     if request.method == 'POST':
@@ -92,3 +120,15 @@ def reference(request, pk):
             serializer.save()
             return Response(serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def concept_reference(request, I_id):
+    serializer = ConceptReferenceSerializer(data=request.data)
+    if serializer.is_valid():
+        validated_data = serializer.validated_data
+        validated_data['concept_item_id'] = ObjectId(I_id)
+        
+        S100_Concept_Reference.insert_one(validated_data)
+        return Response(serializer.data, status=HTTP_201_CREATED)
+    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

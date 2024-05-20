@@ -17,7 +17,7 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
 
     const handleSubmitItem = async () => {
         try {
-            const RId = itemList.references[followIdx].id;
+            const RId = itemList.references[followIdx]._id;
             await axios.put(PUT_R_URL(RId), R);
             onClose();
             window.location.reload();
