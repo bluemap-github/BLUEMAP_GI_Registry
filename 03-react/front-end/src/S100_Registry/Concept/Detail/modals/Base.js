@@ -29,13 +29,13 @@ function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx}) {
       formComponent = <ReferenceUpdate itemList={itemList} onClose={onClose} followIdx={followIdx}/>;
       break;
     case 5:
-      formComponent = <ManagementInfoAdd onClose={onClose} itemId={itemList.item.id}/>;
+      formComponent = <ManagementInfoAdd onClose={onClose} itemId={itemList.item._id}/>;
       break;
     case 6:
-      formComponent = <ReferenceSourceAdd onClose={onClose} itemId={itemList.item.id}/>;
+      formComponent = <ReferenceSourceAdd onClose={onClose} itemId={itemList.item._id}/>;
       break;
     case 7:
-      formComponent = <ReferenceAdd onClose={onClose} itemId={itemList.item.id}/>;
+      formComponent = <ReferenceAdd onClose={onClose} itemId={itemList.item._id}/>;
       break;
     case 8: // del item 
       formComponent = <Delete onClose={onClose} selectedForm={DEL_ITEM_URL(keyIdx)} keyIdx={selectedForm} />;
@@ -77,7 +77,7 @@ function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx}) {
           padding: "20px", /* 내용 패딩 설정 */
           borderRadius: "8px", /* 내용 모서리를 둥글게 만듭니다 */
         }}
-      >
+      > 
         {formComponent}
       </div>
     </div>

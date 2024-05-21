@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
 import { CREATE_ITEM_URL } from '../api';
 import ItemInput from './components/ItemInput';
 import ManagementInfoInput from './components/ManagementInfoInput';
@@ -12,17 +13,17 @@ function Item() {
     const [managementInfos, setManagementInfos] = useState(['']); // 관리 정보 입력 창 배열
     const [referenceSource, setReferenceSource] = useState(null);
     const [references, setReferences] = useState(null);
-
+    const { register_id } = useParams();
     
 
     const handleSubmitItem = async () => {
         try {
             // const itemData = JSON.parse(item);
             const itemResponse = await axios.post(CREATE_ITEM_URL, item);
-            console.log('Item data successfully posted:', itemResponse.data);
+            console.log('Item data successfully posted ~:', itemResponse.data);
 
             // Item 데이터를 CREATE_ITEM_URL로 POST 후 Item의 ID 가져오기
-            const itemId = itemResponse.data.id;
+            const itemId = itemResponse.data._id;
 
             // 모든 MI에 대해 작업하는 for 문
             for (const managementInfo of managementInfos) {
@@ -51,7 +52,7 @@ function Item() {
             window.location.href = `/concept/detail/${itemId}`;
         } catch (error) {
             console.error('Error posting data:', error);
-            console.log(item)
+            console.log(managementInfos)
         }
     };
 
@@ -76,10 +77,10 @@ function Item() {
                 <button onClick={() => window.location='/concept'}>back</button>
             </div>
             <div className='mt-5'>
-                <ItemInput item={item} onFormSubmit={ItemChange}/>
-                <ManagementInfoInput onFormSubmit={MIChange}/>
-                <ReferenceSourceInput onFormSubmit={RSChange}/>
-                <ReferenceInput onFormSubmit={RChange}/>
+                <ItemInput item={item} onFormSubmit={ItemChange} registerId={register_id}/>
+                <ManagementInfoInput onFormSubmit={MIChange} />
+                <ReferenceSourceInput onFormSubmit={RSChange} />
+                <ReferenceInput onFormSubmit={RChange} />
             </div>
             <div className='text-end'>
                 <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button>

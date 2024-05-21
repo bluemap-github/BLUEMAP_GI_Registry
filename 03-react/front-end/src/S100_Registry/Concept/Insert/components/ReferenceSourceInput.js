@@ -47,7 +47,7 @@ function ReferenceSourceInput({onFormSubmit}) {
                         <div style={{ display: 'flex', alignItems: 'center'}}>
                             <h3>Reference Source</h3>
                             <button className='btn' onClick={toggleOpen}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
                                     <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                                 </svg>
                             </button>
@@ -57,7 +57,7 @@ function ReferenceSourceInput({onFormSubmit}) {
                                 !referenceSource ? (
                                     <div>
                                         <button className='btn btn-outline-secondary btn-sm' onClick={addRSInput} style={{ display: 'flex', alignItems: 'center' }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16">
                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
                                             </svg>
                                             <div style={{ marginLeft: '8px' }}>
@@ -77,7 +77,7 @@ function ReferenceSourceInput({onFormSubmit}) {
                                     <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>* Reference Identifier</span>
                                     <input 
                                         type="text" 
-                                        class={`form-control ${mandatoryFields.includes('referenceIdentifier') && referenceSource.referenceIdentifier.trim() === '' ? 'is-invalid' : ''}`}
+                                        className={`form-control ${mandatoryFields.includes('referenceIdentifier') && referenceSource.referenceIdentifier.trim() === '' ? 'is-invalid' : ''}`}
                                         placeholder="Reference Identifier" 
                                         name="referenceIdentifier" onChange={handleChange} />
                                 </div>
@@ -85,16 +85,16 @@ function ReferenceSourceInput({onFormSubmit}) {
                                     <span className="input-group-text" id="basic-addon1" style={{width:"20%" ,fontWeight: "bold"}}>* Source Document</span>
                                     <input 
                                         type="text" 
-                                        class={`form-control ${mandatoryFields.includes('sourceDocument') && referenceSource.sourceDocument.trim() === '' ? 'is-invalid' : ''}`}
+                                        className={`form-control ${mandatoryFields.includes('sourceDocument') && referenceSource.sourceDocument.trim() === '' ? 'is-invalid' : ''}`}
                                         placeholder="Source Document" 
                                         name="sourceDocument" 
                                         onChange={handleChange} />
                                 </div>
                                 <div className='col'>
-                                    <div class="input-group input-group-sm mt-2" style={{zIndex: '0'}}>
-                                        <label style={{ width: "20%" ,fontWeight: "bold"}} class="input-group-text" for="similarity">* Similarity</label>
+                                    <div className="input-group input-group-sm mt-2" style={{zIndex: '0'}}>
+                                        <label style={{ width: "20%" ,fontWeight: "bold"}} className="input-group-text" for="similarity">* Similarity</label>
                                         <select 
-                                            class={`form-select ${mandatoryFields.includes('similarity') && referenceSource.similarity.trim() === '' ? 'is-invalid' : ''}`}
+                                            className={`form-select ${mandatoryFields.includes('similarity') && referenceSource.similarity.trim() === '' ? 'is-invalid' : ''}`}
                                             id="similarity" 
                                             name="similarity" 
                                             onChange={handleChange}>
@@ -123,7 +123,7 @@ function ReferenceSourceInput({onFormSubmit}) {
                 <div className='' style={{ display: 'flex', alignItems: 'center'}}>
                     <h3>Reference Source</h3>
                     <button className='btn' onClick={toggleOpen}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16" >
                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                         </svg>
                     </button>

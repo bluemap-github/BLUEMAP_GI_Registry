@@ -7,7 +7,7 @@ const managementInfoInit = {
     proposalType: '',
     submittingOrganisation: '',
     proposedChange: '',
-    dateAccepted: null,
+    dateAccepted: '',
     dateProposed: '',
     dateAmended: '',
     proposalStatus: '',
@@ -46,13 +46,6 @@ function ManagementInfoInput({ onFormSubmit }) {
                 event.target.classList.remove('is-invalid');
             }
         }
-        // if (mandatoryDateFields.includes(name)) {
-        //     if (value.trim() == '') {
-        //         event.target.classList.add('is-invalid');
-        //     } else {
-        //         event.target.classList.remove('is-invalid');
-        //     }
-        // }
 
         onFormSubmit(updatedManagementInfos);
     };
@@ -71,7 +64,6 @@ function ManagementInfoInput({ onFormSubmit }) {
             if (i === index) {
                 newFALIst[i] = updatedAliasList[i].join();
             }
-            console.log(newFALIst);
         }
         setFormattedAliasList(newFALIst);
         

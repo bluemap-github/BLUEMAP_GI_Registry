@@ -7,9 +7,10 @@ import "react-datepicker/dist/react-datepicker.css";
 
 
 function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
+    
     const initialMI = itemList.management_infos[followIdx];
     const [MI, setMI] = useState(initialMI);
-
+    console.log(initialMI)
     const MIChange = (event) => {
         const { name, value } = event.target;
         setMI(prevMI => ({
@@ -20,7 +21,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
 
     const handleSubmitItem = async () => {
         try {
-            const MIId = itemList.management_infos[followIdx].id;
+            const MIId = itemList.management_infos[followIdx]._id;
             await axios.put(PUT_MI_URL (MIId), MI);
             onClose();
             window.location.reload();
