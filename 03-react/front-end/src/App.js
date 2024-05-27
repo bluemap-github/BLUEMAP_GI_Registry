@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ConceptRegister from './S100_Registry/Concept/ConceptRegister';
 import Home from './S100_Registry/Home';
 import Detail from './S100_Registry/Concept/Detail/Detail';
 import InsertItem from './S100_Registry/Concept/Insert/Item';
-import Navbar from './S100_Registry/Navbar';
+import NavbarWide from './S100_Registry/NavBar/NavbarWide';
+import NavbarNarrow from './S100_Registry/NavBar/NavbarNarrow';
 import './App.css';
 
 function App() {
+  const [isWide, setIsWide] = useState(true);
+
+  const toggleNavbar = () => {
+    setIsWide(!isWide);
+  };
+
   return (
     <Router>
+      {/* <button style={{position: 'fixed', zIndex:'200000'}} onClick={toggleNavbar}>이거</button> */}
       <div className="app-container">
-        <Navbar />
-        <div className='sidebard'></div>
+        {isWide ? <NavbarWide /> : <NavbarNarrow />}
+        <div className={isWide ? 'navBar-rest-wide' : 'navBar-rest-narrow'}></div>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/concept" element={<ConceptRegister />} />

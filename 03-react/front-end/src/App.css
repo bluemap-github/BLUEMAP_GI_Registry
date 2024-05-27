@@ -104,19 +104,30 @@ hr {
 .app-container {
   display: flex;
 }
-.sidebard {
+.navBar-rest-wide {
   width: 200px;
   min-width: 200px;
   height: 100%;
   border-right: 1px solid #ccc;
 }
-.sidebar {
+.sidebar-wide {
   width: 200px;
   height: 100%;
   border-right: 1px solid #ccc;
   position: fixed; /* Navbar를 화면에 고정 */
 }
-
+.navBar-rest-narrow {
+  width: 80px;
+  min-width: 80px;
+  height: 100%;
+  border-right: 1px solid #ccc;
+}
+.sidebar-narrow {
+  width: 80px;
+  height: 100%;
+  border-right: 1px solid #ccc;
+  position: fixed; /* Navbar를 화면에 고정 */
+}
 .main-content {
   flex: 1; /* 나머지 영역을 채우기 위해 flex를 사용 */
   margin-left: 250px; /* Navbar의 너비만큼 왼쪽 여백 추가 */

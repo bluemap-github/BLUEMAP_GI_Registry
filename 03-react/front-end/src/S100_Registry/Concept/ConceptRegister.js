@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { REGISTER_ITEM_LIST_URL, DEL_ITEM_URL } from './api';
 import Toast from '../Toast';
+import { USER_SERIAL } from '../../userSerial';
 
 
 function Register() {
@@ -85,7 +86,7 @@ function Register() {
       <div>
         <div style={{display: "flex"}}>
           <h1 className='mb-3'>Concept Register</h1>
-          <button onClick={() => window.location='/concept/create/664571b089ef3a5ddd535e1d'}>add</button>
+          <button onClick={() => window.location=`/concept/create/${USER_SERIAL}`}>add</button>
         </div>
         <div>
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>

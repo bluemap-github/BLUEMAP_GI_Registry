@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from bson import ObjectId
-from .models import (
-    S100_RE_Register,
-    S100_RE_RegisterItem,
-    S100_RE_ManagementInfo,
-    S100_RE_Reference,
-    S100_RE_ReferenceSource
-)
+# from .models import (
+#     S100_RE_Register,
+#     S100_RE_RegisterItem,
+#     S100_RE_ManagementInfo,
+#     S100_RE_Reference,
+#     S100_RE_ReferenceSource
+# )
 
 # [New]
 # Serializer field for Django REST Framework to handle MongoDB ObjectId.
@@ -27,12 +27,12 @@ class ObjectIdField(serializers.Field):
 
 
 # Register Item
-class RegisterItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = S100_RE_RegisterItem
-        exclude = (
-            's100_RE_Register',
-        )
+# class RegisterItemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = S100_RE_RegisterItem
+#         exclude = (
+#             's100_RE_Register',
+#         )
 
 # [New]
 class ConceptItemSerializer(serializers.Serializer):
@@ -53,10 +53,10 @@ class ConceptItemSerializer(serializers.Serializer):
 
 
 # Registery
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = S100_RE_Register
-        fields = '__all__'
+# class RegisterSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = S100_RE_Register
+#         fields = '__all__'
 
 # [New]
 class ConceptSerializer(serializers.Serializer):
@@ -70,12 +70,12 @@ class ConceptSerializer(serializers.Serializer):
 
 
 # Managemant Info 
-class ManagementInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = S100_RE_ManagementInfo
-        exclude = (
-            's100_RE_RegisterItem',
-        )
+# class ManagementInfoSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = S100_RE_ManagementInfo
+#         exclude = (
+#             's100_RE_RegisterItem',
+#         )
 # [New]
 class ConceptManagementInfoSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
@@ -90,12 +90,12 @@ class ConceptManagementInfoSerializer(serializers.Serializer):
     controlBodyNotes = serializers.JSONField(default=list) 
 
 # Reference Source 
-class ReferenceSourceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = S100_RE_ReferenceSource
-        exclude = (
-            's100_RE_RegisterItem',
-        )
+# class ReferenceSourceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = S100_RE_ReferenceSource
+#         exclude = (
+#             's100_RE_RegisterItem',
+#         )
 # [New]
 class ConceptReferenceSourceSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
@@ -105,12 +105,12 @@ class ConceptReferenceSourceSerializer(serializers.Serializer):
     similarity = serializers.CharField()# Enum - S100_RE_SimilarityToSource
 
 # Reference 
-class ReferenceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = S100_RE_Reference
-        exclude = (
-            's100_RE_RegisterItem',
-        )
+# class ReferenceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = S100_RE_Reference
+#         exclude = (
+#             's100_RE_RegisterItem',
+#         )
 # [New]
 class ConceptReferenceSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
