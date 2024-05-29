@@ -7,18 +7,17 @@ from ..models import (
     S100_Concept_Reference
 )
 from ..serializers import (
-    
-
     ConceptSerializer,
     ConceptItemSerializer,
     ConceptReferenceSerializer,
     ConceptReferenceSourceSerializer,
-    ConceptManagementInfoSerializer
+    ConceptManagementInfoSerializer,
+    EnumeratedValueSerializer,
+    SimpleAttributeSerializer
 )
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 
 from rest_framework.status import (
         HTTP_400_BAD_REQUEST, 
@@ -37,6 +36,7 @@ def concept_register_list(request):
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def concept_register_detail(request, C_id):
     if request.method == 'GET':
@@ -52,22 +52,6 @@ def concept_register_detail(request, C_id):
     return Response(status=HTTP_405_METHOD_NOT_ALLOWED)
 
 
-# @api_view(['GET'])
-# def register_itemList(request, pk):
-#     if request.method == 'GET':
-#         register = get_object_or_404(S100_RE_Register, pk=pk)
-#         serializer = RegisterSerializer(register)
-
-#         # 연결된 모델의 정보를 가져와서 시리얼라이징
-#         register_items = S100_RE_RegisterItem.objects.filter(s100_RE_Register=register)
-#         register_items_serializer = RegisterItemSerializer(register_items, many=True)
-
-#         # 시리얼라이징 결과를 합쳐서 반환
-#         response_data = {
-#             'register' : serializer.data,
-#             'register_items' : register_items_serializer.data
-#         }
-#         return Response(response_data)
 
 @api_view(['GET'])
 def concept_item_list(request, C_id): #레지스터 시리얼넘버가 들어감
@@ -115,24 +99,32 @@ def concept_item_detail(request, I_id):
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
 
-# @api_view(['GET'])
-# def item_detail(request, pk):
-#     if request.method == 'GET':
-#         item = get_object_or_404(S100_RE_RegisterItem, pk=pk)
-#         item_serializer = RegisterItemSerializer(item)
-#         print("이거", item_serializer.data)
-        
-#         management_infos = S100_RE_ManagementInfo.objects.filter(s100_RE_RegisterItem=item)
-#         reference_sources = S100_RE_ReferenceSource.objects.filter(s100_RE_RegisterItem=item)
-#         references = S100_RE_Reference.objects.filter(s100_RE_RegisterItem=item)
-#         management_info_serializer = ManagementInfoSerializer(management_infos, many=True)
-#         reference_source_serializer = ReferenceSourceSerializer(reference_sources, many=True)
-#         reference_serializer = ReferenceSerializer(references, many=True)
-        
-#         response_data = {
-#             'item': item_serializer.data,
-#             'management_infos': management_info_serializer.data,
-#             'reference_sources': reference_source_serializer.data,
-#             'references': reference_serializer.data,
-#         }
-#         return Response(response_data)
+
+@api_view(['GET'])
+def enumerated_value_list(request, C_id):
+    if request.method == 'GET':
+        c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id), "itemType": "EnumeratedValue"}))
+        serializer = EnumeratedValueSerializer(c_item_list, many=True)
+        response_data = {
+            'register': "",
+            'register_items': serializer.data
+        }
+        return Response(response_data)
+    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def enumerated_value_one():
+    return 
+
+@api_view(['GET'])
+def simple_attribute_list(request, C_id):
+    if request.method == 'GET':
+        c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id), "itemType": "SimpleAttribute"}))
+        serializer = SimpleAttributeSerializer(c_item_list, many=True)
+        response_data = {
+            'register': "",
+            'register_items': serializer.data
+        }
+        return Response(response_data)
+    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

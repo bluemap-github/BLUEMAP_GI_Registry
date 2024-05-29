@@ -1,15 +1,6 @@
 from rest_framework import serializers
 from bson import ObjectId
-# from .models import (
-#     S100_RE_Register,
-#     S100_RE_RegisterItem,
-#     S100_RE_ManagementInfo,
-#     S100_RE_Reference,
-#     S100_RE_ReferenceSource
-# )
 
-# [New]
-# Serializer field for Django REST Framework to handle MongoDB ObjectId.
 class ObjectIdField(serializers.Field):
     def to_representation(self, value):
         if isinstance(value, ObjectId):
@@ -22,21 +13,9 @@ class ObjectIdField(serializers.Field):
         except:
             raise serializers.ValidationError("Invalid ObjectId")
 
-
-
-
-
-# Register Item
-# class RegisterItemSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = S100_RE_RegisterItem
-#         exclude = (
-#             's100_RE_Register',
-#         )
-
-# [New]
 class ConceptItemSerializer(serializers.Serializer):
-    _id = ObjectIdField(read_only=True)
+    # _id = ObjectIdField(read_only=True)
+    itemType = serializers.CharField()  # EnumeratedValue, SimpleAttribute, ComplexAttribute, Feature, Information.. 더 생기면 추가하기
     concept_id = serializers.CharField()
     itemIdentifier = serializers.IntegerField()
     name = serializers.CharField(max_length=100)
@@ -52,13 +31,6 @@ class ConceptItemSerializer(serializers.Serializer):
     proposedChange = serializers.CharField(max_length=100, allow_blank=True)
 
 
-# Registery
-# class RegisterSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = S100_RE_Register
-#         fields = '__all__'
-
-# [New]
 class ConceptSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
     name = serializers.CharField(max_length=100)
@@ -68,15 +40,6 @@ class ConceptSerializer(serializers.Serializer):
     dateOfLastChange = serializers.CharField()
     
 
-
-# Managemant Info 
-# class ManagementInfoSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = S100_RE_ManagementInfo
-#         exclude = (
-#             's100_RE_RegisterItem',
-#         )
-# [New]
 class ConceptManagementInfoSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
     # concept_item_id = serializers.CharField()
@@ -89,14 +52,7 @@ class ConceptManagementInfoSerializer(serializers.Serializer):
     proposalStatus = serializers.CharField()# Enum - S100_RE_ProposalStatus
     controlBodyNotes = serializers.JSONField(default=list) 
 
-# Reference Source 
-# class ReferenceSourceSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = S100_RE_ReferenceSource
-#         exclude = (
-#             's100_RE_RegisterItem',
-#         )
-# [New]
+
 class ConceptReferenceSourceSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
     # concept_item_id = serializers.CharField()
@@ -104,17 +60,43 @@ class ConceptReferenceSourceSerializer(serializers.Serializer):
     sourceDocument = serializers.CharField(max_length=100)
     similarity = serializers.CharField()# Enum - S100_RE_SimilarityToSource
 
-# Reference 
-# class ReferenceSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = S100_RE_Reference
-#         exclude = (
-#             's100_RE_RegisterItem',
-#         )
-# [New]
+
 class ConceptReferenceSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
     # concept_item_id = serializers.CharField()
     referenceIdentifier = serializers.CharField(max_length=100, allow_blank=True)
     sourceDocument = serializers.CharField(max_length=100)
 
+class AttributeSerializer(ConceptItemSerializer):
+    pass
+
+class EnumeratedValueSerializer(ConceptItemSerializer):
+    _id = ObjectIdField(read_only=True)
+    numericCode = serializers.IntegerField()
+
+class SimpleAttributeSerializer(AttributeSerializer):
+    _id = ObjectIdField(read_only=True)
+    valueType = serializers.CharField()# Enum - S100_CD_AttributeValueType
+    quantitySpecification = serializers.CharField()# Enum - S100_CD_QuantitySpecification
+
+class AttributeConstraintsSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    stringLength = serializers.IntegerField()
+    textPattern = serializers.CharField()
+    ACRange = serializers.CharField()
+    precision = serializers.IntegerField()
+
+class ComplexAttributeSerializer(AttributeSerializer):
+    _id = ObjectIdField(read_only=True)
+
+class AttributeUsageSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    multiplicity = serializers.CharField()
+    sequential = serializers.BooleanField()
+
+class FeatureSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    featureUseType = serializers.CharField()# Enum - S100_CD_FeatureUseType
+
+class InformationSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
