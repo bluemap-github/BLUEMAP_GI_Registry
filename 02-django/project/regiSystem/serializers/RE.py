@@ -14,7 +14,7 @@ class ObjectIdField(serializers.Field):
             raise serializers.ValidationError("Invalid ObjectId")
 
 class ConceptItemSerializer(serializers.Serializer):
-    # _id = ObjectIdField(read_only=True)
+    _id = ObjectIdField(read_only=True)
     itemType = serializers.CharField()  # EnumeratedValue, SimpleAttribute, ComplexAttribute, Feature, Information.. 더 생기면 추가하기
     concept_id = serializers.CharField()
     itemIdentifier = serializers.IntegerField()
@@ -67,36 +67,4 @@ class ConceptReferenceSerializer(serializers.Serializer):
     referenceIdentifier = serializers.CharField(max_length=100, allow_blank=True)
     sourceDocument = serializers.CharField(max_length=100)
 
-class AttributeSerializer(ConceptItemSerializer):
-    pass
 
-class EnumeratedValueSerializer(ConceptItemSerializer):
-    _id = ObjectIdField(read_only=True)
-    numericCode = serializers.IntegerField()
-
-class SimpleAttributeSerializer(AttributeSerializer):
-    _id = ObjectIdField(read_only=True)
-    valueType = serializers.CharField()# Enum - S100_CD_AttributeValueType
-    quantitySpecification = serializers.CharField()# Enum - S100_CD_QuantitySpecification
-
-class AttributeConstraintsSerializer(serializers.Serializer):
-    _id = ObjectIdField(read_only=True)
-    stringLength = serializers.IntegerField()
-    textPattern = serializers.CharField()
-    ACRange = serializers.CharField()
-    precision = serializers.IntegerField()
-
-class ComplexAttributeSerializer(AttributeSerializer):
-    _id = ObjectIdField(read_only=True)
-
-class AttributeUsageSerializer(serializers.Serializer):
-    _id = ObjectIdField(read_only=True)
-    multiplicity = serializers.CharField()
-    sequential = serializers.BooleanField()
-
-class FeatureSerializer(serializers.Serializer):
-    _id = ObjectIdField(read_only=True)
-    featureUseType = serializers.CharField()# Enum - S100_CD_FeatureUseType
-
-class InformationSerializer(serializers.Serializer):
-    _id = ObjectIdField(read_only=True)

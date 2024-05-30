@@ -1,12 +1,12 @@
 from bson.objectid import ObjectId
-from ..models import (
+from regiSystem.models import (
         S100_Concept_Register,
         S100_Concept_Item,
         S100_Concept_ManagementInfo,
         S100_Concept_ReferenceSource,
         S100_Concept_Reference
     )
-from ..serializers import (
+from regiSystem.serializers.RE import (
         ConceptSerializer,
         ConceptItemSerializer,
         ConceptManagementInfoSerializer,

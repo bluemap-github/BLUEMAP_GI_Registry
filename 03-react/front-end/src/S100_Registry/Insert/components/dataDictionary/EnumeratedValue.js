@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Base from '../modals/Base'
+import {baseFormData} from './base_data'
 
-function ItemInput({ onFormSubmit, registerId, apiType }) {
+function EnumeratedValue({ onFormSubmit, registerId, apiType }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const mandatoryFields = ["name", "itemStatus"];
 
@@ -13,21 +14,7 @@ function ItemInput({ onFormSubmit, registerId, apiType }) {
         setIsModalOpen(false);
       };
 
-    const [formData, setFormData] = useState({
-        concept_id: registerId,
-        itemIdentifier: '2',
-        name: '',
-        definition: '',
-        remarks: '',
-        itemStatus: '',
-        alias: [],
-        camelCase: '',
-        definitionSource: '',
-        reference: '',
-        similarityToSource: '',
-        justification: '',
-        proposedChange: ''
-    });
+    const [formData, setFormData] = useState(baseFormData(registerId));
     const [aliasList, setAliasList] = useState([]);
     const [formattedAliasList, setFormattedAliasList] = useState('');
 
@@ -161,4 +148,4 @@ function ItemInput({ onFormSubmit, registerId, apiType }) {
     );
 }
 
-export default ItemInput;
+export default EnumeratedValue;

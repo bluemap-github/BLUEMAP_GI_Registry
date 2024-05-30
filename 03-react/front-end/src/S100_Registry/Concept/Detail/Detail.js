@@ -10,7 +10,7 @@ import Base from './modals/Base'
 
 function Detail() {
   // 동적 라우팅 변수 - 내장함수 useParams 사용
-  const { id } = useParams();
+  const { item_id } = useParams();
 
   // // setItemList 함수가 샐행될때마다 itemList가 업데이트 됨
   const [itemList, setItemList] = useState(null);
@@ -43,7 +43,7 @@ function Detail() {
     // fetchItemList 함수를 useEffect 안으로 넣어서 컴포넌트가 렌더링될때마다 호출하도록 함 - id 값을 먼저 받아와야 하기 때문
     const fetchItemList = async () => {
       try {
-        const response = await axios.get(`${ITEM_DETAIL_URL}${id}/`);
+        const response = await axios.get(`${ITEM_DETAIL_URL}${item_id}/`);
         setItemList(response.data);
         console.log(response.data)
       } catch (error) {
@@ -52,7 +52,7 @@ function Detail() {
     };
 
     fetchItemList();
-  }, [id]);
+  }, [item_id]);
   
 
   // 로딩 
@@ -66,7 +66,7 @@ function Detail() {
       <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
       <h1 className='mb-3'>Concept Register</h1>
       <div>
-        <div className='mb-3 mt-3'>GET : {ITEM_DETAIL_URL}{id}/</div>
+        <div className='mb-3 mt-3'>GET : {ITEM_DETAIL_URL}{item_id}/</div>
       </div>
       <div className="row">
         <div className="col">

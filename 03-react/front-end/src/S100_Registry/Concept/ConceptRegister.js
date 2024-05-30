@@ -123,11 +123,11 @@ function Register() {
                   style={{transform: "scale(1.5)"}}
                 />
               </th>
-              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='text-center' style={{width: '3%'}}>{index+1}</td>
-              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
-              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
-              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='th-inner sortable both' style={{width: '40%'}}>{item.definition}</td>
-              <td onClick={() => window.location=`/concept/detail/${item._id}`} className='th-inner sortable both' style={{width: '9%'}}>{item.itemStatus}</td>
+              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='text-center' style={{width: '3%'}}>{index+1}</td>
+              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.name}</td>
+              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='th-inner sortable both' style={{width: '15%'}}>{item.camelCase}</td>
+              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='th-inner sortable both' style={{width: '40%'}}>{item.definition}</td>
+              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='th-inner sortable both' style={{width: '9%'}}>{item.itemStatus}</td>
           </tr>
         ))}
         </tbody>

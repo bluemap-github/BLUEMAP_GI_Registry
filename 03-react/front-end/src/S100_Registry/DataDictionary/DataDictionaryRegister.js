@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EV_Filter from './EnumeratedValue/EV_Filter';
+import EVFilter from './Filter/EVFilter';
 import DDR_List from './DDR_List';
 
 function DataDictionaryRegister() {
@@ -17,7 +17,7 @@ function DataDictionaryRegister() {
                 <button className="spacing" onClick={() => clickHandler(5)}>Informations</button>
             </div>
             <div>
-                <EV_Filter/>
+                <EVFilter data={viewNumber}/>
             </div>
             <div>
                 <DDR_List data={viewNumber}/>

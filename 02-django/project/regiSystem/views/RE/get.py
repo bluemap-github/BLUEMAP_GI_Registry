@@ -1,29 +1,25 @@
 from bson.objectid import ObjectId
-from ..models import (
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.status import (
+        HTTP_400_BAD_REQUEST, 
+        HTTP_404_NOT_FOUND,
+        HTTP_405_METHOD_NOT_ALLOWED
+    )
+from regiSystem.models import (
     S100_Concept_Register,
     S100_Concept_Item,
     S100_Concept_ManagementInfo,
     S100_Concept_ReferenceSource,
     S100_Concept_Reference
 )
-from ..serializers import (
+from regiSystem.serializers.RE import (
     ConceptSerializer,
     ConceptItemSerializer,
     ConceptReferenceSerializer,
     ConceptReferenceSourceSerializer,
     ConceptManagementInfoSerializer,
-    EnumeratedValueSerializer,
-    SimpleAttributeSerializer
 )
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
-from rest_framework.status import (
-        HTTP_400_BAD_REQUEST, 
-        HTTP_404_NOT_FOUND,
-        HTTP_405_METHOD_NOT_ALLOWED
-    )
 
 @api_view(['GET'])
 def concept_register_list(request):
@@ -57,7 +53,7 @@ def concept_register_detail(request, C_id):
 def concept_item_list(request, C_id): #레지스터 시리얼넘버가 들어감
     if request.method == 'GET':
         try:
-            c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id)}))
+            c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id)}).sort("_id", -1))
             serializer = ConceptItemSerializer(c_item_list, many=True)
             response_data = {
                 'register' : "", 
@@ -100,31 +96,11 @@ def concept_item_detail(request, I_id):
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def enumerated_value_list(request, C_id):
-    if request.method == 'GET':
-        c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id), "itemType": "EnumeratedValue"}))
-        serializer = EnumeratedValueSerializer(c_item_list, many=True)
-        response_data = {
-            'register': "",
-            'register_items': serializer.data
-        }
-        return Response(response_data)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def enumerated_value_one():
-    return 
 
-@api_view(['GET'])
-def simple_attribute_list(request, C_id):
-    if request.method == 'GET':
-        c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id), "itemType": "SimpleAttribute"}))
-        serializer = SimpleAttributeSerializer(c_item_list, many=True)
-        response_data = {
-            'register': "",
-            'register_items': serializer.data
-        }
-        return Response(response_data)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+
+
+

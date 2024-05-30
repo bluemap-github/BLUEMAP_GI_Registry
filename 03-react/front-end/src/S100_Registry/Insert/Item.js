@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { CREATE_ITEM_URL, CREATE_MANAGEMENT_INFO_URL, CREATE_REFERENCE_SOURCE_URL, CREATE_REFERENCE_URL } from '../Concept/api';
+import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE } from '../DataDictionary/api.js';
 import ItemInput from './components/ItemInput';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
 import ReferenceInput from './components/ReferenceInput';
+import ChooseType from './ChooseType';
 
 function Item() {
     const [item, setItem] = useState('');
@@ -13,15 +15,16 @@ function Item() {
     const [referenceSource, setReferenceSource] = useState(null);
     const [references, setReferences] = useState(null);
     const { register_id } = useParams();
-    
+    const [selectedApiUrl, setSelectedApiUrl] = useState(POST_ENUMERATED_VALUE);
+    const [apiType, setApiType] = useState('Enumerated Value');
 
     const handleSubmitItem = async () => {
         try {
             // const itemData = JSON.parse(item);
-            const itemResponse = await axios.post(CREATE_ITEM_URL, item);
+            const itemResponse = await axios.post(selectedApiUrl, item);
             console.log('Item data successfully posted ~:', itemResponse.data);
 
-            // Item 데이터를 CREATE_ITEM_URL로 POST 후 Item의 ID 가져오기
+            // Item 데이터를 selectedApiUrl로 POST 후 Item의 ID 가져오기
             const itemId = itemResponse.data._id;
 
             // 모든 MI에 대해 작업하는 for 문
@@ -56,27 +59,36 @@ function Item() {
     };
 
 
-    // Item 관련 함수
     const ItemChange = (formData) => {setItem(formData);};
-    
-    // Management Info 관련 함수
     const MIChange = (formData) => {setManagementInfos(formData);};
-
-    // Reference Source 관련 함수
     const RSChange = (formData) => {setReferenceSource(formData);};
-
-    // Reference 관련 함수
     const RChange = (formData) => {setReferences(formData);};
+
+    const getSelestedApi = (type) => {
+        console.log(type);
+        switch (type) {
+            case 'Enumerated value':
+                setSelectedApiUrl(POST_ENUMERATED_VALUE);
+                setApiType('Enumerated Value');
+                break;
+            case 'Simple Attribute':
+                setSelectedApiUrl(POST_SIMPLE_ATTRIBUTE);
+                setApiType('Simple Attribute');
+                break;
+            default:
+                break;
+        }
+    };
 
     return (
         <div className="container p-5">
-            {/* <div style={{height: '70px'}}></div> */}
+            <ChooseType getSelestedApi={getSelestedApi} />
             <div style={{display: "flex"}}>
-                <h1>Create Concept Data</h1>
+                <h1>Create Data</h1>
                 <button onClick={() => window.location='/concept'}>back</button>
             </div>
             <div className='mt-5'>
-                <ItemInput item={item} onFormSubmit={ItemChange} registerId={register_id}/>
+                <ItemInput item={item} onFormSubmit={ItemChange} registerId={register_id} apiType={apiType}/>
                 <ManagementInfoInput onFormSubmit={MIChange} />
                 <ReferenceSourceInput onFormSubmit={RSChange} />
                 <ReferenceInput onFormSubmit={RChange} />
