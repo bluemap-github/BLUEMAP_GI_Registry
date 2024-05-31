@@ -3,11 +3,13 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CREATE_ITEM_URL, CREATE_MANAGEMENT_INFO_URL, CREATE_REFERENCE_SOURCE_URL, CREATE_REFERENCE_URL } from '../Concept/api';
 import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE } from '../DataDictionary/api.js';
-import ItemInput from './components/ItemInput';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
 import ReferenceInput from './components/ReferenceInput';
 import ChooseType from './ChooseType';
+import SimpleAttribute from './components/dataDictionary/SimpleAttribute';
+import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
+import { USER_SERIAL } from '../../userSerial.js';
 
 function Item() {
     const [item, setItem] = useState('');
@@ -19,6 +21,7 @@ function Item() {
     const [apiType, setApiType] = useState('Enumerated Value');
 
     const handleSubmitItem = async () => {
+        console.log(' 여기는?:', selectedApiUrl)
         try {
             // const itemData = JSON.parse(item);
             const itemResponse = await axios.post(selectedApiUrl, item);
@@ -51,10 +54,10 @@ function Item() {
                     }
                 }
             }
-            window.location.href = `/concept/detail/${itemId}`;
+            window.location.href = `/concept/detail/${USER_SERIAL}/${itemId}`;
         } catch (error) {
             console.error('Error posting data:', error);
-            console.log(managementInfos)
+            console.log(item)
         }
     };
 
@@ -88,7 +91,8 @@ function Item() {
                 <button onClick={() => window.location='/concept'}>back</button>
             </div>
             <div className='mt-5'>
-                <ItemInput item={item} onFormSubmit={ItemChange} registerId={register_id} apiType={apiType}/>
+                {apiType === 'Enumerated Value' && <EnumeratedValue item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'Simple Attribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 <ManagementInfoInput onFormSubmit={MIChange} />
                 <ReferenceSourceInput onFormSubmit={RSChange} />
                 <ReferenceInput onFormSubmit={RChange} />

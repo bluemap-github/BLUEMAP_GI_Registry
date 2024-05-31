@@ -26,7 +26,7 @@ itemTypeSet = {
     }
 
 def getItemType(itemType, C_id):
-    c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id), "itemType": itemType}))
+    c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id), "itemType": itemType}).sort("_id", -1))
     serializer = itemTypeSet[itemType](c_item_list, many=True)
     return serializer
 

@@ -81,18 +81,6 @@ hr {
   border-radius: 10px;
 }
 
-.form-control.is-invalid, .was-validated .form-control:invalid{
-  padding-right: .5rem !important;
-  background-image: none !important;
-  color: var(--bs-form-invalid-border-color); 
-}
-
-.form-select.is-invalid, .was-validated .form-control:invalid{
-  padding-right: .5rem !important;
-  background-image: none !important;
-}
-
-
 .title-menu {
   margin-top: 50px;
   height: 100px;
@@ -164,4 +152,21 @@ hr {
 .button-container {
   display: flex;
   justify-content: space-between;
+}
+
+.form-control.tag-invalid {
+  padding-right: .5rem !important;
+  border-color: #ffa7af !important;
+}
+
+.form-select.tag-invalid {
+  padding-right: .5rem !important;
+  border-color: #ffa7af !important;
+  /* color: #DD3A49; */
+}
+
+.input-group-text.tag-invalid {
+  background-color: #ffd5da34;
+  border-color: #ffa7af;
+  color: #DD3A49;
 }

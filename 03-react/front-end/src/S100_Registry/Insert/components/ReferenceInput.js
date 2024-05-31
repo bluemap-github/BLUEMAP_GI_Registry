@@ -9,6 +9,7 @@ function ReferenceInput({onFormSubmit}) {
     const [references, setReferences] = useState([]);
     const mandatoryFields = ["referenceIdentifier", "sourceDocument"];
 
+    // eslint-disable-next-line
     const handleChange = (event, idx) => {
         const { name, value } = event.target;
         const updatedReferences = [...references];

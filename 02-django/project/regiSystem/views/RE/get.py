@@ -18,7 +18,7 @@ from regiSystem.serializers.RE import (
     ConceptItemSerializer,
     ConceptReferenceSerializer,
     ConceptReferenceSourceSerializer,
-    ConceptManagementInfoSerializer,
+    ConceptManagementInfoSerializer, 
 )
 
 @api_view(['GET'])

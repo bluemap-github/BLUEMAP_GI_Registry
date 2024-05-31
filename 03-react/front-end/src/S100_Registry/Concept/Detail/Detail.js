@@ -70,6 +70,7 @@ function Detail() {
       </div>
       <div className="row">
         <div className="col">
+          <button onClick={() => window.location=`/dataDictionary//${itemList.item._id}`}>Detail</button>
           <ItemDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
           <ManagementInfoDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
           <ReferenceSourceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>

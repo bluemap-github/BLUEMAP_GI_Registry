@@ -27,8 +27,12 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
                     </thead>
                     <tbody>
                         <tr>
-                        <th className='text-center' scope="row" style={{width: '25%'}}>itemIdentifier</th>
-                        <td>{itemList.item.itemIdentifier}</td>
+                            <th className='text-center' scope="row" style={{width: '25%'}}>go to Detail page</th>
+                            <button >go</button>
+                        </tr>
+                        <tr>
+                        <th className='text-center' scope="row" style={{width: '25%'}}>Item Type</th>
+                        <td>{itemList.item.itemType}</td>
                         </tr>
                         <tr>
                         <th className='text-center' scope="row">name</th>

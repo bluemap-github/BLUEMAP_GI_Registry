@@ -1,5 +1,5 @@
-import React, { useState, forwardRef, useEffect } from "react";
-import Base from '../modals/Base'
+import React, { useState, forwardRef } from "react";
+import Base from '../modals/Base';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -19,17 +19,19 @@ function ManagementInfoInput({ onFormSubmit }) {
     const mandatoryFields = ["proposalType", "submittingOrganisation", "proposedChange", "proposalStatus"];
     const mandatoryDateFields = ["dateProposed", "dateAmended"];
     const [CBNIdx, setCBNIdx] = useState(0);
+
     const openModal = (idx) => {
         setIsModalOpen(true);
         setCBNIdx(idx);
     };
-      const closeModal = () => {
+
+    const closeModal = () => {
         setIsModalOpen(false);
-      };
+    };
 
     const [managementInfos, setManagementInfos] = useState([managementInfoInit]);
     const [toggleOpened, setToggleOpened] = useState(true);
-
+    
     const handleChange = (event, idx) => {
         const { name, value } = event.target;
         const updatedManagementInfos = [...managementInfos];
@@ -50,6 +52,15 @@ function ManagementInfoInput({ onFormSubmit }) {
         onFormSubmit(updatedManagementInfos);
     };
 
+    const handleDateChange = (date, idx, name) => {
+        const updatedManagementInfos = [...managementInfos];
+        updatedManagementInfos[idx] = {
+            ...updatedManagementInfos[idx],
+            [name]: formatDate(date)
+        };
+        setManagementInfos(updatedManagementInfos);
+        onFormSubmit(updatedManagementInfos);
+    };
 
     const [aliasList, setAliasList] = useState([["Control Body Notes;"]]);
     const [formattedAliasList, setFormattedAliasList] = useState(["Control Body Notes;"]);
@@ -66,9 +77,6 @@ function ManagementInfoInput({ onFormSubmit }) {
             }
         }
         setFormattedAliasList(newFALIst);
-        
-        
-        
     
         const updatedManagementInfos = [...managementInfos];
         updatedManagementInfos[index] = {
@@ -78,7 +86,6 @@ function ManagementInfoInput({ onFormSubmit }) {
         setManagementInfos(updatedManagementInfos);
         onFormSubmit(updatedManagementInfos);
     };
-
 
     const addMIInput = () => {
         setManagementInfos([...managementInfos, managementInfoInit]);
@@ -116,11 +123,11 @@ function ManagementInfoInput({ onFormSubmit }) {
 
     const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
         <div onClick={onClick}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-calendar-fill" viewBox="0 0 16 16">
                 <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5"/>
             </svg>
         </div>
-      ));
+    ));
 
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
@@ -132,21 +139,20 @@ function ManagementInfoInput({ onFormSubmit }) {
                 id={CBNIdx}
                 CBNData={aliasList}
             />
-            {/* <button onClick={debug}>beg</button> */}
             {toggleOpened ? (
                 <div>
                     <div className='' style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                         <div style={{ display: 'flex', alignItems: 'center'}}>
                             <h3>Management Informations</h3>
                             <button className='btn' onClick={toggleOpen}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
                                     <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
                                 </svg>
                             </button>
                         </div>
                         <div>
                             <button className='btn btn-outline-secondary btn-sm' onClick={addMIInput} style={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z" />
                                 </svg>
                                 <div style={{ marginLeft: '8px' }}>
@@ -162,15 +168,15 @@ function ManagementInfoInput({ onFormSubmit }) {
                             
                             <div className='row'>
                                 <div className='col'>
-                                    <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="proposalType" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposal Type</label>
+                                    <div className="input-group input-group-sm mt-2">
+                                        <label className="input-group-text" htmlFor="proposalType" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposal Type</label>
                                         <select 
-                                            // class="form-select" 
-                                            class={`form-select ${mandatoryFields.includes('proposalType') && managementInfo.proposalType.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-select ${mandatoryFields.includes('proposalType') && managementInfo.proposalType.trim() === '' ? 'is-invalid' : ''}`} 
                                             id="proposalType" 
                                             name="proposalType" 
+                                            value={managementInfo.proposalType} // Added value prop
                                             onChange={(event) => handleChange(event, index)}>
-                                            <option selected>Choose</option>
+                                            <option value="">Choose</option>
                                             <option value="addition">addition</option>
                                             <option value="clarification">clarification</option>
                                             <option value="supersession">supersession</option>
@@ -181,20 +187,20 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>* Submitting Organisation</span>
                                         <input 
                                             type="text" 
-                                            className="form-control" 
-                                            class={`form-control ${mandatoryFields.includes('submittingOrganisation') && managementInfo.submittingOrganisation.trim() === '' ? 'is-invalid' : ''}`}
+                                            className={`form-control ${mandatoryFields.includes('submittingOrganisation') && managementInfo.submittingOrganisation.trim() === '' ? 'is-invalid' : ''}`}
                                             placeholder="Submitting Organisation" 
                                             name="submittingOrganisation" 
+                                            value={managementInfo.submittingOrganisation} // Added value prop
                                             onChange={(event) => handleChange(event, index)} />
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposed Change</span>
                                         <input 
                                             type="text"
-                                            className="form-control" 
-                                            class={`form-control ${mandatoryFields.includes('proposedChange') && managementInfo.proposedChange.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-control ${mandatoryFields.includes('proposedChange') && managementInfo.proposedChange.trim() === '' ? 'is-invalid' : ''}`} 
                                             placeholder="Proposed Change" 
                                             name="proposedChange" 
+                                            value={managementInfo.proposedChange} // Added value prop
                                             onChange={(event) => handleChange(event, index)} />
                                     </div>
                                 </div>
@@ -215,8 +221,8 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             />
                                             <DatePicker 
                                                 name="dateAccepted" 
-                                                selected={managementInfo.dateAccepted} 
-                                                onChange={(date) => handleChange({ target: { name: 'dateAccepted', value: formatDate(date) } }, index)} 
+                                                selected={managementInfo.dateAccepted ? new Date(managementInfo.dateAccepted) : null} 
+                                                onChange={(date) => handleDateChange(date, index, 'dateAccepted')} 
                                                 customInput={<ExampleCustomInput />}
                                             />
                                         </div>
@@ -225,7 +231,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     <div className='input-group input-group-sm mt-2' style={{zIndex: '2'}}>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>* Proposed Date</span>
                                         <div 
-                                            class={`form-control ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-control ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'is-invalid' : ''}`} 
                                             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
                                                 type="text" 
@@ -238,8 +244,8 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             />
                                             <DatePicker 
                                                 name="dateProposed" 
-                                                selected={managementInfo.dateProposed} 
-                                                onChange={(date) => handleChange({ target: { name: 'dateProposed', value: formatDate(date) } }, index)} 
+                                                selected={managementInfo.dateProposed ? new Date(managementInfo.dateProposed) : null} 
+                                                onChange={(date) => handleDateChange(date, index, 'dateProposed')} 
                                                 customInput={<ExampleCustomInput />}
                                             />
                                         </div>
@@ -248,8 +254,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     <div className='input-group input-group-sm mt-2' style={{zIndex: '1'}}>
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>* Amended Date</span>
                                         <div 
-                                            // className="form-control" 
-                                            class={`form-control ${mandatoryDateFields.includes('dateAmended') && managementInfo.dateAmended.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-control ${mandatoryDateFields.includes('dateAmended') && managementInfo.dateAmended.trim() === '' ? 'is-invalid' : ''}`} 
                                             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
                                                 type="text" 
@@ -262,8 +267,8 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             />
                                             <DatePicker 
                                                 name="dateAmended" 
-                                                selected={managementInfo.dateAmended} 
-                                                onChange={(date) => handleChange({ target: { name: 'dateAmended', value: formatDate(date) } }, index)} 
+                                                selected={managementInfo.dateAmended ? new Date(managementInfo.dateAmended) : null} 
+                                                onChange={(date) => handleDateChange(date, index, 'dateAmended')} 
                                                 customInput={<ExampleCustomInput />}
                                             />
                                         </div>
@@ -273,15 +278,15 @@ function ManagementInfoInput({ onFormSubmit }) {
                             </div>
                             <div className='row'>
                                 <div className='col'>
-                                    <div class="input-group input-group-sm mt-2">
-                                        <label class="input-group-text" for="proposalStatus" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposal Status</label>
+                                    <div className="input-group input-group-sm mt-2">
+                                        <label className="input-group-text" htmlFor="proposalStatus" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposal Status</label>
                                         <select 
-                                            // class="form-select" 
-                                            class={`form-select ${mandatoryFields.includes('proposalStatus') && managementInfo.proposalStatus.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-select ${mandatoryFields.includes('proposalStatus') && managementInfo.proposalStatus.trim() === '' ? 'is-invalid' : ''}`} 
                                             id="proposalStatus" 
                                             name="proposalStatus" 
+                                            value={managementInfo.proposalStatus} // Added value prop
                                             onChange={(event) => handleChange(event, index)}>
-                                            <option selected>Choose</option>
+                                            <option value="">Choose</option>
                                             <option value="notYetDetermined">notYetDetermined</option>
                                             <option value="transferred">transferred</option>
                                             <option value="accepted">accepted</option>
@@ -302,7 +307,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input className='date-input' placeholder="Control Body Notes" name="controlBodyNotes" value={formattedAliasList[index]} disabled />
                                             <div onClick={(() => openModal(index))}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
                                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                                                 </svg>  
@@ -323,7 +328,7 @@ function ManagementInfoInput({ onFormSubmit }) {
                 <div className='' style={{ display: 'flex', alignItems: 'center'}}>
                     <h3>Management Informations</h3>
                     <button className='btn' onClick={toggleOpen}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16" >
                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
                         </svg>
                     </button>
