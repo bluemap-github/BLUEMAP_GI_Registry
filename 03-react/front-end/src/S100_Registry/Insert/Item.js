@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CREATE_ITEM_URL, CREATE_MANAGEMENT_INFO_URL, CREATE_REFERENCE_SOURCE_URL, CREATE_REFERENCE_URL } from '../Concept/api';
-import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE } from '../DataDictionary/api.js';
+import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION } from '../DataDictionary/api.js';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
 import ReferenceInput from './components/ReferenceInput';
 import ChooseType from './ChooseType';
 import SimpleAttribute from './components/dataDictionary/SimpleAttribute';
+import ComplexAttribute from './components/dataDictionary/ComplexAttribute';
+import Feature from './components/dataDictionary/Feature';
+import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import { USER_SERIAL } from '../../userSerial.js';
-
 function Item() {
     const [item, setItem] = useState('');
     const [managementInfos, setManagementInfos] = useState(['']); // 관리 정보 입력 창 배열
@@ -78,6 +80,18 @@ function Item() {
                 setSelectedApiUrl(POST_SIMPLE_ATTRIBUTE);
                 setApiType('Simple Attribute');
                 break;
+            case 'Complex Attribute':
+                setSelectedApiUrl(POST_COMPLEX_ATTRIBUTE);
+                setApiType('Complex Attribute');
+                break;
+            case 'Feature':
+                setSelectedApiUrl(POST_FEATURE);
+                setApiType('Feature');
+                break;
+            case 'Information':
+                setSelectedApiUrl(POST_INFORMATION);
+                setApiType('Information');
+                break;
             default:
                 break;
         }
@@ -93,6 +107,9 @@ function Item() {
             <div className='mt-5'>
                 {apiType === 'Enumerated Value' && <EnumeratedValue item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'Simple Attribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'Complex Attribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'Feature' && <Feature item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'Information' && <Information item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 <ManagementInfoInput onFormSubmit={MIChange} />
                 <ReferenceSourceInput onFormSubmit={RSChange} />
                 <ReferenceInput onFormSubmit={RChange} />

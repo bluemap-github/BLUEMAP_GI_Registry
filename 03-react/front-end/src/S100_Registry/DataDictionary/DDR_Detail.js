@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ITEM_DETAIL_URL } from '../Concept/api';
 import axios from 'axios';
+import { USER_SERIAL } from '../../userSerial';
 
 const DDR_Detail = () => {
     const { item_id } = useParams();
@@ -33,9 +34,11 @@ const DDR_Detail = () => {
                     <div style={{ fontWeight: 'bold' }}>related value</div>
                     <div>곧 생길거야 ~</div>
                 </div>
-                
+                <div>
+                <button onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item_id}`}>concept data</button>
+                </div>
             </div>
-            <button onClick={() => window.location=`/dataDictionary/${item_id}`}>Back</button>
+            <button onClick={() => window.location=`/dataDictionary/${item_id}`}>Back to List</button>
         </div>
     );
 };

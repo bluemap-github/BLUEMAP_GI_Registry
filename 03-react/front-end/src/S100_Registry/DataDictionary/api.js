@@ -14,3 +14,9 @@ export const GET_INFORMATION_LIST = `${DEPLOY_URL}/api/v1/information_list/get/$
 export const POST_ENUMERATED_VALUE = `${DEPLOY_URL}/api/v1/enumerated_value/post/${USER_SERIAL}/`;
 
 export const POST_SIMPLE_ATTRIBUTE = `${DEPLOY_URL}/api/v1/simple_attribute/post/${USER_SERIAL}/`;  
+
+export const POST_COMPLEX_ATTRIBUTE = `${DEPLOY_URL}/api/v1/complex_attribute/post/${USER_SERIAL}/`;
+
+export const POST_FEATURE = `${DEPLOY_URL}/api/v1/feature/post/${USER_SERIAL}/`;
+
+export const POST_INFORMATION = `${DEPLOY_URL}/api/v1/information/post/${USER_SERIAL}/`;

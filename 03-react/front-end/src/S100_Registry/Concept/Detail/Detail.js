@@ -8,6 +8,7 @@ import ReferenceSourceDetail from './components/ReferenceSourceDetail'
 import ReferenceDetail from './components/ReferenceDetail'
 import Base from './modals/Base'
 
+
 function Detail() {
   // 동적 라우팅 변수 - 내장함수 useParams 사용
   const { item_id } = useParams();
@@ -70,7 +71,6 @@ function Detail() {
       </div>
       <div className="row">
         <div className="col">
-          <button onClick={() => window.location=`/dataDictionary//${itemList.item._id}`}>Detail</button>
           <ItemDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
           <ManagementInfoDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
           <ReferenceSourceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>

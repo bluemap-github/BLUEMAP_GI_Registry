@@ -1,5 +1,6 @@
 import React from 'react';
 import Toast from '../../../Toast';
+import { USER_SERIAL } from '../../../../userSerial';   
 function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
     
     const handleClick = () => {
@@ -28,7 +29,7 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
                     <tbody>
                         <tr>
                             <th className='text-center' scope="row" style={{width: '25%'}}>go to Detail page</th>
-                            <button >go</button>
+                            <button onClick={() => window.location=`/dataDictionary/${USER_SERIAL}/${itemList.item._id}`}>Detail</button>
                         </tr>
                         <tr>
                         <th className='text-center' scope="row" style={{width: '25%'}}>Item Type</th>
