@@ -20,3 +20,8 @@ export const POST_COMPLEX_ATTRIBUTE = `${DEPLOY_URL}/api/v1/complex_attribute/po
 export const POST_FEATURE = `${DEPLOY_URL}/api/v1/feature/post/${USER_SERIAL}/`;
 
 export const POST_INFORMATION = `${DEPLOY_URL}/api/v1/information/post/${USER_SERIAL}/`;
+
+export const GET_DDR_VALUE_ONE = (view_item_type, item_id) => {
+    return `${DEPLOY_URL}/api/v1/${view_item_type}/get/${item_id}/`;
+} 
+

@@ -37,27 +37,31 @@ urlpatterns = [
     # DDR
     # EnumeratedValue
     path('enumerated_value_list/get/<str:C_id>/', CD.get.enumerated_value_list),
-    path('enumerated_value_list/get/<str:EV_id>/', CD.get.enumerated_value_one),
+    path('enumerated_value_one/get/<str:EV_id>/', CD.get.enumerated_value_one),
     path('enumerated_value/post/<str:C_id>/', CD.post.enumerated_value),
     # path('enumerated_value_list/put/<str:EV_id>/', put.enumerated_value),
     # path('enumerated_value_list/delete/<str:EV_id>/', delete.enumerated_value),
 
     # SimpleAttrbute
     path('simple_attribute_list/get/<str:C_id>/', CD.get.simple_attribute_list),
+    path('simple_attribute_one/get/<str:SA_id>/', CD.get.simple_attribute_one),
     path('simple_attribute/post/<str:C_id>/', CD.post.simple_attribute),
 
     # AttributeConstraints
 
     # ComplexAttribute
     path('complex_attribute_list/get/<str:C_id>/', CD.get.complex_attribute_list),
+    path('complex_attribute_one/get/<str:CA_id>/', CD.get.complex_attribute_one),
     path('complex_attribute/post/<str:C_id>/', CD.post.complex_attribute),
 
     # Feature
     path('feature_list/get/<str:C_id>/', CD.get.feature_list),
+    path('feature_one/get/<str:F_id>/', CD.get.feature_one),
     path('feature/post/<str:C_id>/', CD.post.feature),
 
     # Information
     path('information_list/get/<str:C_id>/', CD.get.information_list),
+    path('information_one/get/<str:I_id>/', CD.get.information_one),
     path('information/post/<str:C_id>/', CD.post.information),
 
 ]

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import Base from '../../modals/Base';
+import AddRealtedValues from '../../modals/AddRealtedValues';
 
 function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const mandatoryFields = ["name", "itemStatus", "enumType", "numericCode"];
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = () => {setIsModalOpen(true);};
+    const closeModal = () => {setIsModalOpen(false);};
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+    const [isRelModalOpen, setIsRelModalOpen] = useState(false);
+    const openRelModal = () => {setIsRelModalOpen(true);};
+    const closeRelModal = () => {setIsRelModalOpen(false);};
 
     const [formData, setFormData] = useState({
         concept_id: registerId,
@@ -217,6 +217,26 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
                         </div>
                     </div>
                 </div>
+                <div className='row'>
+                    <div className='col'>
+                        <div className='input-group input-group-sm mt-2'>
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Associated Attribute ID</span>
+                            <input type="text" className="form-control" placeholder="Associated Attribute ID" name="associated_arrtibute_id" onChange={handleChange} />
+                        </div>
+                    </div>
+                </div>  
+                {/* <div className='row'>
+                    <AddRealtedValues
+                        isOpen={isRelModalOpen}
+                        onClose={closeRelModal}
+                    />
+                    <div className='input-group input-group-sm mt-2'>
+                        <span className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>Alias</span>
+                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <button onClick={openRelModal}>Add Alias</button>
+                        </div>
+                    </div>
+                </div> */}
             </div>
         </div>
     );

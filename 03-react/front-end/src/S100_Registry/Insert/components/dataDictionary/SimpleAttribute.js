@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import Base from '../../modals/Base';
+import AddRealtedValues from '../../modals/AddRealtedValues';
 
 function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const mandatoryFields = ["name", "itemStatus", "quantitySpecification", "valueType"];
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = () => {setIsModalOpen(true);};
+    const closeModal = () => {setIsModalOpen(false);};
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+    const [isRelModalOpen, setIsRelModalOpen] = useState(false);
+    const openRelModal = () => {setIsRelModalOpen(true);};
+    const closeRelModal = () => {setIsRelModalOpen(false);};
+
 
     const [formData, setFormData] = useState({
         concept_id: registerId,
@@ -30,7 +31,8 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
         // Simple Attribute 여기서 추가됨
         itemType: 'SimpleAttribute',
         quantitySpecification: '',
-        valueType: ''
+        valueType: '',
+        related_enumeration_value_id_list: []
     });
 
     const [aliasList, setAliasList] = useState([]);
@@ -245,6 +247,26 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
                         </div>
                     </div>
                 </div>
+                <div className='row'>
+                    <div className='col'>
+                        <div className='input-group input-group-sm mt-2'>
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Related EnumeratedValue List</span>
+                            <textarea type="text" className="form-control" placeholder="Related EnumeratedValue List" name="related_enumeration_value_id_list" onChange={handleChange} />
+                        </div>
+                    </div>
+                </div>  
+                {/* <div className='row'>
+                    <AddRealtedValues
+                        isOpen={isRelModalOpen}
+                        onClose={closeRelModal}
+                    />
+                    <div className='input-group input-group-sm mt-2'>
+                        <span className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>Alias</span>
+                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <button onClick={openRelModal}>Add Alias</button>
+                        </div>
+                    </div>
+                </div> */}
             </div>
         </div>
     );

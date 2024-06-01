@@ -81,3 +81,43 @@ def information_list(request, C_id):
         response_data = make_response_data(serializer)
         return Response(response_data)
     return
+
+@api_view(['GET'])
+def enumerated_value_one(request, EV_id):
+    if request.method == 'GET':
+        c_item = S100_Concept_Item.find_one({"_id": ObjectId(EV_id)})
+        serializer = EnumeratedValueSerializer(c_item)
+        return Response(serializer.data)
+    return
+
+@api_view(['GET'])
+def simple_attribute_one(request, SA_id):
+    if request.method == 'GET':
+        c_item = S100_Concept_Item.find_one({"_id": ObjectId(SA_id)})
+        serializer = SimpleAttributeSerializer(c_item)
+        return Response(serializer.data)
+    return
+
+@api_view(['GET'])
+def complex_attribute_one(request, CA_id):
+    if request.method == 'GET':
+        c_item = S100_Concept_Item.find_one({"_id": ObjectId(CA_id)})
+        serializer = ComplexAttributeSerializer(c_item)
+        return Response(serializer.data)
+    return
+
+@api_view(['GET'])
+def feature_one(request, F_id):
+    if request.method == 'GET':
+        c_item = S100_Concept_Item.find_one({"_id": ObjectId(F_id)})
+        serializer = FeatureSerializer(c_item)
+        return Response(serializer.data)
+    return
+
+@api_view(['GET'])
+def information_one(request, I_id):
+    if request.method == 'GET':
+        c_item = S100_Concept_Item.find_one({"_id": ObjectId(I_id)})
+        serializer = InformationSerializer(c_item)
+        return Response(serializer.data)
+    return

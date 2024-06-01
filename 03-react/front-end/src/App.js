@@ -22,7 +22,7 @@ function App() {
           <Route path="/concept/detail/:register_id/:item_id" element={<ConceptDetail />} />
           <Route path="/concept/create/:register_id" element={<InsertItem />} />
           <Route path='/dataDictionary/:register_id' element={<DataDictionaryRegister/>} />
-          <Route path="/dataDictionary/:register_id/:item_id" element={<DDR_Detail />} />
+          <Route path="/dataDictionary/:view_item_type/:register_id/:item_id" element={<DDR_Detail />} />
           <Route path='/portrayal/:register_id' element={<PortrayalRegister/>} />
         </Routes>
       </div>
