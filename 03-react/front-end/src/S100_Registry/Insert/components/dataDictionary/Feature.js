@@ -186,8 +186,8 @@ function Feature({ onFormSubmit, registerId, selectedApiUrl }) {
                             </span>
                             <select 
                                 className={`form-select ${mandatoryFields.includes('featureUseType') && formData.featureUseType.trim() === '' ? 'tag-invalid' : ''}`} 
-                                name="enumType" 
-                                value={formData.enumType} // Added value prop
+                                name="featureUseType" 
+                                value={formData.featureUseType} // Added value prop
                                 onChange={handleChange}
                             >
                                 <option value="">Choose</option>

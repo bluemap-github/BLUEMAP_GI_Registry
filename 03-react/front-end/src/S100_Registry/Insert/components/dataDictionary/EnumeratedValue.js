@@ -29,7 +29,8 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
         proposedChange: '',
         itemType: 'EnumeratedValue',
         numericCode: '',
-        enumType: ''
+        enumType: '',
+        associated_arrtibute_id: ''
     });
 
     const [aliasList, setAliasList] = useState([]);
