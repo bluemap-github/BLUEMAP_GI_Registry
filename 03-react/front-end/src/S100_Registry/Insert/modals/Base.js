@@ -2,7 +2,6 @@ import React from 'react';
 
 import AddAlias from './AddAlias';
 import AddControlBodyNotes from './AddControlBodyNotes';
-// import SubmitModal from './SubmitModal';
 
 function Base({ isOpen, onClose, selectedForm, onformdata, aliasData, id, CBNData}) {
   const handleCheck = (newAliasList) => {
@@ -21,7 +20,7 @@ function Base({ isOpen, onClose, selectedForm, onformdata, aliasData, id, CBNDat
       formComponent = <AddControlBodyNotes onClose={onClose} onCBNList={handleCheck} id={id} CBNData={CBNData}/>;
       break;
     // case 3:
-    //   formComponent = <SubmitModal />;
+    //   formComponent = <AddRealtedValues />;
     default:
       formComponent = null;
   }
@@ -53,7 +52,7 @@ function Base({ isOpen, onClose, selectedForm, onformdata, aliasData, id, CBNDat
         }}
       >
         <div className='text-end' style={{height: "10%"}}>
-            <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+            <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
         </div>
         <div>
           {formComponent}

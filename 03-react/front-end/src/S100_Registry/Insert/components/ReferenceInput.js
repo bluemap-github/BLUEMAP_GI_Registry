@@ -20,9 +20,9 @@ function ReferenceInput({onFormSubmit}) {
         setReferences(updatedReferences);
 
         if (mandatoryFields.includes(name) && value.trim() === '') {
-            event.target.classList.add('is-invalid');
+            event.target.classList.add('tag-invalid');
         } else {
-            event.target.classList.remove('is-invalid');
+            event.target.classList.remove('tag-invalid');
         }
 
         onFormSubmit(updatedReferences);
@@ -75,20 +75,30 @@ function ReferenceInput({onFormSubmit}) {
                                     {index !== 0 && <hr style={{margin: "5px"}}></hr>}
                                     <div className='row'>
                                         <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
-                                            <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>* Reference Identifier</span>
+                                            <span 
+                                                className={`input-group-text ${mandatoryFields.includes('referenceIdentifier') && reference.referenceIdentifier.trim() === '' ? 'tag-invalid' : ''}`}
+                                                id="basic-addon1" 
+                                                style={{width:"45%" ,fontWeight: "bold"}}>
+                                                    * Reference Identifier
+                                            </span>
                                             <input 
                                                 type="text" 
                                                 // className="form-control"
-                                                className={`form-control ${mandatoryFields.includes('referenceIdentifier') && reference.referenceIdentifier.trim() === '' ? 'is-invalid' : ''}`} 
+                                                className={`form-control ${mandatoryFields.includes('referenceIdentifier') && reference.referenceIdentifier.trim() === '' ? 'tag-invalid' : ''}`} 
                                                 placeholder="Reference Identifier" 
                                                 name="referenceIdentifier" 
                                                 onChange={(event) => handleChange(event, index)} />
                                         </div>
                                         <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
-                                            <span className="input-group-text" id="basic-addon1" style={{width:"45%" ,fontWeight: "bold"}}>* Source Document</span>
+                                            <span 
+                                                className={`input-group-text ${mandatoryFields.includes('sourceDocument') && reference.sourceDocument.trim() === '' ? 'tag-invalid' : ''}`}
+                                                id="basic-addon1" 
+                                                style={{width:"45%" ,fontWeight: "bold"}}>
+                                                    * Source Document
+                                            </span>
                                             <input 
                                                 type="text" 
-                                                className={`form-control ${mandatoryFields.includes('sourceDocument') && reference.sourceDocument.trim() === '' ? 'is-invalid' : ''}`}
+                                                className={`form-control ${mandatoryFields.includes('sourceDocument') && reference.sourceDocument.trim() === '' ? 'tag-invalid' : ''}`}
                                                 placeholder="Source Document" 
                                                 name="sourceDocument" 
                                                 onChange={(event) => handleChange(event, index)} 
