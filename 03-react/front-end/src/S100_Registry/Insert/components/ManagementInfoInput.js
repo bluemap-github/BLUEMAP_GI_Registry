@@ -43,9 +43,9 @@ function ManagementInfoInput({ onFormSubmit }) {
 
         if (mandatoryFields.includes(name)) {
             if (value.trim() === '') {
-                event.target.classList.add('is-invalid');
+                event.target.classList.add('tag-invalid');
             } else {
-                event.target.classList.remove('is-invalid');
+                event.target.classList.remove('tag-invalid');
             }
         }
 
@@ -169,12 +169,17 @@ function ManagementInfoInput({ onFormSubmit }) {
                             <div className='row'>
                                 <div className='col'>
                                     <div className="input-group input-group-sm mt-2">
-                                        <label className="input-group-text" htmlFor="proposalType" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposal Type</label>
+                                        <label 
+                                            className={`input-group-text ${mandatoryFields.includes('proposalType') && managementInfo.proposalType.trim() === '' ? 'tag-invalid' : ''}`}
+                                            htmlFor="proposalType" 
+                                            style={{ width: "45%" ,fontWeight: "bold"}}>
+                                                * Proposal Type
+                                        </label>
                                         <select 
-                                            className={`form-select ${mandatoryFields.includes('proposalType') && managementInfo.proposalType.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-select ${mandatoryFields.includes('proposalType') && managementInfo.proposalType.trim() === '' ? 'tag-invalid' : ''}`} 
                                             id="proposalType" 
                                             name="proposalType" 
-                                            value={managementInfo.proposalType} // Added value prop
+                                            value={managementInfo.proposalType}
                                             onChange={(event) => handleChange(event, index)}>
                                             <option value="">Choose</option>
                                             <option value="addition">addition</option>
@@ -184,20 +189,30 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         </select>
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>* Submitting Organisation</span>
+                                        <span 
+                                            className={`input-group-text ${mandatoryFields.includes('submittingOrganisation') && managementInfo.submittingOrganisation.trim() === '' ? 'tag-invalid' : ''}`}
+                                            id="basic-addon1" 
+                                            style={{ width: "45%" ,fontWeight: "bold"}}>
+                                                * Submitting Organisation
+                                        </span>
                                         <input 
                                             type="text" 
-                                            className={`form-control ${mandatoryFields.includes('submittingOrganisation') && managementInfo.submittingOrganisation.trim() === '' ? 'is-invalid' : ''}`}
+                                            className={`form-control ${mandatoryFields.includes('submittingOrganisation') && managementInfo.submittingOrganisation.trim() === '' ? 'tag-invalid' : ''}`}
                                             placeholder="Submitting Organisation" 
                                             name="submittingOrganisation" 
                                             value={managementInfo.submittingOrganisation} // Added value prop
                                             onChange={(event) => handleChange(event, index)} />
                                     </div>
                                     <div className='input-group input-group-sm mt-2'>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposed Change</span>
+                                        <span 
+                                            className={`input-group-text ${mandatoryFields.includes('proposedChange') && managementInfo.proposedChange.trim() === '' ? 'tag-invalid' : ''}`}
+                                            id="basic-addon1" 
+                                            style={{ width: "45%" ,fontWeight: "bold"}}>
+                                                * Proposed Change
+                                        </span>
                                         <input 
                                             type="text"
-                                            className={`form-control ${mandatoryFields.includes('proposedChange') && managementInfo.proposedChange.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-control ${mandatoryFields.includes('proposedChange') && managementInfo.proposedChange.trim() === '' ? 'tag-invalid' : ''}`} 
                                             placeholder="Proposed Change" 
                                             name="proposedChange" 
                                             value={managementInfo.proposedChange} // Added value prop
@@ -229,9 +244,14 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     </div>
 
                                     <div className='input-group input-group-sm mt-2' style={{zIndex: '2'}}>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>* Proposed Date</span>
+                                        <span 
+                                            className={`input-group-text ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'tag-invalid' : ''}`}
+                                            id="basic-addon1" 
+                                            style={{ width: "45%", fontWeight: "bold" }}>
+                                                * Proposed Date
+                                        </span>
                                         <div 
-                                            className={`form-control ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-control ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'tag-invalid' : ''}`} 
                                             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
                                                 type="text" 
@@ -252,9 +272,14 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     </div>
 
                                     <div className='input-group input-group-sm mt-2' style={{zIndex: '1'}}>
-                                        <span className="input-group-text" id="basic-addon1" style={{ width: "45%", fontWeight: "bold" }}>* Amended Date</span>
+                                        <span 
+                                            className={`input-group-text ${mandatoryDateFields.includes('dateAmended') && managementInfo.dateAmended.trim() === '' ? 'tag-invalid' : ''}`}
+                                            id="basic-addon1" 
+                                            style={{ width: "45%", fontWeight: "bold" }}>
+                                                * Amended Date
+                                        </span>
                                         <div 
-                                            className={`form-control ${mandatoryDateFields.includes('dateAmended') && managementInfo.dateAmended.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-control ${mandatoryDateFields.includes('dateAmended') && managementInfo.dateAmended.trim() === '' ? 'tag-invalid' : ''}`} 
                                             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
                                                 type="text" 
@@ -279,9 +304,14 @@ function ManagementInfoInput({ onFormSubmit }) {
                             <div className='row'>
                                 <div className='col'>
                                     <div className="input-group input-group-sm mt-2">
-                                        <label className="input-group-text" htmlFor="proposalStatus" style={{ width: "45%" ,fontWeight: "bold"}}>* Proposal Status</label>
+                                        <label 
+                                            className={`input-group-text ${mandatoryFields.includes('proposalStatus') && managementInfo.proposalStatus.trim() === '' ? 'tag-invalid' : ''}`}
+                                            htmlFor="proposalStatus" 
+                                            style={{ width: "45%" ,fontWeight: "bold"}}>
+                                                * Proposal Status
+                                        </label>
                                         <select 
-                                            className={`form-select ${mandatoryFields.includes('proposalStatus') && managementInfo.proposalStatus.trim() === '' ? 'is-invalid' : ''}`} 
+                                            className={`form-select ${mandatoryFields.includes('proposalStatus') && managementInfo.proposalStatus.trim() === '' ? 'tag-invalid' : ''}`} 
                                             id="proposalStatus" 
                                             name="proposalStatus" 
                                             value={managementInfo.proposalStatus} // Added value prop

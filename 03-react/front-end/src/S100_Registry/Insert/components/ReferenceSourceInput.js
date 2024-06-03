@@ -14,9 +14,9 @@ function ReferenceSourceInput({ onFormSubmit }) {
         setReferenceSource(updatedReferenceSource);
 
         if (mandatoryFields.includes(name) && value.trim() === '') {
-            event.target.classList.add('is-invalid');
+            event.target.classList.add('tag-invalid');
         } else {
-            event.target.classList.remove('is-invalid');
+            event.target.classList.remove('tag-invalid');
         }
 
         onFormSubmit(updatedReferenceSource);
@@ -72,10 +72,15 @@ function ReferenceSourceInput({ onFormSubmit }) {
                     {referenceSource ? (
                         <div className='p-3 mt-2'>
                             <div className='input-group input-group-sm' style={{ zIndex: '0' }}>
-                                <span className="input-group-text" id="basic-addon1" style={{ width: "20%", fontWeight: "bold" }}>* Reference Identifier</span>
+                                <span 
+                                    className={`input-group-text ${mandatoryFields.includes('referenceIdentifier') && referenceSource.referenceIdentifier.trim() === '' ? 'tag-invalid' : ''}`}
+                                    id="basic-addon1" 
+                                    style={{ width: "20%", fontWeight: "bold" }}>
+                                        * Reference Identifier
+                                </span>
                                 <input
                                     type="text"
-                                    className={`form-control ${mandatoryFields.includes('referenceIdentifier') && referenceSource.referenceIdentifier.trim() === '' ? 'is-invalid' : ''}`}
+                                    className={`form-control ${mandatoryFields.includes('referenceIdentifier') && referenceSource.referenceIdentifier.trim() === '' ? 'tag-invalid' : ''}`}
                                     placeholder="Reference Identifier"
                                     name="referenceIdentifier"
                                     value={referenceSource.referenceIdentifier} // Added value prop
@@ -83,10 +88,15 @@ function ReferenceSourceInput({ onFormSubmit }) {
                                 />
                             </div>
                             <div className='input-group input-group-sm mt-2' style={{ zIndex: '0' }}>
-                                <span className="input-group-text" id="basic-addon1" style={{ width: "20%", fontWeight: "bold" }}>* Source Document</span>
+                                <span 
+                                    className={`input-group-text ${mandatoryFields.includes('sourceDocument') && referenceSource.sourceDocument.trim() === '' ? 'tag-invalid' : ''}`}
+                                    id="basic-addon1" 
+                                    style={{ width: "20%", fontWeight: "bold" }}>
+                                        * Source Document
+                                </span>
                                 <input
                                     type="text"
-                                    className={`form-control ${mandatoryFields.includes('sourceDocument') && referenceSource.sourceDocument.trim() === '' ? 'is-invalid' : ''}`}
+                                    className={`form-control ${mandatoryFields.includes('sourceDocument') && referenceSource.sourceDocument.trim() === '' ? 'tag-invalid' : ''}`}
                                     placeholder="Source Document"
                                     name="sourceDocument"
                                     value={referenceSource.sourceDocument} // Added value prop
@@ -95,9 +105,14 @@ function ReferenceSourceInput({ onFormSubmit }) {
                             </div>
                             <div className='col'>
                                 <div className="input-group input-group-sm mt-2" style={{ zIndex: '0' }}>
-                                    <label style={{ width: "20%", fontWeight: "bold" }} className="input-group-text" htmlFor="similarity">* Similarity</label>
+                                    <label 
+                                        style={{ width: "20%", fontWeight: "bold" }} 
+                                        className={`input-group-text ${mandatoryFields.includes('similarity') && referenceSource.similarity.trim() === '' ? 'tag-invalid' : ''}`}
+                                        htmlFor="similarity">
+                                            * Similarity
+                                    </label>
                                     <select
-                                        className={`form-select ${mandatoryFields.includes('similarity') && referenceSource.similarity.trim() === '' ? 'is-invalid' : ''}`}
+                                        className={`form-select ${mandatoryFields.includes('similarity') && referenceSource.similarity.trim() === '' ? 'tag-invalid' : ''}`}
                                         id="similarity"
                                         name="similarity"
                                         value={referenceSource.similarity} // Added value prop

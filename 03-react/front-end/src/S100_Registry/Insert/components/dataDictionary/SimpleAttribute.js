@@ -9,9 +9,7 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
     const openModal = () => {setIsModalOpen(true);};
     const closeModal = () => {setIsModalOpen(false);};
 
-    const [isRelModalOpen, setIsRelModalOpen] = useState(false);
-    const openRelModal = () => {setIsRelModalOpen(true);};
-    const closeRelModal = () => {setIsRelModalOpen(false);};
+    
 
 
     const [formData, setFormData] = useState({
@@ -28,7 +26,6 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
         similarityToSource: '',
         justification: '',
         proposedChange: '',
-        // Simple Attribute 여기서 추가됨
         itemType: 'SimpleAttribute',
         quantitySpecification: '',
         valueType: '',
@@ -37,6 +34,7 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
 
     const [aliasList, setAliasList] = useState([]);
     const [formattedAliasList, setFormattedAliasList] = useState('');
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -64,10 +62,24 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
             alias: newAliasList
         }));
     };
-
+    const [isRelModalOpen, setIsRelModalOpen] = useState(false);
+    const openRelModal = () => {setIsRelModalOpen(true);};
+    const closeRelModal = () => {setIsRelModalOpen(false);};
+    const [relatedEnumList, setRelatedEnumList] = useState([]);
+    const handleRelatedEnumList = (selectedObj, selectedID) => {
+        setRelatedEnumList(selectedObj);
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            related_enumeration_value_id_list: selectedID
+        }));
+    }
+    const log = () => {
+        console.log(formData);
+    }
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
             <h3>Simple Attribute</h3>
+            <button onClick={log}>check</button>
             <p>{selectedApiUrl}</p>
             <div className='p-3 mt-3'>
                 <div className='row'>
@@ -96,10 +108,10 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
                             <input type="text" className="form-control" placeholder="Camel Case" name="camelCase" value={formData.camelCase} onChange={handleChange} />
                         </div>
                     </div>
-                    <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{ width: "19.5%" }}>Source Of Definition</span>
-                        <input type="text" className="form-control" placeholder="Source Of Definition" name="definitionSource" value={formData.definitionSource} onChange={handleChange} />
-                    </div>
+                </div>
+                <div className='input-group input-group-sm mt-2'>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "19.5%" }}>Source Of Definition</span>
+                    <input type="text" className="form-control" placeholder="Source Of Definition" name="definitionSource" value={formData.definitionSource} onChange={handleChange} />
                 </div>
                 <div>
                     <div className='input-group input-group-sm mt-2'>
@@ -248,25 +260,36 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
                     </div>
                 </div>
                 <div className='row'>
-                    <div className='col'>
-                        <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Related EnumeratedValue List</span>
-                            <textarea type="text" className="form-control" placeholder="Related EnumeratedValue List" name="related_enumeration_value_id_list" onChange={handleChange} />
-                        </div>
-                    </div>
-                </div>  
-                {/* <div className='row'>
                     <AddRealtedValues
                         isOpen={isRelModalOpen}
                         onClose={closeRelModal}
+                        handleRelatedValueList={handleRelatedEnumList}
                     />
                     <div className='input-group input-group-sm mt-2'>
-                        <span className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>Alias</span>
-                        <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <button onClick={openRelModal}>Add Alias</button>
+                        <div className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>
+                            <span>Related EnumeratedValue List</span>
+                        </div>
+                        <div className="form-control">
+                            <div className='m-1' onClick={openRelModal}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                </svg> 
+                            </div>
+                            {relatedEnumList.length === 0 ? (
+                                <div>not related Yet</div>
+                            ) : (
+                                <>
+                                    {relatedEnumList.map((item, index) => (
+                                        <div key={index} style={{ display: 'flex'}}>  
+                                            <div>{item.name}</div>
+                                        </div>
+                                    ))}
+                                </>
+                            )}
                         </div>
                     </div>
-                </div> */}
+                </div>
             </div>
         </div>
     );

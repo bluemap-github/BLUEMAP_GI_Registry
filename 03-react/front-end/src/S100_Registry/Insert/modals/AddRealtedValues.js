@@ -1,9 +1,41 @@
 import React, { useEffect, useState } from 'react';
+import EnumSearch from './search/EnumSearch';
 
-function AddRealtedValues({ isOpen, onClose}) {
+
+function AddRealtedValues({ isOpen, onClose, handleRelatedValueList}) {
+    const [data, setData] = useState([]);
+    const [selectedObj, setSelectedObj] = useState([]);
+    const [selectedID, setSelectedID] = useState([]);
+    useEffect(() => {
+    }, []);
+
+
+    const handleSubmit = () => {
+        handleRelatedValueList(selectedObj, selectedID);
+        onClose();
+    };
+
+    const handleSetData = (data) => {
+        setData(data);
+    }
+
+    const log = () => {
+        console.log(selectedObj);
+        console.log(selectedID);
+    }
     if (!isOpen) {
         return null;
     }
+    const handleChange = (e, item) => {
+        if (e.target.checked) {
+            setSelectedObj([...selectedObj, item]);
+            setSelectedID([...selectedID, item._id]);
+        } else {
+            setSelectedObj(selectedObj.filter((obj) => obj !== item));
+            setSelectedID(selectedID.filter((id) => id !== item._id));
+        }
+    };
+
     return (
         <div>
             <div 
@@ -24,20 +56,51 @@ function AddRealtedValues({ isOpen, onClose}) {
                 <div 
                     className="modal-content"
                     style={{
-                    maxWidth: "40rem",
-                    maxHeight: "40rem",
-                    backgroundColor: "white", /* 모달 내용 배경 색상 */
-                    padding: "20px", /* 내용 패딩 설정 */
-                    borderRadius: "8px", /* 내용 모서리를 둥글게 만듭니다 */
+                    maxWidth: "80rem",
+                    maxHeight: "80rem",
+                    backgroundColor: "white", 
+                    padding: "20px", 
+                    borderRadius: "8px",
                     }}
                 >
                     <div className='text-end' style={{height: "10%"}}>
-                        <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+                        <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
                     </div>
                     <div>
                     <div>
                         <h3>Submit Realted Values</h3>
+                            <EnumSearch getResData={handleSetData}/>
+                            <div style={{display: "flex"}}>
+                                <div style={{backgroundColor : "skyblue", width: "50%"}}>
+                                    {data.length === 0 ? (<p>no data</p>) : (
+                                        <>
+                                        {
+                                            data.map((item, index) => (
+                                                <div key={index}>
+                                                    <input type="checkbox" value={item._id} onChange={(e) => handleChange(e, item)} />
+                                                    <label>{item.name}</label>
+                                                </div>
+                                            ))
+                                        }
+                                        </>
+                                    )}
+                                </div>
+                                <div>
+                                    <button onClick={log}>add</button>
+                                </div>
+                                <div>
+                                    <h3>Selected</h3>
+                                    <ul>
+                                        {selectedObj.map((item, index) => (
+                                            <li key={index}>{item.name}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
                     </div>
+                    </div>
+                    <div className='text-end'>
+                        <button className='btn btn-sm btn-primary' onClick={handleSubmit}>Submit</button>
                     </div>
                 </div>
             </div>

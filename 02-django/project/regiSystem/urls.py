@@ -49,7 +49,7 @@ urlpatterns = [
 
     # AttributeConstraints
 
-    # ComplexAttribute
+    # ComplexAttribute 
     path('complex_attribute_list/get/<str:C_id>/', CD.get.complex_attribute_list),
     path('complex_attribute_one/get/<str:CA_id>/', CD.get.complex_attribute_one),
     path('complex_attribute/post/<str:C_id>/', CD.post.complex_attribute),
@@ -64,5 +64,8 @@ urlpatterns = [
     path('information_one/get/<str:I_id>/', CD.get.information_one),
     path('information/post/<str:C_id>/', CD.post.information),
 
+    # RelatedValue
+    path('not_related_enum_list_search/get/<str:C_id>/', CD.get.not_related_enum_list_search),
+    path('sub_att_list_search/get/<str:C_id>/', CD.get.sub_att_list_search),
 ]
 

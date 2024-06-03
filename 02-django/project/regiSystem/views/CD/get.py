@@ -53,11 +53,6 @@ def simple_attribute_list(request, C_id):
         return Response(response_data)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
-
-@api_view(['GET'])
-def enumerated_value_one():
-    return 
-
 @api_view(['GET'])
 def complex_attribute_list(request, C_id):
     if request.method == 'GET':
@@ -121,3 +116,73 @@ def information_one(request, I_id):
         serializer = InformationSerializer(c_item)
         return Response(serializer.data)
     return
+
+@api_view(['GET'])
+def not_related_enum_list_search(request, C_id):
+    search_term = request.query_params.get('search_term', '')
+    
+    if request.method == 'GET':
+        query = {
+            "concept_id": ObjectId(C_id), 
+            "itemType": "EnumeratedValue", 
+            "associated_arrtibute_id": ""
+        }
+        
+        if search_term:
+            query["name"] = {"$regex": search_term, "$options": "i"}
+        
+        c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+        serializer = EnumeratedValueSerializer(c_item_list, many=True)
+        return Response(serializer.data)
+    
+    return Response(status=400, data={"error": "Invalid request method"})
+
+
+@api_view(['GET'])
+def sub_att_list_search(request, C_id):
+    search_term = request.query_params.get('search_term', '')
+    
+    if request.method == 'GET':
+        query = {
+            "concept_id": ObjectId(C_id), 
+            "itemType": {"$in": ["SimpleAttribute", "ComplexAttribute"]}, 
+        }
+        
+        if search_term:
+            query["name"] = {"$regex": search_term, "$options": "i"}
+        
+        c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+        return Response(c_item_list)
+    
+    return Response(status=400, data={"error": "Invalid request method"})
+
+
+
+@api_view(['GET'])
+def sub_att_list_search(request, C_id):
+    search_term = request.query_params.get('search_term', '')
+    
+    if request.method == 'GET':
+        query = {
+            "concept_id": ObjectId(C_id), 
+            "itemType": {"$in": ["SimpleAttribute", "ComplexAttribute"]}, 
+        }
+        
+        if search_term:
+            query["name"] = {"$regex": search_term, "$options": "i"}
+        
+        c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+        
+        simple_attributes = [item for item in c_item_list if item['itemType'] == 'SimpleAttribute']
+        complex_attributes = [item for item in c_item_list if item['itemType'] == 'ComplexAttribute']
+        
+        simple_attributes_serialized = SimpleAttributeSerializer(simple_attributes, many=True).data
+        complex_attributes_serialized = ComplexAttributeSerializer(complex_attributes, many=True).data
+        
+        combined_response = {
+            'simple_attributes': simple_attributes_serialized,
+            'complex_attributes': complex_attributes_serialized
+        }
+        return Response(combined_response)
+    
+    return Response(status=400, data={"error": "Invalid request method"})
