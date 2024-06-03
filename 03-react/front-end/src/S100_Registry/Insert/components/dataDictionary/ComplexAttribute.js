@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Base from '../../modals/Base';
 import AddRealtedValues from '../../modals/AddRealtedValues';
+import AddAttributes from '../../modals/AddAttributes';
 
 function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -186,10 +187,9 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
                     </div>
                 </div>
                 <div className='row'>
-                    <AddRealtedValues
+                    <AddAttributes 
                         isOpen={isRelModalOpen}
                         onClose={closeRelModal}
-                        handleRelatedEnumList={handleRelatedEnumList}
                     />
                     <div className='input-group input-group-sm mt-2'>
                         <div className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>
