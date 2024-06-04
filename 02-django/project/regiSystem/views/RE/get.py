@@ -50,8 +50,9 @@ def concept_register_detail(request, C_id):
 
 
 @api_view(['GET'])
-def concept_item_list(request, C_id): #레지스터 시리얼넘버가 들어감
+def concept_item_list(request): #레지스터 시리얼넘버가 들어감
     if request.method == 'GET':
+        C_id = request.GET.get('user_serial')
         try:
             c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id)}).sort("_id", -1))
             serializer = ConceptItemSerializer(c_item_list, many=True)
@@ -65,7 +66,8 @@ def concept_item_list(request, C_id): #레지스터 시리얼넘버가 들어감
 
 
 @api_view(['GET'])
-def concept_item_detail(request, I_id):
+def concept_item_detail(request):
+    I_id = request.GET.get('item_id')
     if request.method == 'GET':
         try:
             c_item = S100_Concept_Item.find_one({'_id': ObjectId(I_id)})

@@ -40,7 +40,11 @@ const DDR_Detail = () => {
     useEffect(() => {
         const fetchItemList = async () => {
             try {
-                const response = await axios.get(GET_DDR_VALUE_ONE(view_item_type, item_id));
+                const response = await axios.get(GET_DDR_VALUE_ONE(view_item_type), {
+                    params: {
+                        item_id: item_id
+                    }
+                });
                 setItem(response.data);
                 console.log(response.data);
             } catch (error) {
@@ -69,7 +73,7 @@ const DDR_Detail = () => {
                     <div>곧 생길거야 ~</div>
                 </div>
                 <div>
-                    <button onClick={() => (window.location = `/concept/detail/${USER_SERIAL}/${item_id}`)}>
+                    <button onClick={() => (window.location = `/concept/detail/`)}>
                         concept data
                     </button>
                 </div>

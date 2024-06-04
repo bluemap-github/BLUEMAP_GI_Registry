@@ -38,7 +38,8 @@ def make_response_data(serializer):
     return response_data
 
 @api_view(['GET'])
-def enumerated_value_list(request, C_id):
+def enumerated_value_list(request):
+    C_id = request.GET.get('user_serial')
     if request.method == 'GET':
         serializer = getItemType("EnumeratedValue", C_id)
         response_data = make_response_data(serializer)
@@ -46,7 +47,8 @@ def enumerated_value_list(request, C_id):
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def simple_attribute_list(request, C_id):
+def simple_attribute_list(request):
+    C_id = request.GET.get('user_serial')
     if request.method == 'GET':
         serializer = getItemType("SimpleAttribute", C_id)
         response_data = make_response_data(serializer)
@@ -54,7 +56,8 @@ def simple_attribute_list(request, C_id):
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def complex_attribute_list(request, C_id):
+def complex_attribute_list(request):
+    C_id = request.GET.get('user_serial')
     if request.method == 'GET':
         serializer = getItemType("ComplexAttribute", C_id)
         response_data = make_response_data(serializer)
@@ -62,7 +65,8 @@ def complex_attribute_list(request, C_id):
     return
 
 @api_view(['GET'])
-def feature_list(request, C_id):
+def feature_list(request):
+    C_id = request.GET.get('user_serial')
     if request.method == 'GET':
         serializer = getItemType("Feature", C_id)
         response_data = make_response_data(serializer)
@@ -70,7 +74,8 @@ def feature_list(request, C_id):
     return
 
 @api_view(['GET'])
-def information_list(request, C_id):
+def information_list(request):
+    C_id = request.GET.get('user_serial')
     if request.method == 'GET':
         serializer = getItemType("Information", C_id)
         response_data = make_response_data(serializer)
@@ -78,7 +83,9 @@ def information_list(request, C_id):
     return
 
 @api_view(['GET'])
-def enumerated_value_one(request, EV_id):
+def enumerated_value_one(request):
+    EV_id = request.GET.get('item_id')
+    EV_id = request.GET.get('item_id')
     if request.method == 'GET':
         c_item = S100_Concept_Item.find_one({"_id": ObjectId(EV_id)})
         serializer = EnumeratedValueSerializer(c_item)
@@ -86,7 +93,8 @@ def enumerated_value_one(request, EV_id):
     return
 
 @api_view(['GET'])
-def simple_attribute_one(request, SA_id):
+def simple_attribute_one(request):
+    SA_id = request.GET.get('item_id')
     if request.method == 'GET':
         c_item = S100_Concept_Item.find_one({"_id": ObjectId(SA_id)})
         serializer = SimpleAttributeSerializer(c_item)
@@ -94,7 +102,8 @@ def simple_attribute_one(request, SA_id):
     return
 
 @api_view(['GET'])
-def complex_attribute_one(request, CA_id):
+def complex_attribute_one(request):
+    CA_id = request.GET.get('item_id')
     if request.method == 'GET':
         c_item = S100_Concept_Item.find_one({"_id": ObjectId(CA_id)})
         serializer = ComplexAttributeSerializer(c_item)
@@ -102,7 +111,8 @@ def complex_attribute_one(request, CA_id):
     return
 
 @api_view(['GET'])
-def feature_one(request, F_id):
+def feature_one(request):
+    F_id = request.GET.get('item_id')
     if request.method == 'GET':
         c_item = S100_Concept_Item.find_one({"_id": ObjectId(F_id)})
         serializer = FeatureSerializer(c_item)
@@ -110,7 +120,8 @@ def feature_one(request, F_id):
     return
 
 @api_view(['GET'])
-def information_one(request, I_id):
+def information_one(request):
+    I_id = request.GET.get('item_id')
     if request.method == 'GET':
         c_item = S100_Concept_Item.find_one({"_id": ObjectId(I_id)})
         serializer = InformationSerializer(c_item)
@@ -118,7 +129,8 @@ def information_one(request, I_id):
     return
 
 @api_view(['GET'])
-def not_related_enum_list_search(request, C_id):
+def not_related_enum_list_search(request):
+    C_id = request.GET.get('user_serial')
     search_term = request.query_params.get('search_term', '')
     
     if request.method == 'GET':
@@ -138,28 +150,30 @@ def not_related_enum_list_search(request, C_id):
     return Response(status=400, data={"error": "Invalid request method"})
 
 
-@api_view(['GET'])
-def sub_att_list_search(request, C_id):
-    search_term = request.query_params.get('search_term', '')
+# @api_view(['GET'])
+# def sub_att_list_search(request):
+#     C_id = request.GET.get('user_serial')
+#     search_term = request.query_params.get('search_term', '')
     
-    if request.method == 'GET':
-        query = {
-            "concept_id": ObjectId(C_id), 
-            "itemType": {"$in": ["SimpleAttribute", "ComplexAttribute"]}, 
-        }
+#     if request.method == 'GET':
+#         query = {
+#             "concept_id": ObjectId(C_id), 
+#             "itemType": {"$in": ["SimpleAttribute", "ComplexAttribute"]}, 
+#         }
         
-        if search_term:
-            query["name"] = {"$regex": search_term, "$options": "i"}
+#         if search_term:
+#             query["name"] = {"$regex": search_term, "$options": "i"}
         
-        c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
-        return Response(c_item_list)
+#         c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+#         return Response(c_item_list)
     
-    return Response(status=400, data={"error": "Invalid request method"})
+#     return Response(status=400, data={"error": "Invalid request method"})
 
 
 
 @api_view(['GET'])
-def sub_att_list_search(request, C_id):
+def sub_att_list_search(request):
+    C_id = request.GET.get('user_serial')
     search_term = request.query_params.get('search_term', '')
     
     if request.method == 'GET':

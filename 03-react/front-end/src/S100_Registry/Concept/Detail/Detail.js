@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { ITEM_DETAIL_URL } from '../api';
+import { CONCEPT_ITEM_DETAIL } from '../api';
 import ItemDetail from './components/ItemDetail'
 import ManagementInfoDetail from './components/ManagementInfoDetail'
 import ReferenceSourceDetail from './components/ReferenceSourceDetail'
@@ -44,7 +44,11 @@ function Detail() {
     // fetchItemList 함수를 useEffect 안으로 넣어서 컴포넌트가 렌더링될때마다 호출하도록 함 - id 값을 먼저 받아와야 하기 때문
     const fetchItemList = async () => {
       try {
-        const response = await axios.get(`${ITEM_DETAIL_URL}${item_id}/`);
+        const response = await axios.get(CONCEPT_ITEM_DETAIL, {
+          params: {
+            item_id: item_id
+          }
+        });
         setItemList(response.data);
         console.log(response.data)
       } catch (error) {
@@ -67,7 +71,7 @@ function Detail() {
       <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
       <h1 className='mb-3'>Concept Register</h1>
       <div>
-        <div className='mb-3 mt-3'>GET : {ITEM_DETAIL_URL}{item_id}/</div>
+        <div className='mb-3 mt-3'>GET : {CONCEPT_ITEM_DETAIL}{item_id}/</div>
       </div>
       <div className="row">
         <div className="col">

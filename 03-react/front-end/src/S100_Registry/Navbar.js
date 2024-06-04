@@ -9,7 +9,7 @@ const Navbar = () => {
     return location.pathname === url ? 'regi-menu active' : 'regi-menu';
   };
   const createurl = `/concept/create/${USER_SERIAL}`;
-  const regiurl = `/concept/${USER_SERIAL}`;
+  const regiurl = "/concept/list/";
   const ddrurl = `/dataDictionary/${USER_SERIAL}`;
   const purl = `/portrayal/${USER_SERIAL}`;
 

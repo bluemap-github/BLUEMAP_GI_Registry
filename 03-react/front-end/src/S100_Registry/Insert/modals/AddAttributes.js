@@ -56,21 +56,23 @@ function AddAttributes({ isOpen, onClose }) {
                     <div>
                         <h3>Submit Related Values</h3>
                     </div>
-                    {/* <div>
-                        <input 
-                            type="text" 
-                            value={inputValue} 
-                            onChange={handleInputChange} 
-                            placeholder="Enter value" 
-                            style={{ width: "30%", padding: "10px", margin: "10px 0", borderRadius: "4px", border: "1px solid #ccc" }}
-                        />
-                    </div> */}
                     <div className='text-end'>
                         {/* <button className='btn btn-sm btn-primary' onClick={handleSubmit}>Submit</button> */}
                     </div>
                     <AttSearch onSearch={handleSearch} />
                     <div>
                         <h4>Search Results:</h4>
+                        <div>
+                            {/* {searchResults.length === 0 ? (
+                                <p>No results found</p>
+                            ) : (
+                                <ul>
+                                    {searchResults.map((result) => (
+                                        <li key={result.id}>{result.name}</li>
+                                    ))}
+                                </ul>
+                            )} */}
+                        </div>
                     </div>
                 </div>
             </div>

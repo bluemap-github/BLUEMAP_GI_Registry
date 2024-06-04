@@ -34,7 +34,11 @@ const DDRList = ({ data }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios.get(getapi);
+            const result = await axios.get(getapi, {
+                params: {
+                    user_serial: USER_SERIAL
+                }
+            });
             setResponse(result.data);
         };
       

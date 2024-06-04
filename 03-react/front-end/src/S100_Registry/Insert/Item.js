@@ -56,7 +56,7 @@ function Item() {
                     }
                 }
             }
-            window.location.href = `/concept/detail/${USER_SERIAL}/${itemId}`;
+            window.location.href = `/concept/detail/`;
         } catch (error) {
             console.error('Error posting data:', error);
             console.log(item)

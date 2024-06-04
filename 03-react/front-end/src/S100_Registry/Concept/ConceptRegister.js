@@ -13,7 +13,11 @@ function Register() {
   useEffect(() => {
     const fetchItemList = async () => {
       try {
-        const response = await axios.get(REGISTER_ITEM_LIST_URL);
+        const response = await axios.get(REGISTER_ITEM_LIST_URL, {
+          params: {
+              user_serial: USER_SERIAL
+          }
+      });
         setItemList(response.data.register_items);
       } catch (error) {
         console.error('Error fetching item list:', error);
@@ -48,7 +52,11 @@ function Register() {
       await axios.delete(DEL_ITEM_URL(idx));
       const fetchItemList = async () => {
         try {
-          const response = await axios.get(REGISTER_ITEM_LIST_URL);
+          const response = await axios.get(REGISTER_ITEM_LIST_URL, {
+            params: {
+                user_serial: USER_SERIAL
+            }
+        });
           setItemList(response.data.register_items);
           deleteToast();
         } catch (error) {
@@ -86,7 +94,7 @@ function Register() {
       <div>
         <div style={{display: "flex"}}>
           <h1 className='mb-3'>Concept Register</h1>
-          <button onClick={() => window.location=`/concept/create/${USER_SERIAL}`}>add</button>
+          <button onClick={() => window.location=`/concept/create/`}>add</button>
         </div>
         <div>
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>

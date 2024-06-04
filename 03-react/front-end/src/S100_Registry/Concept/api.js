@@ -6,10 +6,11 @@ export const MONGO_DB_POST  = `${DEPLOY_URL}/api/v1/sample_post/`;
 export const MONGO_DB_GET_ALL  = `${DEPLOY_URL}/api/v1/get_student_list/`;
 
 // Concept > Register.js
-export const REGISTER_ITEM_LIST_URL = `${DEPLOY_URL}/api/v1/concept_item_list/get/${USER_SERIAL}/`;
+// export const REGISTER_ITEM_LIST_URL = `${DEPLOY_URL}/api/v1/concept_item_list/get/${USER_SERIAL}/`;
+export const REGISTER_ITEM_LIST_URL = `${DEPLOY_URL}/api/v1/concept_item_list/get/`;
 
 // Concept > Detail > Detail.js
-export const ITEM_DETAIL_URL = `${DEPLOY_URL}/api/v1/concept_item/get/`;
+export const CONCEPT_ITEM_DETAIL = `${DEPLOY_URL}/api/v1/concept_item_detail/get/`;
 
 // Concept > Insert > Item.js
 export const CREATE_ITEM_URL = `${DEPLOY_URL}/api/v1/concept_item/post/`;

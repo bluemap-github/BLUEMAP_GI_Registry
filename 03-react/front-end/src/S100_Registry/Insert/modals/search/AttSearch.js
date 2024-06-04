@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {SUB_ATT_LIST_SEARCH} from '../../../DataDictionary/api.js';
+import { USER_SERIAL } from '../../../../userSerial';
 
 function AttSearch({ onSearch }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -9,6 +10,7 @@ function AttSearch({ onSearch }) {
     const handleSearch = () => {
         axios.get(SUB_ATT_LIST_SEARCH, {
             params: {
+                user_serial: USER_SERIAL,
                 search_term: searchTerm,
                 filter_type: filterType,
             }
