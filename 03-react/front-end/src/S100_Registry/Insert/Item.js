@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { CREATE_ITEM_URL, CREATE_MANAGEMENT_INFO_URL, CREATE_REFERENCE_SOURCE_URL, CREATE_REFERENCE_URL } from '../Concept/api';
+import { CREATE_MANAGEMENT_INFO_URL, CREATE_REFERENCE_SOURCE_URL, CREATE_REFERENCE_URL } from '../Concept/api';
 import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION } from '../DataDictionary/api.js';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
@@ -12,7 +12,7 @@ import ComplexAttribute from './components/dataDictionary/ComplexAttribute';
 import Feature from './components/dataDictionary/Feature';
 import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
-import { USER_SERIAL } from '../../userSerial.js';
+
 function Item() {
     const [item, setItem] = useState('');
     const [managementInfos, setManagementInfos] = useState(['']); // 관리 정보 입력 창 배열
