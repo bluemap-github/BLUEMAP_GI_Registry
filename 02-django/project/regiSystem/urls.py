@@ -35,33 +35,27 @@ urlpatterns = [
     path('concept_item/reference/delete/<str:R_id>/', RE.delete.concept_reference), #😂
 
     # DDR
+    # DDR Items (EnumeratedValue, SimpleAttribute, ComplexAttribute, Feature, Information)
+    path('ddr_item_list/get/', CD.get.ddr_item_list),
+    path('ddr_item_one/get/', CD.get.ddr_item_one),
+
     # EnumeratedValue
-    path('enumerated_value_list/get/', CD.get.enumerated_value_list),
-    path('enumerated_value_one/get/', CD.get.enumerated_value_one),
     path('enumerated_value/post/<str:C_id>/', CD.post.enumerated_value), #😂
     # path('enumerated_value_list/put/<str:EV_id>/', put.enumerated_value),
     # path('enumerated_value_list/delete/<str:EV_id>/', delete.enumerated_value),
 
     # SimpleAttrbute
-    path('simple_attribute_list/get/', CD.get.simple_attribute_list), 
-    path('simple_attribute_one/get/', CD.get.simple_attribute_one),
     path('simple_attribute/post/<str:C_id>/', CD.post.simple_attribute), #😂
 
     # AttributeConstraints
-
+    
     # ComplexAttribute 
-    path('complex_attribute_list/get/', CD.get.complex_attribute_list),
-    path('complex_attribute_one/get/', CD.get.complex_attribute_one),
     path('complex_attribute/post/<str:C_id>/', CD.post.complex_attribute), #😂
 
     # Feature
-    path('feature_list/get/', CD.get.feature_list),
-    path('feature_one/get/', CD.get.feature_one),
     path('feature/post/<str:C_id>/', CD.post.feature), #😂
 
     # Information
-    path('information_list/get/', CD.get.information_list),
-    path('information_one/get/', CD.get.information_one),
     path('information/post/<str:C_id>/', CD.post.information), #😂
 
     # RelatedValue

@@ -3,18 +3,18 @@ import EVFilter from './Filter/EVFilter';
 import DDR_List from './DDR_List';
 
 function DataDictionaryRegister() {
-    const [viewNumber, setViewNumber] = useState(1);
+    const [viewNumber, setViewNumber] = useState("EnumeratedValue");
     const clickHandler = (num) => {
         setViewNumber(num);
     }
     return (
         <div className="container p-5">
             <div className="button-container">
-                <button className="spacing" onClick={() => clickHandler(1)}>Enumerated Values</button>
-                <button className="spacing" onClick={() => clickHandler(2)}>Simple Attributes</button>
-                <button className="spacing" onClick={() => clickHandler(3)}>Complex Attributes</button>
-                <button className="spacing" onClick={() => clickHandler(4)}>Features</button>
-                <button className="spacing" onClick={() => clickHandler(5)}>Informations</button>
+                <button className="spacing" onClick={() => clickHandler("EnumeratedValue")}>Enumerated Values</button>
+                <button className="spacing" onClick={() => clickHandler("SimpleAttribute")}>Simple Attributes</button>
+                <button className="spacing" onClick={() => clickHandler("ComplexAttribute")}>Complex Attributes</button>
+                <button className="spacing" onClick={() => clickHandler("Feature")}>Features</button>
+                <button className="spacing" onClick={() => clickHandler("Information")}>Informations</button>
             </div>
             <div>
                 <EVFilter data={viewNumber}/>

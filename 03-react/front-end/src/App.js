@@ -10,6 +10,7 @@ import DataDictionaryRegister from './S100_Registry/DataDictionary/DataDictionar
 import PortrayalRegister from './S100_Registry/Portrayal/PortrayalRegister';
 import DDR_Detail from './S100_Registry/DataDictionary/DDR_Detail';
 
+
 function App() {
   return (
     <Router>
@@ -23,7 +24,7 @@ function App() {
           <Route path="/concept/detail/:register_id/:item_id" element={<ConceptDetail />} />
           <Route path="/concept/create/:register_id" element={<InsertItem />} />
           <Route path='/dataDictionary/:register_id' element={<DataDictionaryRegister/>} />
-          <Route path="/dataDictionary/:view_item_type/:register_id/:item_id" element={<DDR_Detail />} />
+          <Route path="/dataDictionary" element={<DDR_Detail />} />
           <Route path='/portrayal/:register_id' element={<PortrayalRegister/>} />
         </Routes>
       </div>

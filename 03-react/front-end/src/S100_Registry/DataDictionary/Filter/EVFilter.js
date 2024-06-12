@@ -9,9 +9,7 @@ const EVFilter = ({ data }) => {
 
     return (
         <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-            
-            
-            {data === 1 && 
+            {data === "EnumeratedValue" && 
                 <div>
                     input for data 1
                     <input
@@ -23,22 +21,22 @@ const EVFilter = ({ data }) => {
                     <button>Search</button>
                 </div>
             }
-            {data === 2 && 
+            {data === "SimpleAttribute" && 
                 <div>
                     input for data 2
                 </div>
             }
-            {data === 3 &&
+            {data === "ComplexAttribute" &&
                 <div>
                     input for data 3
                 </div>
             }
-            {data === 4 && 
+            {data === "Feature" && 
                 <div>
                     input for data 4
                 </div>
             }
-            {data === 5 && 
+            {data === "Information" && 
                 <div>
                     input for data 5
                 </div>

@@ -2,27 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Toast from '../../../Toast';
 import { USER_SERIAL } from '../../../../userSerial';   
 function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
-    const [viewItemType, setViewItemType] = useState("enumerated_value");
-
-    useEffect(() => {
-        switch (itemList.item.itemType) {
-            case "EnumeratedValue":
-                setViewItemType("enumerated_value_one");
-                break;
-            case "SimpleAttribute":
-                setViewItemType("simple_attribute_one");
-                break;
-            case "ComplexAttribute":
-                setViewItemType("complex_attribute_one");
-                break;
-            case "Feature":
-                setViewItemType("feature_one");
-                break;
-            case "Information":
-                setViewItemType("information_one");
-                break;
-        }
-    },[itemList.item.itemType] );
+    const viewItemType = itemList.item.itemType;
     
     const handleClick = () => {
         // handleUpdateButtonClick 함수를 호출할 때 변수를 함께 전달

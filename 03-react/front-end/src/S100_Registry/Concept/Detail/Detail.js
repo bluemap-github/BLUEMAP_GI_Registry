@@ -71,7 +71,7 @@ function Detail() {
       <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
       <h1 className='mb-3'>Concept Register</h1>
       <div>
-        <div className='mb-3 mt-3'>GET : {CONCEPT_ITEM_DETAIL}/</div>
+        <div className='mb-3 mt-3'>GET : {CONCEPT_ITEM_DETAIL}</div>
       </div>
       <div className="row">
         <div className="col">
