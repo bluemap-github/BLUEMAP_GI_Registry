@@ -17,8 +17,14 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
 
     const handleSubmitItem = async () => {
         try {
-            const RId = itemList.references[followIdx]._id;
-            await axios.put(PUT_R_URL(RId), R);
+            const RId = itemList.references[followIdx]._id.encrypted_data;
+            const item_iv = itemList.references[followIdx]._id.iv;
+            await axios.put(PUT_R_URL, R, {
+                params: {
+                    item_id: RId,
+                    item_iv: item_iv
+                } 
+            });
             onClose();
             window.location.reload();
         } catch (error) {

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
-import {CREATE_REFERENCE_SOURCE_URL} from '../../../api';
+import {POST_REFERENCE_SOURCE } from '../../../api';
 
 function ReferenceSourceAdd({onClose, itemId}){
     const [referenceSource, setReferenceSource] = useState('');
@@ -13,7 +13,7 @@ function ReferenceSourceAdd({onClose, itemId}){
     }
     const handleSubmitItem = async () => {
         try {
-            const RSUrl = CREATE_REFERENCE_SOURCE_URL(itemId);
+            const RSUrl = POST_REFERENCE_SOURCE (itemId);
             await axios.post(RSUrl, referenceSource);
             onClose();
             window.location.reload();

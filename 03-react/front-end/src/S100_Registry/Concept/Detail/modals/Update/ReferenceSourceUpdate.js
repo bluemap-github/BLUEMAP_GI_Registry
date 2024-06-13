@@ -15,8 +15,13 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
 
     const handleSubmitItem = async () => {
         try {
-            const RSId = RS._id;
-            const RSResponse = await axios.put(PUT_RS_URL(RSId), RS);
+            const RSId = RS._id.encrypted_data;
+            const item_iv = RS._id.iv;
+            const RSResponse = await axios.put(PUT_RS_URL, RS, {
+                params: {
+                    item_id: RSId,
+                    item_iv: item_iv
+                }});
             console.log('Item data successfully put:', RSResponse.data);
             onClose();
             window.location.reload();

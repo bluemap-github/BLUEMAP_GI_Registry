@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { CREATE_MANAGEMENT_INFO_URL, CREATE_REFERENCE_SOURCE_URL, CREATE_REFERENCE_URL } from '../Concept/api';
+import { POST_MANAGEMENT_INFO, POST_REFERENCE_SOURCE , POST_REFERENCE } from '../Concept/api';
 import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION } from '../DataDictionary/api.js';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
@@ -12,6 +13,8 @@ import ComplexAttribute from './components/dataDictionary/ComplexAttribute';
 import Feature from './components/dataDictionary/Feature';
 import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
+import {USER_SERIAL} from '../../userSerial.js';
+import { ItemContext } from '../../context/ItemContext';
 
 function Item() {
     const [item, setItem] = useState('');
@@ -21,42 +24,66 @@ function Item() {
     const { register_id } = useParams();
     const [selectedApiUrl, setSelectedApiUrl] = useState(POST_ENUMERATED_VALUE);
     const [apiType, setApiType] = useState('Enumerated Value');
+    const { setItemDetails } = useContext(ItemContext); 
+    const navigate = useNavigate(); 
 
     const handleSubmitItem = async () => {
-        console.log(' 여기는?:', selectedApiUrl)
         try {
             // const itemData = JSON.parse(item);
-            const itemResponse = await axios.post(selectedApiUrl, item);
+            const itemResponse = await axios.post(
+                selectedApiUrl, 
+                item, 
+                {
+                    params: {
+                        user_serial: USER_SERIAL
+                    }
+                });
             console.log('Item data successfully posted ~:', itemResponse.data);
 
             // Item 데이터를 selectedApiUrl로 POST 후 Item의 ID 가져오기
-            const itemId = itemResponse.data._id;
+            const itemId = itemResponse.data.encrypted_data;
+            const item_iv = itemResponse.data.iv;
 
             // 모든 MI에 대해 작업하는 for 문
             for (const managementInfo of managementInfos) {
-                // if (managementInfo.trim() === '') continue; // 빈 데이터는 무시
 
                 // Management Info를 저장할 URL 생성 후 POST
-                const miUrl = CREATE_MANAGEMENT_INFO_URL(itemId);
-                await axios.post(miUrl, managementInfo);
+                await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
+                    params: {
+                        item_id: itemId,
+                        item_iv: item_iv,
+                    }
+                });
             }
 
             // RS에 대해 작업
             if (referenceSource) {
-                const rsUrl = CREATE_REFERENCE_SOURCE_URL(itemId);
-                await axios.post(rsUrl, referenceSource);
+                await axios.post(POST_REFERENCE_SOURCE, referenceSource, {
+                    params: {
+                        item_id: itemId,
+                        item_iv: item_iv,
+                    }
+                });
             }
 
             // 모든 R에 대해 작업
             if (references != null) {
                 for(const reference of references) {
                     if (reference) {
-                        const rUrl = CREATE_REFERENCE_URL(itemId);
-                        await axios.post(rUrl, reference);
+                        await axios.post(POST_REFERENCE, reference, {
+                            params: {
+                                item_id: itemId,
+                                item_iv: item_iv,
+                            }
+                        });
                     }
                 }
             }
-            window.location.href = `/concept/detail/`;
+            setItemDetails({ 
+                item_id: itemId,
+                item_iv: item_iv
+            });
+            navigate('/concept/detail');
         } catch (error) {
             console.error('Error posting data:', error);
             console.log(item)

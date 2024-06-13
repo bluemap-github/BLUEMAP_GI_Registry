@@ -16,10 +16,13 @@ from regiSystem.serializers.CD import (
         InformationSerializer
 )
 
-@api_view(['POST'])
-def enumerated_value(request, C_id):
-    serializer = EnumeratedValueSerializer(data=request.data)
+import json
+from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
 
+@api_view(['POST'])
+def enumerated_value(request):
+    C_id = request.GET.get('user_serial')
+    serializer = EnumeratedValueSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['concept_id'] = ObjectId(C_id)
@@ -33,13 +36,16 @@ def enumerated_value(request, C_id):
             if enumeration_value_id not in related_enumeration_value_id_list:
                 related_enumeration_value_id_list.append(enumeration_value_id)
                 S100_Concept_Item.update_one({"_id": ObjectId(associated_attribute_id)}, {"$set": {"related_enumeration_value_id_list": related_enumeration_value_id_list}})
-        
-        return Response(serializer.data, status=HTTP_201_CREATED)
+
+        encrypted_id = get_encrypted_id(serializer.data['_id'])        
+        return Response(encrypted_id, status=HTTP_201_CREATED)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
-def simple_attribute(request, C_id):
+def simple_attribute(request):
+    C_id = request.GET.get('user_serial')
+
     serializer = SimpleAttributeSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
@@ -52,36 +58,45 @@ def simple_attribute(request, C_id):
             enumeration_value_obj = S100_Concept_Item.find_one({"_id": ObjectId(get_ev_id)})
             enumeration_value_obj['associated_arrtibute_id'] = simple_attribute_id
             S100_Concept_Item.update_one({"_id": ObjectId(get_ev_id)}, {"$set": enumeration_value_obj})
-                
-        return Response(serializer.data, status=HTTP_201_CREATED)
+        
+        encrypted_id = get_encrypted_id(serializer.data['_id']) 
+        return Response(encrypted_id, status=HTTP_201_CREATED)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
-def complex_attribute(request, C_id):
+def complex_attribute(request):
+    C_id = request.GET.get('user_serial')
+    
     serializer = ComplexAttributeSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['concept_id'] = ObjectId(C_id)
         
         S100_Concept_Item.insert_one(validated_data)
-        return Response(serializer.data, status=HTTP_201_CREATED)
+        encrypted_id = get_encrypted_id(serializer.data['_id'])
+        return Response(encrypted_id, status=HTTP_201_CREATED)
 
 @api_view(['POST'])
-def feature(request, C_id):
+def feature(request):
+    C_id = request.GET.get('user_serial')
     serializer = FeatureSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['concept_id'] = ObjectId(C_id)
         
         S100_Concept_Item.insert_one(validated_data)
-        return Response(serializer.data, status=HTTP_201_CREATED)
+        encrypted_id = get_encrypted_id(serializer.data['_id'])
+        return Response(encrypted_id, status=HTTP_201_CREATED)
     
 @api_view(['POST'])
-def information(request, C_id):
+def information(request):
+    C_id = request.GET.get('user_serial')
     serializer = InformationSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['concept_id'] = ObjectId(C_id)
         
         S100_Concept_Item.insert_one(validated_data)
-        return Response(serializer.data, status=HTTP_201_CREATED)
+        encrypted_id = get_encrypted_id(serializer.data['_id'])
+        return Response(encrypted_id, status=HTTP_201_CREATED)

@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { REGISTER_ITEM_LIST_URL, DEL_ITEM_URL } from './api';
 import Toast from '../Toast';
 import { USER_SERIAL } from '../../userSerial';
+import { ItemContext } from '../../context/ItemContext';
 
 
 function Register() {
   const [itemList, setItemList] = useState([]);
   const [checkedItems, setCheckedItems] = useState({});
   const [checkedAll, setCheckedAll] = useState(false);
+  const { setItemDetails } = useContext(ItemContext); 
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchItemList = async () => {
@@ -18,6 +22,7 @@ function Register() {
               user_serial: USER_SERIAL
           }
       });
+        console.log(response.data);
         setItemList(response.data.register_items);
       } catch (error) {
         console.error('Error fetching item list:', error);
@@ -35,7 +40,7 @@ function Register() {
     const nextState = !checkedAll;
     const updatedCheckedItems = {};
     itemList.forEach(item => {
-      updatedCheckedItems[item._id] = nextState;
+      updatedCheckedItems[item._id.encrypted_data] = nextState;
     });
     setCheckedItems(updatedCheckedItems);
   };
@@ -86,6 +91,15 @@ function Register() {
     setToast(true);
   };
 
+  const handleDetailClick = (item) => {
+      setItemDetails({ 
+          user_serial: USER_SERIAL, 
+          item_id: item._id.encrypted_data,
+          item_iv: item._id.iv
+      });
+      navigate('/concept/detail');
+  };
+
   return (
     <div className="container p-5">
       {toast && <Toast setToast={setToast} text="Item is Deleted." />}
@@ -122,20 +136,20 @@ function Register() {
         </thead>
         <tbody>
         {itemList.map((item, index) => (
-          <tr key={item._id} style={{ cursor: 'pointer' }}>
+          <tr key={item._id.encrypted_data} style={{ cursor: 'pointer' }}>
               <th scope="row" className='text-center' style={{width: '3%'}}>
                 <input 
                   type="checkbox" 
-                  checked={checkedItems[item._id]} 
-                  onChange={() => handleCheckboxChange(item._id)}
+                  checked={checkedItems[item._id.encrypted_data]} 
+                  onChange={() => handleCheckboxChange(item._id.encrypted_data)}
                   style={{transform: "scale(1.5)"}}
                 />
               </th>
-              {/* <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='text-center' style={{width: '3%'}}>{index+1}</td> */}
-              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='th-inner sortable both' >{item.name}</td>
-              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='th-inner sortable both' >{item.camelCase}</td>
-              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='th-inner sortable both' >{item.itemType}</td>
-              <td onClick={() => window.location=`/concept/detail/${USER_SERIAL}/${item._id}`} className='th-inner sortable both' >{item.itemStatus}</td>
+              {/* <td onClick={() => handleDetailClick(item)}className='text-center' style={{width: '3%'}}>{index+1}</td> */}
+              <td onClick={() => handleDetailClick(item)}className='th-inner sortable both' >{item.name}</td>
+              <td onClick={() => handleDetailClick(item)}className='th-inner sortable both' >{item.camelCase}</td>
+              <td onClick={() => handleDetailClick(item)}className='th-inner sortable both' >{item.itemType}</td>
+              <td onClick={() => handleDetailClick(item)}className='th-inner sortable both' >{item.itemStatus}</td>
           </tr>
         ))}
         </tbody>

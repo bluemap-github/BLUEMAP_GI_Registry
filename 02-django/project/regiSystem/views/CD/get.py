@@ -10,7 +10,7 @@ from regiSystem.serializers.CD import (
         InformationSerializer
 )
 import json
-from regiSystem.InfoSec.encryption import (encrypt, decrypt)
+from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
 itemTypeSet = {
         "EnumeratedValue": EnumeratedValueSerializer,
         "SimpleAttribute": SimpleAttributeSerializer,
@@ -36,12 +36,11 @@ def make_response_data(serializer):
 def ddr_item_list(request):
     C_id = request.GET.get('user_serial')
     item_type = request.GET.get('item_type')
+
     if request.method == 'GET':
         serializer = getItemType(item_type, C_id)
         for item in serializer.data:
-            encrypted_id_json = encrypt(str(item["_id"]))
-            encrypted_id_data = json.loads(encrypted_id_json)
-            item["_id"] = encrypted_id_data
+            item["_id"] = get_encrypted_id(item["_id"])
         response_data = make_response_data(serializer)
         return Response(response_data)
     return Response(status=400, data={"error": "Invalid request method"})
@@ -62,9 +61,7 @@ def ddr_item_one(request):
             if c_item is None:
                 return Response(status=404, data={"error": "Item not found"})
             
-            encrypted_id_json = encrypt(str(c_item["_id"]))
-            encrypted_id_data = json.loads(encrypted_id_json)
-            c_item["_id"] = encrypted_id_data
+            c_item["_id"] = get_encrypted_id(c_item["_id"])
             serializer = itemTypeSet[item_type](c_item)
             return Response(serializer.data)
         
@@ -88,35 +85,44 @@ def not_related_enum_list_search(request):
             query["name"] = {"$regex": search_term, "$options": "i"}
         
         c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+
+        for item in c_item_list:
+            item["_id"] = get_encrypted_id(item["_id"])
+
         serializer = EnumeratedValueSerializer(c_item_list, many=True)
-        return Response(serializer.data)
+
+        return Response(serializer.data, status=200)
+    
+    return Response(status=400, data={"error": "Invalid request method"})
+
+@api_view(['GET'])
+def associated_attribute_list_search(request):
+    C_id = request.GET.get('user_serial')
+    search_term = request.query_params.get('search_term', '')
+    
+    if request.method == 'GET':
+        query = {
+            "concept_id": ObjectId(C_id), 
+            "itemType": "ComplexAttribute", 
+        }
+        
+        if search_term:
+            query["name"] = {"$regex": search_term, "$options": "i"}
+        
+        c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+
+        for item in c_item_list:
+            item["_id"] = get_encrypted_id(item["_id"])
+
+        serializer = ComplexAttributeSerializer(c_item_list, many=True)
+
+        return Response(serializer.data, status=200)
     
     return Response(status=400, data={"error": "Invalid request method"})
 
 
-# @api_view(['GET'])
-# def sub_att_list_search(request):
-#     C_id = request.GET.get('user_serial')
-#     search_term = request.query_params.get('search_term', '')
-    
-#     if request.method == 'GET':
-#         query = {
-#             "concept_id": ObjectId(C_id), 
-#             "itemType": {"$in": ["SimpleAttribute", "ComplexAttribute"]}, 
-#         }
-        
-#         if search_term:
-#             query["name"] = {"$regex": search_term, "$options": "i"}
-        
-#         c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
-#         return Response(c_item_list)
-    
-#     return Response(status=400, data={"error": "Invalid request method"})
-
-
-
 @api_view(['GET'])
-def sub_att_list_search(request):
+def sub_att_list_search(request): # 이 함수는 로직이 아직 완성 안됨
     C_id = request.GET.get('user_serial')
     search_term = request.query_params.get('search_term', '')
     
@@ -144,3 +150,4 @@ def sub_att_list_search(request):
         return Response(combined_response)
     
     return Response(status=400, data={"error": "Invalid request method"})
+
