@@ -108,7 +108,6 @@ function Register() {
       <div>
         <div style={{display: "flex"}}>
           <h1 className='mb-3'>Concept Register</h1>
-          <button onClick={() => window.location=`/concept/create/`}>add</button>
         </div>
         <div>
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>

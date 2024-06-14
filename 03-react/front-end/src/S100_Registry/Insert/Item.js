@@ -129,7 +129,6 @@ function Item() {
             <ChooseType getSelestedApi={getSelestedApi} />
             <div style={{display: "flex"}}>
                 <h1>Create Data</h1>
-                <button onClick={() => window.location='/concept'}>back</button>
             </div>
             <div className='mt-5'>
                 {apiType === 'Enumerated Value' && <EnumeratedValue item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
