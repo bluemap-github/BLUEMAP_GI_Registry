@@ -14,7 +14,7 @@ import IDetail from './components/IDetail';
 
 const DDR_Detail = () => {
     const { itemDetails } = useContext(ItemContext); // Context에서 itemDetails 가져오기
-    const { view_item_type, item_id, item_iv } = itemDetails;
+    const { view_item_type, item_id, item_iv, user_serial } = itemDetails;
     const [item, setItem] = useState(null);
     let dataListComponent;
     switch (view_item_type) {
@@ -76,7 +76,7 @@ const DDR_Detail = () => {
                     <button onClick={() => window.location = `/concept/detail/`}>concept data</button>
                 </div>
             </div>
-            <button onClick={() => window.location = `/dataDictionary`}>Back to List</button>
+            <button onClick={() => window.location = `/dataDictionary/${user_serial}`}>Back to List</button>
         </div>
     );
 };
