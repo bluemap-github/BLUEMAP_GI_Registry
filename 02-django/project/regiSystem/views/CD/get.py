@@ -129,25 +129,14 @@ def sub_att_list_search(request): # 이 함수는 로직이 아직 완성 안됨
     if request.method == 'GET':
         query = {
             "concept_id": ObjectId(C_id), 
-            "itemType": {"$in": ["SimpleAttribute", "ComplexAttribute"]}, 
+            "itemType": {"$in": ["SimpleAttribute"]}, 
         }
-        
         if search_term:
             query["name"] = {"$regex": search_term, "$options": "i"}
-        
         c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
-        
         simple_attributes = [item for item in c_item_list if item['itemType'] == 'SimpleAttribute']
-        complex_attributes = [item for item in c_item_list if item['itemType'] == 'ComplexAttribute']
-        
         simple_attributes_serialized = SimpleAttributeSerializer(simple_attributes, many=True).data
-        complex_attributes_serialized = ComplexAttributeSerializer(complex_attributes, many=True).data
         
-        combined_response = {
-            'simple_attributes': simple_attributes_serialized,
-            'complex_attributes': complex_attributes_serialized
-        }
-        return Response(combined_response)
-    
+        return Response({'simple_attributes': simple_attributes_serialized})
     return Response(status=400, data={"error": "Invalid request method"})
 

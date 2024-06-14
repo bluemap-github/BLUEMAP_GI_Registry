@@ -23,7 +23,12 @@ const EnumSearch = ({ getResData }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(GET_NOT_RELATED_ENUM_LIST_SEARCH);
+                const response = await axios.get(GET_NOT_RELATED_ENUM_LIST_SEARCH, {
+                    params: {
+                        user_serial: USER_SERIAL,
+                        search_term: searchTerm
+                    }
+                });
                 getResData(response.data);
             } catch (error) {
                 console.error(error);

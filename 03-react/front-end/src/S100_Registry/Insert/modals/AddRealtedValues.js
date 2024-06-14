@@ -9,15 +9,14 @@ function AddRealtedValues({ isOpen, onClose, handleRelatedValueList}) {
     useEffect(() => {
     }, []);
 
+    const handleSetData = (data) => {
+        setData(data);
+    };
 
     const handleSubmit = () => {
         handleRelatedValueList(selectedObj, selectedID);
         onClose();
     };
-
-    const handleSetData = (data) => {
-        setData(data);
-    }
 
     const log = () => {
         console.log(selectedObj);

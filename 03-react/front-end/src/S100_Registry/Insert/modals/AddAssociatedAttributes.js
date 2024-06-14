@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
+import AttSearch from './search/AttSearch';
 
 const AddAssociatedAttributes = ({isOpen, onClose}) => {
-    const [attribute, setAttribute] = useState('');
+    const [data, setData] = useState([]);
+    const [selectedObj, setSelectedObj] = useState(null);
+    const [selectedID, setSelectedID] = useState(null);
 
-    const handleAttributeChange = (e) => {
-        setAttribute(e.target.value);
+    
+
+    const handleSetData = (data) => {
+        setData(data);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Add your logic here to handle the submission of the associated attribute
-        console.log('Submitted:', attribute);
+    const handleChange = (e, item) => {
+        if (e.target.checked) {
+            setSelectedObj(item);
+            setSelectedID(item._id);
+        } else {
+            setSelectedObj(null);
+            setSelectedID(null);
+        }
+    };
+
+    const handleSubmit = () => {
+        console.log(selectedObj);
+        console.log(selectedID);
     };
 
     if (!isOpen) {
@@ -47,20 +61,32 @@ const AddAssociatedAttributes = ({isOpen, onClose}) => {
             <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
         </div>
         <div>
+            <AttSearch onSearch={handleSetData} />
             <div>
-                <h2>Add Associated Attribute</h2>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Attribute:
-                        <input type="text" value={attribute} onChange={handleAttributeChange} />
-                    </label>
-                    <button type="submit">Add</button>
-                </form>
+                {data.length === 0 ? (<p>no data</p>) : (
+                    <>
+                    {
+                        data.simple_attributes.map((item, index) => (
+                            <div key={index}>
+                                <input 
+                                    type="checkbox" 
+                                    value={item._id} 
+                                    checked={selectedID === item._id}
+                                    onChange={(e) => handleChange(e, item)} 
+                                />
+                                <label>{item.name}</label>
+                            </div>
+                        ))
+                    }
+                    </>
+                )}
+            </div>
+            <div>
+                <button onClick={handleSubmit}>Submit</button>
             </div>
         </div>
       </div>
     </div>
-        
     );
 };
 
