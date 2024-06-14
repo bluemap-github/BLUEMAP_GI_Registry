@@ -30,7 +30,7 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
                     <tbody>
                         <tr>
                             <th className='text-center' scope="row" style={{width: '25%'}}>go to Detail page</th>
-                            <button onClick={() => window.location=`/dataDictionary/${viewItemType}/${USER_SERIAL}/${itemList.item._id}`}>Detail</button>
+                            <button onClick={() => window.location=`/dataDictionary`}>Detail</button>
                         </tr>
                         <tr>
                         <th className='text-center' scope="row" style={{width: '25%'}}>Item Type</th>
