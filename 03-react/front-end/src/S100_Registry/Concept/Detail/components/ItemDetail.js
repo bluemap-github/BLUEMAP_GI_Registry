@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Toast from '../../../Toast';
+import { ItemContext } from '../../../../context/ItemContext';
 import { USER_SERIAL } from '../../../../userSerial';   
 function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
     const viewItemType = itemList.item.itemType;
@@ -8,6 +9,19 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
         // handleUpdateButtonClick 함수를 호출할 때 변수를 함께 전달
         handleUpdateButtonClick(1);
     };
+    const { itemDetails, setItemDetails } = useContext(ItemContext);
+    const { view_item_type, item_id, item_iv } = itemDetails;
+
+    useEffect(() => {
+        setItemDetails({ 
+            view_item_type: view_item_type, 
+            user_serial: USER_SERIAL, 
+            item_id: item_id,
+            item_iv: item_iv,
+            view_item_type: itemList.item.itemType
+        });
+    }, [itemList]);
+
     const handleDelete = (idx) => {
         handleUpdateButtonClick(8);
         handleKeyIdx(idx);
