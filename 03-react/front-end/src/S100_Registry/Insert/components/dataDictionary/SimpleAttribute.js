@@ -79,7 +79,6 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
             <h3>Simple Attribute</h3>
-            <button onClick={log}>check</button>
             <p>{selectedApiUrl}</p>
             <div className='p-3 mt-3'>
                 <div className='row'>
