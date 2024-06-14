@@ -4,7 +4,7 @@ const PortrayalRegister = () => {
 
     return (
         <div>
-            안니옹 여기는 portrayal
+            만들예정ㄹ
         </div>
     );
 };
