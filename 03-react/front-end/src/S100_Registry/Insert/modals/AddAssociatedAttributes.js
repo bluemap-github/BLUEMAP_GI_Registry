@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AttSearch from './search/AttSearch';
 
-const AddAssociatedAttributes = ({isOpen, onClose}) => {
+const AddAssociatedAttributes = ({isOpen, onClose, handleRelatedValueList}) => {
     const [data, setData] = useState([]);
     const [selectedObj, setSelectedObj] = useState(null);
     const [selectedID, setSelectedID] = useState(null);
@@ -23,8 +23,8 @@ const AddAssociatedAttributes = ({isOpen, onClose}) => {
     };
 
     const handleSubmit = () => {
-        console.log(selectedObj);
-        console.log(selectedID);
+        handleRelatedValueList(selectedObj, selectedID);
+        onClose();
     };
 
     if (!isOpen) {

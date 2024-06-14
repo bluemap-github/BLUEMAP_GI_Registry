@@ -62,6 +62,14 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
             alias: newAliasList
         }));
     };
+    const [relatedEnumList, setRelatedEnumList] = useState([]);
+    const handleRelatedEnumList = (selectedObj, selectedID) => {
+        setRelatedEnumList(selectedObj);
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            related_enumeration_value_id_list: selectedID
+        }));
+    }
 
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
@@ -228,6 +236,13 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
                                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                                     </svg> 
                                 </div>
+                                {relatedEnumList.length === 0 ? (
+                                    <div>not related Yet</div>
+                                    ) : (
+                                        <>
+                                            {relatedEnumList.name}
+                                        </>
+                                    )}
                             </div>  
                         </div>
                     </div>
@@ -235,6 +250,7 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
                 <AddAssociatedAttributes
                     isOpen={isRelModalOpen}
                     onClose={closeRelModal}
+                    handleRelatedValueList={handleRelatedEnumList}
                 />
             </div>
         </div>
