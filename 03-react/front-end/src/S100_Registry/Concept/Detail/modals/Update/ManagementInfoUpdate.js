@@ -21,8 +21,14 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
 
     const handleSubmitItem = async () => {
         try {
-            const MIId = itemList.management_infos[followIdx]._id;
-            await axios.put(PUT_MI_URL (MIId), MI);
+            const MIId = itemList.management_infos[followIdx]._id.encrypted_data;
+            const item_iv = itemList.management_infos[followIdx]._id.iv;
+            await axios.put(PUT_MI_URL, MI, {
+                params: {
+                    item_id: MIId,
+                    item_iv: item_iv
+                }
+            });
             onClose();
             window.location.reload();
         } catch (error) {

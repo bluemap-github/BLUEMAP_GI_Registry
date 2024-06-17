@@ -9,15 +9,14 @@ function AddRealtedValues({ isOpen, onClose, handleRelatedValueList}) {
     useEffect(() => {
     }, []);
 
+    const handleSetData = (data) => {
+        setData(data);
+    };
 
     const handleSubmit = () => {
         handleRelatedValueList(selectedObj, selectedID);
         onClose();
     };
-
-    const handleSetData = (data) => {
-        setData(data);
-    }
 
     const log = () => {
         console.log(selectedObj);
@@ -34,6 +33,11 @@ function AddRealtedValues({ isOpen, onClose, handleRelatedValueList}) {
             setSelectedObj(selectedObj.filter((obj) => obj !== item));
             setSelectedID(selectedID.filter((id) => id !== item._id));
         }
+    };
+    const handleChangeUn = (item) => {
+        // 선택된 항목을 필터링하여 목록에서 제거
+        setSelectedObj((prevSelectedObj) => prevSelectedObj.filter((obj) => obj._id !== item._id));
+        setSelectedID((prevSelectedID) => prevSelectedID.filter((id) => id !== item._id));
     };
 
     return (
@@ -92,7 +96,10 @@ function AddRealtedValues({ isOpen, onClose, handleRelatedValueList}) {
                                     <h3>Selected</h3>
                                     <ul>
                                         {selectedObj.map((item, index) => (
-                                            <li key={index}>{item.name}</li>
+                                            <div style={{ display: "flex" }}>
+                                                <li key={index}>{item.name}</li>
+                                                <button onClick={() => handleChangeUn(item)}>unselect</button>
+                                            </div>
                                         ))}
                                     </ul>
                                 </div>

@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import base64
+
 # import KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h-ia$qts3^cv*kpvc$^spht*@r=hai^ppilv*$0tty(6hzn*ap'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = [
     # 'hjk0815.pythonanywhere.com'
@@ -163,3 +166,6 @@ CORS_ALLOW_HEADERS = [  # 실제 요청을 할 때 사용될 수 있는 non-stan
 ]
 
 APPEND_SLASH = False # / 관련 에러 제거
+
+ENCRYPTION_KEY_BASE64 = config('ENCRYPTION_KEY')
+ENCRYPTION_KEY = base64.b64decode(ENCRYPTION_KEY_BASE64)

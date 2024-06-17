@@ -1,65 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { ITEM_DETAIL_URL } from '../Concept/api';
-import { GET_DDR_VALUE_ONE } from './api';
+// src/components/DDRDetail.js
+
+import React, { useContext, useEffect, useState } from 'react';
+import { ItemContext } from '../../context/ItemContext'; // ItemContext 임포트
 import axios from 'axios';
-import { USER_SERIAL } from '../../userSerial';
+import { GET_DDR_VALUE_ONE } from './api';
 import EVDetail from './components/EVDetail';
 import SADetail from './components/SADetail';
 import CADetail from './components/CADetail';
 import FDetail from './components/FDetail';
 import IDetail from './components/IDetail';
 
-const DDR_Detail = () => {
-    const { item_id, view_item_type } = useParams();
-    const [item, setItem] = useState(null);
 
+
+const DDR_Detail = () => {
+    const { itemDetails } = useContext(ItemContext); // Context에서 itemDetails 가져오기
+    const { view_item_type, item_id, item_iv, user_serial } = itemDetails;
+    const [item, setItem] = useState(null);
     let dataListComponent;
     switch (view_item_type) {
-        case 'enumerated_value_one':
+        case 'EnumeratedValue':
           dataListComponent = <EVDetail item={item}/>;
           break;
-        case 'simple_attribute_one':
+        case 'SimpleAttribute':
           dataListComponent = <SADetail item={item}/>;
           break;
-        case 'complex_attribute_one':
+        case 'ComplexAttribute':
             dataListComponent = <CADetail item={item}/>;
             break;
-        case 'feature_one':
+        case 'Feature':
             dataListComponent = <FDetail item={item}/>;
             break;
-        case 'information_one':
+        case 'Information':
             dataListComponent = <IDetail item={item}/>;
             break;
 
         default:
           dataListComponent = null;
       }
-      
 
     useEffect(() => {
         const fetchItemList = async () => {
             try {
-                const response = await axios.get(GET_DDR_VALUE_ONE(view_item_type, item_id));
+                const response = await axios.get(GET_DDR_VALUE_ONE, {
+                    params: {
+                        item_id: item_id,
+                        item_type: view_item_type,
+                        item_iv: item_iv
+                    }
+                });
                 setItem(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.error('Error fetching item list:', error);
             }
         };
-        
 
         fetchItemList();
-    }, [view_item_type, item_id]);
+    }, [view_item_type, item_id, item_iv]);
 
     if (!item) {
         return <div>Loading...</div>;
     }
+
     return (
         <div className='container p-5'>
-            {item_id}
             <h1>DDR_Detail {view_item_type}</h1>
-            <p>{GET_DDR_VALUE_ONE(view_item_type, item_id)}</p>
             <div className='card p-3'>
                 <div>{item.name}</div>
                 <h3>{item.itemType}</h3>
@@ -69,12 +73,10 @@ const DDR_Detail = () => {
                     <div>곧 생길거야 ~</div>
                 </div>
                 <div>
-                    <button onClick={() => (window.location = `/concept/detail/${USER_SERIAL}/${item_id}`)}>
-                        concept data
-                    </button>
+                    <button onClick={() => window.location = `/concept/detail/`}>concept data</button>
                 </div>
             </div>
-            <button onClick={() => (window.location = `/dataDictionary/${item_id}`)}>Back to List</button>
+            <button onClick={() => window.location = `/dataDictionary/${user_serial}`}>Back to List</button>
         </div>
     );
 };

@@ -1,33 +1,27 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Toast from '../../../Toast';
+import { ItemContext } from '../../../../context/ItemContext';
 import { USER_SERIAL } from '../../../../userSerial';   
 function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
-    const [viewItemType, setViewItemType] = useState("enumerated_value");
-
-    useEffect(() => {
-        switch (itemList.item.itemType) {
-            case "EnumeratedValue":
-                setViewItemType("enumerated_value_one");
-                break;
-            case "SimpleAttribute":
-                setViewItemType("simple_attribute_one");
-                break;
-            case "ComplexAttribute":
-                setViewItemType("complex_attribute_one");
-                break;
-            case "Feature":
-                setViewItemType("feature_one");
-                break;
-            case "Information":
-                setViewItemType("information_one");
-                break;
-        }
-    },[itemList.item.itemType] );
+    const viewItemType = itemList.item.itemType;
     
     const handleClick = () => {
         // handleUpdateButtonClick 함수를 호출할 때 변수를 함께 전달
         handleUpdateButtonClick(1);
     };
+    const { itemDetails, setItemDetails } = useContext(ItemContext);
+    const { view_item_type, item_id, item_iv } = itemDetails;
+
+    useEffect(() => {
+        setItemDetails({ 
+            view_item_type: view_item_type, 
+            user_serial: USER_SERIAL, 
+            item_id: item_id,
+            item_iv: item_iv,
+            view_item_type: itemList.item.itemType
+        });
+    }, [itemList]);
+
     const handleDelete = (idx) => {
         handleUpdateButtonClick(8);
         handleKeyIdx(idx);
@@ -50,7 +44,7 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
                     <tbody>
                         <tr>
                             <th className='text-center' scope="row" style={{width: '25%'}}>go to Detail page</th>
-                            <button onClick={() => window.location=`/dataDictionary/${viewItemType}/${USER_SERIAL}/${itemList.item._id}`}>Detail</button>
+                            <button onClick={() => window.location=`/dataDictionary`}>Detail</button>
                         </tr>
                         <tr>
                         <th className='text-center' scope="row" style={{width: '25%'}}>Item Type</th>

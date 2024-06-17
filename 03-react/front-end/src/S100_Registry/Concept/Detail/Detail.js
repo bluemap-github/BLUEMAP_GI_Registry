@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { ItemContext } from '../../../context/ItemContext'; 
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { ITEM_DETAIL_URL } from '../api';
-import ItemDetail from './components/ItemDetail'
-import ManagementInfoDetail from './components/ManagementInfoDetail'
-import ReferenceSourceDetail from './components/ReferenceSourceDetail'
-import ReferenceDetail from './components/ReferenceDetail'
-import Base from './modals/Base'
+import { CONCEPT_ITEM_ONE, GET_MANAGEMENT_INFO, GET_REFERENCE_SOURCE, GET_REFERENCE } from '../api';
+import ItemDetail from './components/ItemDetail';
+import ManagementInfoDetail from './components/ManagementInfoDetail';
+import ReferenceSourceDetail from './components/ReferenceSourceDetail';
+import ReferenceDetail from './components/ReferenceDetail';
+import Base from './modals/Base';
 
 
 function Detail() {
-  // 동적 라우팅 변수 - 내장함수 useParams 사용
-  const { item_id } = useParams();
+  const { itemDetails } = useContext(ItemContext); 
+  const { item_id, item_iv } = itemDetails;
+  const itemParams = {
+    item_id: item_id,
+    item_iv: item_iv
+  };
 
-  // // setItemList 함수가 샐행될때마다 itemList가 업데이트 됨
   const [itemList, setItemList] = useState(null);
+  const [originData, setOriginData] = useState(null);
+  const [MI, setMI] = useState(null);
+  const [RS, setRS] = useState(null);
+  const [References, setReferences] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [numModal, setModalNumber] = useState(2);
   const [followIdx, setFollowIdx] = useState(1);
   const [keyIdx, setKeyIdx] = useState(0);
+  const [loading, setLoading] = useState(true); 
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -31,55 +40,92 @@ function Detail() {
   const handleUpdateButtonClick = (int) => {
     openModal();
     setModalNumber(int);
+    switch (int) {
+      case 1:
+        setOriginData(itemList);
+        break;
+      case 2:
+        setOriginData(MI);
+        break;
+      case 3:
+        setOriginData(RS);
+        break;
+      case 4:
+        setOriginData(References);
+        break;
+      // case 5:
+      //   setFollowIdx(0);
+      //   break;
+      // case 6:
+      //   setFollowIdx(0);
+      //   break;
+      // case 7:
+      //   setFollowIdx(0);
+      //   break;
+      default:
+        setFollowIdx(1);
+    }
   };
 
   const handleFollowIdx = (int) => {
     setFollowIdx(int);
-  }
+  };
+
   const handleKeyIdx = (int) => {
-    setKeyIdx(int)
-  }
+    setKeyIdx(int);
+  };
 
   useEffect(() => {
-    // fetchItemList 함수를 useEffect 안으로 넣어서 컴포넌트가 렌더링될때마다 호출하도록 함 - id 값을 먼저 받아와야 하기 때문
-    const fetchItemList = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${ITEM_DETAIL_URL}${item_id}/`);
-        setItemList(response.data);
-        console.log(response.data)
+        const [itemListResponse, miResponse, rsResponse, referencesResponse] = await Promise.all([
+          axios.get(CONCEPT_ITEM_ONE, { params: itemParams }),
+          axios.get(GET_MANAGEMENT_INFO, { params: itemParams }),
+          axios.get(GET_REFERENCE_SOURCE, { params: itemParams }),
+          axios.get(GET_REFERENCE, { params: itemParams })
+        ]);
+
+        console.log(itemListResponse.data);
+        console.log(miResponse.data);
+        console.log(rsResponse.data);
+        console.log(referencesResponse.data);
+        setItemList(itemListResponse.data);
+        setMI(miResponse.data);
+        setRS(rsResponse.data);
+        setReferences(referencesResponse.data);
+
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching item list:', error);
+        console.error('Error fetching data:', error);
+        setLoading(false);
       }
     };
 
-    fetchItemList();
-  }, [item_id]);
-  
+    fetchData();
+  }, [item_id, item_iv]);
 
-  // 로딩 
-  if (!itemList) {
-    return <div>Loading...</div>; 
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  else return (
+  return (
     <div className="container p-5">
-      {/* <div style={{height: '70px'}}></div> */}
-      <Base itemList={itemList} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  {/* selectedForm 숫자 바꾸는 로직 추가하면 됨 */}
+      <Base itemList={originData} isOpen={isModalOpen} onClose={closeModal} selectedForm={numModal} keyIdx={keyIdx} followIdx={followIdx}/>  
       <h1 className='mb-3'>Concept Register</h1>
       <div>
-        <div className='mb-3 mt-3'>GET : {ITEM_DETAIL_URL}{item_id}/</div>
+        <div className='mb-3 mt-3'>GET : {CONCEPT_ITEM_ONE}</div>
       </div>
       <div className="row">
         <div className="col">
           <ItemDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
-          <ManagementInfoDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
-          <ReferenceSourceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
-          <ReferenceDetail itemList={itemList} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
+          <ManagementInfoDetail itemList={MI} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
+          <ReferenceSourceDetail itemList={RS} handleUpdateButtonClick={handleUpdateButtonClick} handleKeyIdx={handleKeyIdx}/>
+          <ReferenceDetail itemList={References} handleUpdateButtonClick={handleUpdateButtonClick} handleFollowIdx={handleFollowIdx} handleKeyIdx={handleKeyIdx}/>
         </div>
       </div>
       <div>
         <Link to="/">
-            <button className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>
+          <button className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>
         </Link>
       </div>
       <div style={{height: '200px'}}></div>

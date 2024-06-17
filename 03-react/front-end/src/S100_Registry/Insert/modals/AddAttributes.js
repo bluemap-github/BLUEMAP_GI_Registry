@@ -1,30 +1,83 @@
 import React, { useState } from 'react';
+import AttSearch from './search/AttSearch';
 
-const AddAttributes = () => {
-    const [attribute, setAttribute] = useState('');
+function AddAttributes({ isOpen, onClose }) {
+    // const [inputValue, setInputValue] = useState('');
+    const [searchResults, setSearchResults] = useState({});
 
-    const handleAttributeChange = (e) => {
-        setAttribute(e.target.value);
+    // const handleInputChange = (event) => {
+    //     setInputValue(event.target.value);
+    // };
+
+    // const handleSubmit = () => {
+    //     // 입력된 데이터를 처리하는 로직 추가
+    //     console.log('Submitted Value:', inputValue);
+    //     onClose();
+    // };
+
+    const handleSearch = (results) => {
+        setSearchResults(results);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Add your logic here to handle the form submission
-        console.log('Attribute:', attribute);
-    };
+    if (!isOpen) {
+        return null;
+    }
 
     return (
         <div>
-            <h2>Add Attributes</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Attribute:
-                    <input type="text" value={attribute} onChange={handleAttributeChange} />
-                </label>
-                <button type="submit">Add</button>
-            </form>
+            <div 
+                className="modal"
+                style={{
+                    position: "fixed", /* 화면에 고정 */
+                    top: "0", /* 화면 상단에 배치 */
+                    left: "0", /* 화면 왼쪽에 배치 */
+                    width: "100%", /* 전체 화면 너비 */
+                    height: "100%", /* 전체 화면 높이 */
+                    backgroundColor: "rgba(0, 0, 0, 0.5)", /* 배경 색상 및 투명도 설정 */
+                    display: "flex", /* 내부 요소를 수평 정렬하기 위해 */
+                    justifyContent: "center", /* 내부 요소를 수평 가운데 정렬하기 위해 */
+                    alignItems: "center", /* 내부 요소를 수직 가운데 정렬하기 위해 */
+                    zIndex: "9999" /* 다른 요소 위에 위치하도록 설정 */
+                }}
+            >
+                <div 
+                    className="modal-content"
+                    style={{
+                        maxWidth: "80rem",
+                        maxHeight: "80rem",
+                        backgroundColor: "white", 
+                        padding: "20px", 
+                        borderRadius: "8px",
+                    }}
+                >
+                    <div className='text-end' style={{ height: "10%" }}>
+                        <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
+                    </div>
+                    <div>
+                        <h3>Submit Related Values</h3>
+                    </div>
+                    <div className='text-end'>
+                        {/* <button className='btn btn-sm btn-primary' onClick={handleSubmit}>Submit</button> */}
+                    </div>
+                    <AttSearch onSearch={handleSearch} />
+                    <div>
+                        <h4>Search Results:</h4>
+                        <div>
+                            {/* {searchResults.length === 0 ? (
+                                <p>No results found</p>
+                            ) : (
+                                <ul>
+                                    {searchResults.map((result) => (
+                                        <li key={result.id}>{result.name}</li>
+                                    ))}
+                                </ul>
+                            )} */}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    );
-};
+    )
+}
 
 export default AddAttributes;

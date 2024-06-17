@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { ItemContext } from '../../../../../context/ItemContext';
 import axios from 'axios';
 import { PUT_ITEM_URL } from '../../../api';
 
+
 function ItemUpdate({ items, onClose }) {
     const [item, setItem] = useState(items);
+    const { itemDetails } = useContext(ItemContext); 
+    const { item_id, item_iv } = itemDetails;
 
     useEffect(() => {
         setItem(items); // props로 받은 items를 초기 상태로 설정
@@ -20,8 +24,12 @@ function ItemUpdate({ items, onClose }) {
 
     const handleSubmitItem = async () => {
         try {
-            const itemId = items._id;
-            await axios.put(PUT_ITEM_URL(itemId), item);
+            await axios.put(PUT_ITEM_URL, item, {
+                params: {
+                    item_id: item_id,
+                    item_iv: item_iv
+                }
+            });
             onClose();
             window.location.reload();
         } catch (error) {

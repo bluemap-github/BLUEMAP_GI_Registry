@@ -1,50 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { SUB_ATT_LIST_SEARCH } from '../../../DataDictionary/api';
+import {SUB_ATT_LIST_SEARCH} from '../../../DataDictionary/api.js';
+import { USER_SERIAL } from '../../../../userSerial';
 
-// const AttSearch = ({ getResData}) => {
-const AttSearch = () => {
-    // const [searchTerm, setSearchTerm] = useState('');
 
-    // const handleSearch = async () => {
-    //     try {
-    //         const response = await axios.get(SUB_ATT_LIST_SEARCH, {
-    //             params: {
-    //                 search_term: searchTerm
-    //             }
-    //         });
-    //         getResData(response.data);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+function AttSearch({ onSearch }) {
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await axios.get(SUB_ATT_LIST_SEARCH);
-    //             getResData(response.data);
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-    //     fetchData();
-    // }, []);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    
+    const handleSearch = () => {
+        axios.get(SUB_ATT_LIST_SEARCH, {
+            params: {
+                user_serial: USER_SERIAL,
+                search_term: searchTerm,
+            }
+        })
+        .then(response => {
+            console.log(response.data); 
+            onSearch(response.data);
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+    };
+
+    useEffect(() => {
+        handleSearch();
+    }, []);
 
     return (
         <div>
-            attSearch
-            {/* <p style={{ fontSize: '12px' }}>{SUB_ATT_LIST_SEARCH}</p>
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+            <p>{SUB_ATT_LIST_SEARCH}</p>
+            <input 
+                type="text" 
+                value={searchTerm} 
+                onChange={(e) => setSearchTerm(e.target.value)} 
+                placeholder="Search term" 
             />
-            <button onClick={handleSearch}>Search</button> */}
+            <button onClick={handleSearch}>Search</button>
         </div>
     );
-};
+}
 
 export default AttSearch;

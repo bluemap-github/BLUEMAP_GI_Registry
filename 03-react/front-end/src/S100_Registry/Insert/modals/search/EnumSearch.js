@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { GET_NOT_RELATED_ENUM_LIST_SEARCH } from '../../../DataDictionary/api';
+import { USER_SERIAL } from '../../../../userSerial';
 
 const EnumSearch = ({ getResData }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -9,6 +10,7 @@ const EnumSearch = ({ getResData }) => {
         try {
             const response = await axios.get(GET_NOT_RELATED_ENUM_LIST_SEARCH, {
                 params: {
+                    user_serial: USER_SERIAL,
                     search_term: searchTerm
                 }
             });
@@ -21,7 +23,12 @@ const EnumSearch = ({ getResData }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(GET_NOT_RELATED_ENUM_LIST_SEARCH);
+                const response = await axios.get(GET_NOT_RELATED_ENUM_LIST_SEARCH, {
+                    params: {
+                        user_serial: USER_SERIAL,
+                        search_term: searchTerm
+                    }
+                });
                 getResData(response.data);
             } catch (error) {
                 console.error(error);

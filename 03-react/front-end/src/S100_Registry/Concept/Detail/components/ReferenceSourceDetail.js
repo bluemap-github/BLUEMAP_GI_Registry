@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
 function ReferenceSourceDetail({itemList, handleUpdateButtonClick, handleKeyIdx}){
-    console.log(itemList.reference_sources > 0)
-    console.log(itemList.reference_sources)
     const [toggleOpened, setToggleOpened] = useState(true);
 
     const handleClick = () => {

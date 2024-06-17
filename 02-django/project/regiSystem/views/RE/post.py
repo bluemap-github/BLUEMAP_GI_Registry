@@ -17,6 +17,10 @@ from regiSystem.serializers.RE import (
         ConceptReferenceSourceSerializer,
         ConceptReferenceSerializer,
     )
+
+import json
+from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
+
 @api_view(['POST'])
 def concept_register(request):
     if request.method == 'POST':
@@ -28,20 +32,12 @@ def concept_register(request):
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def concept_item(request):
-    serializer = ConceptItemSerializer(data=request.data)
-    if serializer.is_valid():
-        validated_data = serializer.validated_data
-        validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
-        
-        S100_Concept_Item.insert_one(validated_data) 
-        return Response(serializer.data, status=HTTP_201_CREATED)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
 
 @api_view(['POST'])
-def concept_managemant_info(request, I_id):
+def mamagement_info(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+
     serializer = ConceptManagementInfoSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
@@ -53,7 +49,10 @@ def concept_managemant_info(request, I_id):
 
 
 @api_view(['POST'])
-def concept_reference_source(request, I_id):
+def reference_source(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+
     serializer = ConceptReferenceSourceSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
@@ -65,7 +64,10 @@ def concept_reference_source(request, I_id):
 
 
 @api_view(['POST'])
-def concept_reference(request, I_id):
+def reference(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+
     serializer = ConceptReferenceSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data

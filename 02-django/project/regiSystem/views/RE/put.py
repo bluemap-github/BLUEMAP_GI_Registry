@@ -13,11 +13,11 @@ from regiSystem.serializers.RE import (
         ConceptReferenceSourceSerializer,
         ConceptReferenceSerializer
     )
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-
+import json
+from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
 
 @api_view(['PUT'])
 def concept_register(request, C_id):
@@ -33,9 +33,11 @@ def concept_register(request, C_id):
     except Exception as e: 
         return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
 
-
 @api_view(['PUT'])
-def concept_item(request, I_id):
+def concept_item(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+
     c_item = S100_Concept_Item.find_one({'_id': ObjectId(I_id)})
     serializer = ConceptItemSerializer(c_item, data=request.data)
     if serializer.is_valid():
@@ -46,9 +48,11 @@ def concept_item(request, I_id):
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
         
 
-
 @api_view(['PUT'])
-def concept_managemant_info(request, I_id):
+def concept_managemant_info(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    
     c_management_info = S100_Concept_ManagementInfo.find_one({'_id': ObjectId(I_id)})
     serializer = ConceptManagementInfoSerializer(c_management_info, data=request.data)
     if serializer.is_valid():
@@ -59,7 +63,10 @@ def concept_managemant_info(request, I_id):
 
 
 @api_view(['PUT'])
-def concept_reference_source(request, I_id):
+def concept_reference_source(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+
     c_reference_source = S100_Concept_ReferenceSource.find_one({'_id': ObjectId(I_id)})
     serializer = ConceptReferenceSourceSerializer(c_reference_source, data=request.data)
     if serializer.is_valid():
@@ -70,7 +77,10 @@ def concept_reference_source(request, I_id):
 
 
 @api_view(['PUT'])
-def concept_reference(request, I_id):
+def concept_reference(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    
     c_reference = S100_Concept_Reference.find_one({'_id': ObjectId(I_id)})
     serializer = ConceptReferenceSerializer(c_reference, data=request.data)
     if serializer.is_valid():

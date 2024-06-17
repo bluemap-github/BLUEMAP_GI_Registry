@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
-import {CREATE_REFERENCE_URL} from '../../../api';
+import {POST_REFERENCE} from '../../../api';
 
 
 function ReferenceAdd({onClose, itemId}){
@@ -14,7 +14,7 @@ function ReferenceAdd({onClose, itemId}){
     }
     const handleSubmitItem = async () => {
         try {
-            const RUrl = CREATE_REFERENCE_URL(itemId);
+            const RUrl = POST_REFERENCE(itemId);
             await axios.post(RUrl, reference);
             onClose();
             window.location.reload();

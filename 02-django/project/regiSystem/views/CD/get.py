@@ -1,15 +1,7 @@
 from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.status import (
-        HTTP_400_BAD_REQUEST, 
-    )
-from regiSystem.models import (
-    S100_Concept_Item,
-)
-from regiSystem.serializers.RE import (
-    ConceptItemSerializer,
-)
+from regiSystem.models import S100_Concept_Item
 from regiSystem.serializers.CD import (
         SimpleAttributeSerializer,
         EnumeratedValueSerializer,
@@ -17,6 +9,8 @@ from regiSystem.serializers.CD import (
         FeatureSerializer,
         InformationSerializer
 )
+import json
+from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
 itemTypeSet = {
         "EnumeratedValue": EnumeratedValueSerializer,
         "SimpleAttribute": SimpleAttributeSerializer,
@@ -24,6 +18,7 @@ itemTypeSet = {
         "Feature": FeatureSerializer,
         "Information": InformationSerializer
     }
+
 
 def getItemType(itemType, C_id):
     c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id), "itemType": itemType}).sort("_id", -1))
@@ -38,87 +33,45 @@ def make_response_data(serializer):
     return response_data
 
 @api_view(['GET'])
-def enumerated_value_list(request, C_id):
+def ddr_item_list(request):
+    C_id = request.GET.get('user_serial')
+    item_type = request.GET.get('item_type')
+
     if request.method == 'GET':
-        serializer = getItemType("EnumeratedValue", C_id)
+        serializer = getItemType(item_type, C_id)
+        for item in serializer.data:
+            item["_id"] = get_encrypted_id(item["_id"])
         response_data = make_response_data(serializer)
         return Response(response_data)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+    return Response(status=400, data={"error": "Invalid request method"})
+
+
+
 
 @api_view(['GET'])
-def simple_attribute_list(request, C_id):
+def ddr_item_one(request):
+    
+    item_type = request.GET.get('item_type')
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+
     if request.method == 'GET':
-        serializer = getItemType("SimpleAttribute", C_id)
-        response_data = make_response_data(serializer)
-        return Response(response_data)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        try:
+            c_item = S100_Concept_Item.find_one({"_id": ObjectId(I_id)})
+            if c_item is None:
+                return Response(status=404, data={"error": "Item not found"})
+            
+            c_item["_id"] = get_encrypted_id(c_item["_id"])
+            serializer = itemTypeSet[item_type](c_item)
+            return Response(serializer.data)
+        
+        except Exception as e:
+            return Response(status=500, data={"error": str(e)})
+    return Response(status=400, data={"error": "Invalid request method"})
 
 @api_view(['GET'])
-def complex_attribute_list(request, C_id):
-    if request.method == 'GET':
-        serializer = getItemType("ComplexAttribute", C_id)
-        response_data = make_response_data(serializer)
-        return Response(response_data)
-    return
-
-@api_view(['GET'])
-def feature_list(request, C_id):
-    if request.method == 'GET':
-        serializer = getItemType("Feature", C_id)
-        response_data = make_response_data(serializer)
-        return Response(response_data)
-    return
-
-@api_view(['GET'])
-def information_list(request, C_id):
-    if request.method == 'GET':
-        serializer = getItemType("Information", C_id)
-        response_data = make_response_data(serializer)
-        return Response(response_data)
-    return
-
-@api_view(['GET'])
-def enumerated_value_one(request, EV_id):
-    if request.method == 'GET':
-        c_item = S100_Concept_Item.find_one({"_id": ObjectId(EV_id)})
-        serializer = EnumeratedValueSerializer(c_item)
-        return Response(serializer.data)
-    return
-
-@api_view(['GET'])
-def simple_attribute_one(request, SA_id):
-    if request.method == 'GET':
-        c_item = S100_Concept_Item.find_one({"_id": ObjectId(SA_id)})
-        serializer = SimpleAttributeSerializer(c_item)
-        return Response(serializer.data)
-    return
-
-@api_view(['GET'])
-def complex_attribute_one(request, CA_id):
-    if request.method == 'GET':
-        c_item = S100_Concept_Item.find_one({"_id": ObjectId(CA_id)})
-        serializer = ComplexAttributeSerializer(c_item)
-        return Response(serializer.data)
-    return
-
-@api_view(['GET'])
-def feature_one(request, F_id):
-    if request.method == 'GET':
-        c_item = S100_Concept_Item.find_one({"_id": ObjectId(F_id)})
-        serializer = FeatureSerializer(c_item)
-        return Response(serializer.data)
-    return
-
-@api_view(['GET'])
-def information_one(request, I_id):
-    if request.method == 'GET':
-        c_item = S100_Concept_Item.find_one({"_id": ObjectId(I_id)})
-        serializer = InformationSerializer(c_item)
-        return Response(serializer.data)
-    return
-
-@api_view(['GET'])
-def not_related_enum_list_search(request, C_id):
+def not_related_enum_list_search(request):
+    C_id = request.GET.get('user_serial')
     search_term = request.query_params.get('search_term', '')
     
     if request.method == 'GET':
@@ -132,57 +85,58 @@ def not_related_enum_list_search(request, C_id):
             query["name"] = {"$regex": search_term, "$options": "i"}
         
         c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+
+        for item in c_item_list:
+            item["_id"] = get_encrypted_id(item["_id"])
+
         serializer = EnumeratedValueSerializer(c_item_list, many=True)
-        return Response(serializer.data)
+
+        return Response(serializer.data, status=200)
     
     return Response(status=400, data={"error": "Invalid request method"})
 
-
 @api_view(['GET'])
-def sub_att_list_search(request, C_id):
+def associated_attribute_list_search(request):
+    C_id = request.GET.get('user_serial')
     search_term = request.query_params.get('search_term', '')
     
     if request.method == 'GET':
         query = {
             "concept_id": ObjectId(C_id), 
-            "itemType": {"$in": ["SimpleAttribute", "ComplexAttribute"]}, 
+            "itemType": "ComplexAttribute", 
         }
         
         if search_term:
             query["name"] = {"$regex": search_term, "$options": "i"}
         
         c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
-        return Response(c_item_list)
+
+        for item in c_item_list:
+            item["_id"] = get_encrypted_id(item["_id"])
+
+        serializer = ComplexAttributeSerializer(c_item_list, many=True)
+
+        return Response(serializer.data, status=200)
     
     return Response(status=400, data={"error": "Invalid request method"})
 
 
-
 @api_view(['GET'])
-def sub_att_list_search(request, C_id):
+def sub_att_list_search(request): # 이 함수는 로직이 아직 완성 안됨
+    C_id = request.GET.get('user_serial')
     search_term = request.query_params.get('search_term', '')
     
     if request.method == 'GET':
         query = {
             "concept_id": ObjectId(C_id), 
-            "itemType": {"$in": ["SimpleAttribute", "ComplexAttribute"]}, 
+            "itemType": {"$in": ["SimpleAttribute"]}, 
         }
-        
         if search_term:
             query["name"] = {"$regex": search_term, "$options": "i"}
-        
         c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
-        
         simple_attributes = [item for item in c_item_list if item['itemType'] == 'SimpleAttribute']
-        complex_attributes = [item for item in c_item_list if item['itemType'] == 'ComplexAttribute']
-        
         simple_attributes_serialized = SimpleAttributeSerializer(simple_attributes, many=True).data
-        complex_attributes_serialized = ComplexAttributeSerializer(complex_attributes, many=True).data
         
-        combined_response = {
-            'simple_attributes': simple_attributes_serialized,
-            'complex_attributes': complex_attributes_serialized
-        }
-        return Response(combined_response)
-    
+        return Response({'simple_attributes': simple_attributes_serialized})
     return Response(status=400, data={"error": "Invalid request method"})
+

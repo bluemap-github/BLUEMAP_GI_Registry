@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
+
 function ManagementInfoDetail({itemList, handleUpdateButtonClick, handleFollowIdx, handleKeyIdx}) {
+
     const handleClick = (idx) => {
         // handleUpdateButtonClick 함수를 호출할 때 변수를 함께 전달
         handleUpdateButtonClick(2);
@@ -34,7 +36,7 @@ function ManagementInfoDetail({itemList, handleUpdateButtonClick, handleFollowId
                         {toggleOpened && <button className='btn btn-outline-secondary btn-sm' onClick={handleAddClick}>+ Add</button>}
                     </div>  
                     {itemList.management_infos.map((info, idx) => (
-                    <li key={info._id} className="mt-3 mb-3 card p-3" style={{listStyle: 'none'}}>
+                    <li key={info._id.encrypted_data} className="mt-3 mb-3 card p-3" style={{listStyle: 'none'}}>
                         <table className="table table-sm">
                             <thead>
                                 <tr>
@@ -96,7 +98,7 @@ function ManagementInfoDetail({itemList, handleUpdateButtonClick, handleFollowId
                                 style={{maxWidth:"70px"}} 
                                 onClick={() => handleClick(idx)}
                             >Update</button>
-                            {itemList.management_infos.length > 1 && <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(info._id)}>Delete</button>}
+                            {itemList.management_infos.length > 1 && <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(info._id.encrypted_data)}>Delete</button>}
                         </div>
                     </li>
                     ))}

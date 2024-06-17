@@ -3,7 +3,7 @@ import React, { useState, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
-import { CREATE_MANAGEMENT_INFO_URL } from '../../../api';
+import { POST_MANAGEMENT_INFO } from '../../../api';
 
 
 
@@ -19,7 +19,7 @@ function ManagementInfoAdd({onClose, itemId}) {
       };
     const handleSubmitItem = async () => {
         try {
-            const miUrl = CREATE_MANAGEMENT_INFO_URL(itemId);
+            const miUrl = POST_MANAGEMENT_INFO(itemId);
             await axios.post(miUrl, managementInfo);
             onClose();
             window.location.reload();
