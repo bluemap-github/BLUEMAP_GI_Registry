@@ -67,8 +67,9 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
         setRelatedEnumList(selectedObj);
         setFormData(prevFormData => ({
             ...prevFormData,
-            related_enumeration_value_id_list: selectedID
+            associated_arrtibute_id: selectedID
         }));
+        console.log(selectedID);
     }
 
     return (
