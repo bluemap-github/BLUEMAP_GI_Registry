@@ -26,7 +26,8 @@ function ItemInput({ onFormSubmit, registerId, apiType }) {
         reference: '',
         similarityToSource: '',
         justification: '',
-        proposedChange: ''
+        proposedChange: '',
+        itemType: 'ConceptItem',
     });
     const [aliasList, setAliasList] = useState([]);
     const [formattedAliasList, setFormattedAliasList] = useState('');
@@ -40,9 +41,9 @@ function ItemInput({ onFormSubmit, registerId, apiType }) {
         setFormData(updatedFormData);
 
         if (mandatoryFields.includes(name) && value.trim() === '') {
-            event.target.classList.add('is-invalid');
+            event.target.classList.add('tag-invalid');
         } else {
-            event.target.classList.remove('is-invalid');
+            event.target.classList.remove('tag-invalid');
         }
 
         onFormSubmit(updatedFormData);
@@ -60,15 +61,19 @@ function ItemInput({ onFormSubmit, registerId, apiType }) {
 
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
-            <h3>Items</h3>
+            <h3>Concept Item</h3>
             <div className='p-3 mt-3'>
                 <div className='row'>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%" ,fontWeight: "bold"}}>* Name</span>
+                            <span 
+                                className={`input-group-text ${mandatoryFields.includes('name') && formData.name.trim() === '' ? 'tag-invalid' : ''}`}
+                                id="basic-addon1"
+                                style={{width:"40%" ,fontWeight: "bold"}}
+                                >* Name</span>
                             <input 
                                 type="text" 
-                                className={`form-control ${mandatoryFields.includes('name') && formData.name.trim() === '' ? 'is-invalid' : ''}`}
+                                className={`form-control ${mandatoryFields.includes('name') && formData.name.trim() === '' ? 'tag-invalid' : ''}`}
                                 placeholder="Name" 
                                 name="name" 
                                 onChange={handleChange} 
@@ -119,9 +124,12 @@ function ItemInput({ onFormSubmit, registerId, apiType }) {
                             
                         </div>
                         <div className="input-group input-group-sm mt-2">
-                            <label className="input-group-text" for="itemStatus" style={{width:"40%" ,fontWeight: "bold"}}>* Item Status</label>
+                            <label 
+                                className={`input-group-text ${mandatoryFields.includes('itemStatus') && formData.itemStatus.trim() === '' ? 'tag-invalid' : ''}`}
+                                for="itemStatus" 
+                                style={{width:"40%" ,fontWeight: "bold"}}>* Item Status</label>
                             <select 
-                                className={`form-select ${mandatoryFields.includes('itemStatus') && formData.itemStatus.trim() === '' ? 'is-invalid' : ''}`} 
+                                className={`form-select ${mandatoryFields.includes('itemStatus') && formData.itemStatus.trim() === '' ? 'tag-invalid' : ''}`} 
                                 id="itemStatus" 
                                 name="itemStatus" 
                                 onChange={handleChange}>

@@ -5,7 +5,7 @@ import { REGISTER_ITEM_LIST_URL, DEL_ITEM_URL } from './api';
 import Toast from '../Toast';
 import { USER_SERIAL } from '../../userSerial';
 import { ItemContext } from '../../context/ItemContext';
-
+// import './Register.css'; // 추가된 CSS 파일 가져오기
 
 function Register() {
   const [itemList, setItemList] = useState([]);
@@ -128,8 +128,8 @@ function Register() {
             </th>
             {/* <th scope="col">No</th> */}
             <th scope="col">Name</th>
-            <th scope="col">camelCase</th>
-            <th scope="col">Item Type</th>
+            <th scope="col">Camel Case</th>
+            <th scope="col">Definition</th>
             <th scope="col">Status</th>
           </tr>
         </thead>
@@ -145,10 +145,12 @@ function Register() {
                 />
               </th>
               {/* <td onClick={() => handleDetailClick(item)}className='text-center' style={{width: '3%'}}>{index+1}</td> */}
-              <td onClick={() => handleDetailClick(item)}className='th-inner sortable both' >{item.name}</td>
-              <td onClick={() => handleDetailClick(item)}className='th-inner sortable both' >{item.camelCase}</td>
-              <td onClick={() => handleDetailClick(item)}className='th-inner sortable both' >{item.itemType}</td>
-              <td onClick={() => handleDetailClick(item)}className='th-inner sortable both' >{item.itemStatus}</td>
+              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both'>{item.name}</td>
+              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both'>{item.camelCase}</td>
+              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both'>
+                <div style={{width: "600px"}} className='single-line-ellipsis'>{item.definition}</div>
+              </td>
+              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both'>{item.itemStatus}</td>
           </tr>
         ))}
         </tbody>

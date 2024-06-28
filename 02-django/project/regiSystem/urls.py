@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import (RE, CD)
+from .views import (RE, CD, SEARCH)
 
 app_name = 'regiSystem'
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     path('concept_register/delete/<str:C_id>/', RE.delete.concept_register),  
 
     # RegisterItem
+    path('concept_item/item/post/', CD.post.concept_item),
     path('concept_item_list/get/', RE.get.concept_item_list), 
     path('concept_item_one/get/', RE.get.concept_item_one), 
     path('concept_item/delete/<str:I_id>/', RE.delete.concept_item), 
@@ -57,7 +58,6 @@ urlpatterns = [
     path('information/post/', CD.post.information), 
 
     # RelatedValue
-    path('not_related_enum_list_search/get/', CD.get.not_related_enum_list_search),
-    path('sub_att_list_search/get/', CD.get.sub_att_list_search),
+    path('related_item/search/', SEARCH.search.related_item),
 ]
 

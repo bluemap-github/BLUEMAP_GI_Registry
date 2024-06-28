@@ -72,6 +72,9 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
         console.log(selectedID);
     }
 
+    const log = () => {
+        console.log(formData);
+    }
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
             <h3>Enumerated Value</h3>

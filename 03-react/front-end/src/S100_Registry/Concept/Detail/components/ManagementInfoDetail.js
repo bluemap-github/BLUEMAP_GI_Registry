@@ -59,35 +59,35 @@ function ManagementInfoDetail({itemList, handleUpdateButtonClick, handleFollowId
                             </thead>
                             <tbody>
                                 <tr>
-                                <th className='text-center' scope="row" style={{width: '25%'}}>proposalType</th>
+                                <th className='text-center' scope="row" style={{width: '25%'}}>Proposal Type</th>
                                 <td>{info.proposalType}</td>
                                 </tr>
                                 <tr>
-                                <th className='text-center' scope="row">submittingOrganisation</th>
+                                <th className='text-center' scope="row">Submitting Organisation</th>
                                 <td>{info.submittingOrganisation}</td>
                                 </tr>
                                 <tr>
-                                <th className='text-center' scope="row">proposedChange</th>
+                                <th className='text-center' scope="row">Proposed Change</th>
                                 <td>{info.proposedChange}</td>
                                 </tr>
                                 <tr>
-                                <th className='text-center' scope="row">dateAccepted</th>
+                                <th className='text-center' scope="row">Date Accepted</th>
                                 <td>{info.dateAccepted}</td>
                                 </tr>
                                 <tr>
-                                <th className='text-center' scope="row">dateProposed</th>
+                                <th className='text-center' scope="row">Date Proposed</th>
                                 <td>{info.dateProposed}</td>
                                 </tr>
                                 <tr>
-                                <th className='text-center' scope="row">dateAmended</th>
+                                <th className='text-center' scope="row">Date Amended</th>
                                 <td>{info.dateAmended}</td>
                                 </tr>
                                 <tr>
-                                <th className='text-center' scope="row">proposalStatus</th>
+                                <th className='text-center' scope="row">Proposal Status</th>
                                 <td>{info.proposalStatus}</td>
                                 </tr>
                                 <tr>
-                                <th className='text-center' scope="row">controlBodyNotes</th>
+                                <th className='text-center' scope="row">Control Body Notes</th>
                                 <td>{info.controlBodyNotes}</td>
                                 </tr>
                             </tbody>

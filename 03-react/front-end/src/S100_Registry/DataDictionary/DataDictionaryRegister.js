@@ -9,12 +9,14 @@ function DataDictionaryRegister() {
     }
     return (
         <div className="container p-5">
-            <div className="button-container">
-                <button className="spacing" onClick={() => clickHandler("EnumeratedValue")}>Enumerated Values</button>
-                <button className="spacing" onClick={() => clickHandler("SimpleAttribute")}>Simple Attributes</button>
-                <button className="spacing" onClick={() => clickHandler("ComplexAttribute")}>Complex Attributes</button>
-                <button className="spacing" onClick={() => clickHandler("Feature")}>Features</button>
-                <button className="spacing" onClick={() => clickHandler("Information")}>Informations</button>
+            <h1>Data Dictionary List</h1>
+            <p className='mt-5'>Choose the type of data you want to see.</p>
+            <div className="btn-group btn-group-toggle">
+                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("EnumeratedValue")}>Enumerated Values</button>
+                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("SimpleAttribute")}>Simple Attributes</button>
+                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("ComplexAttribute")}>Complex Attributes</button>
+                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("Feature")}>Features</button>
+                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("Information")}>Informations</button>
             </div>
             <div>
                 <EVFilter data={viewNumber}/>

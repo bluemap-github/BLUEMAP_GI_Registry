@@ -34,7 +34,7 @@ class ConceptItemSerializer(serializers.Serializer):
 class ConceptSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
     name = serializers.CharField(max_length=100)
-    operatingLanguage = serializers.CharField(max_length=100)
+    operatingLanguage = serializers.CharField(max_length=100, )
     contentSummary = serializers.CharField()
     uniformResourceIdentifier = serializers.CharField(max_length=100)
     dateOfLastChange = serializers.CharField()

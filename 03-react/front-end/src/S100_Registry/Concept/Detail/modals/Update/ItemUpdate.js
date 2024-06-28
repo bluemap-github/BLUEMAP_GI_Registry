@@ -45,7 +45,7 @@ function ItemUpdate({ items, onClose }) {
             <div>
                 <h3 className='mb-2'>Update Item</h3>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*itemIdentifier</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*Item Identifier</span>
                     <input
                         type='number'
                         value={item.itemIdentifier} // 객체의 해당 속성에 접근
@@ -56,7 +56,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*name</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*Name</span>
                     <input
                         value={item.name} // 객체의 해당 속성에 접근
                         type="text"
@@ -67,7 +67,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>definition</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Definition</span>
                     <input
                         value={item.definition} // 객체의 해당 속성에 접근
                         type="text"
@@ -78,7 +78,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>remarks</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Remarks</span>
                     <input
                         value={item.remarks} // 객체의 해당 속성에 접근
                         type="text"
@@ -89,7 +89,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*itemStatus</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*Item Status</span>
                     <input
                         value={item.itemStatus} // 객체의 해당 속성에 접근
                         type="text"
@@ -100,7 +100,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>alias</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Alias</span>
                     <input
                         value={item.alias} // 객체의 해당 속성에 접근
                         type="text"
@@ -111,7 +111,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>camelCase</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Camel Case</span>
                     <input
                         value={item.camelCase} // 객체의 해당 속성에 접근
                         type="text"
@@ -122,7 +122,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>definitionSource</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Definition Source</span>
                     <input
                         value={item.definitionSource} // 객체의 해당 속성에 접근
                         type="text"
@@ -133,7 +133,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>reference</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Reference</span>
                     <input
                         value={item.reference} // 객체의 해당 속성에 접근
                         type="text"
@@ -144,7 +144,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>similarityToSource</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Similarity to Source</span>
                     <input
                         value={item.similarityToSource} // 객체의 해당 속성에 접근
                         type="text"
@@ -155,7 +155,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>justification</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Justification</span>
                     <input
                         value={item.justification} // 객체의 해당 속성에 접근
                         type="text"
@@ -166,7 +166,7 @@ function ItemUpdate({ items, onClose }) {
                     />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>proposedChange</span>
+                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>Proposed Change</span>
                     <input
                         value={item.proposedChange} // 객체의 해당 속성에 접근
                         type="text"

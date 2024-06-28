@@ -14,7 +14,6 @@ import DDR_Detail from './S100_Registry/DataDictionary/DDR_Detail';
 function App() {
   return (
     <Router>
-      <div className="app-container"></div>
       <div className="app-container">
       <Navbar />
         <div className={'navBar-rest-wide'}></div>

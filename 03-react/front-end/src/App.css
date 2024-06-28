@@ -170,3 +170,37 @@ hr {
   border-color: #ffa7af;
   color: #DD3A49;
 }
+
+.modal-style {
+  position: fixed; /* 화면에 고정 */
+  top: 0; /* 화면 상단에 배치 */
+  left: 0; /* 화면 왼쪽에 배치 */
+  width: 100%; /* 전체 화면 너비 */
+  height: 100%; /* 전체 화면 높이 */
+  background-color: rgba(0, 0, 0, 0.5); /* 배경 색상 및 투명도 설정 */
+  display: flex; /* 내부 요소를 수평 정렬하기 위해 */
+  justify-content: center; /* 내부 요소를 수평 가운데 정렬하기 위해 */
+  align-items: center; /* 내부 요소를 수직 가운데 정렬하기 위해 */
+  z-index : 9999 /* 다른 요소 위에 위치하도록 설정 */
+}
+
+.modal-content-style {
+  width: 500px; /* 너비 설정 */
+  height: 300px; /* 높이 설정 */
+  background-color: white; /* 배경 색상 설정 */
+  border-radius: 10px; /* 모서리 둥글게 설정 */
+  padding: 20px; /* 안쪽 여백 설정 */
+  position: relative /* 자식 요소의 위치를 상대적으로 설정 */
+}
+
+.delete-button {
+  color: #DD3A49;
+}
+.delete-button:hover {
+  cursor: pointer;
+}
+.single-line-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

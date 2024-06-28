@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Base from '../../modals/Base';
-import AddRealtedValues from '../../modals/AddRealtedValues';
 import AddAttributes from '../../modals/AddAttributes';
 
 function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {

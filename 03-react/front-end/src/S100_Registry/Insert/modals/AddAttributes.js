@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AttSearch from './search/AttSearch';
+import AttSearch from './search/Item';
 
 function AddAttributes({ isOpen, onClose }) {
     // const [inputValue, setInputValue] = useState('');

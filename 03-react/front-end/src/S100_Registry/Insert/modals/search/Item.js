@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {SUB_ATT_LIST_SEARCH} from '../../../DataDictionary/api.js';
-import { USER_SERIAL } from '../../../../userSerial';
+import {SEARCH_RELATED_ITEM} from '../../../DataDictionary/api.js';
+import { USER_SERIAL } from '../../../../userSerial.js';
 
 
 function AttSearch({ onSearch }) {
@@ -9,10 +9,11 @@ function AttSearch({ onSearch }) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleSearch = () => {
-        axios.get(SUB_ATT_LIST_SEARCH, {
+        axios.get(SEARCH_RELATED_ITEM, {
             params: {
                 user_serial: USER_SERIAL,
                 search_term: searchTerm,
+                item_type: 'SimpleAttribute'
             }
         })
         .then(response => {
@@ -30,7 +31,8 @@ function AttSearch({ onSearch }) {
 
     return (
         <div>
-            <p>{SUB_ATT_LIST_SEARCH}</p>
+            <h3>Connect to Simple Attribute</h3>
+            {/* <p>{SEARCH_RELATED_ITEM}</p> */}
             <input 
                 type="text" 
                 value={searchTerm} 
