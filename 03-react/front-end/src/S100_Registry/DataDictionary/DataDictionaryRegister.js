@@ -12,11 +12,21 @@ function DataDictionaryRegister() {
             <h1>Data Dictionary List</h1>
             <p className='mt-5'>Choose the type of data you want to see.</p>
             <div className="btn-group btn-group-toggle">
-                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("EnumeratedValue")}>Enumerated Values</button>
-                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("SimpleAttribute")}>Simple Attributes</button>
-                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("ComplexAttribute")}>Complex Attributes</button>
-                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("Feature")}>Features</button>
-                <button className="spacing btn btn-outline-primary" onClick={() => clickHandler("Information")}>Informations</button>
+                <button className={`btn btn-outline-primary ${viewNumber === 'EnumeratedValue' ? 'active' : ''}`}
+                        onClick={() => clickHandler("EnumeratedValue")}
+                >Enumerated Values</button>
+                <button className={`btn btn-outline-primary ${viewNumber === 'SimpleAttribute' ? 'active' : ''}`}
+                        onClick={() => clickHandler("SimpleAttribute")}
+                >Simple Attributes</button>
+                <button className={`btn btn-outline-primary ${viewNumber === 'ComplexAttribute' ? 'active' : ''}`}
+                        onClick={() => clickHandler("ComplexAttribute")}
+                >Complex Attributes</button>
+                <button className={`btn btn-outline-primary ${viewNumber === 'Feature' ? 'active' : ''}`}
+                        onClick={() => clickHandler("Feature")}
+                >Features</button>
+                <button className={`btn btn-outline-primary ${viewNumber === 'Information' ? 'active' : ''}`}
+                        onClick={() => clickHandler("Information")}
+                >Informations</button>
             </div>
             <div>
                 <EVFilter data={viewNumber}/>

@@ -11,14 +11,14 @@ class EnumeratedValueSerializer(ConceptItemSerializer):
     _id = ObjectIdField(read_only=True)
     numericCode = serializers.IntegerField()
     enumType = serializers.CharField()# Enum - S100_CD_EnumType
-    associated_arrtibute_id = serializers.CharField(allow_blank=True)
+    attributeId = serializers.CharField(allow_blank=True)
 
 
 class SimpleAttributeSerializer(AttributeSerializer):
     _id = ObjectIdField(read_only=True)
     valueType = serializers.CharField()# Enum - S100_CD_AttributeValueType
     quantitySpecification = serializers.CharField()# Enum - S100_CD_QuantitySpecification
-    related_enumeration_value_id_list = serializers.JSONField(default=list) 
+    listedValue = serializers.JSONField(default=list) 
 
 class AttributeConstraintsSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
@@ -29,6 +29,7 @@ class AttributeConstraintsSerializer(serializers.Serializer):
 
 class ComplexAttributeSerializer(AttributeSerializer):
     _id = ObjectIdField(read_only=True)
+    subAttribute = serializers.JSONField(default=list) 
 
 class AttributeUsageSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)

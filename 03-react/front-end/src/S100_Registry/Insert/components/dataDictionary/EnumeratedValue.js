@@ -30,7 +30,7 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
         itemType: 'EnumeratedValue',
         numericCode: '',
         enumType: '',
-        associated_arrtibute_id: ''
+        attributeId: ''
     });
 
     const [aliasList, setAliasList] = useState([]);
@@ -65,19 +65,19 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
     const [relatedEnumList, setRelatedEnumList] = useState([]);
     const handleRelatedEnumList = (selectedObj, selectedID) => {
         setRelatedEnumList(selectedObj);
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            associated_arrtibute_id: selectedID
-        }));
-        console.log(selectedID);
+        const updatedFormData = {
+            ...formData,
+            ['attributeId']: selectedID
+        };
+        setFormData(updatedFormData);
+        onFormSubmit(updatedFormData);
     }
 
-    const log = () => {
-        console.log(formData);
-    }
+    
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
             <h3>Enumerated Value</h3>
+            
             <p>{selectedApiUrl}</p>
             <div className='p-3 mt-3'>
                 <div className='row'>
@@ -240,13 +240,15 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
                                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                                     </svg> 
                                 </div>
-                                {relatedEnumList.length === 0 ? (
+                                <div>
+                                    {relatedEnumList.length === 0 ? (
                                     <div>not related Yet</div>
                                     ) : (
                                         <>
                                             {relatedEnumList.name}
                                         </>
                                     )}
+                                </div>
                             </div>  
                         </div>
                     </div>

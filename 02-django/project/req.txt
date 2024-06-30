@@ -5,11 +5,16 @@ django-environ==0.11.2
 django-extensions==3.2.3
 djangorestframework==3.14.0
 dnspython==2.6.1
+drf-yasg==1.21.7
+inflection==0.5.1
 lxml==5.2.1
+packaging==24.1
 pycryptodome==3.20.0
 pymongo==4.7.2
 python-decouple==3.8
 pytz==2024.1
+PyYAML==6.0.1
 sqlparse==0.4.4
 typing_extensions==4.9.0
 tzdata==2023.4
+uritemplate==4.1.1

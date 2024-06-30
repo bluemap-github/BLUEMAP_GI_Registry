@@ -28,7 +28,8 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
         similarityToSource: '',
         justification: '',
         proposedChange: '',
-        itemType: 'ComplexAttribute'
+        itemType: 'ComplexAttribute',
+        subAttribute: []
     });
 
     const [aliasList, setAliasList] = useState([]);
@@ -65,16 +66,29 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
     const openRelModal = () => {setIsRelModalOpen(true);};
     const closeRelModal = () => {setIsRelModalOpen(false);};
     const [relatedEnumList, setRelatedEnumList] = useState([]);
-    const handleRelatedEnumList = (selectedObj, selectedID) => {
-        setRelatedEnumList(selectedObj);
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            related_enumeration_value_id_list: selectedID
-        }));
+    const handleRelatedEnumList = (selectedValues) => {
+        // Extracting _id values from selectedValues
+        const subAttributeIds = selectedValues.map(item => item._id);
+    
+        // Updating relatedEnumList state
+        setRelatedEnumList(selectedValues);
+    
+        // Updating formData state to include subAttribute with _id values
+        const updatedFormData = {
+            ...formData,
+            ['subAttribute']: subAttributeIds
+        };
+
+        setFormData(updatedFormData);
+        onFormSubmit(updatedFormData);
+    };
+    const log = () => {
+        console.log(formData);
     }
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
             <h3>Complex Attribute</h3>
+            <button onClick={log}>log</button>
             <p>{selectedApiUrl}</p>
             <div className='p-3 mt-3'>
                 <div className='row'>
@@ -189,10 +203,12 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
                     <AddAttributes 
                         isOpen={isRelModalOpen}
                         onClose={closeRelModal}
+                        handleRelatedEnumList={handleRelatedEnumList}
+                        relatedEnumList={relatedEnumList}
                     />
                     <div className='input-group input-group-sm mt-2'>
                         <div className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>
-                            <span>Related EnumeratedValue List</span>
+                            <span>Related Attribute List</span>
                         </div>
                         <div className="form-control">
                             <div className='m-1' onClick={openRelModal}>

@@ -8,9 +8,6 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
     const openModal = () => {setIsModalOpen(true);};
     const closeModal = () => {setIsModalOpen(false);};
 
-    
-
-
     const [formData, setFormData] = useState({
         concept_id: registerId,
         itemIdentifier: '2',
@@ -28,7 +25,7 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
         itemType: 'SimpleAttribute',
         quantitySpecification: '',
         valueType: '',
-        related_enumeration_value_id_list: []
+        listedValue: []
     });
 
     const [aliasList, setAliasList] = useState([]);

@@ -128,11 +128,15 @@ function Item() {
                 break;
         }
     };
+    const log = () => {
+        console.log(item);
+    }
 
     return (
         <div className="container p-5">
             <div style={{display: "flex"}}>
                 <h1>Create Data</h1>
+                <button onClick={log}>Log</button>
             </div>
             <ChooseType getSelestedApi={getSelestedApi} />
             <div className='mt-1'>

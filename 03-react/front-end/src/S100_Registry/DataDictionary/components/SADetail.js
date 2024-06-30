@@ -10,7 +10,7 @@ const SADetail = ({item}) => {
             <p>{item.quantitySpecification}</p>
             <div style={{backgroundColor : "pink"}}>
                 <div>related value list</div>
-                {item.related_enumeration_value_id_list.map((value, index) => (
+                {item.listedValue.map((value, index) => (
                     <p 
                         style={{color : "red"}} 
                         key={index}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Item from './search/Item';
+import AttSearch from './search/AttSearch';
 
 const AddAssociatedAttributes = ({isOpen, onClose, handleRelatedValueList}) => {
     const [data, setData] = useState([]);
@@ -38,12 +38,12 @@ const AddAssociatedAttributes = ({isOpen, onClose, handleRelatedValueList}) => {
                     <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
                 </div>
             <div>
-            <Item onSearch={handleSetData} />
+            <AttSearch onSearch={handleSetData} />
             <div>
                 {data.length === 0 ? (<p>no data</p>) : (
                     <>
                     {
-                        data.simple_attributes.map((item, index) => (
+                        data.map((item, index) => (
                             <div key={index}>
                                 <input 
                                     type="checkbox" 
