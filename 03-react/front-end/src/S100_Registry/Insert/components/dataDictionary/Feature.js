@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Base from '../../modals/Base';
+import AddAttributes from '../../modals/AddAttributes';
 
 function Feature({ onFormSubmit, registerId, selectedApiUrl }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,8 +28,9 @@ function Feature({ onFormSubmit, registerId, selectedApiUrl }) {
         similarityToSource: '',
         justification: '',
         proposedChange: '',
-        itemType: 'Feature',
-        featureUseType: ''
+        itemType: 'FeatureType',
+        featureUseType: '',
+        distinctedFeature: []
     });
 
     const [aliasList, setAliasList] = useState([]);
@@ -59,6 +61,27 @@ function Feature({ onFormSubmit, registerId, selectedApiUrl }) {
             ...prevFormData,
             alias: newAliasList
         }));
+    };
+
+    const [isRelModalOpen, setIsRelModalOpen] = useState(false);
+    const openRelModal = () => {setIsRelModalOpen(true);};
+    const closeRelModal = () => {setIsRelModalOpen(false);};
+    const [relatedEnumList, setRelatedEnumList] = useState([]);
+    const handleRelatedEnumList = (selectedValues) => {
+        // Extracting _id values from selectedValues
+        const subAttributeIds = selectedValues.map(item => item._id);
+    
+        // Updating relatedEnumList state
+        setRelatedEnumList(selectedValues);
+    
+        // Updating formData state to include subAttribute with _id values
+        const updatedFormData = {
+            ...formData,
+            ['distinctedFeature']: subAttributeIds
+        };
+
+        setFormData(updatedFormData);
+        onFormSubmit(updatedFormData);
     };
 
     return (
@@ -196,6 +219,39 @@ function Feature({ onFormSubmit, registerId, selectedApiUrl }) {
                                 <option value="cartographic">cartographic</option>
                                 <option value="theme">theme</option>
                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div className='row'>
+                    <AddAttributes 
+                        isOpen={isRelModalOpen}
+                        onClose={closeRelModal}
+                        handleRelatedEnumList={handleRelatedEnumList}
+                        relatedEnumList={relatedEnumList}
+                        componentType='Feature'
+                    />
+                    <div className='input-group input-group-sm mt-2'>
+                        <div className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>
+                            <span>Disticted Feature List</span>
+                        </div>
+                        <div className="form-control">
+                            <div className='m-1' onClick={openRelModal}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                </svg> 
+                            </div>
+                            {relatedEnumList.length === 0 ? (
+                                <div>not related Yet</div>
+                            ) : (
+                                <>
+                                    {relatedEnumList.map((item, index) => (
+                                        <div key={index} style={{ display: 'flex'}}>  
+                                            <div>{item.name}</div>
+                                        </div>
+                                    ))}
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

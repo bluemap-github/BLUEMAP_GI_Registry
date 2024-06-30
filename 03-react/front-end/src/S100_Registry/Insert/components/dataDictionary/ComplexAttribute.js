@@ -205,6 +205,7 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
                         onClose={closeRelModal}
                         handleRelatedEnumList={handleRelatedEnumList}
                         relatedEnumList={relatedEnumList}
+                        componentType='ComplexAttribute'
                     />
                     <div className='input-group input-group-sm mt-2'>
                         <div className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Item from './search/Item';
 
-function AddAttributes({ isOpen, onClose, handleRelatedEnumList, relatedEnumList }) {
+function AddAttributes({ isOpen, onClose, handleRelatedEnumList, relatedEnumList, componentType }) {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedValues, setSelectedValues] = useState(relatedEnumList);
     const [filteredList, setFilteredList] = useState([]);
-    console.log("!!", selectedValues)
+    
 
     const getSearchResult = (results) => {
         setSearchResults(results);
@@ -28,7 +28,7 @@ function AddAttributes({ isOpen, onClose, handleRelatedEnumList, relatedEnumList
     };
     
     const [searchTerm, setSearchTerm] = useState('');
-    const [itemTypes, setItemTypes] = useState('SimpleAttribute');
+    const [itemTypes, setItemTypes] = useState('All');
     const handleItemTypes = (e) => {    
         setItemTypes(e.target.value);
     }
@@ -82,14 +82,18 @@ function AddAttributes({ isOpen, onClose, handleRelatedEnumList, relatedEnumList
                     </div>
                     <div style={{ display: 'flex' }}>
                         <h3>Submit Related Values</h3>
-                        <Item onSearch={getSearchResult} />
-                        <div>
-                            <label htmlFor="typeSelect"></label>
-                            <select id="typeSelect" onChange={handleItemTypes}>
-                                <option value="All">All</option>
-                                <option value="SimpleAttribute">Simple Attribute</option>
-                                <option value="ComplexAttribute">Complex Attribute</option>
-                            </select>
+                        <Item onSearch={getSearchResult} componentType={componentType} />
+                        <div style={{display: 'flex'}}>
+                            {(componentType === 'ComplexAttribute') ? (
+                                <div>
+                                    <label htmlFor="typeSelect"></label>
+                                    <select id="typeSelect" onChange={handleItemTypes}>
+                                        <option value="All">All</option>
+                                        <option value="SimpleAttribute">Simple Attribute</option>
+                                        <option value="ComplexAttribute">Complex Attribute</option>
+                                    </select>
+                                </div>
+                            ) : (<></>)}
                             <input 
                                 type="text" 
                                 value={searchTerm} 

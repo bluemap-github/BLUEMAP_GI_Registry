@@ -15,12 +15,12 @@ itemTypeSet = {
         "EnumeratedValue": EnumeratedValueSerializer,
         "SimpleAttribute": SimpleAttributeSerializer,
         "ComplexAttribute": ComplexAttributeSerializer,
-        "Feature": FeatureSerializer,
-        "Information": InformationSerializer
+        "FeatureType": FeatureSerializer,
+        "InformationType": InformationSerializer
     }
 
 @api_view(['GET'])
-def related_item(request): # 이 함수는 로직이 아직 완성 안됨
+def related_item(request):
     C_id = request.GET.get('user_serial')
     search_term = request.query_params.get('search_term', '')
     item_type = list(request.GET.get('item_type').split(','))

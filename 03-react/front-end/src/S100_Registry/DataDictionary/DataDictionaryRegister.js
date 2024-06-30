@@ -21,11 +21,11 @@ function DataDictionaryRegister() {
                 <button className={`btn btn-outline-primary ${viewNumber === 'ComplexAttribute' ? 'active' : ''}`}
                         onClick={() => clickHandler("ComplexAttribute")}
                 >Complex Attributes</button>
-                <button className={`btn btn-outline-primary ${viewNumber === 'Feature' ? 'active' : ''}`}
-                        onClick={() => clickHandler("Feature")}
+                <button className={`btn btn-outline-primary ${viewNumber === 'FeatureType' ? 'active' : ''}`}
+                        onClick={() => clickHandler("FeatureType")}
                 >Features</button>
-                <button className={`btn btn-outline-primary ${viewNumber === 'Information' ? 'active' : ''}`}
-                        onClick={() => clickHandler("Information")}
+                <button className={`btn btn-outline-primary ${viewNumber === 'InformationType' ? 'active' : ''}`}
+                        onClick={() => clickHandler("InformationType")}
                 >Informations</button>
             </div>
             <div>

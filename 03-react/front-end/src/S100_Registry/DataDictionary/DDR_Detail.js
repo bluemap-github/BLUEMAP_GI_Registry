@@ -27,10 +27,10 @@ const DDR_Detail = () => {
         case 'ComplexAttribute':
             dataListComponent = <CADetail item={item}/>;
             break;
-        case 'Feature':
+        case 'FeatureType':
             dataListComponent = <FDetail item={item}/>;
             break;
-        case 'Information':
+        case 'InformationType':
             dataListComponent = <IDetail item={item}/>;
             break;
 

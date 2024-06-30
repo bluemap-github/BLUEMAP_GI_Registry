@@ -15,8 +15,8 @@ itemTypeSet = {
         "EnumeratedValue": EnumeratedValueSerializer,
         "SimpleAttribute": SimpleAttributeSerializer,
         "ComplexAttribute": ComplexAttributeSerializer,
-        "Feature": FeatureSerializer,
-        "Information": InformationSerializer
+        "FeatureType": FeatureSerializer,
+        "InformationType": InformationSerializer
     }
 
 

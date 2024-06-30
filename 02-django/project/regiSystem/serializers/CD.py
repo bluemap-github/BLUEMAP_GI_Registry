@@ -39,9 +39,11 @@ class AttributeUsageSerializer(serializers.Serializer):
 class FeatureSerializer(ConceptItemSerializer):
     _id = ObjectIdField(read_only=True)
     featureUseType = serializers.CharField()# Enum - S100_CD_FeatureUseType
+    distinctedFeature = serializers.JSONField(default=list) 
 
 class InformationSerializer(ConceptItemSerializer):
     _id = ObjectIdField(read_only=True)
+    distinctedInformation = serializers.JSONField(default=list) 
 
 class RelatedValueListSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)

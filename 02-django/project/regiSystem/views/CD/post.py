@@ -95,8 +95,15 @@ def feature(request):
         validated_data = serializer.validated_data
         validated_data['concept_id'] = ObjectId(C_id)
         
-        S100_Concept_Item.insert_one(validated_data)
-        encrypted_id = get_encrypted_id(serializer.data['_id'])
+        saved_ = S100_Concept_Item.insert_one(validated_data)
+        new_feature_id = str(saved_.inserted_id)
+        distincted_list = validated_data['distinctedFeature']
+        for f_id in distincted_list:
+            d_f_obj = S100_Concept_Item.find_one({"_id": ObjectId(f_id)})
+            d_f_obj['distinctedFeature'].append(new_feature_id)
+            S100_Concept_Item.update_one({"_id": ObjectId(f_id)}, {"$set": d_f_obj})
+        
+        encrypted_id = get_encrypted_id(serializer.data['_id']) 
         return Response(encrypted_id, status=HTTP_201_CREATED)
     
 @api_view(['POST'])
@@ -107,6 +114,12 @@ def information(request):
         validated_data = serializer.validated_data
         validated_data['concept_id'] = ObjectId(C_id)
         
-        S100_Concept_Item.insert_one(validated_data)
+        saved_ = S100_Concept_Item.insert_one(validated_data)
+        new_info_id = str(saved_.inserted_id)
+        distincted_list = validated_data['distinctedInformation']
+        for f_id in distincted_list:
+            d_i_obj = S100_Concept_Item.find_one({"_id": ObjectId(f_id)})
+            d_i_obj['distinctedInformation'].append(new_info_id)
+            S100_Concept_Item.update_one({"_id": ObjectId(f_id)}, {"$set": d_i_obj})
         encrypted_id = get_encrypted_id(serializer.data['_id'])
         return Response(encrypted_id, status=HTTP_201_CREATED)

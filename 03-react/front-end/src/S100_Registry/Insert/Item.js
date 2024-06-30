@@ -16,6 +16,7 @@ import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import {USER_SERIAL} from '../../userSerial.js';
 import { ItemContext } from '../../context/ItemContext';
+import validateFormData from './validation/ValidateItems.js';
 
 function Item() {
     const [item, setItem] = useState('');
@@ -27,7 +28,13 @@ function Item() {
     const [apiType, setApiType] = useState('Concept Item');
     const { setItemDetails } = useContext(ItemContext); 
     const navigate = useNavigate(); 
+    let alertData = 'none';
+    const [viewAlert, setViewAlert] = useState(false);
 
+    const validationTest = () => {
+        validateFormData(item, 'Item');
+
+    };
     const handleSubmitItem = async () => {
         try {
             // const itemData = JSON.parse(item);
@@ -151,9 +158,10 @@ function Item() {
                 <ReferenceInput onFormSubmit={RChange} />
             </div>
             <div className='text-end'>
-                <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button>
+                <button className='mt-3 btn btn-sm btn-primary' onClick={validationTest}>Submit</button>
             </div>
             <div style={{height: '200px'}}></div>
+            
         </div>
     );
 }
