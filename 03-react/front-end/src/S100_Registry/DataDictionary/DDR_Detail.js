@@ -64,20 +64,10 @@ const DDR_Detail = () => {
     return (
         <div className='container p-5'>
             <h1>Data Dictionary Detail</h1>
-            <div className='card p-3'>
-                <h4 style={{ fontWeight: 'bold' }}>Details</h4>
-                <div className='p-3'> 
-                    <div>Name : {item.name}</div>
-                    {dataListComponent}
-                </div>
-                <div className='p-2 mb-3' style={{border: '1px solid gray'}} >
-                    <h5 style={{ fontWeight: 'bold' }}>related value</h5>
-                    <div>listed value here</div>
-                </div>
-                <div>
-                    <button onClick={() => window.location = `/concept/detail/`} className='btn btn-info'>goto concept information</button>
-                </div>
+            <div className='mt-4' style={{border: "1px solid gray", borderRadius: "10px"}}>
+                {dataListComponent}
             </div>
+            
             <button onClick={() => window.location = `/dataDictionary/${user_serial}`} className='btn btn-primary mt-3'>Back to List</button>
         </div>
     );

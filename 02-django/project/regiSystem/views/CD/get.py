@@ -10,14 +10,21 @@ from regiSystem.serializers.CD import (
         InformationSerializer
 )
 import json
-from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
+from regiSystem.InfoSec.encryption import (get_encrypted_id, decrypt)
 itemTypeSet = {
         "EnumeratedValue": EnumeratedValueSerializer,
         "SimpleAttribute": SimpleAttributeSerializer,
         "ComplexAttribute": ComplexAttributeSerializer,
         "FeatureType": FeatureSerializer,
         "InformationType": InformationSerializer
-    }
+}
+itemIncryption = {
+        "EnumeratedValue": "attributeId",
+        "SimpleAttribute": "listedValue",
+        "ComplexAttribute": "subAttribute",
+        "FeatureType": "distinctedFeature",
+        "InformationType": "distinctedInformation"
+}
 
 
 def getItemType(itemType, C_id):
@@ -31,6 +38,8 @@ def make_response_data(serializer):
         'register_items': serializer.data
     }
     return response_data
+
+
 
 @api_view(['GET'])
 def ddr_item_list(request):
@@ -46,7 +55,13 @@ def ddr_item_list(request):
     return Response(status=400, data={"error": "Invalid request method"})
 
 
-
+def one_encrypt_process(id_attribute_set):
+    if type(id_attribute_set) == list:
+        for i in range(len(id_attribute_set)):
+            id_attribute_set[i] = get_encrypted_id(str(id_attribute_set[i]))
+        return id_attribute_set
+    else:
+        return get_encrypted_id(str(id_attribute_set))
 
 @api_view(['GET'])
 def ddr_item_one(request):
@@ -63,8 +78,10 @@ def ddr_item_one(request):
             
             c_item["_id"] = get_encrypted_id(c_item["_id"])
             serializer = itemTypeSet[item_type](c_item)
+            c_item[itemIncryption[item_type]] = one_encrypt_process(c_item[itemIncryption[item_type]])
             return Response(serializer.data)
         
         except Exception as e:
             return Response(status=500, data={"error": str(e)})
     return Response(status=400, data={"error": "Invalid request method"})
+

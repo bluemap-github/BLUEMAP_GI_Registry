@@ -109,21 +109,23 @@ function Register() {
           <div>GET : {REGISTER_ITEM_LIST_URL}</div>
         </div>
 
-        <button onClick={deleteAll} className="btn btn-danger mt-3 mb-3" style={{ maxWidth: '130px', width: '100%' }}>select delete</button>
+        {/* <button onClick={deleteAll} className="btn btn-danger mt-3 mb-3" style={{ maxWidth: '130px', width: '100%' }}>select delete</button> */}
       </div>
       <table className="table table-hover table-bordered table-striped" style={{ tableLayout: 'fixed', width: '100%' }}>
         <thead>
           <tr>
-            <th scope="col" className='text-center' style={{ width: '3%' }}>
+            {/* <th scope="col" className='text-center' style={{ width: '3%' }}>
               <input
                 type="checkbox"
                 checked={checkedAll}
                 onChange={handleCheckboxAll}
                 style={{ transform: "scale(1.5)" }}
               />
-            </th>
+            </th> */}
             <th scope="col" style={{ width: '15%' }}>Name</th>
-            <th scope="col" style={{ width: '15%' }}>Camel Case</th>
+            <th scope="col" style={{ width: '15%' }}>
+              <div className='single-line-ellipsis'>Camel Case</div>
+            </th>
             <th scope="col" style={{ width: '45%' }}>Definition</th>
             <th scope="col" style={{ width: '11%' }}>Status</th>
           </tr>
@@ -131,22 +133,26 @@ function Register() {
         <tbody>
           {itemList.map((item) => (
             <tr key={item._id.encrypted_data} style={{ cursor: 'pointer' }}>
-              <th scope="row" className='text-center' style={{ width: '3%' }}>
+              {/* <th scope="row" className='text-center' style={{ width: '3%' }}>
                 <input
                   type="checkbox"
                   checked={checkedItems[item._id.encrypted_data]}
                   onChange={() => handleCheckboxChange(item._id.encrypted_data)}
                   style={{ transform: "scale(1.5)" }}
                 />
-              </th>
-              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '15%' }}>{item.name}</td>
+              </th> */}
+              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '15%' }}>
+                  <div className='single-line-ellipsis'>{item.name}</div>
+              </td>
               <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '15%' }}>
                 <div className='single-line-ellipsis'>{item.camelCase}</div>
               </td>
               <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '45%' }}>
                 <div className='single-line-ellipsis'>{item.definition}</div>
               </td>
-              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '11%' }}>{item.itemStatus}</td>
+              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '11%' }}>
+                  <div className='single-line-ellipsis'>{item.itemStatus}</div> 
+              </td>
             </tr>
           ))}
         </tbody>

@@ -5,13 +5,15 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from regiSystem.models import (
     S100_Concept_Item,
+    S100_CD_AttributeConstraints
 )
 from regiSystem.serializers.CD import (
         SimpleAttributeSerializer,
         EnumeratedValueSerializer,
         ComplexAttributeSerializer,
         FeatureSerializer,
-        InformationSerializer
+        InformationSerializer,
+        AttributeConstraintsSerializer,
 )
 
 from regiSystem.serializers.RE import (
@@ -19,7 +21,7 @@ from regiSystem.serializers.RE import (
 )
 
 import json
-from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
+from regiSystem.InfoSec.encryption import (get_encrypted_id, decrypt)
 
 @api_view(['POST'])
 def concept_item(request):
@@ -123,3 +125,18 @@ def information(request):
             S100_Concept_Item.update_one({"_id": ObjectId(f_id)}, {"$set": d_i_obj})
         encrypted_id = get_encrypted_id(serializer.data['_id'])
         return Response(encrypted_id, status=HTTP_201_CREATED)
+    
+@api_view(['POST'])
+def attribute_constraints(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+
+    serializer = AttributeConstraintsSerializer(data=request.data)
+    if serializer.is_valid():
+        validated_data = serializer.validated_data
+        validated_data['simpleAttribute'] = ObjectId(I_id)
+        
+        S100_CD_AttributeConstraints.insert_one(validated_data)
+        encrypted_id = get_encrypted_id(serializer.data['_id'])
+        return Response(encrypted_id, status=HTTP_201_CREATED)
+    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

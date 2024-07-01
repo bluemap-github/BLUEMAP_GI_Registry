@@ -38,21 +38,47 @@ const DDRList = ({ data }) => {
 
     return (
         <div>
+            
+
+
             {response.length === 0 ? (
                 <div>Loading...</div>
             ) : (
-                response.register_items.map(item => (
-                    <div key={item._id.encrypted_data} style={{border: '1px solid gray'}} className='mt-3'>
-                        <div>{item._id.encrypted_data}</div>
-                        <div>{item.concept_id.encrypted_data}</div>
-                        <div>{item.itemType}</div>
-                        <div>{item.name}</div>
-                        <div>{item.definition}</div>
-                        <button onClick={() => handleDetailClick(item)} className='btn btn-info'>show Detail</button>
-                    </div>
-                ))
+                <table className="table table-hover table-bordered table-striped" style={{ tableLayout: 'fixed', width: '100%' }}>
+                        <thead>
+                        <tr>
+                            <th scope="col" style={{ width: '15%' }}>Name</th>
+                            <th scope="col" style={{ width: '15%' }}>
+                                <div className='single-line-ellipsis'>Camel Case</div>
+                            </th>
+                            <th scope="col" style={{ width: '40%' }}>Definition</th>
+                            <th scope="col" style={{ width: '11%' }}>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {response.register_items.map((item) => (
+                            <tr key={item._id.encrypted_data} style={{ cursor: 'pointer' }}>
+                            <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '15%' }}>
+                                <div className='single-line-ellipsis'>{item.name}</div>
+                            </td>
+                            <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '15%' }}>
+                                <div className='single-line-ellipsis'>{item.camelCase}</div>
+                            </td>
+                            <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '40%' }}>
+                                <div className='single-line-ellipsis'>{item.definition}</div>
+                            </td>
+                            <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '11%' }}>
+                                <div className='single-line-ellipsis'>{item.itemStatus}</div> 
+                            </td>
+                                                           
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
             )}
+            
         </div>
+
     );
 };
 

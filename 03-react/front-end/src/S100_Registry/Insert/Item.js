@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { POST_MANAGEMENT_INFO, POST_REFERENCE_SOURCE , POST_REFERENCE } from '../Concept/api';
-import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION, POST_CONCEPT_ITEM } from '../DataDictionary/api.js';
+import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION, POST_CONCEPT_ITEM, POST_ATTRIBUTE_CONSTRAINTS} from '../DataDictionary/api.js';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
 import ReferenceInput from './components/ReferenceInput';
@@ -17,12 +17,14 @@ import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import {USER_SERIAL} from '../../userSerial.js';
 import { ItemContext } from '../../context/ItemContext';
 import validateFormData from './validation/ValidateItems.js';
+import AttributeConstraints from './components/AttributeConstraints.js';
 
 function Item() {
     const [item, setItem] = useState('');
     const [managementInfos, setManagementInfos] = useState(['']); // 관리 정보 입력 창 배열
     const [referenceSource, setReferenceSource] = useState(null);
     const [references, setReferences] = useState(null);
+    const [attributeContsraints, setAttributeContsraints] = useState(null);
     const { register_id } = useParams();
     const [selectedApiUrl, setSelectedApiUrl] = useState(POST_CONCEPT_ITEM);
     const [apiType, setApiType] = useState('Concept Item');
@@ -51,6 +53,15 @@ function Item() {
             // Item 데이터를 selectedApiUrl로 POST 후 Item의 ID 가져오기
             const itemId = itemResponse.data.encrypted_data;
             const item_iv = itemResponse.data.iv;
+
+            if (attributeContsraints) {
+                await axios.post(POST_ATTRIBUTE_CONSTRAINTS, attributeContsraints, {
+                    params: {
+                        item_id: itemId,
+                        item_iv: item_iv,
+                    }
+                });
+            }
 
             // 모든 MI에 대해 작업하는 for 문
             for (const managementInfo of managementInfos) {
@@ -103,9 +114,9 @@ function Item() {
     const MIChange = (formData) => {setManagementInfos(formData);};
     const RSChange = (formData) => {setReferenceSource(formData);};
     const RChange = (formData) => {setReferences(formData);};
+    const ACChange = (formData) => {setAttributeContsraints(formData);};
 
     const getSelestedApi = (type) => {
-        console.log(type);
         switch (type) {
             case 'Concept Item':
                 setSelectedApiUrl(POST_CONCEPT_ITEM);
@@ -135,15 +146,11 @@ function Item() {
                 break;
         }
     };
-    const log = () => {
-        console.log(item);
-    }
 
     return (
         <div className="container p-5">
             <div style={{display: "flex"}}>
                 <h1>Create Data</h1>
-                <button onClick={log}>Log</button>
             </div>
             <ChooseType getSelestedApi={getSelestedApi} />
             <div className='mt-1'>
@@ -153,12 +160,14 @@ function Item() {
                 {apiType === 'Complex Attribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'Feature' && <Feature item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'Information' && <Information item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'Simple Attribute' && <AttributeConstraints onFormSubmit={ACChange} />}
                 <ManagementInfoInput onFormSubmit={MIChange} />
                 <ReferenceSourceInput onFormSubmit={RSChange} />
                 <ReferenceInput onFormSubmit={RChange} />
             </div>
             <div className='text-end'>
-                <button className='mt-3 btn btn-sm btn-primary' onClick={validationTest}>Submit</button>
+                {/* <button className='mt-3 btn btn-sm btn-primary' onClick={validationTest}>Submit</button> */}
+                <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button>
             </div>
             <div style={{height: '200px'}}></div>
             
