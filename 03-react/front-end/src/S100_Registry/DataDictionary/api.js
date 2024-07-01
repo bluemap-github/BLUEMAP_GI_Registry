@@ -18,6 +18,8 @@ export const POST_INFORMATION = `${DEPLOY_URL}/api/v1/information/post/`;
 
 
 
-export const GET_NOT_RELATED_ENUM_LIST_SEARCH = `${DEPLOY_URL}/api/v1/not_related_enum_list_search/get/`;
+export const SEARCH_RELATED_ITEM = `${DEPLOY_URL}/api/v1/related_item/search/`;
 
 export const SUB_ATT_LIST_SEARCH = `${DEPLOY_URL}/api/v1/sub_att_list_search/get/`;
+
+export const POST_CONCEPT_ITEM = `${DEPLOY_URL}/api/v1/concept_item/item/post/`;

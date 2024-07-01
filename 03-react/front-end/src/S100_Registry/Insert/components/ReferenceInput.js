@@ -74,7 +74,7 @@ function ReferenceInput({onFormSubmit}) {
                                 <div key={index} className='p-2'>
                                     {index !== 0 && <hr style={{margin: "5px"}}></hr>}
                                     <div className='row'>
-                                        <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
+                                        <div className='col-3 input-group input-group-sm mt-2' style={{width:"47%", fontWeight: "bold"}}>
                                             <span 
                                                 className={`input-group-text ${mandatoryFields.includes('referenceIdentifier') && reference.referenceIdentifier.trim() === '' ? 'tag-invalid' : ''}`}
                                                 id="basic-addon1" 
@@ -89,7 +89,7 @@ function ReferenceInput({onFormSubmit}) {
                                                 name="referenceIdentifier" 
                                                 onChange={(event) => handleChange(event, index)} />
                                         </div>
-                                        <div className='col-3 input-group input-group-sm mt-2' style={{width:"45%", fontWeight: "bold"}}>
+                                        <div className='col-3 input-group input-group-sm mt-2' style={{width:"47%", fontWeight: "bold"}}>
                                             <span 
                                                 className={`input-group-text ${mandatoryFields.includes('sourceDocument') && reference.sourceDocument.trim() === '' ? 'tag-invalid' : ''}`}
                                                 id="basic-addon1" 
@@ -104,8 +104,11 @@ function ReferenceInput({onFormSubmit}) {
                                                 onChange={(event) => handleChange(event, index)} 
                                             />
                                         </div>
-                                        <div className='text-end mt-2 col-1' style={{width:"10%"}}>
-                                            <button  className="btn btn-sm btn-outline-danger" onClick={() => popRInput(index)}>Remove</button>
+                                        <div className='text-end mt-2 col-1' style={{width:"5%"}}>
+                                            {/* <button  className="btn btn-sm btn-outline-danger" }>Remove</button> */}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1.75em" height="1.75em" viewBox="0 0 24 24" onClick={() => popRInput(index)} className='delete-button'>
+                                                <path fill="currentColor" d="M12 3c-4.963 0-9 4.038-9 9s4.037 9 9 9s9-4.038 9-9s-4.037-9-9-9m0 16c-3.859 0-7-3.14-7-7s3.141-7 7-7s7 3.14 7 7s-3.141 7-7 7m.707-7l2.646-2.646a.502.502 0 0 0 0-.707a.502.502 0 0 0-.707 0L12 11.293L9.354 8.646a.5.5 0 0 0-.707.707L11.293 12l-2.646 2.646a.5.5 0 0 0 .707.708L12 12.707l2.646 2.646a.5.5 0 1 0 .708-.706z"/>
+                                            </svg>
                                         </div>
                                     </div>
                                 </div>

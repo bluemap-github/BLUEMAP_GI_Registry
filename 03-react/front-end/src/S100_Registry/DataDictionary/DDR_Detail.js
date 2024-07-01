@@ -27,10 +27,10 @@ const DDR_Detail = () => {
         case 'ComplexAttribute':
             dataListComponent = <CADetail item={item}/>;
             break;
-        case 'Feature':
+        case 'FeatureType':
             dataListComponent = <FDetail item={item}/>;
             break;
-        case 'Information':
+        case 'InformationType':
             dataListComponent = <IDetail item={item}/>;
             break;
 
@@ -63,20 +63,22 @@ const DDR_Detail = () => {
 
     return (
         <div className='container p-5'>
-            <h1>DDR_Detail {view_item_type}</h1>
+            <h1>Data Dictionary Detail</h1>
             <div className='card p-3'>
-                <div>{item.name}</div>
-                <h3>{item.itemType}</h3>
-                {dataListComponent}
-                <div className='p-2' style={{ backgroundColor: 'yellow' }}>
-                    <div style={{ fontWeight: 'bold' }}>related value</div>
-                    <div>곧 생길거야 ~</div>
+                <h4 style={{ fontWeight: 'bold' }}>Details</h4>
+                <div className='p-3'> 
+                    <div>Name : {item.name}</div>
+                    {dataListComponent}
+                </div>
+                <div className='p-2 mb-3' style={{border: '1px solid gray'}} >
+                    <h5 style={{ fontWeight: 'bold' }}>related value</h5>
+                    <div>listed value here</div>
                 </div>
                 <div>
-                    <button onClick={() => window.location = `/concept/detail/`}>concept data</button>
+                    <button onClick={() => window.location = `/concept/detail/`} className='btn btn-info'>goto concept information</button>
                 </div>
             </div>
-            <button onClick={() => window.location = `/dataDictionary/${user_serial}`}>Back to List</button>
+            <button onClick={() => window.location = `/dataDictionary/${user_serial}`} className='btn btn-primary mt-3'>Back to List</button>
         </div>
     );
 };

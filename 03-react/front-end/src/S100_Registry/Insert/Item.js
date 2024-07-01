@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { POST_MANAGEMENT_INFO, POST_REFERENCE_SOURCE , POST_REFERENCE } from '../Concept/api';
-import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION } from '../DataDictionary/api.js';
+import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION, POST_CONCEPT_ITEM } from '../DataDictionary/api.js';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
 import ReferenceInput from './components/ReferenceInput';
 import ChooseType from './ChooseType';
+import ItemInput from './components/dataDictionary/ItemInput';
 import SimpleAttribute from './components/dataDictionary/SimpleAttribute';
 import ComplexAttribute from './components/dataDictionary/ComplexAttribute';
 import Feature from './components/dataDictionary/Feature';
@@ -15,6 +16,7 @@ import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import {USER_SERIAL} from '../../userSerial.js';
 import { ItemContext } from '../../context/ItemContext';
+import validateFormData from './validation/ValidateItems.js';
 
 function Item() {
     const [item, setItem] = useState('');
@@ -22,11 +24,17 @@ function Item() {
     const [referenceSource, setReferenceSource] = useState(null);
     const [references, setReferences] = useState(null);
     const { register_id } = useParams();
-    const [selectedApiUrl, setSelectedApiUrl] = useState(POST_ENUMERATED_VALUE);
-    const [apiType, setApiType] = useState('Enumerated Value');
+    const [selectedApiUrl, setSelectedApiUrl] = useState(POST_CONCEPT_ITEM);
+    const [apiType, setApiType] = useState('Concept Item');
     const { setItemDetails } = useContext(ItemContext); 
     const navigate = useNavigate(); 
+    let alertData = 'none';
+    const [viewAlert, setViewAlert] = useState(false);
 
+    const validationTest = () => {
+        validateFormData(item, 'Item');
+
+    };
     const handleSubmitItem = async () => {
         try {
             // const itemData = JSON.parse(item);
@@ -99,6 +107,10 @@ function Item() {
     const getSelestedApi = (type) => {
         console.log(type);
         switch (type) {
+            case 'Concept Item':
+                setSelectedApiUrl(POST_CONCEPT_ITEM);
+                setApiType('Concept Item');
+                break;
             case 'Enumerated value':
                 setSelectedApiUrl(POST_ENUMERATED_VALUE);
                 setApiType('Enumerated Value');
@@ -123,14 +135,19 @@ function Item() {
                 break;
         }
     };
+    const log = () => {
+        console.log(item);
+    }
 
     return (
         <div className="container p-5">
-            <ChooseType getSelestedApi={getSelestedApi} />
             <div style={{display: "flex"}}>
                 <h1>Create Data</h1>
+                <button onClick={log}>Log</button>
             </div>
-            <div className='mt-5'>
+            <ChooseType getSelestedApi={getSelestedApi} />
+            <div className='mt-1'>
+                {apiType === 'Concept Item' && <ItemInput item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'Enumerated Value' && <EnumeratedValue item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'Simple Attribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'Complex Attribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
@@ -141,9 +158,10 @@ function Item() {
                 <ReferenceInput onFormSubmit={RChange} />
             </div>
             <div className='text-end'>
-                <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button>
+                <button className='mt-3 btn btn-sm btn-primary' onClick={validationTest}>Submit</button>
             </div>
             <div style={{height: '200px'}}></div>
+            
         </div>
     );
 }

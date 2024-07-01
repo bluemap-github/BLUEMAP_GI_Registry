@@ -11,7 +11,6 @@ const EVFilter = ({ data }) => {
         <div style={{ marginTop: '20px', marginBottom: '20px' }}>
             {data === "EnumeratedValue" && 
                 <div>
-                    input for data 1
                     <input
                         type="text"
                         value={filterValue}

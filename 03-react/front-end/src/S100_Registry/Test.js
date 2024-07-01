@@ -21,7 +21,6 @@ function Test() {
     }
     return (
         <div>
-            <h1>Hello, World!</h1>
             user name: <input type="text" value={testdata.name} onChange={(e) => setTestdata({...testdata, name: e.target.value})} />  <br />
             <button onClick={handleSubmit}>Submit</button>
         </div>

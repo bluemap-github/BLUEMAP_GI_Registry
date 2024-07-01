@@ -6,13 +6,13 @@ const EVDetail = ({item}) => {
 
     return (
         <div>
-            <p>{item.numericCode}</p>
-            <p>{item.enumType}</p>
+            <div>Numeric Code : {item.numericCode}</div>
+            <p>Ttem Type : {item.enumType}</p>
             <p 
                     style={{backgroundColor : "skyblue"}} 
-                    onClick={() => (window.location = `/dataDictionary/simple_attribute_one/${USER_SERIAL}/${item.associated_arrtibute_id}`)}
+                    onClick={() => (window.location = `/dataDictionary/simple_attribute_one/${USER_SERIAL}/${item.attributeId}`)}
                 >
-                    {item.associated_arrtibute_id}</p>
+                    {item.attributeId}</p>
         </div>
     );
 };

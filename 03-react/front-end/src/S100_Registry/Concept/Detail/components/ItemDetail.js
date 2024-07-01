@@ -43,7 +43,7 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
                     </thead>
                     <tbody>
                         <tr>
-                            <th className='text-center' scope="row" style={{width: '25%'}}>go to Detail page</th>
+                            <th className='text-center' scope="row" style={{width: '25%'}}>Go to Detail Page</th>
                             <button onClick={() => window.location=`/dataDictionary`}>Detail</button>
                         </tr>
                         <tr>
@@ -51,49 +51,49 @@ function ItemDetail({itemList, handleUpdateButtonClick, handleKeyIdx}) {
                         <td>{itemList.item.itemType}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">name</th>
+                        <th className='text-center' scope="row">Name</th>
                         <td>{itemList.item.name}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">definition</th>
+                        <th className='text-center' scope="row">Definition</th>
                         <td>{itemList.item.definition}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">remarks</th>
+                        <th className='text-center' scope="row">Remarks</th>
                         <td>{itemList.item.remarks}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">itemStatus</th>
+                        <th className='text-center' scope="row">Item Status</th>
                         <td>{itemList.item.itemStatus}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">alias</th>
+                        <th className='text-center' scope="row">Alias</th>
                         <td>
                             {Object.values(itemList.item.alias).map((item, index) => (<span key={index}>{item}; </span>))}
                         </td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">camelCase</th>
+                        <th className='text-center' scope="row">Camel Case</th>
                         <td>{itemList.item.camelCase}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">definitionSource</th>
+                        <th className='text-center' scope="row">Definition Source</th>
                         <td>{itemList.item.definitionSource}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">reference</th>
+                        <th className='text-center' scope="row">Reference</th>
                         <td>{itemList.item.reference}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">similarityToSource</th>
+                        <th className='text-center' scope="row">Similarity to Source</th>
                         <td>{itemList.item.similarityToSource}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">justification</th>
+                        <th className='text-center' scope="row">Justification</th>
                         <td>{itemList.item.justification}</td>
                         </tr>
                         <tr>
-                        <th className='text-center' scope="row">proposedChange</th>
+                        <th className='text-center' scope="row">Proposed Change</th>
                         <td>{itemList.item.proposedChange}</td>
                         </tr>
                     </tbody>

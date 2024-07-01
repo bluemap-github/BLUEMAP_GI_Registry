@@ -30,11 +30,11 @@ function ReferenceAdd({onClose, itemId}){
             <div>
                 <h3 className='mb-2'>Add Reference</h3>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{width:"40%", fontWeight: "bold"}}>*referenceIdentifier</span>
+                    <span className="input-group-text" id="basic-addon1" style={{width:"40%", fontWeight: "bold"}}>*Reference Identifier</span>
                     <input type="text" className="form-control" placeholder="referenceIdentifier" name="referenceIdentifier" onChange={RChange} />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{width:"40%", fontWeight: "bold"}}>*sourceDocument</span>
+                    <span className="input-group-text" id="basic-addon1" style={{width:"40%", fontWeight: "bold"}}>*Source Document</span>
                     <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={RChange} />
                 </div>
                 <div className='text-end'>

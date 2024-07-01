@@ -42,13 +42,13 @@ const DDRList = ({ data }) => {
                 <div>Loading...</div>
             ) : (
                 response.register_items.map(item => (
-                    <div key={item._id.encrypted_data} style={{ backgroundColor: 'skyblue', border: '1px solid black' }}>
+                    <div key={item._id.encrypted_data} style={{border: '1px solid gray'}} className='mt-3'>
                         <div>{item._id.encrypted_data}</div>
                         <div>{item.concept_id.encrypted_data}</div>
                         <div>{item.itemType}</div>
                         <div>{item.name}</div>
                         <div>{item.definition}</div>
-                        <button onClick={() => handleDetailClick(item)}>Detail</button>
+                        <button onClick={() => handleDetailClick(item)} className='btn btn-info'>show Detail</button>
                     </div>
                 ))
             )}
