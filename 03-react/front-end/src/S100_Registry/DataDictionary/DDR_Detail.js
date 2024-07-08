@@ -1,7 +1,7 @@
 // src/components/DDRDetail.js
 
 import React, { useContext, useEffect, useState } from 'react';
-import { ItemContext } from '../../context/ItemContext'; // ItemContext 임포트
+import { ItemContext } from '../../context/ItemContext'; 
 import axios from 'axios';
 import { GET_DDR_VALUE_ONE } from './api';
 import EVDetail from './components/EVDetail';
@@ -10,33 +10,18 @@ import CADetail from './components/CADetail';
 import FDetail from './components/FDetail';
 import IDetail from './components/IDetail';
 
-
+const componentMap = {
+    'EnumeratedValue': EVDetail,
+    'SimpleAttribute': SADetail,
+    'ComplexAttribute': CADetail,
+    'FeatureType': FDetail,
+    'InformationType': IDetail
+};
 
 const DDR_Detail = () => {
-    const { itemDetails } = useContext(ItemContext); // Context에서 itemDetails 가져오기
+    const { itemDetails } = useContext(ItemContext); 
     const { view_item_type, item_id, item_iv, user_serial } = itemDetails;
     const [item, setItem] = useState(null);
-    let dataListComponent;
-    switch (view_item_type) {
-        case 'EnumeratedValue':
-          dataListComponent = <EVDetail item={item}/>;
-          break;
-        case 'SimpleAttribute':
-          dataListComponent = <SADetail item={item}/>;
-          break;
-        case 'ComplexAttribute':
-            dataListComponent = <CADetail item={item}/>;
-            break;
-        case 'FeatureType':
-            dataListComponent = <FDetail item={item}/>;
-            break;
-        case 'InformationType':
-            dataListComponent = <IDetail item={item}/>;
-            break;
-
-        default:
-          dataListComponent = null;
-      }
 
     useEffect(() => {
         const fetchItemList = async () => {
@@ -61,11 +46,13 @@ const DDR_Detail = () => {
         return <div>Loading...</div>;
     }
 
+    const DetailComponent = componentMap[view_item_type] || null;
+
     return (
         <div className='container p-5'>
             <h1>Data Dictionary Detail</h1>
             <div className='mt-4' style={{border: "1px solid gray", borderRadius: "10px"}}>
-                {dataListComponent}
+                {DetailComponent ? <DetailComponent item={item} /> : null}
             </div>
             
             <button onClick={() => window.location = `/dataDictionary/${user_serial}`} className='btn btn-primary mt-3'>Back to List</button>

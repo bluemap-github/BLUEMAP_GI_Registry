@@ -1,14 +1,19 @@
 from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from regiSystem.models import S100_Concept_Item
+from regiSystem.models import (
+    S100_Concept_Item,
+    S100_CD_AttributeConstraints
+)
 from regiSystem.serializers.CD import (
         SimpleAttributeSerializer,
         EnumeratedValueSerializer,
         ComplexAttributeSerializer,
         FeatureSerializer,
-        InformationSerializer
+        InformationSerializer,
+        AttributeConstraintsSerializer
 )
+
 import json
 from regiSystem.InfoSec.encryption import (get_encrypted_id, decrypt)
 itemTypeSet = {
@@ -84,4 +89,25 @@ def ddr_item_one(request):
         except Exception as e:
             return Response(status=500, data={"error": str(e)})
     return Response(status=400, data={"error": "Invalid request method"})
+
+
+@api_view(['GET'])
+def attribute_constraints(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+
+    if request.method == 'GET':
+        try:
+            c_item = S100_CD_AttributeConstraints.find({'simpleAttribute': ObjectId(I_id)})
+            if not c_item:
+                Response({"attribute_constraint" : []})
+            serializer = AttributeConstraintsSerializer(c_item, many=True)
+            for item in serializer.data:
+                item["_id"] = get_encrypted_id(item["_id"])
+            return Response({"attribute_constraint" : serializer.data})
+        except Exception as e:
+            return Response(status=400, data={"error": str(e)})
+        
+         
+
 

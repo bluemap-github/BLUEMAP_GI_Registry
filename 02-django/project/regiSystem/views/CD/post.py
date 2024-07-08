@@ -5,7 +5,8 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from regiSystem.models import (
     S100_Concept_Item,
-    S100_CD_AttributeConstraints
+    S100_CD_AttributeConstraints,
+    S100_CD_AttributeUsage
 )
 from regiSystem.serializers.CD import (
         SimpleAttributeSerializer,
@@ -14,6 +15,7 @@ from regiSystem.serializers.CD import (
         FeatureSerializer,
         InformationSerializer,
         AttributeConstraintsSerializer,
+        AttributeUsageSerializer
 )
 
 from regiSystem.serializers.RE import (
@@ -84,10 +86,30 @@ def complex_attribute(request):
     if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['concept_id'] = ObjectId(C_id)
-        
-        S100_Concept_Item.insert_one(validated_data)
+        saved_ = S100_Concept_Item.insert_one(validated_data)
+        new_comp_id = str(saved_.inserted_id)
+        sub_list = validated_data['subAttribute']
+        for s_id in sub_list:
+            attribute_usage(new_comp_id, s_id)
+
         encrypted_id = get_encrypted_id(serializer.data['_id'])
         return Response(encrypted_id, status=HTTP_201_CREATED)
+    
+def attribute_usage(source, target):
+    usageData = {
+        "lower": 0,
+        "upper": 0,
+        "sequential": False
+    }
+    serializer = AttributeUsageSerializer(data=usageData)
+    if serializer.is_valid():
+        validated_data = serializer.validated_data
+        validated_data['complexAttribute'] = ObjectId(source)
+        validated_data['subAttribute'] = ObjectId(target)
+        S100_CD_AttributeUsage.insert_one(validated_data)
+        
+            
+
 
 @api_view(['POST'])
 def feature(request):

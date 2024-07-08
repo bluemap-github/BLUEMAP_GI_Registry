@@ -1,17 +1,20 @@
 import React, {useEffect, useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 
 const EVDetail = ({item}) => {
     const { itemDetails, setItemDetails } = useContext(ItemContext);
-    useEffect(() => {
+    const navigate = useNavigate();
+    const handleClick = () => {
         setItemDetails({ 
             view_item_type: "SimpleAttribute", 
             user_serial: USER_SERIAL, 
             item_id: item.attributeId.encrypted_data,
             item_iv: item.attributeId.iv,
         });
-    }, [item]);
+        navigate('/dataDictionary');
+    }
 
     return (
         <div>
@@ -36,7 +39,7 @@ const EVDetail = ({item}) => {
                             <li>No Associated Attribute</li>
                         ) : (
                             <li>- Attribute Name : 
-                                <span onClick={() => window.location=`/dataDictionary`}>
+                                <span onClick={handleClick}>
                                     {item.attributeId.encrypted_data}
                                 </span>
                             </li>

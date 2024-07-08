@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {PUT_RS_URL} from "../../../api"
+import { PUT_RS_URL } from "../../../api";
+import UpdateInput from '../tags/UpdateInput';
+
+const similarityOptions = ["identical", "restyled", "contextAdded", "generalization", "specialization", "unspecified"];
+const inputFields = [
+    { type: "text", name: "referenceIdentifier", spanName: "Reference Identifier" },
+    { type: "text", name: "sourceDocument", spanName: "*Source Document" }
+];
 
 function ReferenceSourceUpdate({ referenceSources, onClose }) {
     const [RS, setRS] = useState(referenceSources[0]);
@@ -15,8 +22,7 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
 
     const handleSubmitItem = async () => {
         try {
-            const RSId = RS._id.encrypted_data;
-            const item_iv = RS._id.iv;
+            const { encrypted_data: RSId, iv: item_iv } = RS._id;
             const RSResponse = await axios.put(PUT_RS_URL, RS, {
                 params: {
                     item_id: RSId,
@@ -33,42 +39,26 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
     return (
         <div>
             <div className='text-end'>
-                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+                <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
             </div>
             <h3 className='mb-2'>Update reference Source</h3>
             <div>
-                <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>referenceIdentifier</span>
-                    <input
-                        value={RS.referenceIdentifier} // 객체의 해당 속성에 접근
-                        type="text"
-                        className="form-control"
-                        placeholder="referenceIdentifier"
-                        name="referenceIdentifier"
-                        onChange={RChange} // 변경 핸들러 설정
+                {inputFields.map(({ type, name, spanName }) => (
+                    <UpdateInput 
+                        key={name} 
+                        type={type} 
+                        ItemChange={RChange} 
+                        itemValue={RS[name]} 
+                        name={name} 
+                        spanName={spanName} 
                     />
-                </div>
+                ))}
                 <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>sourceDocument</span>
-                    <input
-                        value={RS.sourceDocument} // 객체의 해당 속성에 접근
-                        type="text"
-                        className="form-control"
-                        placeholder="sourceDocument"
-                        name="sourceDocument"
-                        onChange={RChange} // 변경 핸들러 설정
-                    />
-                </div>
-                <div className='input-group input-group-sm mt-2'>
-                    <label class="input-group-text" for="similarity" style={{ width: "40%", fontWeight: "bold" }}>*similarity</label>
-                    <select class="form-select" id="similarity" name="similarity" onChange={RChange} >
-                        <option selected>{RS.similarity}</option>
-                        <option value="identical">identical</option>
-                        <option value="restyled">restyled</option>
-                        <option value="contextAdded">contextAdded</option>
-                        <option value="generalization">generalization</option>
-                        <option value="specialization">specialization</option>
-                        <option value="unspecified">unspecified</option>
+                    <label className="input-group-text" htmlFor="similarity" style={{ width: "40%", fontWeight: "bold" }}>*similarity</label>
+                    <select className="form-select" id="similarity" name="similarity" value={RS.similarity} onChange={RChange} >
+                        {similarityOptions.map(value => (
+                            <option key={value} value={value}>{value}</option>
+                        ))}
                     </select>
                 </div>
                 <div className='text-end'>

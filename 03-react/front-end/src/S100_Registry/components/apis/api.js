@@ -1,4 +1,4 @@
-import {DEPLOY_URL} from '../index.js'
+import {DEPLOY_URL} from '../../index.js';
 
 // DataDictionary/DDR_List.js
 export const GET_DDR_ITEM_LIST = `${DEPLOY_URL}/api/v1/ddr_item_list/get/`;

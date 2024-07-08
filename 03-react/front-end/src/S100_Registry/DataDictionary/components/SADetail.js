@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
+import {getAttributeConstraints} from '../../components/requestAPI.js'
+
 
 const SADetail = ({ item }) => {
     const { setItemDetails } = useContext(ItemContext);
+    const [constraints, setConstraints] = useState([]);
     const navigate = useNavigate();
 
     const movetoPage = (value) => {
@@ -16,6 +19,14 @@ const SADetail = ({ item }) => {
         });
         navigate('/dataDictionary');
     }
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getAttributeConstraints(item._id.encrypted_data, item._id.iv);
+            setConstraints(result);
+        };
+        fetchData();
+    }
+    , []);
 
     return (
         <div>
@@ -27,6 +38,28 @@ const SADetail = ({ item }) => {
                     <li>- Value Type: {item.valueType}</li>
                     <li>- Definition: {item.definition}</li>
                     <li>- Item Identifier: {item.itemIdentifier}</li>
+                </ul>
+            </div>
+            <hr />
+            <div className='m-3'>
+                <ul>
+                <h6 style={{ fontWeight: 'bold' }}>Constraints</h6>
+                {
+                    constraints.length === 0 ? (
+                        <div>No constraints</div>
+                    ):(
+                    <>
+                        {constraints.map((constraint, idx) => (
+                            <div>
+                                <li key={idx}>- stringLength : {constraint.stringLength}</li>
+                                <li key={idx}>- textPattern : {constraint.textPattern}</li>
+                                <li key={idx}>- ACRange : {constraint.ACRange}</li>
+                                <li key={idx}>- precision : {constraint.precision}</li>
+                            </div>  
+                        ))}
+                    </>
+                    )
+                }
                 </ul>
             </div>
             {item.valueType === 'enumeration' || item.valueType === 'S100_CodeList' ? (

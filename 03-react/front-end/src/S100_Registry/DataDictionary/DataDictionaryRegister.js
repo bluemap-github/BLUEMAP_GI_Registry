@@ -1,38 +1,29 @@
-import React, { useState } from 'react';
-import EVFilter from './Filter/EVFilter';
+import React, { useState, useContext } from 'react';
+import DDR_Filter from './Filter/DDR_Filter';
 import DDR_List from './DDR_List';
+import DDR_Choose from './DDR_Choose';
+import { ItemContext } from '../../context/ItemContext';
 
 function DataDictionaryRegister() {
-    const [viewNumber, setViewNumber] = useState("EnumeratedValue");
+    const { itemDetails } = useContext(ItemContext); 
+    // const { view_item_type } = itemDetails;
+    const [viewType, setViewType] = useState("EnumeratedValue");
     const clickHandler = (num) => {
-        setViewNumber(num);
+        setViewType(num);
     }
     return (
         <div className="container p-5">
             <h1>Data Dictionary List</h1>
             <p className='mt-5'>Choose the type of data you want to see.</p>
+            
             <div className="btn-group btn-group-toggle">
-                <button className={`btn btn-outline-primary ${viewNumber === 'EnumeratedValue' ? 'active' : ''}`}
-                        onClick={() => clickHandler("EnumeratedValue")}
-                >Enumerated Values</button>
-                <button className={`btn btn-outline-primary ${viewNumber === 'SimpleAttribute' ? 'active' : ''}`}
-                        onClick={() => clickHandler("SimpleAttribute")}
-                >Simple Attributes</button>
-                <button className={`btn btn-outline-primary ${viewNumber === 'ComplexAttribute' ? 'active' : ''}`}
-                        onClick={() => clickHandler("ComplexAttribute")}
-                >Complex Attributes</button>
-                <button className={`btn btn-outline-primary ${viewNumber === 'FeatureType' ? 'active' : ''}`}
-                        onClick={() => clickHandler("FeatureType")}
-                >Features</button>
-                <button className={`btn btn-outline-primary ${viewNumber === 'InformationType' ? 'active' : ''}`}
-                        onClick={() => clickHandler("InformationType")}
-                >Informations</button>
+                <DDR_Choose clickHandler={clickHandler} viewType={viewType}/>
             </div>
             <div>
-                <EVFilter data={viewNumber}/>
+                <DDR_Filter data={viewType}/>
             </div>
             <div>
-                <DDR_List data={viewNumber}/>
+                <DDR_List viewType={viewType}/>
             </div>
         </div>
     );

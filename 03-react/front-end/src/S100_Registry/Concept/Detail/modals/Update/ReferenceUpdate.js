@@ -1,29 +1,33 @@
-import React, {useState}from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 import { PUT_R_URL } from '../../../api';
+import UpdateInput from '../tags/UpdateInput';
 
+const inputFields = [
+    { type: "text", name: "referenceIdentifier", spanName: "*Reference Identifier" },
+    { type: "text", name: "sourceDocument", spanName: "*Source Document" }
+];
 
 function ReferenceUpdate({ itemList, onClose, followIdx }) {
     const str = JSON.stringify(itemList.references[followIdx]);
-    const [R, setR] = useState(JSON.parse(str)); // JSON 문자열을 파싱하여 객체로 변환
+    const [R, setR] = useState(JSON.parse(str)); 
 
     const RChange = (event) => {
-        // R의 해당 속성을 업데이트
-        setR({
-            ...R,
-            [event.target.name]: event.target.value
-        });
+        const { name, value } = event.target;
+        setR(prevR => ({
+            ...prevR,
+            [name]: value
+        }));
     };
 
     const handleSubmitItem = async () => {
         try {
-            const RId = itemList.references[followIdx]._id.encrypted_data;
-            const item_iv = itemList.references[followIdx]._id.iv;
+            const { encrypted_data: RId, iv: item_iv } = itemList.references[followIdx]._id;
             await axios.put(PUT_R_URL, R, {
                 params: {
                     item_id: RId,
                     item_iv: item_iv
-                } 
+                }
             });
             onClose();
             window.location.reload();
@@ -35,32 +39,20 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
     return (
         <div>
             <div className='text-end'>
-                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+                <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
             </div>
             <div>
                 <h3 className='mb-2'>Update reference</h3>
-                <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*referenceIdentifier</span>
-                    <input
-                        value={R.referenceIdentifier} // 객체의 해당 속성에 접근
-                        type="text"
-                        className="form-control"
-                        placeholder="referenceIdentifier"
-                        name="referenceIdentifier"
-                        onChange={RChange} // 변경 핸들러 설정
+                {inputFields.map(({ type, name, spanName }) => (
+                    <UpdateInput 
+                        key={name} 
+                        type={type} 
+                        ItemChange={RChange} 
+                        itemValue={R[name]} 
+                        name={name} 
+                        spanName={spanName} 
                     />
-                </div>
-                <div className='input-group input-group-sm mt-2'>
-                    <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>*sourceDocument</span>
-                    <input
-                        value={R.sourceDocument} // 객체의 해당 속성에 접근
-                        type="text"
-                        className="form-control"
-                        placeholder="sourceDocument"
-                        name="sourceDocument"
-                        onChange={RChange} // 변경 핸들러 설정
-                    />
-                </div>
+                ))}
                 <div className='text-end'>
                     <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>update</button>
                 </div>

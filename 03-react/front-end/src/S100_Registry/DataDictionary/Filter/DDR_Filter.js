@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const EVFilter = ({ data }) => {
+const DDR_Filter = ({ data }) => {
     const [filterValue, setFilterValue] = useState('');
 
     const handleFilterChange = (event) => {
@@ -44,4 +44,4 @@ const EVFilter = ({ data }) => {
     );
 };
 
-export default EVFilter;
+export default DDR_Filter;
