@@ -6,13 +6,15 @@ import {getAttributeConstraints} from '../../components/requestAPI.js'
 
 
 const SADetail = ({ item }) => {
+    
     const { setItemDetails } = useContext(ItemContext);
     const [constraints, setConstraints] = useState([]);
     const navigate = useNavigate();
 
     const movetoPage = (value) => {
+        console.log(value);
         setItemDetails({ 
-            view_item_type: "EnumeratedValue", 
+            view_item_type: value.itemType,  
             user_serial: USER_SERIAL, 
             item_id: value.encrypted_data,
             item_iv: value.iv,
@@ -72,7 +74,7 @@ const SADetail = ({ item }) => {
                                 <li>No Listed Value</li>
                             ) : (
                                 item.listedValue.map((value, idx) => (
-                                    <li key={idx} onClick={() => movetoPage(value)}>- Value {idx + 1} : {value.encrypted_data}</li>
+                                    <li key={idx} onClick={() => movetoPage(value)}>- {value.name}</li>
                                 ))
                             )}
                         </ul>

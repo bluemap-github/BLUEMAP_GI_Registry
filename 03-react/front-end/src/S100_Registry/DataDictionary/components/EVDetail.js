@@ -4,14 +4,17 @@ import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 
 const EVDetail = ({item}) => {
+    console.log(item, "????????????????????????????");
     const { itemDetails, setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
-    const handleClick = () => {
+    
+    const movetoPage = (value) => {
+        console.log(value);
         setItemDetails({ 
-            view_item_type: "SimpleAttribute", 
+            view_item_type: value.itemType, 
             user_serial: USER_SERIAL, 
-            item_id: item.attributeId.encrypted_data,
-            item_iv: item.attributeId.iv,
+            item_id: value.encrypted_data,
+            item_iv: value.iv,
         });
         navigate('/dataDictionary');
     }
@@ -35,14 +38,12 @@ const EVDetail = ({item}) => {
                 <ul>
                     <h6 style={{fontWeight: "bold"}}>Associated Attribute</h6>
                     {
-                        item.attributeId === "" ? (
+                        item.attributeId === undefined || item.attributeId.length === 0 ? (
                             <li>No Associated Attribute</li>
                         ) : (
-                            <li>- Attribute Name : 
-                                <span onClick={handleClick}>
-                                    {item.attributeId.encrypted_data}
-                                </span>
-                            </li>
+                            item.attributeId.map((value, idx) => (
+                                <li key={idx} onClick={() => movetoPage(value)}>- {value.name}</li>
+                            ))
                         )
                     }
                 </ul>

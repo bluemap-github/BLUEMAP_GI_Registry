@@ -8,7 +8,7 @@ class EnumeratedValueSerializer(ConceptItemSerializer):
     _id = ObjectIdField(read_only=True)
     numericCode = serializers.IntegerField()
     enumType = serializers.CharField()# Enum - S100_CD_EnumType
-    attributeId = ObjectIdField(read_only=True)
+    attributeId = serializers.JSONField(default=list) 
 
 class AttributeSerializer(ConceptItemSerializer):
     pass

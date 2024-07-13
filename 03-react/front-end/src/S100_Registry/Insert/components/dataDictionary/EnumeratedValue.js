@@ -30,7 +30,7 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
         itemType: 'EnumeratedValue',
         numericCode: '',
         enumType: '',
-        attributeId: ''
+        attributeId: []
     });
 
     const [aliasList, setAliasList] = useState([]);
@@ -67,17 +67,20 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
         setRelatedEnumList(selectedObj);
         const updatedFormData = {
             ...formData,
-            ['attributeId']: selectedID
+            ['attributeId']: [selectedID]
         };
         setFormData(updatedFormData);
         onFormSubmit(updatedFormData);
+    }
+    const log = () => {
+        console.log(formData);
     }
 
     
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
             <h3>Enumerated Value</h3>
-            
+            <button onClick={log}>log</button>
             <p>{selectedApiUrl}</p>
             <div className='p-3 mt-3'>
                 <div className='row'>

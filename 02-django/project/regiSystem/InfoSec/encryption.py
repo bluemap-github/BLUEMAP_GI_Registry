@@ -6,17 +6,23 @@ import base64
 import json
 
 def encrypt(data):
+    data[0] = str(data[0])
     key = settings.ENCRYPTION_KEY
     iv = get_random_bytes(16)
-    encoded_data = data.encode()
+    encoded_data = data[0].encode()
     cipher = AES.new(key, AES.MODE_CBC, iv)
     ciphertext = cipher.encrypt(pad(encoded_data, AES.block_size))
-    encrypted_data = base64.b64encode(ciphertext).decode('utf-8')
-    encoded_iv = base64.b64encode(iv).decode('utf-8')
-    return json.dumps({"encrypted_data": encrypted_data, "iv": encoded_iv})
+    if len(data) == 1:
+        encrypted_data = base64.b64encode(ciphertext).decode('utf-8')
+        encoded_iv = base64.b64encode(iv).decode('utf-8')
+        return json.dumps({"encrypted_data": encrypted_data, "iv": encoded_iv})
+    else:
+        encrypted_data = base64.b64encode(ciphertext).decode('utf-8')
+        encoded_iv = base64.b64encode(iv).decode('utf-8')
+        return json.dumps({"encrypted_data": encrypted_data, "iv": encoded_iv, "name": data[1], "itemType": data[2]})
 
 def get_encrypted_id(data):
-    encrypted_id_json = encrypt(str(data))
+    encrypted_id_json = encrypt(data)
     encrypted_id_data = json.loads(encrypted_id_json)
     return encrypted_id_data
 

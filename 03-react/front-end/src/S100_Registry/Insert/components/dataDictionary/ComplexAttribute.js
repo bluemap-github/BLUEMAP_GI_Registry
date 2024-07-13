@@ -82,13 +82,10 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
         setFormData(updatedFormData);
         onFormSubmit(updatedFormData);
     };
-    const log = () => {
-        console.log(formData);
-    }
+    
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
             <h3>Complex Attribute</h3>
-            <button onClick={log}>log</button>
             <p>{selectedApiUrl}</p>
             <div className='p-3 mt-3'>
                 <div className='row'>

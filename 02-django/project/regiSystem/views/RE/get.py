@@ -66,7 +66,7 @@ def concept_item_list(request): #레지스터 시리얼넘버가 들어감
             c_item_list = list(S100_Concept_Item.find({"concept_id": ObjectId(C_id)}).sort("_id", -1))
             serializer = ConceptItemSerializer(c_item_list, many=True)
             for item in serializer.data:
-                item["_id"] = get_encrypted_id(item["_id"])
+                item["_id"] = get_encrypted_id([item["_id"]])
             response_data = make_response_data(serializer)
             return Response(response_data)
         except Exception as e:
@@ -84,7 +84,7 @@ def concept_item_one(request):
             c_item = S100_Concept_Item.find_one({'_id': ObjectId(I_id)})
             if not c_item:
                 return Response({'error': 'Concept item not found'}, status=HTTP_400_BAD_REQUEST)
-            c_item["_id"] = get_encrypted_id(c_item["_id"])
+            c_item["_id"] = get_encrypted_id([c_item["_id"]])
             serializer = ConceptItemSerializer(c_item)
             return Response({'item': serializer.data })
         except Exception as e:
@@ -103,7 +103,7 @@ def concept_managemant_info(request):
                 Response({"management_infos" : []})
             serializer = ConceptManagementInfoSerializer(c_item, many=True)
             for item in serializer.data:
-                item["_id"] = get_encrypted_id(item["_id"])
+                item["_id"] = get_encrypted_id([item["_id"]])
             return Response({"management_infos" : serializer.data})
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
@@ -121,7 +121,7 @@ def concept_reference_source(request):
                 Response({"reference_sources" : []})
             serializer = ConceptReferenceSourceSerializer(c_item, many=True)
             for item in serializer.data:
-                item["_id"] = get_encrypted_id(item["_id"])
+                item["_id"] = get_encrypted_id([item["_id"]])
             return Response({"reference_sources" : serializer.data})
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
@@ -138,7 +138,7 @@ def concept_reference(request):
                 Response({"references" : []})
             serializer = ConceptReferenceSerializer(c_item, many=True)
             for item in serializer.data:
-                item["_id"] = get_encrypted_id(item["_id"])
+                item["_id"] = get_encrypted_id([item["_id"]])
             return Response({"references" : serializer.data})
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
