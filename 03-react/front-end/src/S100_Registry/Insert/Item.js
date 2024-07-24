@@ -16,25 +16,28 @@ import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import {USER_SERIAL} from '../../userSerial.js';
 import { ItemContext } from '../../context/ItemContext';
-import validateFormData from './validation/ValidateItems.js';
+import { validateFormData, checkPostList } from './validation/ValidateItems.js';
 import AttributeConstraints from './components/AttributeConstraints.js';
 
 function Item() {
-    const [item, setItem] = useState('');
-    const [managementInfos, setManagementInfos] = useState(['']); // 관리 정보 입력 창 배열
+    const [item, setItem] = useState(null);
+    const [managementInfos, setManagementInfos] = useState([]); // 관리 정보 입력 창 배열
     const [referenceSource, setReferenceSource] = useState(null);
     const [references, setReferences] = useState(null);
     const [attributeContsraints, setAttributeContsraints] = useState(null);
     const { register_id } = useParams();
     const [selectedApiUrl, setSelectedApiUrl] = useState(POST_CONCEPT_ITEM);
-    const [apiType, setApiType] = useState('Concept Item');
+    const [apiType, setApiType] = useState('ConceptItem');
     const { setItemDetails } = useContext(ItemContext); 
     const navigate = useNavigate(); 
     let alertData = 'none';
     const [viewAlert, setViewAlert] = useState(false);
 
-    const validationTest = () => {
-        validateFormData(item, 'Item');
+    const validationTest = (validateType) => {
+        checkPostList(item, attributeContsraints, managementInfos, referenceSource, references, validateType);
+        // if (validateFormData(item, validateType)) {
+        //     handleSubmitItem();
+        // };
 
     };
     const handleSubmitItem = async () => {
@@ -118,21 +121,21 @@ function Item() {
 
     const getSelestedApi = (type) => {
         switch (type) {
-            case 'Concept Item':
+            case 'ConceptItem':
                 setSelectedApiUrl(POST_CONCEPT_ITEM);
-                setApiType('Concept Item');
+                setApiType('ConceptItem');
                 break;
-            case 'Enumerated value':
+            case 'EnumeratedValue':
                 setSelectedApiUrl(POST_ENUMERATED_VALUE);
-                setApiType('Enumerated Value');
+                setApiType('EnumeratedValue');
                 break;
-            case 'Simple Attribute':
+            case 'SimpleAttribute':
                 setSelectedApiUrl(POST_SIMPLE_ATTRIBUTE);
-                setApiType('Simple Attribute');
+                setApiType('SimpleAttribute');
                 break;
-            case 'Complex Attribute':
+            case 'ComplexAttribute':
                 setSelectedApiUrl(POST_COMPLEX_ATTRIBUTE);
-                setApiType('Complex Attribute');
+                setApiType('ComplexAttribute');
                 break;
             case 'Feature':
                 setSelectedApiUrl(POST_FEATURE);
@@ -154,20 +157,20 @@ function Item() {
             </div>
             <ChooseType getSelestedApi={getSelestedApi} />
             <div className='mt-1'>
-                {apiType === 'Concept Item' && <ItemInput item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'Enumerated Value' && <EnumeratedValue item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'Simple Attribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'Complex Attribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'ConceptItem' && <ItemInput item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'EnumeratedValue' && <EnumeratedValue item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'SimpleAttribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'ComplexAttribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'Feature' && <Feature item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'Information' && <Information item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'Simple Attribute' && <AttributeConstraints onFormSubmit={ACChange} />}
+                {apiType === 'SimpleAttribute' && <AttributeConstraints onFormSubmit={ACChange} />}
                 <ManagementInfoInput onFormSubmit={MIChange} />
                 <ReferenceSourceInput onFormSubmit={RSChange} />
                 <ReferenceInput onFormSubmit={RChange} />
             </div>
             <div className='text-end'>
-                {/* <button className='mt-3 btn btn-sm btn-primary' onClick={validationTest}>Submit</button> */}
-                <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button>
+                <button className='mt-3 btn btn-sm btn-primary' onClick={() => validationTest(apiType)}>Submit</button>
+                {/* <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button> */}
             </div>
             <div style={{height: '200px'}}></div>
             

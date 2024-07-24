@@ -3,7 +3,7 @@ import Base from '../../modals/Base';
 import AddAssociatedAttributes from '../../modals/AddAssociatedAttributes';
 
 function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
-    const mandatoryFields = ["name", "itemStatus", "enumType", "numericCode"];
+    const mandatoryFields = ["name", "itemStatus", "enumType", "attributeId"];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => {setIsModalOpen(true);};
@@ -67,20 +67,17 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
         setRelatedEnumList(selectedObj);
         const updatedFormData = {
             ...formData,
-            ['attributeId']: [selectedID]
+            attributeId: selectedID ? [selectedID] : []
         };
+        
         setFormData(updatedFormData);
         onFormSubmit(updatedFormData);
-    }
-    const log = () => {
-        console.log(formData);
     }
 
     
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
             <h3>Enumerated Value</h3>
-            <button onClick={log}>log</button>
             <p>{selectedApiUrl}</p>
             <div className='p-3 mt-3'>
                 <div className='row'>
@@ -194,20 +191,8 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
                 <div className='row'>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span 
-                                className={`input-group-text ${mandatoryFields.includes('numericCode') && formData.numericCode.trim() === '' ? 'tag-invalid' : ''}`}
-                                id="basic-addon1" 
-                                style={{width:"40%", fontWeight: "bold"}}
-                            >
-                                Numeric Code
-                            </span>
-                            <input 
-                                type="number" // Changed to number type
-                                className={`form-control ${mandatoryFields.includes('numericCode') && formData.enumType.trim() === '' ? 'tag-invalid' : ''}`} 
-                                placeholder="Numeric Code" 
-                                name="numericCode" 
-                                onChange={handleChange} 
-                            />
+                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Numeric Code</span>
+                            <input type="number" className="form-control" placeholder="numericCode" name="numericCode" onChange={handleChange} />
                         </div>
                     </div>
                     <div className='col'>
@@ -235,8 +220,16 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
                 <div className='row'>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Associated Attribute ID</span>
-                            <div className="form-control">
+                            <span 
+                                className={`input-group-text ${mandatoryFields.includes('attributeId') && relatedEnumList.length === 0 ? 'tag-invalid' : ''}`}
+                                id="basic-addon1" 
+                                style={{width:"40%", fontWeight: "bold"}}
+                            >
+                                * Associated Attribute ID
+                            </span>
+                            <div 
+                                className={`form-control ${mandatoryFields.includes('attributeId') && relatedEnumList.length === 0 ? 'tag-invalid' : ''}`}
+                            >
                                 <div className='m-1'>
                                     <svg onClick={openRelModal} xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
                                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>

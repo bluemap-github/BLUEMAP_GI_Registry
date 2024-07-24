@@ -1,42 +1,66 @@
-const getValidationList = (formType) => {
+const getValidationItem = (formType) => {
     switch (formType) {
-        case 'Item':
+        case 'ConceptItem':
             return ['name', 'itemStatus'];
         case 'SimpleAttribute':
-            return ['name', 'attributeType', 'attributeValue'];
+            return ['name', 'itemStatus', 'valueType'];
         case 'ComplexAttribute':
-            return ['name', 'attributeType', 'attributeValue'];
+            return ['name', 'itemStatus', 'subAttribute'];
         case 'Feature':
-            return ['name', 'featureType', 'featureValue'];
+            return ['name', 'itemStatus', 'featureUseType'];
         case 'Information':
-            return ['name', 'informationType', 'informationValue'];
+            return ['name', 'itemStatus'];
         case 'EnumeratedValue':
-            return ['name', 'value'];
-        case 'ReferenceSource':
-            return ['referenceIdentifier', 'sourceDocument', 'similarity'];
-        case 'Reference':
-            return ['referenceIdentifier', 'sourceDocument'];
-        case 'ManagementInfo':
-            return [
-                    'proposalType', 
-                    'submittingOrganisation',
-                    'proposedChange',
-                    'dateProposed',
-                    'dateAmended',
-                    'proposalStatus',
-                ];
+            return ['name', 'attributeId', 'enumType'];
         default:
             return [];
     }
 };
 
-const validateFormData = (formData, formType) => {
-    const validateList = getValidationList(formType);
-    const missingFields = validateList.filter(field => !formData[field]);
-    if (missingFields.length > 0) {
-        alert(`The following fields are missing or empty: ${missingFields.join(', ')}`);
-    }
-    return missingFields.length === 0;
+const validationList = {
+    ReferenceSource:  ['referenceIdentifier', 'sourceDocument', 'similarity'],
+    Reference:  ['referenceIdentifier', 'sourceDocument'],
+    ManagementInfo:  [
+                'proposalType', 
+                'submittingOrganisation',
+                'proposedChange',
+                'dateProposed',
+                'dateAmended',
+                'proposalStatus',
+            ]
 };
 
-export default validateFormData;
+const validateFormData = (formData, formType) => {
+    const validateList = getValidationItem(formType);
+    // item 검사
+    const missingFields = validateList.filter(field => 
+        formData[field] === undefined || 
+        formData[field] === null || 
+        (Array.isArray(formData[field]) && formData[field].length === 0) || 
+        (typeof formData[field] === 'string' && formData[field].trim() === '')
+    );
+    // for () {};
+    
+    if (missingFields.length > 0) {
+        alert(` [${formType}] The following fields are missing or empty: ${missingFields.join(', ')}`);
+        return false;
+    } else {
+        return true;
+    }
+    
+};
+
+const PostList = {
+    
+}
+
+const checkPostList = (item, attributeContsraints, managementInfos, referenceSource, references, validateType) => {
+    console.log('item:', item);
+    console.log('attributeContsraints:', attributeContsraints);
+    console.log('managementInfos:', managementInfos);
+    console.log('referenceSource:', referenceSource);
+    console.log('references:', references);
+    console.log('validateType:', validateType);
+};
+
+export { validateFormData, checkPostList };

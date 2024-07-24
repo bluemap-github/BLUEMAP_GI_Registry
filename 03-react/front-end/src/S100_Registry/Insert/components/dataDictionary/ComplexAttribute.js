@@ -4,7 +4,7 @@ import AddAttributes from '../../modals/AddAttributes';
 
 function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const mandatoryFields = ["name", "itemStatus"];
+    const mandatoryFields = ["name", "itemStatus", "subAttribute"];
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -82,11 +82,14 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
         setFormData(updatedFormData);
         onFormSubmit(updatedFormData);
     };
+    const log = () => {
+        console.log(formData);
+    }
     
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
             <h3>Complex Attribute</h3>
-            <p>{selectedApiUrl}</p>
+            <button onClick={log}>log</button>
             <div className='p-3 mt-3'>
                 <div className='row'>
                     <div className='col'>
@@ -205,10 +208,13 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
                         componentType='ComplexAttribute'
                     />
                     <div className='input-group input-group-sm mt-2'>
-                        <div className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>
-                            <span>Related Attribute List</span>
+                        <div 
+                            className={`input-group-text ${mandatoryFields.includes('subAttribute') && relatedEnumList.length === 0 ?'tag-invalid' : ''}`}
+                            style={{ width: "20.5%",fontWeight: "bold" }}
+                        >
+                            <span>* Related Attribute List</span>
                         </div>
-                        <div className="form-control">
+                        <div className={`form-control ${mandatoryFields.includes('subAttribute') && relatedEnumList.length === 0 ? 'tag-invalid' : ''}`}>
                             <div className='m-1' onClick={openRelModal}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>

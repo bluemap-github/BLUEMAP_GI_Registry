@@ -3,8 +3,8 @@ import AttSearch from './search/AttSearch';
 
 const AddAssociatedAttributes = ({isOpen, onClose, handleRelatedValueList}) => {
     const [data, setData] = useState([]);
-    const [selectedObj, setSelectedObj] = useState(null);
-    const [selectedID, setSelectedID] = useState(null);
+    const [selectedObj, setSelectedObj] = useState();
+    const [selectedID, setSelectedID] = useState();
 
     
 
@@ -17,8 +17,9 @@ const AddAssociatedAttributes = ({isOpen, onClose, handleRelatedValueList}) => {
             setSelectedObj(item);
             setSelectedID(item._id);
         } else {
-            setSelectedObj(null);
-            setSelectedID(null);
+            // 필요한 필드만 초기화하고 나머지는 빈 상태 유지
+            setSelectedObj([]);
+            setSelectedID('');
         }
     };
 

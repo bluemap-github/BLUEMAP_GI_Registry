@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'regiSystem',
+    'userSystem',
     'drf_yasg', #drf_yasg
     'rest_framework',    # pip install djangorestframework
     'django_extensions', # pip install django-extensions

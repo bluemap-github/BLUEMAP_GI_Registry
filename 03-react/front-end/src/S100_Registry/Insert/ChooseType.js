@@ -10,10 +10,10 @@ const ChooseType = ({ getSelestedApi }) => {
         <div>
             <label htmlFor="typeSelect"></label>
             <select id="typeSelect" onChange={handleChange}>
-                <option value="Concept Item">Concept Item</option>
-                <option value="Enumerated value">Enumerated value</option>
-                <option value="Simple Attribute">Simple Attribute</option>
-                <option value="Complex Attribute">Complex Attribute</option>
+                <option value="ConceptItem">Concept Item</option>
+                <option value="EnumeratedValue">Enumerated value</option>
+                <option value="SimpleAttribute">Simple Attribute</option>
+                <option value="ComplexAttribute">Complex Attribute</option>
                 <option value="Feature">Feature</option>
                 <option value="Information">Information</option>
             </select>

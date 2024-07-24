@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Base from '../../modals/Base';
 
 function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
-    const mandatoryFields = ["name", "itemStatus", "quantitySpecification", "valueType"];
+    const mandatoryFields = ["name", "itemStatus", "valueType"];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => {setIsModalOpen(true);};
@@ -206,15 +206,9 @@ function SimpleAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
                     </div>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
-                            <span
-                                className={`input-group-text ${mandatoryFields.includes('quantitySpecification') && formData.quantitySpecification.trim() === '' ? 'tag-invalid' : ''}`}
-                                id="basic-addon1"
-                                style={{ width: "40%", fontWeight: "bold" }}
-                            >
-                                * Quantity Specificaton
-                            </span>
+                            <span className="input-group-text" id="basic-addon1" style={{ width: "40%" }}>* Quantity Specificaton</span>
                             <select
-                                className={`form-select ${mandatoryFields.includes('quantitySpecification') && formData.quantitySpecification.trim() === '' ? 'tag-invalid' : ''}`}
+                                className='form-select'
                                 name="quantitySpecification"
                                 value={formData.quantitySpecification} // Added value prop
                                 onChange={handleChange}
