@@ -4,3 +4,4 @@ export const CHECK_EMAIL = `${DEPLOY_URL}/user/check-email/`;
 export const SIGN_UP = `${DEPLOY_URL}/user/signup/`;
 export const SIGN_IN = `${DEPLOY_URL}/user/login/`;
 export const CHECK_AUTH = `${DEPLOY_URL}/user/check-auth/`;
+export const LOG_OUT = `${DEPLOY_URL}/user/logout/`;

@@ -92,28 +92,31 @@ hr {
 .app-container {
   display: flex;
 }
-.navBar-rest-wide {
+.side-rest-wide {
   width: 200px;
-  min-width: 200px;
   height: 100%;
-  border-right: 1px solid #ccc;
 }
 .sidebar-wide {
   width: 200px;
   height: 100%;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #cccccc8c;
   position: fixed; /* Navbar를 화면에 고정 */
+}
+.navBar-rest {
+  height: 50px;
+  width: 100%;
+  border-bottom: 1px solid #cccccc8c;
 }
 .navBar-rest-narrow {
   width: 80px;
   min-width: 80px;
   height: 100%;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #cccccc8c;
 }
 .sidebar-narrow {
   width: 80px;
   height: 100%;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #cccccc8c;
   position: fixed; /* Navbar를 화면에 고정 */
 }
 .main-content {
@@ -202,4 +205,16 @@ hr {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.profile{
+  display: flex;
+  height: 100%;
+  border-left: 1px solid #cccccc8c;
+  justify-content: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.profile:hover{
+  background-color: #F7F7F7;
+  cursor: pointer;
 }

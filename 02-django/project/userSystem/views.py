@@ -55,8 +55,37 @@ def check_auth(request):
     token = auth_header.split(' ')[1]
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-        return JsonResponse({'message': 'Authorized', 'user': payload}, status=200)
+        email = payload.get('email')
+        
+        if email:
+            # 데이터베이스에서 사용자 정보를 가져옴
+            user = UserModel.get_user(email)
+            if user:
+                user_info = {
+                    'email': user.get('email'),
+                    'name': user.get('name'),
+                    # 필요한 추가 정보가 있다면 여기에 추가
+                }
+                return JsonResponse({'message': 'Authorized', 'user': user_info}, status=200)
+            else:
+                return JsonResponse({'error': 'Unauthorized: User not found'}, status=401)
+        else:
+            return JsonResponse({'error': 'Unauthorized: Invalid token'}, status=401)
     except jwt.ExpiredSignatureError:
         return JsonResponse({'error': 'Unauthorized: Token has expired'}, status=401)
     except jwt.InvalidTokenError:
         return JsonResponse({'error': 'Unauthorized: Invalid token'}, status=401)
+
+@csrf_exempt
+def logout(request):
+    if request.method == 'POST':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Unauthorized: No token provided'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        # 블랙리스트에 토큰 추가
+        BlacklistToken.add(token)
+        
+        return JsonResponse({'message': 'Logged out successfully'}, status=200)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
