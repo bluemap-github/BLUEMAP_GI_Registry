@@ -2,8 +2,10 @@
 
 from mongo_driver import db
 from django.contrib.auth.hashers import make_password, check_password
+from regiSystem.models import S100_Concept_Register
 
 User = db['User']
+Participation = db['Participation']
 
 class UserModel:
     @staticmethod
@@ -26,3 +28,40 @@ class UserModel:
         if user and check_password(password, user["password"]):
             return True
         return False
+    
+    @staticmethod
+    def get_user_id_by_email(email):
+        user = UserModel.get_user(email)
+        if user:
+            return user.get('_id')  # 또는 user 객체에서 ID를 가져오는 방식에 맞게 수정
+        return None
+class ParticipationModel:
+    @staticmethod
+    def create_participation(user_id, registry_id, role):
+        participation = {
+            "user_id": user_id,
+            "registry_id": registry_id,
+            "role": role
+        }
+        Participation.insert_one(participation)
+    
+    @staticmethod
+    def get_participations(user_id, role):
+        participations = Participation.find({"user_id": user_id, "role": role})
+        result = []
+        for participation in participations:
+            registry = S100_Concept_Register.find_one({"_id": participation["registry_id"]})
+            result.append(registry)
+        return result
+
+    @staticmethod
+    def get_participation(user_id, registry_id):
+        return Participation.find_one({"user_id": user_id, "registry_id": registry_id})
+
+    @staticmethod
+    def delete_participation(user_id, registry_id):
+        Participation.delete_one({"user_id": user_id, "registry_id": registry_id})
+    
+    @staticmethod
+    def update_role(user_id, registry_id, role):
+        Participation.update_one({"user_id": user_id, "registry_id": registry_id}, {"$set": {"role": role}})

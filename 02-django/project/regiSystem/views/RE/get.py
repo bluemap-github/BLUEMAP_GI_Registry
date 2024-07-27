@@ -21,7 +21,7 @@ from regiSystem.serializers.RE import (
     ConceptManagementInfoSerializer, 
 )
 import json
-from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
+from regiSystem.info_sec.encryption import (encrypt, get_encrypted_id, decrypt)
 
 @api_view(['GET'])
 def concept_register_list(request):

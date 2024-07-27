@@ -10,7 +10,7 @@ from regiSystem.serializers.CD import (
         InformationSerializer
 )
 import json
-from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
+from regiSystem.info_sec.encryption import (encrypt, get_encrypted_id, decrypt)
 itemTypeSet = {
         "EnumeratedValue": EnumeratedValueSerializer,
         "SimpleAttribute": SimpleAttributeSerializer,

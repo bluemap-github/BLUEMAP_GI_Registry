@@ -14,7 +14,7 @@ import ComplexAttribute from './components/dataDictionary/ComplexAttribute';
 import Feature from './components/dataDictionary/Feature';
 import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
-import {USER_SERIAL} from '../../userSerial.js';
+// import {USER_SERIAL} from '../../userSerial.js';
 import { ItemContext } from '../../context/ItemContext';
 import { validateFormData, checkPostList } from './validation/ValidateItems.js';
 import AttributeConstraints from './components/AttributeConstraints.js';
@@ -40,6 +40,8 @@ function Item() {
         // };
 
     };
+    const USER_SERIAL = sessionStorage.getItem('USER_SERIAL');
+
     const handleSubmitItem = async () => {
         try {
             // const itemData = JSON.parse(item);

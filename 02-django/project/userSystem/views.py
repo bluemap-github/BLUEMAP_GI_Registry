@@ -5,7 +5,16 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import jwt
 from django.conf import settings
-from .models import UserModel
+from .models import (UserModel, ParticipationModel)
+from rest_framework.response import Response
+from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from bson.objectid import ObjectId
+
+
+from .serializers import ParticipationSerializer
+from regiSystem.serializers.RE import ConceptSerializer
+
+from .manage_auth.check_auth import get_email_from_jwt
 
 SECRET_KEY = settings.SECRET_KEY
 
@@ -77,15 +86,20 @@ def check_auth(request):
         return JsonResponse({'error': 'Unauthorized: Invalid token'}, status=401)
 
 @csrf_exempt
-def logout(request):
-    if request.method == 'POST':
-        auth_header = request.headers.get('Authorization')
-        if not auth_header or not auth_header.startswith('Bearer '):
-            return JsonResponse({'error': 'Unauthorized: No token provided'}, status=401)
+def get_registry_list(request):
+    if request.method == 'GET':
+        email = get_email_from_jwt(request)
+        if not email:
+            return JsonResponse({"error": "Invalid token"}, status=400)
+        user_id = ObjectId(UserModel.get_user_id_by_email(email))
+        if not user_id:
+            return JsonResponse({"error": "User not found"}, status=400)
 
-        token = auth_header.split(' ')[1]
-        # 블랙리스트에 토큰 추가
-        BlacklistToken.add(token)
-        
-        return JsonResponse({'message': 'Logged out successfully'}, status=200)
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+        role = request.GET.get('role')
+        participations = ParticipationModel.get_participations(user_id, role)
+        registries = ConceptSerializer(participations, many=True).data 
+        print(registries)
+        return JsonResponse(registries, safe=False, status=200)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+            

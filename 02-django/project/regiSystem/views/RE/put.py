@@ -17,7 +17,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 import json
-from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
+from regiSystem.info_sec.encryption import (encrypt, get_encrypted_id, decrypt)
 
 @api_view(['PUT'])
 def concept_register(request, C_id):

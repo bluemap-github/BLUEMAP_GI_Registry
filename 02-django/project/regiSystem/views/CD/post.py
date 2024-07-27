@@ -23,7 +23,7 @@ from regiSystem.serializers.RE import (
 )
 
 import json
-from regiSystem.InfoSec.encryption import (get_encrypted_id, decrypt)
+from regiSystem.info_sec.encryption import (get_encrypted_id, decrypt)
 
 @api_view(['POST'])
 def concept_item(request):

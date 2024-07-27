@@ -18,8 +18,11 @@ from regiSystem.serializers.RE import (
         ConceptReferenceSerializer,
     )
 
+from userSystem.models import (ParticipationModel, UserModel)
+from userSystem.manage_auth.check_auth import (get_email_from_jwt)
+
 import json
-from regiSystem.InfoSec.encryption import (encrypt, get_encrypted_id, decrypt)
+from regiSystem.info_sec.encryption import (encrypt, get_encrypted_id, decrypt)
 
 @api_view(['POST'])
 def concept_register(request):
@@ -27,10 +30,20 @@ def concept_register(request):
         serializer = ConceptSerializer(data=request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
-            S100_Concept_Register.insert_one(validated_data) 
-            return Response(serializer.data, status=HTTP_201_CREATED) 
+            email = get_email_from_jwt(request)
+            if not email:
+                return Response({"error": "Invalid token"}, status=HTTP_400_BAD_REQUEST)
+            
+            user_id = UserModel.get_user_id_by_email(email)
+            if not user_id:
+                return Response({"error": "User not found"}, status=HTTP_400_BAD_REQUEST)
+            
+            S100_Concept_Register.insert_one(validated_data)
+            registry_id = ObjectId(serializer.data.get("_id"))
+            role = "owner"
+            ParticipationModel.create_participation(user_id, registry_id, role)
+            return Response(serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
 
 
 @api_view(['POST'])

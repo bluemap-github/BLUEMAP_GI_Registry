@@ -1,9 +1,6 @@
 import {DEPLOY_URL} from '../index.js'
 import {USER_SERIAL} from '../../userSerial.js'
 
-// Concept > Test.js
-export const MONGO_DB_POST  = `${DEPLOY_URL}/api/v1/sample_post/`;
-export const MONGO_DB_GET_ALL  = `${DEPLOY_URL}/api/v1/get_student_list/`;
 
 // Concept > Register.js
 // export const REGISTER_ITEM_LIST_URL = `${DEPLOY_URL}/api/v1/concept_item_list/get/${USER_SERIAL}/`;

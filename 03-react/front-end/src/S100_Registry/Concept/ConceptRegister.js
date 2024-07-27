@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { REGISTER_ITEM_LIST_URL, DEL_ITEM_URL } from './api';
 import Toast from '../Toast';
@@ -12,13 +12,15 @@ function Register() {
   const [checkedAll, setCheckedAll] = useState(false);
   const { setItemDetails } = useContext(ItemContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { serial } = location.state || {};
 
   useEffect(() => {
     const fetchItemList = async () => {
       try {
         const response = await axios.get(REGISTER_ITEM_LIST_URL, {
           params: {
-            user_serial: USER_SERIAL
+            user_serial: serial
           }
         });
         console.log(response.data);
