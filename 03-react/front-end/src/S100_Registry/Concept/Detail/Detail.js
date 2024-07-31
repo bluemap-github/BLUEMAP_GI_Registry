@@ -21,7 +21,7 @@ function Detail() {
   const { item_id, item_iv } = itemDetails;
   const itemParams = { item_id, item_iv };
 
-    const [state, setState] = useState({
+  const [state, setState] = useState({
     itemList: null,
     MI: null,
     RS: null,
@@ -39,10 +39,18 @@ function Detail() {
 
   const handleUpdateButtonClick = (int) => {
     openModal();
+  
+    // 상태 업데이트를 위한 객체를 정의합니다.
+    const newState = { numModal: int };
+  
+    // 조건에 따라 originData 속성을 설정합니다.
+    if (int < 5) {
+      newState.originData = state[componentDetails[int - 1].state];
+    }
+  
     setState(prev => ({
       ...prev,
-      numModal: int,
-      originData: state[componentDetails[int - 1].state]
+      ...newState,
     }));
   };
 

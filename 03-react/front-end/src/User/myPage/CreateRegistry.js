@@ -74,70 +74,77 @@ const CreateRegistry = () => {
             });
     };
 
+    const handleMyPage = () => {
+        navigate('/user/mymain');
+    };
+
     return (
-        <div className="container p-5">
-            <h4 style={{ fontWeight: 'bold' }}>새 레지스트리 만들기</h4>
-            <div style={{ backgroundColor: '#F8F8F8' }} className='p-5 mt-4'>
-                <form onSubmit={postRegistry}>
-                    <div className="mb-3">
-                        <label htmlFor="registryName" className="form-label">레지스트리 이름</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="registry name"
-                            name="name"
-                            onChange={handleChange}
-                        />
-                        {errors.name && <span style={{ color: 'red', fontSize: '12px' }}>{errors.name}</span>}
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="uniformResourceIdentifier" className="form-label">레지스트리 주소</label>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div>
+            <div className="container p-5">
+                <h4 style={{ fontWeight: 'bold' }}>새 레지스트리 만들기</h4>
+                <div style={{ backgroundColor: '#F8F8F8', width: '70vw'}} className='p-5 mt-4'>
+                    <form onSubmit={postRegistry}>
+                        <div className="mb-3">
+                            <label htmlFor="registryName" className="form-label">레지스트리 이름</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                placeholder="URI"
-                                name="uniformResourceIdentifier"
+                                placeholder="registry name"
+                                name="name"
                                 onChange={handleChange}
-                                style={{ width: '95%' }}
                             />
-                            <span>.registry</span>
+                            {errors.name && <span style={{ color: 'red', fontSize: '12px' }}>{errors.name}</span>}
                         </div>
-                        <label style={{ color: 'gray', fontSize: '12px' }}>
-                            {validation}
-                        </label>
-                        {errors.uniformResourceIdentifier && <div style={{ color: 'red', fontSize: '12px' }}>{errors.uniformResourceIdentifier}</div>}
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="operatingLanguage" className="form-label">운영언어</label>
-                        <select
-                            id="operatingLanguage"
-                            name="operatingLanguage"
-                            className="form-select"
-                            value={formData.operatingLanguage}
-                            onChange={handleChange}>
-                            <option value="Choose">Choose</option>
-                            <option value="한국어">한국어</option>
-                            <option value="English">English</option>
-                        </select>
-                        {errors.operatingLanguage && <span style={{ color: 'red', fontSize: '12px' }}>{errors.operatingLanguage}</span>}
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="description" className="form-label">설명</label>
-                        <textarea
-                            className="form-control"
-                            id="description"
-                            rows="3"
-                            placeholder="summary of Registry"
-                            name="contentSummary"
-                            onChange={handleChange}>
-                        </textarea>
-                        {errors.contentSummary && <span style={{ color: 'red', fontSize: '12px' }}>{errors.contentSummary}</span>}
-                    </div>
-                    <div className='text-end'>
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                    </div>
-                </form>
+                        <div className="mb-3">
+                            <label htmlFor="uniformResourceIdentifier" className="form-label">레지스트리 주소</label>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="URI"
+                                    name="uniformResourceIdentifier"
+                                    onChange={handleChange}
+                                    style={{ width: '95%' }}
+                                />
+                                <span>.registry</span>
+                            </div>
+                            <label style={{ color: 'gray', fontSize: '12px' }}>
+                                {validation}
+                            </label>
+                            {errors.uniformResourceIdentifier && <div style={{ color: 'red', fontSize: '12px' }}>{errors.uniformResourceIdentifier}</div>}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="operatingLanguage" className="form-label">운영언어</label>
+                            <select
+                                id="operatingLanguage"
+                                name="operatingLanguage"
+                                className="form-select"
+                                value={formData.operatingLanguage}
+                                onChange={handleChange}>
+                                <option value="Choose">Choose</option>
+                                <option value="한국어">한국어</option>
+                                <option value="English">English</option>
+                            </select>
+                            {errors.operatingLanguage && <span style={{ color: 'red', fontSize: '12px' }}>{errors.operatingLanguage}</span>}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="description" className="form-label">설명</label>
+                            <textarea
+                                className="form-control"
+                                id="description"
+                                rows="3"
+                                placeholder="summary of Registry"
+                                name="contentSummary"
+                                onChange={handleChange}>
+                            </textarea>
+                            {errors.contentSummary && <span style={{ color: 'red', fontSize: '12px' }}>{errors.contentSummary}</span>}
+                        </div>
+                        <div className='text-end'>
+                            <button type="submit" className="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <button type="submit" className="btn btn-outline-primary mt-4" onClick={handleMyPage}>back to main</button>
             </div>
         </div>
     );

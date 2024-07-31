@@ -20,6 +20,22 @@ from regiSystem.serializers.RE import (
     ConceptReferenceSourceSerializer,
     ConceptManagementInfoSerializer, 
 )
+from regiSystem.serializers.CD import (
+        SimpleAttributeSerializer,
+        EnumeratedValueSerializer,
+        ComplexAttributeSerializer,
+        FeatureSerializer,
+        InformationSerializer,
+        AttributeConstraintsSerializer
+)
+itemTypeSet = {
+        "ConceptItem": ConceptItemSerializer,
+        "EnumeratedValue": EnumeratedValueSerializer,
+        "SimpleAttribute": SimpleAttributeSerializer,
+        "ComplexAttribute": ComplexAttributeSerializer,
+        "FeatureType": FeatureSerializer,
+        "InformationType": InformationSerializer
+}
 import json
 from regiSystem.info_sec.encryption import (encrypt, get_encrypted_id, decrypt)
 
@@ -75,7 +91,6 @@ def concept_item_list(request): #레지스터 시리얼넘버가 들어감
 
 @api_view(['GET'])
 def concept_item_one(request):
-    print(request.GET)
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
     
@@ -85,7 +100,7 @@ def concept_item_one(request):
             if not c_item:
                 return Response({'error': 'Concept item not found'}, status=HTTP_400_BAD_REQUEST)
             c_item["_id"] = get_encrypted_id([c_item["_id"]])
-            serializer = ConceptItemSerializer(c_item)
+            serializer = itemTypeSet[c_item["itemType"]](c_item)
             return Response({'item': serializer.data })
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)

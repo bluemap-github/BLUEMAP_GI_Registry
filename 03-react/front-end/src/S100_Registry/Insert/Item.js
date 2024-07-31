@@ -171,8 +171,8 @@ function Item() {
                 <ReferenceInput onFormSubmit={RChange} />
             </div>
             <div className='text-end'>
-                <button className='mt-3 btn btn-sm btn-primary' onClick={() => validationTest(apiType)}>Submit</button>
-                {/* <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button> */}
+                {/* <button className='mt-3 btn btn-sm btn-primary' onClick={() => validationTest(apiType)}>Submit</button> */}
+                <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button>
             </div>
             <div style={{height: '200px'}}></div>
             

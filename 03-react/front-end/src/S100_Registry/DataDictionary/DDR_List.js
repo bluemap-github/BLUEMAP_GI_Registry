@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ItemContext } from '../../context/ItemContext';
 import { GET_DDR_ITEM_LIST } from './api';
-import { USER_SERIAL } from '../../userSerial';
 
 const DDRList = ({ viewType }) => {
-    console.log(viewType);
+    const USER_SERIAL = sessionStorage.getItem('USER_SERIAL');
     const [response, setResponse] = useState([]);
     const { setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
@@ -32,7 +31,6 @@ const DDRList = ({ viewType }) => {
     }, [viewType]);
 
     const handleDetailClick = (item) => {
-        console.log(viewType);
         setItemDetails({
             view_item_type: viewType,
             user_serial: USER_SERIAL,
@@ -69,6 +67,12 @@ const DDRList = ({ viewType }) => {
                         </tr>
                     </thead>
                     <tbody>
+                        {
+                            response.register_items.length === 0 &&
+                            <tr>
+                            <td colSpan="4" className="text-center">No items found</td>
+                            </tr>
+                        }
                         {response.register_items.map((item) => (
                             <tr key={item._id.encrypted_data} style={{ cursor: 'pointer' }}>
                                 {renderTableCell(item, 'name', { width: '15%' })}
@@ -85,3 +89,5 @@ const DDRList = ({ viewType }) => {
 };
 
 export default DDRList;
+
+

@@ -1,10 +1,16 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
+import { ItemContext } from '../../../../../context/ItemContext';
 import axios from "axios";
 import {POST_REFERENCE} from '../../../api';
 
-
-function ReferenceAdd({onClose, itemId}){
-    const [reference, setReference] = useState('');
+const referenceInit = {
+    referenceIdentifier: '',
+    sourceDocument: ''
+};
+function ReferenceAdd({onClose}){
+    const [reference, setReference] = useState([referenceInit]);
+    const { itemDetails } = useContext(ItemContext); 
+    const { item_id, item_iv } = itemDetails;
     const RChange = (event) => {
         const {name, value} = event.target;
         setReference((prevR) => ({
@@ -14,8 +20,12 @@ function ReferenceAdd({onClose, itemId}){
     }
     const handleSubmitItem = async () => {
         try {
-            const RUrl = POST_REFERENCE(itemId);
-            await axios.post(RUrl, reference);
+            await axios.post(POST_REFERENCE, reference, {
+                params: {
+                    "item_id": item_id,
+                    "item_iv": item_iv
+                }
+            });
             onClose();
             window.location.reload();
         } catch (error) {

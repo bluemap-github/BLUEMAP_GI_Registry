@@ -4,12 +4,10 @@ import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 
 const EVDetail = ({item}) => {
-    console.log(item, "????????????????????????????");
     const { itemDetails, setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
     
     const movetoPage = (value) => {
-        console.log(value);
         setItemDetails({ 
             view_item_type: value.itemType, 
             user_serial: USER_SERIAL, 

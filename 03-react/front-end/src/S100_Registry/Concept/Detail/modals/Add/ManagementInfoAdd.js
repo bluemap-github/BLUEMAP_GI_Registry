@@ -1,5 +1,5 @@
-import React, { useState, forwardRef } from "react";
-
+import React, { useState, forwardRef, useContext } from "react";
+import { ItemContext } from '../../../../../context/ItemContext';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
@@ -7,8 +7,20 @@ import { POST_MANAGEMENT_INFO } from '../../../api';
 
 
 
-function ManagementInfoAdd({onClose, itemId}) {
-    const [managementInfo, setManagementInfo] = useState([]);
+function ManagementInfoAdd({onClose}) {
+    const managementInfoInit = {
+        proposalType: '',
+        submittingOrganisation: '',
+        proposedChange: '',
+        dateAccepted: '',
+        dateProposed: '',
+        dateAmended: '',
+        proposalStatus: '',
+        controlBodyNotes: []
+    };
+    const [managementInfo, setManagementInfo] = useState([managementInfoInit]);
+    const { itemDetails } = useContext(ItemContext); 
+    const { item_id, item_iv } = itemDetails;
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -19,8 +31,13 @@ function ManagementInfoAdd({onClose, itemId}) {
       };
     const handleSubmitItem = async () => {
         try {
-            const miUrl = POST_MANAGEMENT_INFO(itemId);
-            await axios.post(miUrl, managementInfo);
+            console.log('item_id:', managementInfo);
+            await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
+                params: {
+                    "item_id": item_id,
+                    "item_iv": item_iv
+                }
+            });
             onClose();
             window.location.reload();
         } catch (error) {

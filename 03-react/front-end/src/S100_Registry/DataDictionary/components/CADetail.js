@@ -6,7 +6,6 @@ import { ItemContext } from '../../../context/ItemContext';
 const CADetail = ({item}) => {
     const { setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
-    console.log(item.subAttribute);
     const movetoPage = (value) => {
         setItemDetails({ 
             view_item_type: value.itemType, 

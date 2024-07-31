@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { REGISTER_ITEM_LIST_URL, DEL_ITEM_URL } from './api';
 import Toast from '../Toast';
-import { USER_SERIAL } from '../../userSerial';
+// import { USER_SERIAL } from '../../userSerial';
 import { ItemContext } from '../../context/ItemContext';
 
 function Register() {
@@ -13,17 +13,15 @@ function Register() {
   const { setItemDetails } = useContext(ItemContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const { serial } = location.state || {};
-
+  const USER_SERIAL = sessionStorage.getItem('USER_SERIAL');
   useEffect(() => {
     const fetchItemList = async () => {
       try {
         const response = await axios.get(REGISTER_ITEM_LIST_URL, {
           params: {
-            user_serial: serial
+            user_serial: USER_SERIAL
           }
         });
-        console.log(response.data);
         setItemList(response.data.register_items);
       } catch (error) {
         console.error('Error fetching item list:', error);
@@ -93,11 +91,12 @@ function Register() {
 
   const handleDetailClick = (item) => {
     setItemDetails({
-      user_serial: USER_SERIAL,
       item_id: item._id.encrypted_data,
-      item_iv: item._id.iv
+      item_iv: item._id.iv,
     });
-    navigate('/concept/detail');
+    setTimeout(() => {
+      navigate('/concept/detail');
+    }, 100); 
   };
 
   return (
@@ -133,6 +132,12 @@ function Register() {
           </tr>
         </thead>
         <tbody>
+          {
+            itemList.length === 0 &&
+            <tr>
+              <td colSpan="4" className="text-center">No items found</td>
+            </tr>
+          }
           {itemList.map((item) => (
             <tr key={item._id.encrypted_data} style={{ cursor: 'pointer' }}>
               {/* <th scope="row" className='text-center' style={{ width: '3%' }}>

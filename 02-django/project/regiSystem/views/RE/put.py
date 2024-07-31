@@ -13,6 +13,22 @@ from regiSystem.serializers.RE import (
         ConceptReferenceSourceSerializer,
         ConceptReferenceSerializer
     )
+from regiSystem.serializers.CD import (
+        SimpleAttributeSerializer,
+        EnumeratedValueSerializer,
+        ComplexAttributeSerializer,
+        FeatureSerializer,
+        InformationSerializer,
+        AttributeConstraintsSerializer
+)
+itemTypeSet = {
+        "ConceptItem": ConceptItemSerializer,
+        "EnumeratedValue": EnumeratedValueSerializer,
+        "SimpleAttribute": SimpleAttributeSerializer,
+        "ComplexAttribute": ComplexAttributeSerializer,
+        "FeatureType": FeatureSerializer,
+        "InformationType": InformationSerializer
+}
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
@@ -37,9 +53,11 @@ def concept_register(request, C_id):
 def concept_item(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    item_type = request.GET.get('item_type')
 
     c_item = S100_Concept_Item.find_one({'_id': ObjectId(I_id)})
-    serializer = ConceptItemSerializer(c_item, data=request.data)
+    print(itemTypeSet[item_type])
+    serializer = itemTypeSet[item_type](c_item, data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['concept_id'] = ObjectId(validated_data['concept_id'])

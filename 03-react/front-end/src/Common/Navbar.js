@@ -5,11 +5,15 @@ const Navbar = ({ userInfo }) => {
     const navigate = useNavigate();
     
     const handleLogout = () => {
-        localStorage.removeItem('jwt'); // 로컬 스토리지에서 JWT 제거
-        navigate('/user/signin'); // 로그인 페이지로 리디렉션
+        localStorage.removeItem('jwt'); 
+        sessionStorage.removeItem('USER_SERIAL');
+        sessionStorage.removeItem('itemDetails');
+        navigate('/user/signin'); 
     };
     const handleMyPage = () => {
         navigate('/user/mymain');
+        sessionStorage.removeItem('USER_SERIAL');
+        sessionStorage.removeItem('itemDetails');
     };
     
     return (

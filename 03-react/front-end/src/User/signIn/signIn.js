@@ -39,32 +39,36 @@ const SignIn = () => {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw'}}>
-            <h1>BLUEMAP GI Registry</h1>
-            <div style={{ width: '500px', padding: '20px', border: '1px solid #ccc', borderRadius: '10px', backgroundColor: '#f9f9f9', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '20px', fontWeight: 'bold', color: '#81DAF5' }}>Sign In</h2>
-                {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ marginBottom: '15px' }}>
-                        <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>Email:</label>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#f0f4f8'}}>
+            <h1 className='m-5' style={{ color: '#007bff' }}>BLUEMAP GI Registry</h1>
+            <div style={{ width: '500px', padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                <h2 style={{ textAlign: 'center', marginBottom: '20px', fontWeight: 'bold', color: '#007bff' }}>Sign In</h2>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ marginBottom: '15px', width: '100%' }}>
+                        <label htmlFor="email" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Email:</label>
                         <input type="email" id="email" value={email} onChange={handleEmailChange} style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
                     </div>
-                    <div style={{ marginBottom: '20px' }}>
-                        <label htmlFor="password" style={{ display: 'block', marginBottom: '5px' }}>Password:</label>
+                    <div style={{ marginBottom: '20px', width: '100%' }}>
+                        <label htmlFor="password" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Password:</label>
                         <input type="password" id="password" value={password} onChange={handlePasswordChange} style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
                     </div>
-                    <button type="submit" style={{ width: '100%', padding: '10px', borderRadius: '5px', border: 'none', backgroundColor: '#81DAF5', color: 'white', fontSize: '16px', cursor: 'pointer' }}>Sign In</button>
+                    <button type="submit" style={{ padding: '10px 20px', borderRadius: '5px', backgroundColor: '#007bff', color: '#fff', border: 'none', cursor: 'pointer' }}>Sign In</button>
                 </form>
-                <p style={{ textAlign: 'center', marginTop: '20px' }}>New user?</p>
-                <button 
-                    className='btn btn-outline-info'
-                    onClick={() => { window.location.href = '/user/signup' }}
-                    style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #81DAF5', backgroundColor: 'white', color: '#81DAF5', fontSize: '16px', cursor: 'pointer' }}
-                >
-                    Sign Up
-                </button>
+                <div style={{width: '100%'}}>
+                    <p style={{ marginTop: '20px', color: '#555' }}>New user?</p>
+                    <button 
+                        className='btn btn-outline-info'
+                        onClick={() => { window.location.href = '/user/signup' }}
+                        style={{ padding: '10px 20px', borderRadius: '5px', border: '1px solid #007bff', backgroundColor: '#fff', color: '#007bff', cursor: 'pointer' }}
+                    >
+                        Sign Up
+                    </button>
+                </div>
+                
             </div>
         </div>
+
     );
 };
 

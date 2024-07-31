@@ -6,7 +6,7 @@ from regiSystem.serializers.RE import (
 
 class EnumeratedValueSerializer(ConceptItemSerializer):
     _id = ObjectIdField(read_only=True)
-    numericCode = serializers.IntegerField()
+    numericCode = serializers.CharField(allow_blank=True)
     enumType = serializers.CharField()# Enum - S100_CD_EnumType
     attributeId = serializers.JSONField(default=list) 
 

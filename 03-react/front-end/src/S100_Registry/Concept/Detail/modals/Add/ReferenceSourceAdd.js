@@ -1,9 +1,16 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
+import { ItemContext } from '../../../../../context/ItemContext';
 import axios from "axios";
 import {POST_REFERENCE_SOURCE } from '../../../api';
 
-function ReferenceSourceAdd({onClose, itemId}){
-    const [referenceSource, setReferenceSource] = useState('');
+function ReferenceSourceAdd({onClose}){
+    const { itemDetails } = useContext(ItemContext); 
+    const { item_id, item_iv } = itemDetails;
+    const [referenceSource, setReferenceSource] = useState({
+        referenceIdentifier: '',
+        sourceDocument: '',
+        similarity: ''
+    });
     const RSChange = (event) => {
         const {name, value} = event.target;
         setReferenceSource((prevRS) => ({
@@ -13,8 +20,12 @@ function ReferenceSourceAdd({onClose, itemId}){
     }
     const handleSubmitItem = async () => {
         try {
-            const RSUrl = POST_REFERENCE_SOURCE (itemId);
-            await axios.post(RSUrl, referenceSource);
+            await axios.post(POST_REFERENCE_SOURCE, referenceSource, {
+                params: {
+                    "item_id": item_id,
+                    "item_iv": item_iv
+                }
+            });
             onClose();
             window.location.reload();
         } catch (error) {

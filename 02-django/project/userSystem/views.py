@@ -73,7 +73,6 @@ def check_auth(request):
                 user_info = {
                     'email': user.get('email'),
                     'name': user.get('name'),
-                    # 필요한 추가 정보가 있다면 여기에 추가
                 }
                 return JsonResponse({'message': 'Authorized', 'user': user_info}, status=200)
             else:
@@ -98,7 +97,6 @@ def get_registry_list(request):
         role = request.GET.get('role')
         participations = ParticipationModel.get_participations(user_id, role)
         registries = ConceptSerializer(participations, many=True).data 
-        print(registries)
         return JsonResponse(registries, safe=False, status=200)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)

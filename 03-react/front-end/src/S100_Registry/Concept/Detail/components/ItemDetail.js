@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import Toast from '../../../Toast';
+import { useNavigate } from 'react-router-dom';
 import { ItemContext } from '../../../../context/ItemContext';
 import { USER_SERIAL } from '../../../../userSerial';   
 import TableContents from './tags/TableContens';
@@ -20,18 +21,24 @@ const tableFields = [
 ];
 
 function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
+    const navigate = useNavigate();
     const { itemDetails, setItemDetails } = useContext(ItemContext);
 
-    useEffect(() => {
-        const { itemType, _id, iv } = itemList.item;
+    // useEffect(() => {
+        
+    // }, [itemList]);
+    const gotoDDR = () => {
         setItemDetails({
             ...itemDetails,
-            view_item_type: itemType,
-            user_serial: USER_SERIAL,
-            item_id: _id,
-            item_iv: iv,
+            view_item_type: itemList.item.itemType,
+            item_id: itemList.item._id.encrypted_data,
+            item_iv: itemList.item._id.iv,
         });
-    }, [itemList]);
+        setTimeout(() => {
+            navigate('/dataDictionary');
+        }, 0);
+    }
+
 
     const handleClick = () => handleUpdateButtonClick(1);
     const handleDelete = (idx) => {
@@ -51,12 +58,14 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th className='text-center' scope="row" style={{ width: '25%' }}>Go to Detail Page</th>
-                            <td>
-                                <button onClick={() => window.location = `/dataDictionary`}>Detail</button>
-                            </td>
-                        </tr>
+                        {itemList.item.itemType === 'ConceptItem' ? (<></>) : (
+                            <tr>
+                                <th className='text-center' scope="row" style={{ width: '25%' }}>Go to Detail Page</th>
+                                <td>
+                                    <button onClick={gotoDDR}>Detail</button>
+                                </td>
+                            </tr>
+                        )}
                         {tableFields.map(({ name, key, isAlias }) => (
                             <TableContents
                                 key={key}

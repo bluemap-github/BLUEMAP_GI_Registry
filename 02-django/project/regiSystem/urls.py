@@ -17,6 +17,7 @@ urlpatterns = [
     path('concept_item_list/get/', RE.get.concept_item_list), 
     path('concept_item_one/get/', RE.get.concept_item_one), 
     path('concept_item/delete/<str:I_id>/', RE.delete.concept_item), 
+    path('concept_item/put/', RE.put.concept_item),
 
     # ManagementInfo
     path('concept_item/mamagement_info/get/', RE.get.concept_managemant_info), 

@@ -12,7 +12,6 @@ const SADetail = ({ item }) => {
     const navigate = useNavigate();
 
     const movetoPage = (value) => {
-        console.log(value);
         setItemDetails({ 
             view_item_type: value.itemType,  
             user_serial: USER_SERIAL, 

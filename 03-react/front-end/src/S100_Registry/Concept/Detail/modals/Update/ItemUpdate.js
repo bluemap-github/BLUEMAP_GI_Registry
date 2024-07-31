@@ -10,7 +10,8 @@ function ItemUpdate({ items, onClose }) {
     const { item_id, item_iv } = itemDetails;
 
     useEffect(() => {
-        setItem(items); // props로 받은 items를 초기 상태로 설정
+        console.log('items:', items.itemType);
+        // setItem(items); // props로 받은 items를 초기 상태로 설정
     }, [items]);
 
     const ItemChange = (event) => {
@@ -22,8 +23,9 @@ function ItemUpdate({ items, onClose }) {
         try {
             await axios.put(PUT_ITEM_URL, item, {
                 params: {
-                    item_id,
-                    item_iv
+                    "item_id": item_id,
+                    "item_iv": item_iv,
+                    "item_type": items.itemType,
                 }
             });
             onClose();

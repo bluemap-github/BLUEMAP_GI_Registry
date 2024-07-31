@@ -13,9 +13,6 @@ from regiSystem.serializers.CD import (
         InformationSerializer,
         AttributeConstraintsSerializer
 )
-
-import json
-from regiSystem.info_sec.encryption import (get_encrypted_id, decrypt)
 itemTypeSet = {
         "EnumeratedValue": EnumeratedValueSerializer,
         "SimpleAttribute": SimpleAttributeSerializer,
@@ -23,6 +20,8 @@ itemTypeSet = {
         "FeatureType": FeatureSerializer,
         "InformationType": InformationSerializer
 }
+
+from regiSystem.info_sec.encryption import (get_encrypted_id, decrypt)
 itemIncryption = {
         "EnumeratedValue": "attributeId",
         "SimpleAttribute": "listedValue",
