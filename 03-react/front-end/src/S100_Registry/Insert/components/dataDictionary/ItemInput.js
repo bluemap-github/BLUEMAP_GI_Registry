@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Base from '../../modals/Base'
 
-function ItemInput({ onFormSubmit, registerId, apiType }) {
+function ItemInput({ onFormSubmit, apiType }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const mandatoryFields = ["name", "itemStatus"];
 
@@ -14,7 +14,7 @@ function ItemInput({ onFormSubmit, registerId, apiType }) {
       };
 
     const [formData, setFormData] = useState({
-        concept_id: registerId,
+        concept_id: '1',
         itemIdentifier: '2',
         name: '',
         definition: '',
@@ -61,9 +61,9 @@ function ItemInput({ onFormSubmit, registerId, apiType }) {
 
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
-            <h3>Concept Item</h3>
-            <div className='p-3 mt-3'>
+            <div className='p-3'>
                 <div className='row'>
+                    <h3>Concept Item</h3>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
                             <span 

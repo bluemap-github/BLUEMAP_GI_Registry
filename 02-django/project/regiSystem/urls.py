@@ -12,6 +12,9 @@ urlpatterns = [
     path('concept_register/put/<str:C_id>/', RE.put.concept_register),  
     path('concept_register/delete/<str:C_id>/', RE.delete.concept_register),  
 
+    ## for guest
+    path('register_info_for_guest/get/', RE.get.register_info_for_guest),
+
     # RegisterItem
     path('concept_item/item/post/', CD.post.concept_item),
     path('concept_item_list/get/', RE.get.concept_item_list), 

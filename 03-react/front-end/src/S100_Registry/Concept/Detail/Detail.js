@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ItemContext } from '../../../context/ItemContext';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CONCEPT_ITEM_ONE, GET_MANAGEMENT_INFO, GET_REFERENCE_SOURCE, GET_REFERENCE } from '../api';
 import ItemDetail from './components/ItemDetail';
@@ -8,6 +8,7 @@ import ManagementInfoDetail from './components/ManagementInfoDetail';
 import ReferenceSourceDetail from './components/ReferenceSourceDetail';
 import ReferenceDetail from './components/ReferenceDetail';
 import Base from './modals/Base';
+import { CONCEPT_LIST } from '../../../Common/PageLinks';
 
 const componentDetails = [
   { Component: ItemDetail, state: 'itemList', setState: 'setItemList', api: CONCEPT_ITEM_ONE },
@@ -17,6 +18,7 @@ const componentDetails = [
 ];
 
 function Detail() {
+  const navigate = useNavigate();
   const { itemDetails } = useContext(ItemContext);
   const { item_id, item_iv } = itemDetails;
   const itemParams = { item_id, item_iv };
@@ -36,7 +38,7 @@ function Detail() {
 
   const openModal = () => setState(prev => ({ ...prev, isModalOpen: true }));
   const closeModal = () => setState(prev => ({ ...prev, isModalOpen: false }));
-
+  
   const handleUpdateButtonClick = (int) => {
     openModal();
   
@@ -56,6 +58,11 @@ function Detail() {
 
   const handleFollowIdx = (int) => setState(prev => ({ ...prev, followIdx: int }));
   const handleKeyIdx = (int) => setState(prev => ({ ...prev, keyIdx: int }));
+
+  const moveToList = () => {
+    navigate(CONCEPT_LIST)
+  };
+    
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,7 +91,7 @@ function Detail() {
   }
 
   return (
-    <div className="container p-5">
+    <div className="p-5" style={{width: "85%"}}>
       <Base
         itemList={state.originData}
         isOpen={state.isModalOpen}
@@ -93,10 +100,6 @@ function Detail() {
         keyIdx={state.keyIdx}
         followIdx={state.followIdx}
       />
-      <h1 className='mb-3'>Concept Register</h1>
-      <div>
-        <div className='mb-3 mt-3'>GET : {CONCEPT_ITEM_ONE}</div>
-      </div>
       <div className="row">
         <div className="col">
           {componentDetails.map((detail, index) => {
@@ -114,9 +117,7 @@ function Detail() {
         </div>
       </div>
       <div>
-        <Link to="/">
-          <button className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>
-        </Link>
+        <button onClick={moveToList} className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>
       </div>
       <div style={{ height: '200px' }}></div>
     </div>

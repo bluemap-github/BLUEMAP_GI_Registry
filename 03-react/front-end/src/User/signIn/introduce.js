@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CHECK_AUTH } from '../api';
 import { useNavigate } from 'react-router-dom';
-
+import {SIGN_IN, SIGN_UP, MY_MAIN, INTRO} from '../../Common/PageLinks';
 
 const Introduce = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-
+    const moveToSIGNIN = () => {
+        navigate(SIGN_IN);
+    }
+    const moveToSIGNUP = () => {
+        navigate(SIGN_UP);
+    }
     useEffect(() => {
         // 로컬 스토리지에서 JWT 토큰을 가져오기
         const token = localStorage.getItem('jwt');
@@ -21,13 +26,13 @@ const Introduce = () => {
                 }
             })
             .then(response => {
-                navigate('/user/mymain')
+                navigate(MY_MAIN)
             })
             .catch(error => {
                 if (error.response) {
                     setError(error.response.data.error);
                     if (error.response.status === 401) {
-                        navigate('/'); 
+                        navigate(INTRO); 
                     }
                 } else {
                     setError(error.message);
@@ -35,7 +40,7 @@ const Introduce = () => {
             });
         } else {
             setError('No token found');
-            navigate('/'); // 토큰이 없을 경우 로그인 페이지로 리디렉션
+            navigate(INTRO); // 토큰이 없을 경우 로그인 페이지로 리디렉션
         }
     }, [navigate]);
 
@@ -45,11 +50,11 @@ const Introduce = () => {
             <div>
                 <button 
                     className='btn btn-outline-secondary'
-                    onClick={() => {window.location.href = '/user/signin'}}
+                    onClick={moveToSIGNIN}
                     >signIn</button>
                 <button 
                     className='btn btn-outline-info'
-                    onClick={() => {window.location.href = '/user/signup'}}
+                    onClick={moveToSIGNUP}
                     >signUp</button>
             </div>
             

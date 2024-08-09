@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Base from '../../modals/Base';
 import AddAssociatedAttributes from '../../modals/AddAssociatedAttributes';
 
-function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
+function EnumeratedValue({ onFormSubmit, selectedApiUrl }) {
     const mandatoryFields = ["name", "itemStatus", "enumType", "attributeId"];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,7 +14,7 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
     const closeRelModal = () => {setIsRelModalOpen(false);};
 
     const [formData, setFormData] = useState({
-        concept_id: registerId,
+        concept_id: '1',
         itemIdentifier: '2',
         name: '',
         definition: '',
@@ -77,9 +77,8 @@ function EnumeratedValue({ onFormSubmit, registerId, selectedApiUrl }) {
     
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
-            <h3>Enumerated Value</h3>
-            <p>{selectedApiUrl}</p>
-            <div className='p-3 mt-3'>
+            <div className='p-3'>
+                <h3>Enumerated Value</h3>
                 <div className='row'>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>

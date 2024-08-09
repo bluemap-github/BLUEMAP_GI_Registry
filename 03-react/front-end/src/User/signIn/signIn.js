@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { SIGN_IN } from '../api.js';
+import { SIGN_IN as API_SIGN_IN, SIGN_UP as API_SIGN_UP } from '../api.js';
+import { SIGN_IN as PAGE_SIGN_IN, SIGN_UP as PAGE_SIGN_UP, MY_MAIN } from '../../Common/PageLinks';
+
 import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
@@ -8,7 +10,9 @@ const SignIn = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-
+    const moveToSIGNUP = () => {
+        navigate(PAGE_SIGN_UP);
+    }
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
@@ -22,7 +26,7 @@ const SignIn = () => {
         setError('');
 
         try {
-            const response = await axios.post(SIGN_IN, { email, password });
+            const response = await axios.post(API_SIGN_IN, { email, password });
 
             if (response.status !== 200) {
                 throw new Error('로그인 실패');
@@ -32,7 +36,7 @@ const SignIn = () => {
             localStorage.setItem('jwt', token); // JWT를 로컬 스토리지에 저장
             console.log('로그인 성공');
             alert('로그인 성공');
-            navigate('/user/mymain'); // 로그인 후 리디렉션
+            navigate(MY_MAIN); // 로그인 후 리디렉션
         } catch (error) {
             setError(error.message);
         }
@@ -59,7 +63,7 @@ const SignIn = () => {
                     <p style={{ marginTop: '20px', color: '#555' }}>New user?</p>
                     <button 
                         className='btn btn-outline-info'
-                        onClick={() => { window.location.href = '/user/signup' }}
+                        onClick={moveToSIGNUP}
                         style={{ padding: '10px 20px', borderRadius: '5px', border: '1px solid #007bff', backgroundColor: '#fff', color: '#007bff', cursor: 'pointer' }}
                     >
                         Sign Up

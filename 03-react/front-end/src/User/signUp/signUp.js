@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {CHECK_EMAIL, SIGN_UP} from '../api.js';
+import { SIGN_IN as PAGE_SIGN_IN} from '../../Common/PageLinks';
 import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
@@ -11,6 +12,9 @@ const SignUp = () => {
     const [emailError, setEmailError] = useState('');
     const [emailChecked, setEmailChecked] = useState(false);
     const navigate = useNavigate();
+    const moveToSIGNIN = () => {
+        navigate(PAGE_SIGN_IN);
+    }
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -79,7 +83,7 @@ const SignUp = () => {
             // 회원가입 성공 시 알림 창 띄우기
             alert('Sign up successful! Please log in.');
             // 회원가입 성공 시 리디렉션
-            navigate('/user/signin');
+            navigate(PAGE_SIGN_IN);
         } catch (err) {
             console.error('Error signing up:', err);
             setError('Sign up failed');
@@ -120,7 +124,7 @@ const SignUp = () => {
                 <p style={{ textAlign: 'center', marginTop: '20px', color: '#555' }}>Already have an account?</p>
                 <button 
                     className='btn btn-outline-info'
-                    onClick={() => { window.location.href = '/user/signin' }}
+                    onClick={moveToSIGNIN}
                     style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #007bff', backgroundColor: 'white', color: '#007bff', fontSize: '16px', cursor: 'pointer' }}
                 >
                     Sign In

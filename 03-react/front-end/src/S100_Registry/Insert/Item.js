@@ -18,6 +18,7 @@ import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import { ItemContext } from '../../context/ItemContext';
 import { validateFormData, checkPostList } from './validation/ValidateItems.js';
 import AttributeConstraints from './components/AttributeConstraints.js';
+import {CONCEPT_DETAIL} from '../../Common/PageLinks.js';
 
 function Item() {
     const [item, setItem] = useState(null);
@@ -53,7 +54,6 @@ function Item() {
                         user_serial: USER_SERIAL
                     }
                 });
-            console.log('Item data successfully posted ~:', itemResponse.data);
 
             // Item 데이터를 selectedApiUrl로 POST 후 Item의 ID 가져오기
             const itemId = itemResponse.data.encrypted_data;
@@ -107,7 +107,7 @@ function Item() {
                 item_id: itemId,
                 item_iv: item_iv
             });
-            navigate('/concept/detail');
+            navigate(CONCEPT_DETAIL);
         } catch (error) {
             console.error('Error posting data:', error);
             console.log(item)
@@ -153,18 +153,19 @@ function Item() {
     };
 
     return (
-        <div className="container p-5">
+        <div className="p-5" style={{width: '85%'}}>
             <div style={{display: "flex"}}>
-                <h1>Create Data</h1>
+                <h5 style={{fontWeight:'bold', marginRight: '10px'}}>Create</h5>
+                <ChooseType getSelestedApi={getSelestedApi} />
             </div>
-            <ChooseType getSelestedApi={getSelestedApi} />
+            
             <div className='mt-1'>
-                {apiType === 'ConceptItem' && <ItemInput item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'EnumeratedValue' && <EnumeratedValue item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'SimpleAttribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'ComplexAttribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'Feature' && <Feature item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'Information' && <Information item={item} onFormSubmit={ItemChange} registerId={register_id} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'ConceptItem' && <ItemInput item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'EnumeratedValue' && <EnumeratedValue item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'SimpleAttribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'ComplexAttribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'Feature' && <Feature item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'Information' && <Information item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
                 {apiType === 'SimpleAttribute' && <AttributeConstraints onFormSubmit={ACChange} />}
                 <ManagementInfoInput onFormSubmit={MIChange} />
                 <ReferenceSourceInput onFormSubmit={RSChange} />

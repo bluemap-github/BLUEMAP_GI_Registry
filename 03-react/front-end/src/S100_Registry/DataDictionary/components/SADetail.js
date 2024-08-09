@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 import {getAttributeConstraints} from '../../components/requestAPI.js'
-
+import { DDR_DETAIL } from '../../../Common/PageLinks';
 
 const SADetail = ({ item }) => {
     
@@ -18,7 +18,7 @@ const SADetail = ({ item }) => {
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate('/dataDictionary');
+        navigate(DDR_DETAIL);
     }
     useEffect(() => {
         const fetchData = async () => {

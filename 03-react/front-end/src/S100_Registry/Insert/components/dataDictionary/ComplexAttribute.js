@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Base from '../../modals/Base';
 import AddAttributes from '../../modals/AddAttributes';
 
-function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
+function ComplexAttribute({ onFormSubmit, selectedApiUrl }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const mandatoryFields = ["name", "itemStatus", "subAttribute"];
 
@@ -15,7 +15,7 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
     };
 
     const [formData, setFormData] = useState({
-        concept_id: registerId,
+        concept_id: '1',
         itemIdentifier: '2',
         name: '',
         definition: '',
@@ -82,16 +82,12 @@ function ComplexAttribute({ onFormSubmit, registerId, selectedApiUrl }) {
         setFormData(updatedFormData);
         onFormSubmit(updatedFormData);
     };
-    const log = () => {
-        console.log(formData);
-    }
     
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
-            <h3>Complex Attribute</h3>
-            <button onClick={log}>log</button>
-            <div className='p-3 mt-3'>
+            <div className='p-3'>
                 <div className='row'>
+                    <h3>Complex Attribute</h3>
                     <div className='col'>
                         <div className='input-group input-group-sm mt-2'>
                             <span 

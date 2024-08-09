@@ -4,11 +4,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ItemContext } from '../../context/ItemContext'; 
 import axios from 'axios';
 import { GET_DDR_VALUE_ONE } from './api';
+import { useNavigate } from "react-router-dom";
 import EVDetail from './components/EVDetail';
 import SADetail from './components/SADetail';
 import CADetail from './components/CADetail';
 import FDetail from './components/FDetail';
 import IDetail from './components/IDetail';
+import { DDR_LIST } from '../../Common/PageLinks';
 
 const componentMap = {
     'EnumeratedValue': EVDetail,
@@ -18,11 +20,15 @@ const componentMap = {
     'InformationType': IDetail
 };
 
+
 const DDR_Detail = () => {
     const { itemDetails } = useContext(ItemContext); 
     const { view_item_type, item_id, item_iv, user_serial } = itemDetails;
     const [item, setItem] = useState(null);
-
+    const navigate = useNavigate();
+    const moveToPage = () => {
+        navigate(DDR_LIST);
+    }
     useEffect(() => {
         const fetchItemList = async () => {
             try {
@@ -49,13 +55,12 @@ const DDR_Detail = () => {
     const DetailComponent = componentMap[view_item_type] || null;
 
     return (
-        <div className='container p-5'>
-            <h1>Data Dictionary Detail</h1>
-            <div className='mt-4' style={{border: "1px solid gray", borderRadius: "10px"}}>
+        <div className='p-5'>
+            <div style={{border: "1px solid gray", borderRadius: "10px", width: "85%"}}>
                 {DetailComponent ? <DetailComponent item={item} /> : null}
             </div>
             
-            <button onClick={() => window.location = `/dataDictionary/${user_serial}`} className='btn btn-primary mt-3'>Back to List</button>
+            <button onClick={moveToPage} className='btn btn-primary mt-3'>Back to List</button>
         </div>
     );
 };

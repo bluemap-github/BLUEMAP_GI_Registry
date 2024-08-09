@@ -35,6 +35,7 @@ class UserModel:
         if user:
             return user.get('_id')  # 또는 user 객체에서 ID를 가져오는 방식에 맞게 수정
         return None
+
 class ParticipationModel:
     @staticmethod
     def create_participation(user_id, registry_id, role):
@@ -65,3 +66,10 @@ class ParticipationModel:
     @staticmethod
     def update_role(user_id, registry_id, role):
         Participation.update_one({"user_id": user_id, "registry_id": registry_id}, {"$set": {"role": role}})
+
+    @staticmethod
+    def get_role(user_id, registry_id):
+        participation = Participation.find_one({"user_id": user_id, "registry_id": registry_id})
+        if participation:
+            return participation["role"]
+        return None

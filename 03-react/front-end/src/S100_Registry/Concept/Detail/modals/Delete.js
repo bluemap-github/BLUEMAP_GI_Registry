@@ -1,17 +1,17 @@
 import React from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import { RERI_HOME } from "../../../../Common/PageLinks";
 
 function Delete({onClose, selectedForm, keyIdx}){
-    console.log(selectedForm)
-
+    const navigate = useNavigate();
     const handleDelete = async () => {
         try {
             const response = await axios.delete(selectedForm);
             console.log('Item data successfully deleted:', response.data);
             onClose()
             if (keyIdx == 8) {
-                window.location.href = "/";
+                navigate(RERI_HOME)
             }
             else {
                 window.location.reload();

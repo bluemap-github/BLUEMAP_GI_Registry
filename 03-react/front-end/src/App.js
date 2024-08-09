@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import ConceptRegister from './S100_Registry/Concept/ConceptRegister';
-import RegiHome from './S100_Registry/Home';
+import RegiHome from './S100_Registry/RegiHome';
 import ConceptDetail from './S100_Registry/Concept/Detail/Detail';
 import InsertItem from './S100_Registry/Insert/Item';
 import SideBar from './S100_Registry/Sidebar';
@@ -19,6 +19,10 @@ import MySidebar from './Common/MySidebar';
 import GetUserInfo from './Common/GetUserInfo';
 import CreateRegistry from './User/myPage/CreateRegistry';
 import ErrorPage from './Common/ErrorPage';
+import InnerNav from './Common/InnerNav';
+import InnerMyNav from './Common/InnerMyNav';
+import EnterRegi from './Common/EnterRegi';
+import {ENTER_REGI, INTRO, SIGN_IN, SIGN_UP, MY_MAIN, CREATE_REGI, ACCESS, ERROR, RERI_HOME, CONCEPT_LIST, CONCEPT_DETAIL, CREATE_ITEM, DDR_LIST, DDR_DETAIL, PORTAYAL_LIST} from './Common/PageLinks';
 function App() {
   return (
     <Router>
@@ -30,42 +34,52 @@ function App() {
 function AppContent() {
   const location = useLocation();
   const hideSidebar = location.pathname.startsWith('/user');
-  const hideAll = location.pathname === '/' || location.pathname === '/user/signin' || location.pathname === '/user/signup';
+  const hideAll = location.pathname === '/' || 
+                location.pathname === '/user/signin' || 
+                location.pathname === '/user/signup';
+
 
   return (
     <div>
-      {hideAll ? null : (
-        <div className='navBar-rest'>
-          <GetUserInfo>
-            <Navbar />
-          </GetUserInfo>
-        </div>
-      )}
+      <div className='navBar-rest'><Navbar /></div>
       <div className="app-container">
         {hideAll ? null : (
           <>
             {!hideSidebar && <SideBar />}
-            {hideSidebar && <MySidebar />}
+            {hideSidebar && <GetUserInfo><MySidebar /></GetUserInfo>}
             <div className='side-rest-wide'></div>
           </>
         )}
-        
-        <Routes>
-          <Route path="/" element={<Introduce />} />
-          <Route path="/user/signin" element={<SignIn />} />
-          <Route path="/user/signup" element={<SignUp />} />
-          <Route path="/user/mymain" element={<PrivateRoute><MyMain /></PrivateRoute>} />
-          <Route path="/user/create-registry" element={<PrivateRoute><CreateRegistry /></PrivateRoute>} />
-
-          <Route path="/error" element={<ErrorPage />} />
-          <Route path="/concept/:register_id" element={<ConceptRegister />} />
-          <Route path="/concept/detail" element={<ConceptDetail />} />
-          <Route path="/concept/create/:register_id" element={<InsertItem />} />
-          <Route path='/dataDictionary/:register_id' element={<DataDictionaryRegister/>} />
-          <Route path="/dataDictionary" element={<DDR_Detail />} />
-          <Route path='/portrayal/:register_id' element={<PortrayalRegister />} />
-        </Routes>
-      </div>
+        <div style={{ width: '90%'}}>
+          {hideAll ? null : (
+            <>
+              {!hideSidebar && 
+                <InnerNav/>
+              }
+              {hideSidebar && 
+                <GetUserInfo><InnerMyNav/></GetUserInfo>
+              }
+            </>
+          )}
+          <Routes>
+            <Route path=":id" element={<EnterRegi/>} />
+            <Route path={INTRO} element={<Introduce />} />
+            <Route path={SIGN_IN} element={<SignIn />} />
+            <Route path={SIGN_UP} element={<SignUp />} />
+            <Route path={MY_MAIN} element={<PrivateRoute><MyMain /></PrivateRoute>} />
+            <Route path={CREATE_REGI} element={<PrivateRoute><CreateRegistry /></PrivateRoute>} />
+            <Route path={ERROR} element={<ErrorPage />} />
+            
+            <Route path={RERI_HOME} element={<RegiHome />} />
+            <Route path={CONCEPT_LIST} element={<ConceptRegister />} />
+            <Route path={CONCEPT_DETAIL} element={<ConceptDetail />} />
+            <Route path={CREATE_ITEM} element={<InsertItem />} />
+            <Route path={DDR_LIST} element={<DataDictionaryRegister/>} />
+            <Route path={DDR_DETAIL} element={<DDR_Detail />} />
+            <Route path={PORTAYAL_LIST} element={<PortrayalRegister />} />
+          </Routes>
+        </div>
+        </div>
     </div>
   );
 }

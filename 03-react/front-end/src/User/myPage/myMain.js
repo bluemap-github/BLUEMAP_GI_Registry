@@ -3,6 +3,7 @@ import axios from 'axios';
 import { CHECK_AUTH } from '../api';
 import { useNavigate } from 'react-router-dom';
 import { getOwnRegistries } from './GetRegistery';
+import {SIGN_IN, ACCESS, CREATE_REGI, ENTER_REGI} from '../../Common/PageLinks';
 
 function MyMain() {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ function MyMain() {
     const [ownRegistries, setOwnRegistries] = useState([]);
     const [guestRegistries, setGuestRegistries] = useState([]);
 
-    const handleCreateRegi = () => {navigate('/user/create-registry')};
+    const handleCreateRegi = () => {navigate(CREATE_REGI)};
 
     useEffect(() => {
         sessionStorage.removeItem('USER_SERIAL');
@@ -32,7 +33,7 @@ function MyMain() {
                 if (error.response) {
                     setError(error.response.data.error);
                     if (error.response.status === 401) {
-                        navigate('/login');
+                        navigate(SIGN_IN);
                     }
                 } else {
                     setError(error.message);
@@ -40,7 +41,7 @@ function MyMain() {
             });
         } else {
             setError('No token found');
-            navigate('/user/signin'); // 토큰이 없을 경우 로그인 페이지로 리디렉션
+            navigate(SIGN_IN); // 토큰이 없을 경우 로그인 페이지로 리디렉션
         }
 
         const fetchData = async () => {
@@ -55,12 +56,11 @@ function MyMain() {
     }, [navigate]);
 
     const connectToRegistry = (e, registry) => {
-        sessionStorage.setItem('USER_SERIAL', registry._id); // 세션 스토리지에 저장
-    
-        // navigate 호출
-        setTimeout(() => {
-            navigate('/concept/list/');
-        }, 0); 
+        sessionStorage.setItem('REGISTRY_URI', registry.uniformResourceIdentifier);
+        sessionStorage.setItem('REGISTRY_NAME', registry.name);
+        sessionStorage.setItem('USER_SERIAL', registry._id);
+        console.log(registry);
+        navigate(ENTER_REGI(registry.uniformResourceIdentifier));
     };
     
     
@@ -74,9 +74,8 @@ function MyMain() {
 
     return (
         <div>
-            <div className='container p-5'>
-                <h3 style={{fontWeight: "bold"}}>참여하고 있는 레지스트리</h3>
-                <div style={{ backgroundColor: '#F8F8F8', width: '70vw'}} className='p-3 mt-4'>
+            <div className='p-5'>
+                <div style={{ backgroundColor: '#F8F8F8', width: '70vw'}} className='p-3'>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}} className='mb-3'>
                         <div style={{display: 'flex'}}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="1.75rem" height="1.5rem" viewBox="0 0 24 24"><path fill="currentColor" d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14z"></path></svg>

@@ -1,19 +1,23 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import {SIGN_IN, MY_MAIN} from './PageLinks';
 const Navbar = ({ userInfo }) => {
     const navigate = useNavigate();
     
     const handleLogout = () => {
-        localStorage.removeItem('jwt'); 
+        localStorage.removeItem('jwt');
         sessionStorage.removeItem('USER_SERIAL');
         sessionStorage.removeItem('itemDetails');
-        navigate('/user/signin'); 
+        sessionStorage.removeItem('REGISTRY_NAME');
+        sessionStorage.removeItem('REGISTRY_URI');
+        navigate(SIGN_IN); 
     };
     const handleMyPage = () => {
-        navigate('/user/mymain');
+        navigate(MY_MAIN);
         sessionStorage.removeItem('USER_SERIAL');
         sessionStorage.removeItem('itemDetails');
+        sessionStorage.removeItem('REGISTRY_NAME');
+        sessionStorage.removeItem('REGISTRY_URI');
     };
     
     return (

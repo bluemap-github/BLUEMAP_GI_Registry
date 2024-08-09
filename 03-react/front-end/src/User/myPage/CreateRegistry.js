@@ -80,7 +80,7 @@ const CreateRegistry = () => {
 
     return (
         <div>
-            <div className="container p-5">
+            <div className="container">
                 <h4 style={{ fontWeight: 'bold' }}>새 레지스트리 만들기</h4>
                 <div style={{ backgroundColor: '#F8F8F8', width: '70vw'}} className='p-5 mt-4'>
                     <form onSubmit={postRegistry}>

@@ -52,11 +52,35 @@ def offer_item_nameNtype(id):
 def ddr_item_list(request):
     C_id = request.GET.get('user_serial')
     item_type = request.GET.get('item_type')
+    search_term = request.GET.get('search_term', '')
+    status = request.GET.get('status', '')
+    category = request.GET.get('category', '')
+    enumType = request.GET.get('enum_type', '')
+    valueType = request.GET.get('value_type', '')
+
 
     if request.method == 'GET':
-        serializer = getItemType(item_type, C_id)
+        query = {"concept_id": ObjectId(C_id), "itemType": item_type}
+        if status:
+            query["itemStatus"] = status
+        if search_term:
+            if category == "name":
+                query["name"] = {"$regex": search_term, "$options": "i"}
+            elif category == "camelCase":
+                query["camelCase"] = {"$regex": search_term, "$options": "i"}
+            elif category == "definition":
+                query["definition"] = {"$regex": search_term, "$options": "i"}
+        if item_type == "EnumeratedValue" and enumType != "":
+            query["enumType"] = enumType
+        elif item_type == "SimpleAttribute" and valueType != "":
+            query["valueType"] = valueType
+
+        c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+        serializer = itemTypeSet[item_type](c_item_list, many=True)
+
         for item in serializer.data:
             item["_id"] = get_encrypted_id([item["_id"]])
+
         response_data = make_response_data(serializer)
         return Response(response_data)
     return Response(status=400, data={"error": "Invalid request method"})

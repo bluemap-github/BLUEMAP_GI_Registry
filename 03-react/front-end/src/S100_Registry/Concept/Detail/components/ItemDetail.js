@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ItemContext } from '../../../../context/ItemContext';
 import { USER_SERIAL } from '../../../../userSerial';   
 import TableContents from './tags/TableContens';
-
+import { DDR_DETAIL } from '../../../../Common/PageLinks';
 const tableFields = [
     { name: 'Item Type', key: 'itemType' },
     { name: 'Name', key: 'name' },
@@ -35,7 +35,7 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
             item_iv: itemList.item._id.iv,
         });
         setTimeout(() => {
-            navigate('/dataDictionary');
+            navigate(DDR_DETAIL);
         }, 0);
     }
 
