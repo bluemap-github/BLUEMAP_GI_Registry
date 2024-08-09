@@ -5,7 +5,7 @@ import axios from 'axios';
 import {GET_REGISTRY_DETAIL} from '../User/api';
 
 const RegiHome = () => {
-    const USER_SERIAL = sessionStorage.getItem('USER_SERIAL');
+    const regi_uri = sessionStorage.getItem('REGISTRY_URI');
     const navigate = useNavigate();
     const [registryInfo, setRegistryInfo] = useState(null);
 
@@ -13,10 +13,10 @@ const RegiHome = () => {
         getRegistryInfo();
     }, []);
     const getRegistryInfo = () => {
-        if (USER_SERIAL) {
+        if (regi_uri) {
             axios.get(GET_REGISTRY_DETAIL,{
                 params: {
-                    user_serial: USER_SERIAL
+                    regi_uri: regi_uri,
                 }
             })
             .then(response => {

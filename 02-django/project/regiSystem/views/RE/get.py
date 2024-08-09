@@ -41,6 +41,7 @@ itemTypeSet = {
 }
 import json
 from regiSystem.info_sec.encryption import (encrypt, get_encrypted_id, decrypt)
+from regiSystem.info_sec.getByURI import uri_to_serial
 
 @api_view(['GET'])
 def concept_register_list(request):
@@ -56,7 +57,7 @@ def concept_register_list(request):
 
 @api_view(['GET'])
 def concept_register_detail(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     if request.method == 'GET':
         try:
             c_register = S100_Concept_Register.find_one({'_id': ObjectId(C_id)})
@@ -77,10 +78,11 @@ def make_response_data(serializer):
     return response_data
 
 
+
 @api_view(['GET'])
 def concept_item_list(request): 
     if request.method == 'GET':
-        C_id = request.GET.get('user_serial')
+        C_id = uri_to_serial(request.GET.get('regi_uri'))
         search_term = request.GET.get('search_term', '')
         status = request.GET.get('status', '')
         category = request.GET.get('category', '')
@@ -181,12 +183,11 @@ import jwt
 from django.conf import settings
 from userSystem.models import UserModel, ParticipationModel
 @api_view(['GET'])
-def register_info_for_guest(request): ## 0808 이거 문제 있음 수정 필요
+def register_info_for_guest(request): 
     auth_header = request.headers.get('Authorization')
     regi_uri = request.GET.get('regi_uri')
     
     if not auth_header or not auth_header.startswith('Bearer '):
-        print("No auth header or token missing")
         return Response({"message": "Guest"}, status=HTTP_200_OK)
     token = auth_header.split(' ')[1]
     try:

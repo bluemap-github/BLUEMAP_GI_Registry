@@ -47,10 +47,10 @@ def offer_item_nameNtype(id):
     c_item = S100_Concept_Item.find_one({"_id": ObjectId(id)})
     return c_item["name"], c_item["itemType"]
     
-
+from regiSystem.info_sec.getByURI import uri_to_serial
 @api_view(['GET'])
 def ddr_item_list(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     item_type = request.GET.get('item_type')
     search_term = request.GET.get('search_term', '')
     status = request.GET.get('status', '')

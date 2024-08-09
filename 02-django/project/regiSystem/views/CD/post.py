@@ -24,10 +24,11 @@ from regiSystem.serializers.RE import (
 
 import json
 from regiSystem.info_sec.encryption import (get_encrypted_id, decrypt)
+from regiSystem.info_sec.getByURI import uri_to_serial
 
 @api_view(['POST'])
 def concept_item(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     serializer = ConceptItemSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
@@ -41,7 +42,7 @@ def concept_item(request):
 
 @api_view(['POST'])
 def enumerated_value(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     serializer = EnumeratedValueSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
@@ -64,7 +65,7 @@ def enumerated_value(request):
 
 @api_view(['POST'])
 def simple_attribute(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
 
     serializer = SimpleAttributeSerializer(data=request.data)
     if serializer.is_valid():
@@ -79,7 +80,7 @@ def simple_attribute(request):
 
 @api_view(['POST'])
 def complex_attribute(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     
     serializer = ComplexAttributeSerializer(data=request.data)
     if serializer.is_valid():
@@ -112,7 +113,7 @@ def attribute_usage(source, target):
 
 @api_view(['POST'])
 def feature(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     serializer = FeatureSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
@@ -131,7 +132,7 @@ def feature(request):
     
 @api_view(['POST'])
 def information(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     serializer = InformationSerializer(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data

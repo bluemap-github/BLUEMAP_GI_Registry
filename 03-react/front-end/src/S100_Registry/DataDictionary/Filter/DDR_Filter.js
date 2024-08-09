@@ -13,9 +13,10 @@ const DDR_Filter = ({ data, onSearch }) => {
     // API 요청을 수행하여 데이터를 가져옴
     try {
       const USER_SERIAL = sessionStorage.getItem('USER_SERIAL');
+      const regi_uri = sessionStorage.getItem('REGISTRY_URI');
       const response = await axios.get(GET_DDR_ITEM_LIST, {
         params: {
-          user_serial: USER_SERIAL,
+          regi_uri: regi_uri,
           item_type: data, // viewType에 해당
           ...params, // 추가적인 파라미터 전달 (status, category, search_term, enumType, valueType)
         },

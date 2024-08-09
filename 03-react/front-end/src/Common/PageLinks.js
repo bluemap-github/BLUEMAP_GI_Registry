@@ -17,3 +17,4 @@ export const PORTAYAL_LIST =  `/${URI}/portrayal/list`;
 
 export const ACCESS =  `/check-access`;
 export const ENTER_REGI =(regi_uri)=> `/${regi_uri}`;
+export const test_home =(regi_uri)=> `/${regi_uri}/home`;

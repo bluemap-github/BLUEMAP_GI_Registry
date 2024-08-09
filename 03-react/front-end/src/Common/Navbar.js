@@ -6,7 +6,6 @@ const Navbar = ({ userInfo }) => {
     
     const handleLogout = () => {
         localStorage.removeItem('jwt');
-        sessionStorage.removeItem('USER_SERIAL');
         sessionStorage.removeItem('itemDetails');
         sessionStorage.removeItem('REGISTRY_NAME');
         sessionStorage.removeItem('REGISTRY_URI');
@@ -14,7 +13,6 @@ const Navbar = ({ userInfo }) => {
     };
     const handleMyPage = () => {
         navigate(MY_MAIN);
-        sessionStorage.removeItem('USER_SERIAL');
         sessionStorage.removeItem('itemDetails');
         sessionStorage.removeItem('REGISTRY_NAME');
         sessionStorage.removeItem('REGISTRY_URI');

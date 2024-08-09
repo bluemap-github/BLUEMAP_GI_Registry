@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {SEARCH_RELATED_ITEM} from '../../../DataDictionary/api.js';
-import { USER_SERIAL } from '../../../../userSerial.js';
+
 
 
 function AttSearch({ onSearch }) {
-
+    const regi_uri = sessionStorage.getItem('REGISTRY_URI');
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleSearch = () => {
         axios.get(SEARCH_RELATED_ITEM, {
             params: {
-                user_serial: USER_SERIAL,
+                regi_uri: regi_uri,
                 search_term: searchTerm,
                 item_type: 'SimpleAttribute'
             }

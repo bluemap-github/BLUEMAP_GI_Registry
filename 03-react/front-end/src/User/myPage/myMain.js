@@ -56,9 +56,8 @@ function MyMain() {
     }, [navigate]);
 
     const connectToRegistry = (e, registry) => {
-        sessionStorage.setItem('REGISTRY_URI', registry.uniformResourceIdentifier);
+        // sessionStorage.setItem('REGISTRY_URI', registry.uniformResourceIdentifier);
         sessionStorage.setItem('REGISTRY_NAME', registry.name);
-        sessionStorage.setItem('USER_SERIAL', registry._id);
         console.log(registry);
         navigate(ENTER_REGI(registry.uniformResourceIdentifier));
     };

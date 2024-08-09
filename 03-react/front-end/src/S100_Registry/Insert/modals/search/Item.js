@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SEARCH_RELATED_ITEM } from '../../../DataDictionary/api.js';
-import { USER_SERIAL } from '../../../../userSerial.js';
 
 function Item({ onSearch, componentType}) {
     let itemTypes;
@@ -18,11 +17,12 @@ function Item({ onSearch, componentType}) {
         default:
             break;
     }
+    const regi_uri = sessionStorage.getItem('REGISTRY_URI');
     
     useEffect(() => {
         axios.get(SEARCH_RELATED_ITEM, {
             params: {
-                user_serial: USER_SERIAL,
+                regi_uri: regi_uri,
                 item_type: itemTypes
             }
         })

@@ -4,6 +4,7 @@ import { REGISTER_ITEM_LIST_URL } from '../api';
 
 const SearchConcept = ({ onSearchResults }) => {
   const USER_SERIAL = sessionStorage.getItem('USER_SERIAL');
+  const regi_uri = sessionStorage.getItem('REGISTRY_URI');
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState('');
   const [category, setCategory] = useState('');
@@ -14,8 +15,7 @@ const SearchConcept = ({ onSearchResults }) => {
       try {
         const response = await axios.get(REGISTER_ITEM_LIST_URL, {
           params: {
-            user_serial: USER_SERIAL,
-            // No searchTerm, status, or category for the initial load
+            regi_uri: regi_uri,
           },
         });
         onSearchResults(response.data.register_items); // Pass results back to the parent component
@@ -33,7 +33,7 @@ const SearchConcept = ({ onSearchResults }) => {
         console.log('searchTerm:', searchTerm, 'status:', status, 'category:', category);
         const response = await axios.get(REGISTER_ITEM_LIST_URL, {
         params: {
-          user_serial: USER_SERIAL,
+          regi_uri: regi_uri,
           search_term: searchTerm,
           status,
           category,

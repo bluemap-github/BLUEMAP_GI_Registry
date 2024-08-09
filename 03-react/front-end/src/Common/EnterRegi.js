@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { GET_REGI_INFO_FOR_GUEST } from '../User/api';
-import { RERI_HOME } from '../Common/PageLinks';
+import { RERI_HOME, test_home } from '../Common/PageLinks';
 
 const EnterRegi = () => {
     const location = useLocation();
@@ -10,6 +10,7 @@ const EnterRegi = () => {
     
     useEffect(() => {
         const fetchData = async () => {
+            sessionStorage.removeItem('REGISTRY_URI');
             const regi_uri = location.pathname.slice(1);
             const headers = {};
             const token = localStorage.getItem('jwt');
@@ -28,6 +29,10 @@ const EnterRegi = () => {
                     }
                 });
                 console.log(response.data);
+                sessionStorage.setItem('REGISTRY_URI', regi_uri);
+                setTimeout(() => {
+                    navigate(test_home(regi_uri));
+                }, 1000);
             } catch (error) {
                 console.log(error);
             }

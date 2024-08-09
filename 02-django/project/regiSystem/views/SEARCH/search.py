@@ -18,10 +18,10 @@ itemTypeSet = {
         "FeatureType": FeatureSerializer,
         "InformationType": InformationSerializer
     }
-
+from regiSystem.info_sec.getByURI import uri_to_serial
 @api_view(['GET'])
 def related_item(request):
-    C_id = request.GET.get('user_serial')
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     search_term = request.query_params.get('search_term', '')
     item_type = list(request.GET.get('item_type').split(','))
     print(item_type)
