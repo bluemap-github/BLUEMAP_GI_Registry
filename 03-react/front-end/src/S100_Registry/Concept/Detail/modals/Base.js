@@ -18,10 +18,10 @@ const formComponents = {
   5: (props) => <ManagementInfoAdd onClose={props.onClose} />,
   6: (props) => <ReferenceSourceAdd onClose={props.onClose} />,
   7: (props) => <ReferenceAdd onClose={props.onClose} />,
-  8: (props) => <Delete selectedForm={DEL_ITEM_URL(props.keyIdx)} keyIdx={props.selectedForm} {...props} />,
-  9: (props) => <Delete selectedForm={DEL_MI_URL(props.keyIdx)} keyIdx={props.selectedForm} {...props} />,
-  10: (props) => <Delete selectedForm={DEL_RS_URL(props.keyIdx)} keyIdx={props.selectedForm} {...props} />,
-  11: (props) => <Delete selectedForm={DEL_R_URL(props.keyIdx)} keyIdx={props.selectedForm} {...props} />,
+  8: (props) => <Delete DEL_API={DEL_ITEM_URL} itemSerial={props.keyIdx} onClose={props.onClose} />,
+  9: (props) => <Delete DEL_API={DEL_MI_URL} itemSerial={props.keyIdx} onClose={props.onClose} />,
+  10: (props) => <Delete DEL_API={DEL_RS_URL} itemSerial={props.keyIdx} onClose={props.onClose} />,
+  11: (props) => <Delete DEL_API={DEL_R_URL} itemSerial={props.keyIdx} onClose={props.onClose} />,
 };
 
 function Base({ itemList, isOpen, onClose, selectedForm, followIdx, keyIdx }) {

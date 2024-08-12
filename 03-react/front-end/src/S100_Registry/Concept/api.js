@@ -40,20 +40,10 @@ export const PUT_R_URL = `${DEPLOY_URL}/api/v1/concept_item/reference/put/`;
 
 // Concept > Detail > modals > Base.js
 // Concept > Register.js
-export const DEL_ITEM_URL  = (idx) => {
-    return `${DEPLOY_URL}/api/v1/concept_item/delete/${idx}/`;
-};
-
-// Concept > Detail > modals > Base.js
-export const DEL_MI_URL  = (idx) => {
-    return `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/delete/${idx}/`;
-};
-export const DEL_RS_URL  = (idx) => {
-    return `${DEPLOY_URL}/api/v1/concept_item/reference_source/delete/${idx}/`;
-};
-export const DEL_R_URL  = (idx) => {
-    return `${DEPLOY_URL}/api/v1/concept_item/reference/delete/${idx}/`;
-};
+export const DEL_ITEM_URL  = `${DEPLOY_URL}/api/v1/concept_item/delete/`;
+export const DEL_MI_URL  = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/delete/`;
+export const DEL_RS_URL  = `${DEPLOY_URL}/api/v1/concept_item/reference_source/delete/`;
+export const DEL_R_URL  = `${DEPLOY_URL}/api/v1/concept_item/reference/delete/`;
 
 
 

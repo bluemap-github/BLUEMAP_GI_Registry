@@ -22,10 +22,14 @@ def concept_register(request, C_id):
                 return Response({'error': 'Document not found'}, status=HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
-        
+
+from regiSystem.info_sec.encryption import decrypt    
 
 @api_view(['DELETE'])
-def concept_item(request, I_id):
+def concept_item(request):
+    item_iv = request.data.get('item_iv')
+    I_id = decrypt(request.data.get('item_id'), item_iv)
+
     if request.method == 'DELETE':
         try:
             result = S100_Concept_Item.delete_one({'_id': ObjectId(I_id)})
@@ -41,8 +45,11 @@ def concept_item(request, I_id):
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
 
 
+
 @api_view(['DELETE'])
-def concept_managemant_info(request, M_id):
+def concept_managemant_info(request):
+    item_iv = request.data.get('item_iv')
+    M_id = decrypt(request.data.get('item_id'), item_iv)
     if request.method == 'DELETE':
         try:
             result = S100_Concept_ManagementInfo.delete_one({'_id': ObjectId(M_id)})
@@ -54,7 +61,9 @@ def concept_managemant_info(request, M_id):
         
 
 @api_view(['DELETE'])
-def concept_reference_source(request, RS_id):
+def concept_reference_source(request):
+    item_iv = request.data.get('item_iv')
+    RS_id = decrypt(request.data.get('item_id'), item_iv)
     if request.method == 'DELETE':
         try:
             result = S100_Concept_ReferenceSource.delete_one({'_id': ObjectId(RS_id)})
@@ -66,7 +75,9 @@ def concept_reference_source(request, RS_id):
         
 
 @api_view(['DELETE'])
-def concept_reference(request, R_id):
+def concept_reference(request):
+    item_iv = request.data.get('item_iv')
+    R_id = decrypt(request.data.get('item_id'), item_iv)
     if request.method == 'DELETE':
         try:
             result = S100_Concept_Reference.delete_one({'_id': ObjectId(R_id)})

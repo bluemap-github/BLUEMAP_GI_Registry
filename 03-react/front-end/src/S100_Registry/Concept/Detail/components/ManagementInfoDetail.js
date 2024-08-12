@@ -86,7 +86,7 @@ function ManagementInfoDetail({ itemList, handleUpdateButtonClick, handleFollowI
                                     onClick={() => handleClick(idx)}
                                 >Update</button>
                                 {itemList.management_infos.length > 1 && (
-                                    <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(info._id.encrypted_data)}>Delete</button>
+                                    <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(info._id)}>Delete</button>
                                 )}
                             </div>
                         </li>

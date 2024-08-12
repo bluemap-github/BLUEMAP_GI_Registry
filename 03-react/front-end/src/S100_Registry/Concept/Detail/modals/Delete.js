@@ -3,17 +3,22 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { RERI_HOME } from "../../../../Common/PageLinks";
 
-function Delete({onClose, selectedForm, keyIdx}){
+function Delete({onClose, DEL_API, itemSerial}){
+    console.log('DEL_API:', itemSerial);
     const navigate = useNavigate();
     const handleDelete = async () => {
         try {
-            const response = await axios.delete(selectedForm);
+            const response = await axios.delete(DEL_API, {
+                data: {
+                    "item_id": itemSerial.encrypted_data,
+                    "item_iv": itemSerial.iv
+                }
+            });
             console.log('Item data successfully deleted:', response.data);
             onClose()
-            if (keyIdx == 8) {
-                navigate(RERI_HOME)
-            }
-            else {
+            if (DEL_API === 'http://localhost:8000/api/v1/concept_item/delete/') {
+                navigate(RERI_HOME);
+            } else {
                 window.location.reload();
             }
             
@@ -27,7 +32,7 @@ function Delete({onClose, selectedForm, keyIdx}){
             <div className='text-end' style={{height: "10%"}}>
                 <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
             </div>
-            <h3>Delete {}</h3>
+            <h3>Delete</h3>
             <div style={{height: "50%", display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                 <div>Are you sure you want to delete?</div>
             </div>
