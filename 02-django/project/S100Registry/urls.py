@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import re_path, include
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -32,10 +32,10 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path(r'swagger(?P<format>\.json|\.yaml)', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path(r'swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path(r'redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc-v1'),
-    path('admin/', admin.site.urls),
-    path('api/v1/', include('regiSystem.urls')),
-    path('user/', include('userSystem.urls')),  # userSystem 앱의 URL 패턴 포함
+    re_path(r'swagger(?P<format>\.json|\.yaml)', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc-v1'),
+    re_path('admin/', admin.site.urls),
+    re_path('api/v1/', include('regiSystem.urls')),
+    re_path('user/', include('userSystem.urls')),  # userSystem 앱의 URL 패턴 포함
 ]
