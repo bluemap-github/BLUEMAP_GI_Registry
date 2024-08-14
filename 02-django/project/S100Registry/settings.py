@@ -33,7 +33,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 #     # 'hjk0815.pythonanywhere.com'
 # ]
 
-ALLOWED_HOST = ['*']
+ALLOWED_HOSTS = ['bluemap.kr', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -141,6 +141,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
+    "http://bluemap.kr",
 ]
 
 ##CORS
