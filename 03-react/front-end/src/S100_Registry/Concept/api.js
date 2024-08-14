@@ -50,3 +50,6 @@ export const DEL_R_URL  = `${DEPLOY_URL}/api/v1/concept_item/reference/delete/`;
 export const GET_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/get/`;
 export const GET_REFERENCE_SOURCE = `${DEPLOY_URL}/api/v1/concept_item/reference_source/get/`;
 export const GET_REFERENCE = `${DEPLOY_URL}/api/v1/concept_item/reference/get/`;
+
+
+export const BROWSING_REGISTRIES = `${DEPLOY_URL}/api/v1/concept_register_list/get/`;

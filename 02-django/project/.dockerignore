@@ -7,3 +7,8 @@ Dockerfile
 *.sh
 *.yml
 scripts
+*.log
+*.tar
+.git
+node_modules
+tmp/

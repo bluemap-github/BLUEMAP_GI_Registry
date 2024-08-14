@@ -65,5 +65,6 @@ urlpatterns = [
 
     # RelatedValue
     path('related_item/search/', SEARCH.search.related_item),
+    # path('browsing_registries/get/', SEARCH.search.browsing_registries),
 ]
 

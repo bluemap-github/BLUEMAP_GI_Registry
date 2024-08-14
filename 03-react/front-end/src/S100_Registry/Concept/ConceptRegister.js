@@ -1,67 +1,75 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { DEL_ITEM_URL } from './api';
-import Toast from '../Toast';
+import { useNavigate } from 'react-router-dom';
 import { ItemContext } from '../../context/ItemContext';
-import SearchConcept from './GetItem/SearchConcept.js';
 import { CONCEPT_DETAIL } from '../../Common/PageLinks';
+import { REGISTER_ITEM_LIST_URL } from './api';
+import Toast from '../Toast';
 
 function Register() {
   const [itemList, setItemList] = useState([]);
-  const [checkedItems, setCheckedItems] = useState({});
-  const [checkedAll, setCheckedAll] = useState(false);
-  const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'ascending' }); // Initial sort config
+  const [searchTerm, setSearchTerm] = useState('');
+  const [status, setStatus] = useState('');
+  const [category, setCategory] = useState('');
+  const [sortKey, setSortKey] = useState('name');
+  const [sortDirection, setSortDirection] = useState('ascending');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
   const { setItemDetails } = useContext(ItemContext);
   const navigate = useNavigate();
-  const USER_SERIAL = sessionStorage.getItem('USER_SERIAL');
 
-  // Callback to update the item list when search results are obtained
-  const handleSearchResults = (results) => {
-    setItemList(results);
-  };
-
-  const handleCheckboxAll = () => {
-    const nextState = !checkedAll;
-    const updatedCheckedItems = {};
-    itemList.forEach(item => {
-      updatedCheckedItems[item._id.encrypted_data] = nextState;
-    });
-    setCheckedItems(updatedCheckedItems);
-  };
-
-  const handleCheckboxChange = (itemId) => {
-    setCheckedItems(prevState => ({
-      ...prevState,
-      [itemId]: !prevState[itemId]
-    }));
-  };
-
-  const deleteItem = async (idx) => {
+  const fetchItems = async (updatedPage = page) => {
     try {
-      await axios.delete(DEL_ITEM_URL(idx));
-      // Fetch new list after deletion
-      setItemList(prevItems => prevItems.filter(item => item._id.encrypted_data !== idx));
-      deleteToast();
+      const regi_uri = sessionStorage.getItem('REGISTRY_URI');
+      const response = await axios.get(REGISTER_ITEM_LIST_URL, {
+        params: {
+          regi_uri,
+          search_term: searchTerm,
+          status,
+          category,
+          sort_key: sortKey,
+          sort_direction: sortDirection,
+          page: updatedPage,
+          page_size: pageSize,
+        },
+      });
+
+      setItemList(response.data.register_items || []);
+      setTotalPages(response.data.total_pages || 1);
     } catch (error) {
-      console.error('Error deleting item:', error);
+      console.error('Error fetching data:', error);
     }
   };
 
-  const deleteAll = async () => {
-    try {
-      for (const key in checkedItems) {
-        const value = checkedItems[key];
-        if (value) await deleteItem(key);
-      }
-    } catch (error) {
-      console.error('Error deleting items:', error);
+  useEffect(() => {
+    fetchItems();
+  }, [searchTerm, status, category, sortKey, sortDirection, pageSize]);
+
+  const handleSearch = () => {
+    setPage(1);
+    fetchItems(1);
+  };
+
+  const handleSortChange = (key) => {
+    const newDirection = sortKey === key && sortDirection === 'ascending' ? 'descending' : 'ascending';
+    setSortKey(key);
+    setSortDirection(newDirection);
+    fetchItems(); // Keep the current page when sorting
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+      fetchItems(newPage);
     }
   };
 
-  const [toast, setToast] = useState(false);
-  const deleteToast = () => {
-    setToast(true);
+  const handlePageSizeChange = (e) => {
+    const newSize = parseInt(e.target.value);
+    setPageSize(newSize);
+    setPage(1);
+    fetchItems(1); // Reset to page 1 when page size changes
   };
 
   const handleDetailClick = (item) => {
@@ -69,119 +77,98 @@ function Register() {
       item_id: item._id.encrypted_data,
       item_iv: item._id.iv,
     });
-    setTimeout(() => {
-      navigate(CONCEPT_DETAIL);
-    }, 100);
+    navigate(CONCEPT_DETAIL);
   };
 
-  const sortItems = (key, direction) => {
-    setSortConfig({ key, direction });
-  };
-
-  const sortedItems = React.useMemo(() => {
-    let sortableItems = [...itemList];
-    if (sortConfig.key) {
-      sortableItems.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? 1 : -1;
-        }
-        return 0;
-      });
+  const renderSortArrow = (key) => {
+    if (sortKey === key) {
+      return sortDirection === 'ascending' ? '↑' : '↓';
     }
-    return sortableItems;
-  }, [itemList, sortConfig]);
+    return '↕'; // Default arrow when not sorted by this key
+  };
 
   return (
     <div className="p-5">
-      {toast && <Toast setToast={setToast} text="Item is Deleted." />}
-      <div>
-        <SearchConcept onSearchResults={handleSearchResults} />
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div>
+          <label>Status:</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="">All</option>
+            <option value="processing">Processing</option>
+            <option value="valid">Valid</option>
+            <option value="superseded">Superseded</option>
+            <option value="notValid">Not Valid</option>
+            <option value="retired">Retired</option>
+            <option value="clarified">Clarified</option>
+          </select>
+        </div>
+        <div>
+          <label>Category:</label>
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="">Choose</option>
+            <option value="name">Name</option>
+            <option value="camelCase">Camel Case</option>
+            <option value="definition">Definition</option>
+          </select>
+        </div>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search..."
+        />
+        <button onClick={handleSearch}>Search</button>
       </div>
-      <table className="table table-hover table-bordered table-striped" style={{ tableLayout: 'fixed', width: '85%' }}>
+      <table className="table table-hover table-bordered" style={{ tableLayout: 'fixed', width: '85%', marginTop: '20px' }}>
         <thead>
-          <tr>
-            <th scope="col" style={{ width: '15%', cursor: 'pointer' }}>
-              Name
-              <span
-                style={{
-                  marginLeft: '5px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  color: sortConfig.key === 'name' && sortConfig.direction === 'ascending' ? 'blue' : 'grey',
-                }}
-                onClick={() => sortItems('name', 'ascending')}
-              >
-                ↑
-              </span>
-              <span
-                style={{
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  color: sortConfig.key === 'name' && sortConfig.direction === 'descending' ? 'blue' : 'grey',
-                }}
-                onClick={() => sortItems('name', 'descending')}
-              >
-                ↓
-              </span>
+          <tr className='table-primary'>
+            <th style={{ cursor: 'pointer', color: sortKey === 'name' ? 'blue' : 'black' }} onClick={() => handleSortChange('name')}>
+              Name {renderSortArrow('name')}
             </th>
-            <th scope="col" style={{ width: '15%', cursor: 'pointer' }}>
-              <div className='single-line-ellipsis'>
-                Camel Case
-                <span
-                  style={{
-                    marginLeft: '5px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: sortConfig.key === 'camelCase' && sortConfig.direction === 'ascending' ? 'blue' : 'grey',
-                  }}
-                  onClick={() => sortItems('camelCase', 'ascending')}
-                >
-                  ↑
-                </span>
-                <span
-                  style={{
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: sortConfig.key === 'camelCase' && sortConfig.direction === 'descending' ? 'blue' : 'grey',
-                  }}
-                  onClick={() => sortItems('camelCase', 'descending')}
-                >
-                  ↓
-                </span>
-              </div>
+            <th style={{ cursor: 'pointer', color: sortKey === 'camelCase' ? 'blue' : 'black' }} onClick={() => handleSortChange('camelCase')}>
+              Camel Case {renderSortArrow('camelCase')}
             </th>
-            <th scope="col" style={{ width: '45%' }}>Definition</th>
-            <th scope="col" style={{ width: '11%' }}>Status</th>
+            <th>Definition</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {sortedItems.length === 0 && (
+          {itemList.length === 0 && (
             <tr>
               <td colSpan="4" className="text-center">No items found</td>
             </tr>
           )}
-          {sortedItems.map((item) => (
-            <tr key={item._id.encrypted_data} style={{ cursor: 'pointer' }}>
-              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '15%' }}>
-                <div className='single-line-ellipsis'>{item.name}</div>
-              </td>
-              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '15%' }}>
-                <div className='single-line-ellipsis'>{item.camelCase}</div>
-              </td>
-              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '45%' }}>
-                <div className='single-line-ellipsis'>{item.definition}</div>
-              </td>
-              <td onClick={() => handleDetailClick(item)} className='th-inner sortable both' style={{ width: '11%' }}>
-                <div className='single-line-ellipsis'>{item.itemStatus}</div>
-              </td>
+          {itemList.map((item) => (
+            <tr key={item._id.encrypted_data} onClick={() => handleDetailClick(item)} style={{ cursor: 'pointer' }}>
+              <td>{item.name}</td>
+              <td>{item.camelCase}</td>
+              <td>{item.definition}</td>
+              <td>{item.itemStatus}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div style={{ height: '200px' }}></div>
+      <nav aria-label="Page navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+        <ul className="pagination">
+          <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => handlePageChange(page - 1)} disabled={page <= 1}>
+              Previous
+            </button>
+          </li>
+          {[...Array(totalPages)].map((_, i) => (
+            <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(i + 1)} disabled={page === i + 1}>
+                {i + 1}
+              </button>
+            </li>
+          ))}
+          <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 }

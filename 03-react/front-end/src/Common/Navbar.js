@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import {SIGN_IN, MY_MAIN} from './PageLinks';
+import {SIGN_IN, MY_MAIN, BROWSING} from './PageLinks';
 const Navbar = ({ userInfo }) => {
     const navigate = useNavigate();
     
@@ -17,11 +17,19 @@ const Navbar = ({ userInfo }) => {
         sessionStorage.removeItem('REGISTRY_NAME');
         sessionStorage.removeItem('REGISTRY_URI');
     };
-    
+    const gotoBrowse = () => {
+        sessionStorage.removeItem('itemDetails');
+        sessionStorage.removeItem('REGISTRY_NAME');
+        sessionStorage.removeItem('REGISTRY_URI');
+        navigate(BROWSING);
+    }
     return (
         <nav style={{height: '100%'}}>
             <ul style={{display: 'flex', justifyContent: 'end', height: '100%'}}>
                 <div style={{display: 'flex', alignItems: 'center'}}>
+                    <li style={{marginRight: '5px', marginLeft: '5px'}}>
+                        <button className='btn btn-outline-secondary' onClick={gotoBrowse}>Browsing registry</button>
+                    </li>
                     <li style={{marginRight: '5px', marginLeft: '5px'}}>
                         <button className='btn btn-outline-secondary' onClick={handleMyPage}>My Page</button>
                     </li>
@@ -36,7 +44,7 @@ const Navbar = ({ userInfo }) => {
                     </div>
                     <ul className="dropdown-menu">
                         <li><a className="dropdown-item" href="/user/mymain">My Page</a></li>
-                        <li><a className="dropdown-item" onClick={handleLogout}>Log out</a></li>
+                        <li><a className="dropdown-item" >Log out</a></li>
                     </ul>
                 </div>
             </ul>

@@ -57,7 +57,10 @@ def ddr_item_list(request):
     category = request.GET.get('category', '')
     enumType = request.GET.get('enum_type', '')
     valueType = request.GET.get('value_type', '')
-
+    sort_key = request.GET.get('sort_key', '_id')  # 기본값 '_id'
+    sort_direction = request.GET.get('sort_direction', 'ascending')  # 기본값 'ascending'
+    page = int(request.GET.get('page', 1))  # 기본값 1
+    page_size = int(request.GET.get('page_size', 10))  # 기본값 10
 
     if request.method == 'GET':
         query = {"concept_id": ObjectId(C_id), "itemType": item_type}
@@ -75,15 +78,34 @@ def ddr_item_list(request):
         elif item_type == "SimpleAttribute" and valueType != "":
             query["valueType"] = valueType
 
-        c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+        # 전체 항목 수 계산
+        total_items = S100_Concept_Item.count_documents(query)
+
+        # 정렬 및 페이지네이션 적용
+        sort_order = 1 if sort_direction == 'ascending' else -1
+        c_item_list = list(S100_Concept_Item.find(query)
+                           .sort(sort_key, sort_order)
+                           .skip((page - 1) * page_size)
+                           .limit(page_size))
+
         serializer = itemTypeSet[item_type](c_item_list, many=True)
 
         for item in serializer.data:
             item["_id"] = get_encrypted_id([item["_id"]])
 
-        response_data = make_response_data(serializer)
+        response_data = {
+            'register_items': serializer.data,
+            'total_items': total_items,
+            'total_pages': (total_items + page_size - 1) // page_size,
+            'current_page': page,
+            'page_size': page_size
+        }
         return Response(response_data)
+
     return Response(status=400, data={"error": "Invalid request method"})
+
+
+
 
 
 def one_encrypt_process(id_attribute_set):

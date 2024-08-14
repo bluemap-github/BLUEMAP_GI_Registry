@@ -106,7 +106,7 @@ function MyMain() {
                                             <h4>{registry.name}</h4>
                                             <div>개설일 : {registry.dateOfLastChange}</div>
                                             <div>상세 : {registry.contentSummary}</div>
-                                            <div style={{color : 'gray'}}>{registry.uniformResourceIdentifier}.registry</div>
+                                            <div style={{color : 'gray'}}>http://bluemap.kr:21804/{registry.uniformResourceIdentifier}</div>
                                         </div>
                                     </div>
                                 </div>    

@@ -46,7 +46,7 @@ const ReferenceSourceDetail = ({ itemList, handleUpdateButtonClick, handleKeyIdx
                                     <table className="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th colSpan="2" className='text-center table-dark' scope="col" style={{ width: '25%' }}>
+                                                <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
                                                     Reference Source
                                                 </th>
                                             </tr>

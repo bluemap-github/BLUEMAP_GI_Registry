@@ -18,7 +18,8 @@ const GetUserInfo = ({ children }) => {
                 const response = await axios.get(CHECK_AUTH, {
                     headers: {
                         'Authorization': `Bearer ${token}`
-                    }
+                    },
+                    withCredentials: true
                 });
 
                 if (response.status === 200) {

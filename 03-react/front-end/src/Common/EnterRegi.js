@@ -30,9 +30,7 @@ const EnterRegi = () => {
                 });
                 console.log(response.data);
                 sessionStorage.setItem('REGISTRY_URI', regi_uri);
-                setTimeout(() => {
-                    navigate(test_home(regi_uri));
-                }, 1000);
+                navigate(test_home(regi_uri));
             } catch (error) {
                 console.log(error);
             }

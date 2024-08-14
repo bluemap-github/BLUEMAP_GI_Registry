@@ -61,7 +61,7 @@ function ManagementInfoDetail({ itemList, handleUpdateButtonClick, handleFollowI
                             <table className="table table-sm">
                                 <thead>
                                     <tr>
-                                        <th colSpan="2" className='text-center table-dark' scope="col" style={{ width: '25%' }}>
+                                        <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%" }}>
                                                 <div className='text-center' style={{ display: 'flex', alignItems: 'center', width: "80%" }}>
                                                     <div>

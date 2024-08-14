@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { RERI_HOME } from '../Common/PageLinks';
 
 const InnerNav = () => {
+    const registry_name = sessionStorage.getItem('REGISTRY_NAME');
     const location = useLocation();
     const navigate = useNavigate();
     const moveToHome = () => {
@@ -46,10 +47,10 @@ const InnerNav = () => {
                 <div>{error}</div>
             ) : (
                 <>
-                    {firstSegment === 'Home' ? (
+                    {registry_name === 'Home' ? (
                         <h5 style={{ fontWeight: 'bold' }}>Register Information</h5>
                     ) : (
-                        <h5 style={{ fontWeight: 'bold' }}>{firstSegment} Register</h5>
+                        <h5 style={{ fontWeight: 'bold' }}>{registry_name}</h5>
                     )}
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div

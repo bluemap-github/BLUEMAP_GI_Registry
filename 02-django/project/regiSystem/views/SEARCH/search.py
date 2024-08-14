@@ -1,7 +1,7 @@
 from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from regiSystem.models import S100_Concept_Item
+from regiSystem.models import S100_Concept_Item, S100_Concept_Register
 from regiSystem.serializers.CD import (
         SimpleAttributeSerializer,
         EnumeratedValueSerializer,
@@ -41,3 +41,17 @@ def related_item(request):
         
         return Response({'search_result': attributes_serialized})
     return Response(status=400, data={"error": "Invalid request method"})
+
+# @api_view(['GET'])
+# def browsing_registries(request):
+#     search_term = request.query_params.get('search_term', '')
+    
+#     if request.method == 'GET':
+#         query = {}
+#         if search_term:
+#             query["name"] = {"$regex": search_term, "$options": "i"}
+#         registries = list(S100_Concept_Register.find(query).sort("_id", -1))
+
+        
+#         return Response({'search_result': attributes_serialized})
+#     return Response(status=400, data={"error": "Invalid request method"})

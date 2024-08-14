@@ -4,16 +4,12 @@ import {RERI_HOME, CREATE_ITEM, CONCEPT_LIST, DDR_LIST, PORTAYAL_LIST} from '../
 
 const Navbar = () => {
   const location = useLocation();
-  const registry_name = sessionStorage.getItem('REGISTRY_NAME');
   const isActive = (url) => {
     return location.pathname === url ? 'regi-menu active' : 'regi-menu';
   };
 
   return (
     <nav className="sidebar-wide">
-      <div className='sidebar-title'>
-        <h4 style={{fontWeight: 'bold'}}>{registry_name}</h4>
-      </div>
       <div>
         <Link to={RERI_HOME} style={{textDecoration: 'none', color: 'black'}} className={isActive(RERI_HOME)}>
           <div className='regi-menu'>

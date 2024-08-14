@@ -45,15 +45,40 @@ from regiSystem.info_sec.getByURI import uri_to_serial
 
 @api_view(['GET'])
 def concept_register_list(request):
+    search_term = request.query_params.get('search_term', '')
+    page = int(request.query_params.get('page', 1))
+    page_size = int(request.query_params.get('page_size', 10))
+    sort_key = request.query_params.get('sort_key', 'name')  # 정렬 기준 (기본값: name)
+    sort_direction = request.query_params.get('sort_direction', 'ascending')  # 정렬 방향 (기본값: ascending)
+
     if request.method == 'GET':
-        try :
-            cursor = S100_Concept_Register.find()
-            serializer = ConceptSerializer(cursor, many=True)
-            return Response(serializer.data)
+        query = {}
+        try:
+            if search_term:
+                query["name"] = {"$regex": search_term, "$options": "i"}
+
+            total_items = S100_Concept_Register.count_documents(query)
+            cursor = S100_Concept_Register.find(query)
+
+            # 정렬 적용
+            sort_order = 1 if sort_direction == 'ascending' else -1
+            cursor = cursor.sort(sort_key, sort_order)
+
+            # 페이지네이션 적용
+            paginated_cursor = cursor.skip((page - 1) * page_size).limit(page_size)
+            
+            serializer = ConceptSerializer(paginated_cursor, many=True)
+
+            return Response({
+                'total_items': total_items,
+                'total_pages': (total_items + page_size - 1) // page_size,
+                'current_page': page,
+                'page_size': page_size,
+                'results': serializer.data,
+            })
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
+    return Response({'error': 'Invalid request method'}, status=HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def concept_register_detail(request):
@@ -77,7 +102,7 @@ def make_response_data(serializer):
     }
     return response_data
 
-
+import math
 
 @api_view(['GET'])
 def concept_item_list(request): 
@@ -86,6 +111,10 @@ def concept_item_list(request):
         search_term = request.GET.get('search_term', '')
         status = request.GET.get('status', '')
         category = request.GET.get('category', '')
+        sort_key = request.GET.get('sort_key', '_id')  # 정렬 키 (기본값: _id)
+        sort_direction = request.GET.get('sort_direction', 'ascending')  # 정렬 방향 (기본값: ascending)
+        page = int(request.GET.get('page', 1))  # 현재 페이지 번호, 기본값은 1
+        page_size = int(request.GET.get('page_size', 10))  # 페이지 크기, 기본값은 10
 
         try:
             query = {"concept_id": ObjectId(C_id)}
@@ -98,13 +127,30 @@ def concept_item_list(request):
                     query["camelCase"] = {"$regex": search_term, "$options": "i"}
                 elif category == "definition":
                     query["definition"] = {"$regex": search_term, "$options": "i"}
-            c_item_list = list(S100_Concept_Item.find(query).sort("_id", -1))
+
+            total_items = S100_Concept_Item.count_documents(query)  # 총 항목 수 계산
+            sort_order = 1 if sort_direction == 'ascending' else -1
+
+            c_item_list = list(S100_Concept_Item.find(query)
+                               .sort(sort_key, sort_order)
+                               .skip((page - 1) * page_size)
+                               .limit(page_size))
+
             serializer = ConceptItemSerializer(c_item_list, many=True)
 
             for item in serializer.data:
                 item["_id"] = get_encrypted_id([item["_id"]])
 
-            response_data = make_response_data(serializer)
+            total_pages = math.ceil(total_items / page_size)  # 총 페이지 수 계산
+
+            response_data = {
+                'total_items': total_items,
+                'total_pages': total_pages,
+                'current_page': page,
+                'page_size': page_size,
+                'register_items': serializer.data,  # 데이터 응답
+            }
+
             return Response(response_data)
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)

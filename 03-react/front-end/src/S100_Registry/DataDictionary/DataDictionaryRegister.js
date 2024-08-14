@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import DDR_Filter from './Filter/DDR_Filter';
 import DDR_List from './DDR_List';
 import DDR_Choose from './DDR_Choose';
 import { ItemContext } from '../../context/ItemContext';
@@ -24,10 +23,7 @@ function DataDictionaryRegister() {
         <DDR_Choose clickHandler={clickHandler} viewType={viewType} />
       </div>
       <div>
-        <DDR_Filter data={viewType} onSearch={onSearch} />
-      </div>
-      <div>
-        <DDR_List viewType={viewType} items={filteredItems} /> {/* 필터링된 데이터를 전달 */}
+        <DDR_List viewType={viewType}/> 
       </div>
     </div>
   );

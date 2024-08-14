@@ -55,7 +55,7 @@ function ReferenceDetail({ itemList, handleUpdateButtonClick, handleFollowIdx, h
                                     <table className="table table-sm">
                                         <thead>
                                             <tr>
-                                                <th colSpan="2" className='text-center table-dark' scope="col" style={{ width: '25%' }}>
+                                                <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
                                                     References
                                                     {itemList.references.length > 1 && <span> {idx + 1}</span>}
                                                 </th>

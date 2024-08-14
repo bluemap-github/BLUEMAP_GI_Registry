@@ -22,7 +22,8 @@ import ErrorPage from './Common/ErrorPage';
 import InnerNav from './Common/InnerNav';
 import InnerMyNav from './Common/InnerMyNav';
 import EnterRegi from './Common/EnterRegi';
-import {ENTER_REGI, INTRO, SIGN_IN, SIGN_UP, MY_MAIN, CREATE_REGI, ACCESS, ERROR, RERI_HOME, CONCEPT_LIST, CONCEPT_DETAIL, CREATE_ITEM, DDR_LIST, DDR_DETAIL, PORTAYAL_LIST} from './Common/PageLinks';
+import Browsing from './Common/Browsing/Browsing';
+import {ENTER_REGI,BROWSING,  INTRO, SIGN_IN, SIGN_UP, MY_MAIN, CREATE_REGI, ACCESS, ERROR, RERI_HOME, CONCEPT_LIST, CONCEPT_DETAIL, CREATE_ITEM, DDR_LIST, DDR_DETAIL, PORTAYAL_LIST} from './Common/PageLinks';
 function App() {
   return (
     <Router>
@@ -36,7 +37,8 @@ function AppContent() {
   const hideSidebar = location.pathname.startsWith('/user');
   const hideAll = location.pathname === '/' || 
                 location.pathname === '/user/signin' || 
-                location.pathname === '/user/signup';
+                location.pathname === '/user/signup' || 
+                location.pathname === '/browsing';
 
 
   return (
@@ -77,6 +79,8 @@ function AppContent() {
             <Route path={DDR_LIST} element={<DataDictionaryRegister/>} />
             <Route path={DDR_DETAIL} element={<DDR_Detail />} />
             <Route path={PORTAYAL_LIST} element={<PortrayalRegister />} />
+
+            <Route path={BROWSING} element={<Browsing />}/>
           </Routes>
         </div>
         </div>
