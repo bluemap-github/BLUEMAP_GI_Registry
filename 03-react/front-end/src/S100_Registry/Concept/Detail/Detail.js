@@ -60,7 +60,7 @@ function Detail() {
   const handleKeyIdx = (int) => setState(prev => ({ ...prev, keyIdx: int }));
 
   const moveToList = () => {
-    navigate(CONCEPT_LIST)
+    navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/concept/list`)
   };
     
 

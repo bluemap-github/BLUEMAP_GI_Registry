@@ -80,8 +80,8 @@ const Browsing = () => {
                             <div className='card regi-card mb-4'>
                                 <div className="card-body">
                                     <h4>{registry.name}</h4>
-                                    <div>개설일 : {registry.dateOfLastChange}</div>
-                                    <div>상세 : {registry.contentSummary}</div>
+                                    <div>Last updated : {registry.dateOfLastChange}</div>
+                                    <div>Description : {registry.contentSummary}</div>
                                     <div style={{color : 'gray'}}>http://bluemap.kr:21804/{registry.uniformResourceIdentifier}</div>
                                 </div>
                             </div>

@@ -77,7 +77,7 @@ function Register() {
       item_id: item._id.encrypted_data,
       item_iv: item._id.iv,
     });
-    navigate(CONCEPT_DETAIL);
+    navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/concept/detail`);
   };
 
   const renderSortArrow = (key) => {
@@ -89,37 +89,47 @@ function Register() {
 
   return (
     <div className="p-5">
-      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-        <div>
-          <label>Status:</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="">All</option>
-            <option value="processing">Processing</option>
-            <option value="valid">Valid</option>
-            <option value="superseded">Superseded</option>
-            <option value="notValid">Not Valid</option>
-            <option value="retired">Retired</option>
-            <option value="clarified">Clarified</option>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexGrow: 1 }}>
+          <div>
+            <label>Status:</label>
+            <select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="">All</option>
+              <option value="processing">Processing</option>
+              <option value="valid">Valid</option>
+              <option value="superseded">Superseded</option>
+              <option value="notValid">Not Valid</option>
+              <option value="retired">Retired</option>
+              <option value="clarified">Clarified</option>
+            </select>
+          </div>
+          <div>
+            <label>Category:</label>
+            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="">Choose</option>
+              <option value="name">Name</option>
+              <option value="camelCase">Camel Case</option>
+              <option value="definition">Definition</option>
+            </select>
+          </div>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search..."
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
+        <div style={{ marginLeft: 'auto' }}>
+          <label>Page Size:</label>
+          <select value={pageSize} onChange={handlePageSizeChange}>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
           </select>
         </div>
-        <div>
-          <label>Category:</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="">Choose</option>
-            <option value="name">Name</option>
-            <option value="camelCase">Camel Case</option>
-            <option value="definition">Definition</option>
-          </select>
-        </div>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search..."
-        />
-        <button onClick={handleSearch}>Search</button>
       </div>
-      <table className="table table-hover table-bordered" style={{ tableLayout: 'fixed', width: '85%', marginTop: '20px' }}>
+      <table className="table table-hover table-bordered" style={{ tableLayout: 'fixed', marginTop: '20px' }}>
         <thead>
           <tr className='table-primary'>
             <th style={{ cursor: 'pointer', color: sortKey === 'name' ? 'blue' : 'black' }} onClick={() => handleSortChange('name')}>

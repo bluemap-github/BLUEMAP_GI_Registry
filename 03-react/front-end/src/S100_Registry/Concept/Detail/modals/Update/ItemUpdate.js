@@ -10,7 +10,6 @@ function ItemUpdate({ items, onClose }) {
     const { item_id, item_iv } = itemDetails;
 
     useEffect(() => {
-        console.log('items:', items.itemType);
         // setItem(items); // props로 받은 items를 초기 상태로 설정
     }, [items]);
 

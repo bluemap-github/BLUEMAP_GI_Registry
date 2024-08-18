@@ -17,7 +17,7 @@ function Delete({onClose, DEL_API, itemSerial}){
             console.log('Item data successfully deleted:', response.data);
             onClose()
             if (DEL_API === 'http://localhost:8000/api/v1/concept_item/delete/') {
-                navigate(RERI_HOME);
+                navigate(`/${sessionStorage.getItem('REGISTRY_URI')}`);
             } else {
                 window.location.reload();
             }

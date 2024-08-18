@@ -6,7 +6,8 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from regiSystem.models import (
     S100_Concept_Item,
     S100_CD_AttributeConstraints,
-    S100_CD_AttributeUsage
+    S100_CD_AttributeUsage,
+    RegiModel
 )
 from regiSystem.serializers.CD import (
         SimpleAttributeSerializer,
@@ -36,6 +37,7 @@ def concept_item(request):
 
         S100_Concept_Item.insert_one(validated_data)
         encrypted_id = get_encrypted_id([serializer.data['_id']])
+        RegiModel.update_date(C_id)
         return Response(encrypted_id, status=HTTP_201_CREATED)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -58,7 +60,8 @@ def enumerated_value(request):
             listedValue.append(enumeration_value_id)
             S100_Concept_Item.update_one({"_id": ObjectId(attributeId)}, {"$set": {"listedValue": listedValue}})
 
-        encrypted_id = get_encrypted_id([serializer.data['_id']])        
+        encrypted_id = get_encrypted_id([serializer.data['_id']])  
+        RegiModel.update_date(C_id)      
         return Response(encrypted_id, status=HTTP_201_CREATED)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -74,6 +77,7 @@ def simple_attribute(request):
         
         S100_Concept_Item.insert_one(validated_data)
         encrypted_id = get_encrypted_id([serializer.data['_id']]) 
+        RegiModel.update_date(C_id)
         return Response(encrypted_id, status=HTTP_201_CREATED)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -91,7 +95,7 @@ def complex_attribute(request):
         sub_list = validated_data['subAttribute']
         for s_id in sub_list:
             attribute_usage(new_comp_id, s_id)
-
+        RegiModel.update_date(C_id)
         encrypted_id = get_encrypted_id([serializer.data['_id']])
         return Response(encrypted_id, status=HTTP_201_CREATED)
     
@@ -126,7 +130,7 @@ def feature(request):
             d_f_obj = S100_Concept_Item.find_one({"_id": ObjectId(f_id)})
             d_f_obj['distinctedFeature'].append(new_feature_id)
             S100_Concept_Item.update_one({"_id": ObjectId(f_id)}, {"$set": d_f_obj})
-        
+        RegiModel.update_date(C_id)
         encrypted_id = get_encrypted_id([serializer.data['_id']]) 
         return Response(encrypted_id, status=HTTP_201_CREATED)
     
@@ -146,6 +150,7 @@ def information(request):
             d_i_obj['distinctedInformation'].append(new_info_id)
             S100_Concept_Item.update_one({"_id": ObjectId(f_id)}, {"$set": d_i_obj})
         encrypted_id = get_encrypted_id([serializer.data['_id']])
+        RegiModel.update_date(C_id)
         return Response(encrypted_id, status=HTTP_201_CREATED)
     
 @api_view(['POST'])
@@ -160,5 +165,6 @@ def attribute_constraints(request):
         
         S100_CD_AttributeConstraints.insert_one(validated_data)
         encrypted_id = get_encrypted_id([serializer.data['_id']])
+        RegiModel.update_date(C_id)
         return Response(encrypted_id, status=HTTP_201_CREATED)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

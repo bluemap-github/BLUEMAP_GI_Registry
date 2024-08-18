@@ -56,9 +56,8 @@ function MyMain() {
     }, [navigate]);
 
     const connectToRegistry = (e, registry) => {
-        // sessionStorage.setItem('REGISTRY_URI', registry.uniformResourceIdentifier);
+        sessionStorage.setItem('REGISTRY_URI', registry.uniformResourceIdentifier);
         sessionStorage.setItem('REGISTRY_NAME', registry.name);
-        console.log(registry);
         navigate(ENTER_REGI(registry.uniformResourceIdentifier));
     };
     
@@ -104,8 +103,8 @@ function MyMain() {
                                     <div className='card regi-card mb-4' style={{}}>
                                         <div className="card-body">
                                             <h4>{registry.name}</h4>
-                                            <div>개설일 : {registry.dateOfLastChange}</div>
-                                            <div>상세 : {registry.contentSummary}</div>
+                                            <div>Last updated : {registry.dateOfLastChange}</div>
+                                            <div>Description : {registry.contentSummary}</div>
                                             <div style={{color : 'gray'}}>http://bluemap.kr:21804/{registry.uniformResourceIdentifier}</div>
                                         </div>
                                     </div>
@@ -130,8 +129,8 @@ function MyMain() {
                                     <div className='card regi-card mb-4' style={{}}>
                                         <div className="card-body">
                                             <h4>{registry.name}</h4>
-                                            <div>개설일 : {registry.dateOfLastChange}</div>
-                                            <div>상세 : {registry.contentSummary}</div>
+                                            <div>Last updated : {registry.dateOfLastChange}</div>
+                                            <div>Description : {registry.contentSummary}</div>
                                             <div style={{color : 'gray'}}>{registry.uniformResourceIdentifier}.registry</div>
                                         </div>
                                     </div>

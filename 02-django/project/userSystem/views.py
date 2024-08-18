@@ -18,6 +18,8 @@ from .manage_auth.check_auth import get_email_from_jwt
 
 SECRET_KEY = settings.SECRET_KEY
 
+from regiSystem.models import S100_Concept_Register
+
 @csrf_exempt
 def check_email(request):
     if request.method == 'POST':
@@ -100,4 +102,91 @@ def get_registry_list(request):
         return JsonResponse(registries, safe=False, status=200)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
-            
+
+
+from datetime import datetime, timedelta, timezone
+import jwt
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.conf import settings
+
+def make_role_payload(role):
+    return {
+        'role': role,
+        'exp': datetime.now(timezone.utc) + timedelta(hours=1)
+    }
+
+@api_view(['GET'])
+# def register_info_for_guest(request): 
+#     auth_header = request.headers.get('Authorization')
+#     regi_uri = request.GET.get('regi_uri')
+    
+#     if not auth_header or not auth_header.startswith('Bearer '):
+#         # Guest 용 JWT 발급
+#         guest_payload = make_role_payload('guest')
+#         guest_token = jwt.encode(guest_payload, settings.SECRET_KEY, algorithm='HS256')
+#         # return Response({"token": guest_token}, status=200)
+#         return Response({"role" : "guest"}, status=200)
+    
+#     token = auth_header.split(' ')[1]
+#     try:
+#         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+#         user_id = UserModel.get_user_id_by_email(payload.get('email'))
+#         if not user_id:
+#             return Response({"error": "User not found"}, status=404)
+        
+#         s_item = S100_Concept_Register.find_one({'uniformResourceIdentifier': regi_uri})
+#         if not s_item:
+#             return Response({"error": "Item not found"}, status=404)
+        
+#         regi_id = s_item["_id"]
+#         print(user_id, regi_id)
+        
+#         role = ParticipationModel.get_role(user_id, regi_id)
+#         if not role:
+#             # Guest 용 JWT 발급
+#             guest_payload = make_role_payload('guest')
+#             guest_token = jwt.encode(guest_payload, settings.SECRET_KEY, algorithm='HS256')
+#             return Response({"role" : "guest"}, status=200)
+        
+#         # Owner 용 JWT 발급
+#         owner_payload = make_role_payload('owner')
+#         owner_token = jwt.encode(owner_payload, settings.SECRET_KEY, algorithm='HS256')
+#         return Response({"role" : "owner"}, status=200)
+
+#     except Exception as e:
+#         print("An unexpected error occurred:", str(e))
+#         return Response({"error": "Internal Server Error"}, status=500)
+def register_info_for_guest(request): 
+    auth_header = request.headers.get('Authorization')
+    regi_uri = request.GET.get('regi_uri')
+    
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return Response({"role" : "guest"}, status=200)
+    token = auth_header.split(' ')[1]
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        user_id = UserModel.get_user_id_by_email(payload.get('email'))
+        if not user_id:
+            return Response({"error": "User not found"}, status=404)
+        s_item = S100_Concept_Register.find_one({'uniformResourceIdentifier': regi_uri})
+        if not s_item:
+            return Response({"error": "Item not found"}, status=404)
+        regi_id = s_item["_id"]
+        print(user_id, regi_id)
+        role = ParticipationModel.get_role(user_id, regi_id)
+        if not role:
+            return Response({"role" : "guest"}, status=200)
+
+
+        return Response({"role" : "owner"}, status=200)
+
+    except jwt.ExpiredSignatureError:
+        print("Token has expired")
+        return Response(status=HTTP_400_BAD_REQUEST)
+    except jwt.InvalidTokenError:
+        print("Invalid token")
+        return Response(status=HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        print("An unexpected error occurred:", str(e))
+        return Response({"error": "Internal Server Error"}, status=500)

@@ -11,3 +11,11 @@ S100_CD_AttributeConstraints = db['S100_CD_AttributeConstraints']
 S100_CD_AttributeUsage = db['S100_CD_AttributeUsage']
 
 S100_Portrayal_Item = db['S100_Portrayal_Item']
+
+
+import datetime
+class RegiModel:
+    @staticmethod
+    def update_date(registry_id):
+        date = datetime.datetime.now().strftime("%Y-%m-%d")
+        S100_Concept_Register.update_one({"_id": registry_id}, {"$set": {"dateOfLastChange": date}})

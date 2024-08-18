@@ -8,7 +8,8 @@ from regiSystem.models import (
         S100_Concept_Item,
         S100_Concept_ManagementInfo,
         S100_Concept_ReferenceSource,
-        S100_Concept_Reference
+        S100_Concept_Reference,
+        RegiModel
     )
 from regiSystem.serializers.RE import (
         ConceptSerializer,
@@ -42,6 +43,7 @@ def concept_register(request):
             registry_id = ObjectId(serializer.data.get("_id"))
             role = "owner"
             ParticipationModel.create_participation(user_id, registry_id, role)
+            RegiModel.update_date(registry_id)
             return Response(serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 

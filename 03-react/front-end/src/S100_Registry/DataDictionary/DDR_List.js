@@ -15,7 +15,7 @@ const DDR_FilterList = ({ viewType }) => {
   const [sortKey, setSortKey] = useState('name');
   const [sortDirection, setSortDirection] = useState('ascending');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(10); // Default to 10
   const [totalPages, setTotalPages] = useState(1);
   const { setItemDetails } = useContext(ItemContext);
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const DDR_FilterList = ({ viewType }) => {
           sort_key: sortKey,
           sort_direction: sortDirection,
           page: updatedPage,
-          page_size: pageSize,
+          page_size: pageSize, // Use the current pageSize state
           status,
           category,
           search_term: searchTerm,
@@ -90,79 +90,89 @@ const DDR_FilterList = ({ viewType }) => {
       item_id: item._id.encrypted_data,
       item_iv: item._id.iv,
     });
-    navigate(DDR_DETAIL);
+    navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/detail`);
   };
 
   return (
     <div>
       <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          {viewType === 'EnumeratedValue' && (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexGrow: 1 }}>
+            {viewType === 'EnumeratedValue' && (
+              <div>
+                <label>Enum Type:</label>
+                <select value={enumType} onChange={(e) => setEnumType(e.target.value)}>
+                  <option value="">Choose</option>
+                  <option value="S100_Codelist">S100_Codelist</option>
+                  <option value="enumeration">enumeration</option>
+                </select>
+              </div>
+            )}
+            {viewType === 'SimpleAttribute' && (
+              <div>
+                <label>Value Type:</label>
+                <select value={valueType} onChange={(e) => setValueType(e.target.value)}>
+                  <option value="">Choose</option>
+                  <option value="boolean">boolean</option>
+                  <option value="enumeration">enumeration</option>
+                  <option value="integer">integer</option>
+                  <option value="real">real</option>
+                  <option value="date">date</option>
+                  <option value="text">text</option>
+                  <option value="time">time</option>
+                  <option value="dateTime">dateTime</option>
+                  <option value="URI">URI</option>
+                  <option value="URL">URL</option>
+                  <option value="URN">URN</option>
+                  <option value="S100_CodeList">S100_CodeList</option>
+                  <option value="S100_TruncatedDate">S100_TruncatedDate</option>
+                </select>
+              </div>
+            )}
             <div>
-              <label>Enum Type:</label>
-              <select value={enumType} onChange={(e) => setEnumType(e.target.value)}>
-                <option value="">Choose</option>
-                <option value="S100_Codelist">S100_Codelist</option>
-                <option value="enumeration">enumeration</option>
+              <label>Status:</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                <option value="">All</option>
+                <option value="processing">Processing</option>
+                <option value="valid">Valid</option>
+                <option value="superseded">Superseded</option>
+                <option value="notValid">Not Valid</option>
+                <option value="retired">Retired</option>
+                <option value="clarified">Clarified</option>
               </select>
             </div>
-          )}
-          {viewType === 'SimpleAttribute' && (
             <div>
-              <label>Value Type:</label>
-              <select value={valueType} onChange={(e) => setValueType(e.target.value)}>
+              <label>Category:</label>
+              <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">Choose</option>
-                <option value="boolean">boolean</option>
-                <option value="enumeration">enumeration</option>
-                <option value="integer">integer</option>
-                <option value="real">real</option>
-                <option value="date">date</option>
-                <option value="text">text</option>
-                <option value="time">time</option>
-                <option value="dateTime">dateTime</option>
-                <option value="URI">URI</option>
-                <option value="URL">URL</option>
-                <option value="URN">URN</option>
-                <option value="S100_CodeList">S100_CodeList</option>
-                <option value="S100_TruncatedDate">S100_TruncatedDate</option>
+                <option value="name">Name</option>
+                <option value="camelCase">Camel Case</option>
+                <option value="definition">Definition</option>
               </select>
             </div>
-          )}
-          <div>
-            <label>Status:</label>
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-              <option value="">All</option>
-              <option value="processing">Processing</option>
-              <option value="valid">Valid</option>
-              <option value="superseded">Superseded</option>
-              <option value="notValid">Not Valid</option>
-              <option value="retired">Retired</option>
-              <option value="clarified">Clarified</option>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search..."
+            />
+            <button onClick={handleSearch}>Search</button>
+          </div>
+          <div style={{ marginLeft: 'auto' }}>
+            <label>Page Size:</label>
+            <select value={pageSize} onChange={handlePageSizeChange}>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
             </select>
           </div>
-          <div>
-            <label>Category:</label>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
-              <option value="">Choose</option>
-              <option value="name">Name</option>
-              <option value="camelCase">Camel Case</option>
-              <option value="definition">Definition</option>
-            </select>
-          </div>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search..."
-          />
-          <button onClick={handleSearch}>Search</button>
         </div>
       </div>
 
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <table
           className="table table-hover table-bordered"
-          style={{ tableLayout: 'fixed', width: '85%' }}
+          style={{ tableLayout: 'fixed' }}
         >
           <thead>
             <tr className='table-primary'>

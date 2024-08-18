@@ -49,7 +49,7 @@ function ReferenceSourceAdd({onClose}){
                     <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={RSChange} />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <label class="input-group-text" for="similarity" style={{width:"40%", fontWeight: "bold"}}>*similarity</label>
+                    <label class="input-group-text" htmlFor="similarity" style={{width:"40%", fontWeight: "bold"}}>*similarity</label>
                     <select class="form-select" id="similarity" name="similarity" onChange={RSChange}>
                         <option selected>Choose</option>
                         <option value="identical">identical</option>

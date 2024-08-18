@@ -14,7 +14,7 @@ const EVDetail = ({item}) => {
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate(DDR_DETAIL);
+        navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/detail`);
     }
 
     return (

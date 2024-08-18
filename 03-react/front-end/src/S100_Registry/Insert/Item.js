@@ -106,7 +106,7 @@ function Item() {
                 item_id: itemId,
                 item_iv: item_iv
             });
-            navigate(CONCEPT_DETAIL);
+            navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/concept/detail`);
         } catch (error) {
             console.error('Error posting data:', error);
             console.log(item)
@@ -152,7 +152,7 @@ function Item() {
     };
 
     return (
-        <div className="p-5" style={{width: '85%'}}>
+        <div className="p-5">
             <div style={{display: "flex"}}>
                 <h5 style={{fontWeight:'bold', marginRight: '10px'}}>Create</h5>
                 <ChooseType getSelestedApi={getSelestedApi} />

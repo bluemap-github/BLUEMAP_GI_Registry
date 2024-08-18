@@ -7,7 +7,7 @@ const InnerNav = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const moveToHome = () => {
-        navigate(RERI_HOME);
+        navigate(`/${sessionStorage.getItem('REGISTRY_URI')}`);
     };
     const [error, setError] = useState('');
     const [pathSegments, setPathSegments] = useState(['Home', '']);
@@ -47,11 +47,7 @@ const InnerNav = () => {
                 <div>{error}</div>
             ) : (
                 <>
-                    {registry_name === 'Home' ? (
-                        <h5 style={{ fontWeight: 'bold' }}>Register Information</h5>
-                    ) : (
-                        <h5 style={{ fontWeight: 'bold' }}>{registry_name}</h5>
-                    )}
+                    <h5 style={{ fontWeight: 'bold' }}>{registry_name}</h5>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div
                             className='inner-nav-link inner-nav-link-click'

@@ -35,7 +35,7 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
             item_iv: itemList.item._id.iv,
         });
         setTimeout(() => {
-            navigate(DDR_DETAIL);
+            navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/detail`);
         }, 0);
     }
 

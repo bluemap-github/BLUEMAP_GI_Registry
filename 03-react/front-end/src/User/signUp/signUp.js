@@ -91,9 +91,9 @@ const SignUp = () => {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#f0f4f8' }}>
-            <h1 className='m-5' style={{ color: '#007bff' }}>BLUEMAP GI Registry</h1>
-            <div style={{ width: '500px', margin: '0 auto', padding: '20px', border: '1px solid #ccc', borderRadius: '10px', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#F8F8F8' }}>
+            {/* <h1 className='m-5' style={{ color: '#007bff' }}>BLUEMAP GI Registry</h1> */}
+            <div className='m-5' style={{ marginTop: '70px', width: '500px', margin: '0 auto', padding: '20px', border: '1px solid #ccc', borderRadius: '10px', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
                 <h2 style={{ textAlign: 'center', marginBottom: '20px', fontWeight: 'bold', color: '#007bff' }}>Sign Up</h2>
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
                     <div style={{ marginBottom: '15px' }}>

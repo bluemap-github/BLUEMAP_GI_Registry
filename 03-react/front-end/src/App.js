@@ -13,7 +13,7 @@ import Introduce from './User/signIn/introduce';
 import SignUp from './User/signUp/signUp';
 import SignIn from './User/signIn/signIn';
 import MyMain from './User/myPage/myMain';
-import PrivateRoute from './PrivateRoute';
+
 import Navbar from './Common/Navbar';
 import MySidebar from './Common/MySidebar';
 import GetUserInfo from './Common/GetUserInfo';
@@ -21,8 +21,11 @@ import CreateRegistry from './User/myPage/CreateRegistry';
 import ErrorPage from './Common/ErrorPage';
 import InnerNav from './Common/InnerNav';
 import InnerMyNav from './Common/InnerMyNav';
-import EnterRegi from './Common/EnterRegi';
+
 import Browsing from './Common/Browsing/Browsing';
+
+import PrivateRoute from './PrivateRoute';
+import EnterRegi from './Common/EnterRegi';
 import {ENTER_REGI,BROWSING,  INTRO, SIGN_IN, SIGN_UP, MY_MAIN, CREATE_REGI, ACCESS, ERROR, RERI_HOME, CONCEPT_LIST, CONCEPT_DETAIL, CREATE_ITEM, DDR_LIST, DDR_DETAIL, PORTAYAL_LIST} from './Common/PageLinks';
 function App() {
   return (
@@ -40,10 +43,9 @@ function AppContent() {
                 location.pathname === '/user/signup' || 
                 location.pathname === '/browsing';
 
-
   return (
     <div>
-      <div className='navBar-rest'><Navbar /></div>
+      <div className='navBar-rest'><GetUserInfo><Navbar /></GetUserInfo></div>
       <div className="app-container">
         {hideAll ? null : (
           <>
@@ -64,29 +66,31 @@ function AppContent() {
             </>
           )}
           <Routes>
-            <Route path=":id" element={<EnterRegi/>} />
             <Route path={INTRO} element={<Introduce />} />
             <Route path={SIGN_IN} element={<SignIn />} />
             <Route path={SIGN_UP} element={<SignUp />} />
             <Route path={MY_MAIN} element={<PrivateRoute><MyMain /></PrivateRoute>} />
             <Route path={CREATE_REGI} element={<PrivateRoute><CreateRegistry /></PrivateRoute>} />
-            <Route path={ERROR} element={<ErrorPage />} />
             
-            <Route path={RERI_HOME} element={<RegiHome />} />
-            <Route path={CONCEPT_LIST} element={<ConceptRegister />} />
-            <Route path={CONCEPT_DETAIL} element={<ConceptDetail />} />
-            <Route path={CREATE_ITEM} element={<InsertItem />} />
-            <Route path={DDR_LIST} element={<DataDictionaryRegister/>} />
-            <Route path={DDR_DETAIL} element={<DDR_Detail />} />
-            <Route path={PORTAYAL_LIST} element={<PortrayalRegister />} />
+            
+            <Route path=":id" element={<EnterRegi><RegiHome /></EnterRegi>} />
+            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/concept/list`} element={<ConceptRegister />} />
+            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/concept/detail`} element={<ConceptDetail />} />
+            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/create`} element={<PrivateRoute><InsertItem /></PrivateRoute>} />
+            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/list`} element={<DataDictionaryRegister/>} />
+            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/detail`} element={<DDR_Detail />} />
+            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/portrayal/list`} element={<PortrayalRegister />} />
 
-            <Route path={BROWSING} element={<Browsing />}/>
+            <Route path="/browsing" element={<Browsing />}/>
+
+            <Route path="/error" element={<ErrorPage />} />
           </Routes>
         </div>
         </div>
     </div>
   );
 }
+
 
 
 export default App;

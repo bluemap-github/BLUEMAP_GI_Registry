@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {CHECK_AUTH} from '../User/api';
+import { CHECK_AUTH } from '../User/api';
 
 const GetUserInfo = ({ children }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
                 const token = localStorage.getItem('jwt');
                 if (!token) {
-                    throw new Error('No token found');
+                    // 토큰이 없으면 바로 로딩 종료
+                    setLoading(false);
+                    return;
                 }
 
                 const response = await axios.get(CHECK_AUTH, {
@@ -24,11 +25,9 @@ const GetUserInfo = ({ children }) => {
 
                 if (response.status === 200) {
                     setUserInfo(response.data.user);
-                } else {
-                    throw new Error('Failed to fetch user info');
                 }
             } catch (error) {
-                setError(error.message);
+                console.error('Failed to fetch user info:', error);
             } finally {
                 setLoading(false);
             }
@@ -41,11 +40,7 @@ const GetUserInfo = ({ children }) => {
         return <div>Loading...</div>;
     }
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
-    // 사용자 정보를 모든 자식 컴포넌트에 prop으로 전달
+    // userInfo가 없더라도 자식 컴포넌트를 렌더링하도록 함
     return React.Children.map(children, child => {
         return React.cloneElement(child, { userInfo });
     });

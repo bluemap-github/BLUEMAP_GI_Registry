@@ -68,7 +68,7 @@ function ManagementInfoAdd({onClose}) {
                 <div>
                     <h3 className='mb-2'>Add management Info</h3>
                     <div className='input-group input-group-sm mt-2'>
-                        <label style={{width:"50%", fontWeight: "bold"}} class="input-group-text" for="proposalType">*proposalType</label>
+                        <label style={{width:"50%", fontWeight: "bold"}} class="input-group-text" htmlFor="proposalType">*proposalType</label>
                         <select class="form-select" id="proposalType" name="proposalType" onChange={handleChange}>
                             <option selected>Choose</option>
                             <option value="addition">addition</option>
@@ -143,7 +143,7 @@ function ManagementInfoAdd({onClose}) {
                         </div>
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <label style={{ width: "50%" , fontWeight: "bold"}} class="input-group-text" for="proposalStatus">*proposalStatus</label>
+                        <label style={{ width: "50%" , fontWeight: "bold"}} class="input-group-text" htmlFor="proposalStatus">*proposalStatus</label>
                         <select class="form-select" id="proposalStatus" name="proposalStatus" onChange={handleChange}>
                             <option selected>Choose</option>
                             <option value="notYetDetermined">notYetDetermined</option>

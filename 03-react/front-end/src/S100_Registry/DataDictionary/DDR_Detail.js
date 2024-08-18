@@ -27,7 +27,7 @@ const DDR_Detail = () => {
     const [item, setItem] = useState(null);
     const navigate = useNavigate();
     const moveToPage = () => {
-        navigate(DDR_LIST);
+        navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/list`);
     }
     useEffect(() => {
         const fetchItemList = async () => {

@@ -261,20 +261,3 @@ def register_info_for_guest(request):
         print("An unexpected error occurred:", str(e))
         return Response({"error": "Internal Server Error"}, status=HTTP_500_INTERNAL_SERVER_ERROR)
 
-            
-
-    
-    # if request.method == 'GET':
-    #     try:
-    #         s_item = S100_Concept_Register.find_one({'uniformResourceIdentifier': regi_uri})
-    #         serializer = ConceptSerializer(s_item)
-    #         print(serializer.data, "??")
-    #         response_data = serializer.data
-    #         # response_data = get_encrypted_id([serializer.data["_id"]])
-    #         return Response(response_data)
-
-    #     except Exception as e:
-    #         return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
-    return Response(status=HTTP_400_BAD_REQUEST)
-
-

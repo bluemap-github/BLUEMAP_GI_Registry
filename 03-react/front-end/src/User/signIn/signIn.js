@@ -9,10 +9,13 @@ const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [userInfo, setUserInfo] = useState(null);
     const navigate = useNavigate();
+
     const moveToSIGNUP = () => {
         navigate(PAGE_SIGN_UP);
     }
+
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
@@ -32,20 +35,20 @@ const SignIn = () => {
                 throw new Error('로그인 실패');
             }
 
-            const { token } = response.data;
+            const { token, user } = response.data;
             localStorage.setItem('jwt', token); // JWT를 로컬 스토리지에 저장
-            console.log('로그인 성공');
-            alert('로그인 성공');
+            setUserInfo(user); // user 정보를 업데이트
             navigate(MY_MAIN); // 로그인 후 리디렉션
+            window.location.reload();
         } catch (error) {
             setError(error.message);
         }
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#f0f4f8'}}>
-            <h1 className='m-5' style={{ color: '#007bff' }}>BLUEMAP GI Registry</h1>
-            <div style={{ width: '500px', padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#F8F8F8'}}>
+            {/* <h1 className='m-5' style={{ color: '#007bff' }}>BLUEMAP GI Registry</h1> */}
+            <div style={{ width: '500px', padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginTop: '70px'}}>
                 <h2 style={{ textAlign: 'center', marginBottom: '20px', fontWeight: 'bold', color: '#007bff' }}>Sign In</h2>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
