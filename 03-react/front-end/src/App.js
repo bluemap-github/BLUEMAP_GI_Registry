@@ -66,7 +66,7 @@ function AppContent() {
             </>
           )}
           <Routes>
-            <Route path={INTRO} element={<Introduce />} />
+            <Route path={INTRO} element={<SignIn />} />
             <Route path={SIGN_IN} element={<SignIn />} />
             <Route path={SIGN_UP} element={<SignUp />} />
             <Route path={MY_MAIN} element={<PrivateRoute><MyMain /></PrivateRoute>} />

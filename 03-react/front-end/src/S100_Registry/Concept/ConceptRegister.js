@@ -89,11 +89,11 @@ function Register() {
 
   return (
     <div className="p-5">
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexGrow: 1 }}>
-          <div>
-            <label>Status:</label>
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
+      <div>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <div className='input-group' style={{width: "12%"}}>
+            <label className='input-group-text'>Status</label>
+            <select className='form-select' value={status} onChange={(e) => setStatus(e.target.value)}>
               <option value="">All</option>
               <option value="processing">Processing</option>
               <option value="valid">Valid</option>
@@ -103,31 +103,27 @@ function Register() {
               <option value="clarified">Clarified</option>
             </select>
           </div>
-          <div>
-            <label>Category:</label>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <div className='input-group' style={{width: "15%"}}>
+            <label className='input-group-text'>Category</label>
+            <select className='form-select' value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="">Choose</option>
               <option value="name">Name</option>
               <option value="camelCase">Camel Case</option>
               <option value="definition">Definition</option>
             </select>
           </div>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search..."
-          />
-          <button onClick={handleSearch}>Search</button>
-        </div>
-        <div style={{ marginLeft: 'auto' }}>
-          <label>Page Size:</label>
-          <select value={pageSize} onChange={handlePageSizeChange}>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-          </select>
-        </div>
+          <div className="input-group" style={{width: "20%"}}>
+              <input
+                className="form-control"
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search..."
+              />
+              <button className="btn btn-outline-secondary" onClick={handleSearch}>Search</button>
+            </div>
+          </div>
+          
       </div>
       <table className="table table-hover table-bordered" style={{ tableLayout: 'fixed', marginTop: '20px' }}>
         <thead>
@@ -158,27 +154,42 @@ function Register() {
           ))}
         </tbody>
       </table>
-      <nav aria-label="Page navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-        <ul className="pagination">
-          <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
-            <button className="page-link" onClick={() => handlePageChange(page - 1)} disabled={page <= 1}>
-              Previous
-            </button>
-          </li>
-          {[...Array(totalPages)].map((_, i) => (
-            <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
-              <button className="page-link" onClick={() => handlePageChange(i + 1)} disabled={page === i + 1}>
-                {i + 1}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+        <div style={{ display: 'flex',  alignItems: 'center'}}>
+          <div style={{ display: 'flex', alignContent: 'center'}}>
+            <select className='form-select form-select-sm' value={pageSize} onChange={handlePageSizeChange}>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <label style={{marginLeft: '10px'}}>rows per page</label>
+        </div>
+        
+        <nav aria-label="Page navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+          <ul className="pagination">
+            <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(page - 1)} disabled={page <= 1}>
+                Previous
               </button>
             </li>
-          ))}
-          <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
-            <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
+            {[...Array(totalPages)].map((_, i) => (
+              <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => handlePageChange(i + 1)} disabled={page === i + 1}>
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+            <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      
     </div>
   );
 }

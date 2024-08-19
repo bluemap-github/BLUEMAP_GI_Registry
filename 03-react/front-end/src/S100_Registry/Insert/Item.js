@@ -1,9 +1,9 @@
-import React, { useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { POST_MANAGEMENT_INFO, POST_REFERENCE_SOURCE , POST_REFERENCE } from '../Concept/api';
-import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION, POST_CONCEPT_ITEM, POST_ATTRIBUTE_CONSTRAINTS} from '../DataDictionary/api.js';
+import { POST_MANAGEMENT_INFO, POST_REFERENCE_SOURCE, POST_REFERENCE } from '../Concept/api';
+import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION, POST_CONCEPT_ITEM, POST_ATTRIBUTE_CONSTRAINTS } from '../DataDictionary/api.js';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ReferenceSourceInput from './components/ReferenceSourceInput';
 import ReferenceInput from './components/ReferenceInput';
@@ -15,46 +15,51 @@ import Feature from './components/dataDictionary/Feature';
 import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import { ItemContext } from '../../context/ItemContext';
-import { validateFormData, checkPostList } from './validation/ValidateItems.js';
+import { performValidation, checkPostList } from './validation/ValidateItems.js';
 import AttributeConstraints from './components/AttributeConstraints.js';
-import {CONCEPT_DETAIL} from '../../Common/PageLinks.js';
 
 function Item() {
     const [item, setItem] = useState(null);
     const [managementInfos, setManagementInfos] = useState([]); // 관리 정보 입력 창 배열
     const [referenceSource, setReferenceSource] = useState(null);
-    const [references, setReferences] = useState(null);
+    const [references, setReferences] = useState([]);
     const [attributeContsraints, setAttributeContsraints] = useState(null);
-    const { register_id } = useParams();
     const [selectedApiUrl, setSelectedApiUrl] = useState(POST_CONCEPT_ITEM);
     const [apiType, setApiType] = useState('ConceptItem');
-    const { setItemDetails } = useContext(ItemContext); 
-    const navigate = useNavigate(); 
-    let alertData = 'none';
-    const [viewAlert, setViewAlert] = useState(false);
+    const { setItemDetails } = useContext(ItemContext);
+    const navigate = useNavigate();
 
     const validationTest = (validateType) => {
-        checkPostList(item, attributeContsraints, managementInfos, referenceSource, references, validateType);
-        // if (validateFormData(item, validateType)) {
-        //     handleSubmitItem();
-        // };
-
+        if (!managementInfos || managementInfos.length === 0) {
+            alert('Management Info is required.');
+            return;
+        }
+    
+        if (
+            performValidation(item, validateType) &&
+            (attributeContsraints === null || performValidation(attributeContsraints, 'AttributeConstraints')) &&
+            managementInfos.every(info => performValidation(info, 'ManagementInfo')) &&
+            (referenceSource === null || performValidation(referenceSource, 'ReferenceSource')) &&
+            references.every(ref => performValidation(ref, 'Reference'))
+        ) {
+            handleSubmitItem();
+        }
     };
+    
+
     const regi_uri = sessionStorage.getItem('REGISTRY_URI');
 
     const handleSubmitItem = async () => {
         try {
-            // const itemData = JSON.parse(item);
             const itemResponse = await axios.post(
-                selectedApiUrl, 
-                item, 
+                selectedApiUrl,
+                item,
                 {
                     params: {
                         regi_uri: regi_uri,
                     }
                 });
 
-            // Item 데이터를 selectedApiUrl로 POST 후 Item의 ID 가져오기
             const itemId = itemResponse.data.encrypted_data;
             const item_iv = itemResponse.data.iv;
 
@@ -67,10 +72,7 @@ function Item() {
                 });
             }
 
-            // 모든 MI에 대해 작업하는 for 문
             for (const managementInfo of managementInfos) {
-
-                // Management Info를 저장할 URL 생성 후 POST
                 await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
                     params: {
                         item_id: itemId,
@@ -79,7 +81,6 @@ function Item() {
                 });
             }
 
-            // RS에 대해 작업
             if (referenceSource) {
                 await axios.post(POST_REFERENCE_SOURCE, referenceSource, {
                     params: {
@@ -89,36 +90,32 @@ function Item() {
                 });
             }
 
-            // 모든 R에 대해 작업
-            if (references != null) {
-                for(const reference of references) {
-                    if (reference) {
-                        await axios.post(POST_REFERENCE, reference, {
-                            params: {
-                                item_id: itemId,
-                                item_iv: item_iv,
-                            }
-                        });
-                    }
+            for (const reference of references) {
+                if (reference) {
+                    await axios.post(POST_REFERENCE, reference, {
+                        params: {
+                            item_id: itemId,
+                            item_iv: item_iv,
+                        }
+                    });
                 }
             }
-            setItemDetails({ 
+            setItemDetails({
                 item_id: itemId,
                 item_iv: item_iv
             });
             navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/concept/detail`);
         } catch (error) {
             console.error('Error posting data:', error);
-            console.log(item)
+            console.log(item);
         }
     };
 
-
-    const ItemChange = (formData) => {setItem(formData);};
-    const MIChange = (formData) => {setManagementInfos(formData);};
-    const RSChange = (formData) => {setReferenceSource(formData);};
-    const RChange = (formData) => {setReferences(formData);};
-    const ACChange = (formData) => {setAttributeContsraints(formData);};
+    const ItemChange = (formData) => { setItem(formData); };
+    const MIChange = (formData) => { setManagementInfos(formData); };
+    const RSChange = (formData) => { setReferenceSource(formData); };
+    const RChange = (formData) => { setReferences(formData); };
+    const ACChange = (formData) => { setAttributeContsraints(formData); };
 
     const getSelestedApi = (type) => {
         switch (type) {
@@ -153,31 +150,29 @@ function Item() {
 
     return (
         <div className="p-5">
-            <div style={{display: "flex"}}>
-                <h5 style={{fontWeight:'bold', marginRight: '10px'}}>Create</h5>
-                <ChooseType getSelestedApi={getSelestedApi} />
-            </div>
-            
+            <ChooseType getSelestedApi={getSelestedApi} />
+
             <div className='mt-1'>
-                {apiType === 'ConceptItem' && <ItemInput item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'EnumeratedValue' && <EnumeratedValue item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'SimpleAttribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'ComplexAttribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'Feature' && <Feature item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
-                {apiType === 'Information' && <Information item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl}/>}
+                {apiType === 'ConceptItem' && <ItemInput item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
+                {apiType === 'EnumeratedValue' && <EnumeratedValue item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
+                {apiType === 'SimpleAttribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
+                {apiType === 'ComplexAttribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
+                {apiType === 'Feature' && <Feature item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
+                {apiType === 'Information' && <Information item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
                 {apiType === 'SimpleAttribute' && <AttributeConstraints onFormSubmit={ACChange} />}
                 <ManagementInfoInput onFormSubmit={MIChange} />
                 <ReferenceSourceInput onFormSubmit={RSChange} />
                 <ReferenceInput onFormSubmit={RChange} />
             </div>
             <div className='text-end'>
-                {/* <button className='mt-3 btn btn-sm btn-primary' onClick={() => validationTest(apiType)}>Submit</button> */}
-                <button className='mt-3 btn btn-sm btn-primary' onClick={handleSubmitItem}>Submit</button>
+                <button className='mt-3 btn btn-sm btn-primary' onClick={() => validationTest(apiType)}>Submit</button>
             </div>
-            <div style={{height: '200px'}}></div>
-            
+            <div style={{ height: '200px' }}></div>
+
         </div>
     );
 }
 
 export default Item;
+
+

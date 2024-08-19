@@ -70,12 +70,14 @@ const InnerNav = () => {
                         {firstSegment === 'Home' ? null : (
                             <>
                                 <p className='inner-nav-link'>|</p>
-                                <p className='inner-nav-link inner-nav-link-click' onClick={moveToHome}>
-                                    {firstSegment}
-                                </p>
-                                <p className='inner-nav-link'>|</p>
-                                <p className='inner-nav-link inner-nav-link-click' onClick={moveToHome}>
-                                    {secondSegment}
+                                <p className='inner-nav-link'>
+                                    {secondSegment === 'Create' 
+                                        ? `${secondSegment} Item` 
+                                        : (secondSegment === 'Default' 
+                                        ? 'Register Info' 
+                                        : `${secondSegment} Register`
+                                        )
+                                    }
                                 </p>
                             </>
                         )}

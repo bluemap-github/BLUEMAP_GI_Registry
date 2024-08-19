@@ -62,14 +62,6 @@ const Browsing = () => {
                     />
                     <button className='btn btn-outline-secondary' onClick={handleSearch}>Search</button>
                 </div>
-
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-                    <select value={pageSize} onChange={handlePageSizeChange}>
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={50}>50</option>
-                    </select>
-                </div>
             </div>
 
             <div className='p-5'>
@@ -88,25 +80,42 @@ const Browsing = () => {
                         </div>    
                     ))}
                 </div>
-                
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
-                    <button 
-                        className='btn btn-outline-secondary' 
-                        disabled={page <= 1}
-                        onClick={() => setPage(page - 1)}
-                    >
-                        Previous
-                    </button>
-                    <span>Page {page} of {totalPages}</span>
-                    <button 
-                        className='btn btn-outline-secondary' 
-                        disabled={page >= totalPages}
-                        onClick={() => setPage(page + 1)}
-                    >
-                        Next
-                    </button>
-                </div>
             </div>
+            <div className='p-5' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <select className='form-select form-select-sm' value={pageSize} onChange={handlePageSizeChange}>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <label style={{ marginLeft: '10px' }}>rows per page</label>
+                </div>
+                <nav aria-label="Page navigation" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <ul className="pagination">
+                        <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => setPage(page - 1)} disabled={page <= 1}>
+                                Previous
+                            </button>
+                        </li>
+                        {[...Array(totalPages)].map((_, i) => (
+                            <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => setPage(i + 1)}>
+                                    {i + 1}
+                                </button>
+                            </li>
+                        ))}
+                        <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => setPage(page + 1)} disabled={page >= totalPages}>
+                                Next
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            
         </>
     );
 };

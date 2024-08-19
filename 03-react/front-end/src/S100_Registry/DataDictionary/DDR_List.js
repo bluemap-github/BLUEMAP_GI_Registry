@@ -99,9 +99,9 @@ const DDR_FilterList = ({ viewType }) => {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexGrow: 1 }}>
             {viewType === 'EnumeratedValue' && (
-              <div>
-                <label>Enum Type:</label>
-                <select value={enumType} onChange={(e) => setEnumType(e.target.value)}>
+              <div className='input-group' style={{width: "15%"}}>
+                <label className='input-group-text'>Enum Type</label>
+                <select className='form-select' value={enumType} onChange={(e) => setEnumType(e.target.value)}>
                   <option value="">Choose</option>
                   <option value="S100_Codelist">S100_Codelist</option>
                   <option value="enumeration">enumeration</option>
@@ -109,9 +109,9 @@ const DDR_FilterList = ({ viewType }) => {
               </div>
             )}
             {viewType === 'SimpleAttribute' && (
-              <div>
-                <label>Value Type:</label>
-                <select value={valueType} onChange={(e) => setValueType(e.target.value)}>
+              <div className='input-group'  style={{width: "15%"}}>
+                <label className='input-group-text'>Value Type</label>
+                <select  className='form-select' value={valueType} onChange={(e) => setValueType(e.target.value)}>
                   <option value="">Choose</option>
                   <option value="boolean">boolean</option>
                   <option value="enumeration">enumeration</option>
@@ -129,9 +129,9 @@ const DDR_FilterList = ({ viewType }) => {
                 </select>
               </div>
             )}
-            <div>
-              <label>Status:</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+            <div className='input-group' style={{width: "12%"}}>
+              <label className='input-group-text'>Status</label>
+              <select className='form-select' value={status} onChange={(e) => setStatus(e.target.value)}>
                 <option value="">All</option>
                 <option value="processing">Processing</option>
                 <option value="valid">Valid</option>
@@ -141,31 +141,26 @@ const DDR_FilterList = ({ viewType }) => {
                 <option value="clarified">Clarified</option>
               </select>
             </div>
-            <div>
-              <label>Category:</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <div className='input-group' style={{width: "15%"}}>
+              <label className='input-group-text'>Category</label>
+              <select className='form-select' value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">Choose</option>
                 <option value="name">Name</option>
                 <option value="camelCase">Camel Case</option>
                 <option value="definition">Definition</option>
               </select>
             </div>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search..."
-            />
-            <button onClick={handleSearch}>Search</button>
-          </div>
-          <div style={{ marginLeft: 'auto' }}>
-            <label>Page Size:</label>
-            <select value={pageSize} onChange={handlePageSizeChange}>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-            </select>
-          </div>
+            <div className="input-group" style={{width: "20%"}}>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search..."
+                />
+                <button className="btn btn-outline-secondary" onClick={handleSearch}>Search</button>
+              </div>
+            </div>
         </div>
       </div>
 
@@ -178,14 +173,14 @@ const DDR_FilterList = ({ viewType }) => {
             <tr className='table-primary'>
               <th
                 scope="col"
-                style={{ width: '15%', cursor: 'pointer' }}
+                style={{ width: '15%', cursor: 'pointer', color: sortKey === 'name' ? 'blue' : 'black' }}
                 onClick={() => handleSortChange('name')}
               >
                 Name {renderSortArrow('name')}
               </th>
               <th
                 scope="col"
-                style={{ width: '15%', cursor: 'pointer' }}
+                style={{ width: '15%', cursor: 'pointer', color: sortKey === 'camelCase' ? 'blue' : 'black' }}
                 onClick={() => handleSortChange('camelCase')}
               >
                 Camel Case {renderSortArrow('camelCase')}
@@ -236,28 +231,40 @@ const DDR_FilterList = ({ viewType }) => {
           </tbody>
         </table>
       </div>
-
-      <nav aria-label="Page navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-        <ul className="pagination">
-          <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
-            <button className="page-link" onClick={() => handlePageChange(page - 1)} disabled={page <= 1}>
-              Previous
-            </button>
-          </li>
-          {[...Array(totalPages)].map((_, i) => (
-            <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
-              <button className="page-link" onClick={() => handlePageChange(i + 1)}>
-                {i + 1}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+        <div style={{ display: 'flex',  alignItems: 'center'}}>
+          <div style={{ display: 'flex', alignContent: 'center'}}>
+            <select className='form-select form-select-sm' value={pageSize} onChange={handlePageSizeChange}>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <label style={{marginLeft: '10px'}}>rows per page</label>
+        </div>
+        <nav aria-label="Page navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+          <ul className="pagination">
+            <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(page - 1)} disabled={page <= 1}>
+                Previous
               </button>
             </li>
-          ))}
-          <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
-            <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
+            {[...Array(totalPages)].map((_, i) => (
+              <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => handlePageChange(i + 1)}>
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+            <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      
     </div>
   );
 };

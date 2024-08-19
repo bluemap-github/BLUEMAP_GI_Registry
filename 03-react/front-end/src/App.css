@@ -142,6 +142,7 @@ hr {
 
 .regi-menu:hover{
   background-color: #F7F7F7;
+  cursor: pointer;
 }
 
 .sidebar .regi-menu a {

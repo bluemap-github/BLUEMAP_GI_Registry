@@ -7,9 +7,9 @@ const ChooseType = ({ getSelestedApi }) => {
     };
 
     return (
-        <div>
-            <label htmlFor="typeSelect"></label>
-            <select id="typeSelect" onChange={handleChange}>
+        <div className='input-group' style={{width: "12%"}}>
+            {/* <label htmlFor="typeSelect"></label> */}
+            <select className='form-select' id="typeSelect" onChange={handleChange}>
                 <option value="ConceptItem">Concept Item</option>
                 <option value="EnumeratedValue">Enumerated value</option>
                 <option value="SimpleAttribute">Simple Attribute</option>
