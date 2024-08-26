@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BROWSING_REGISTRIES } from '../../S100_Registry/Concept/api';
 import { useNavigate } from 'react-router-dom';
-import {ENTER_REGI } from '../../Common/PageLinks';
+import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
+import { ENTER_REGI } from '../../Common/PageLinks';
 
 const Browsing = () => {
     const navigate = useNavigate();
@@ -35,7 +36,7 @@ const Browsing = () => {
     }, [page, pageSize]);
 
     const connectToRegistry = (e, registry) => {
-        sessionStorage.setItem('REGISTRY_NAME', registry.name);
+        Cookies.set('REGISTRY_NAME', registry.name, { expires: 7 }); // REGISTRY_NAME을 쿠키에 저장
         navigate(ENTER_REGI(registry.uniformResourceIdentifier));
     };
 

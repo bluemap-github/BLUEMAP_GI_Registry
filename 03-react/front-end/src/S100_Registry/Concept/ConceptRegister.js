@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';  // js-cookie 라이브러리 임포트
 import { ItemContext } from '../../context/ItemContext';
 import { CONCEPT_DETAIL } from '../../Common/PageLinks';
 import { REGISTER_ITEM_LIST_URL } from './api';
@@ -21,7 +22,7 @@ function Register() {
 
   const fetchItems = async (updatedPage = page) => {
     try {
-      const regi_uri = sessionStorage.getItem('REGISTRY_URI');
+      const regi_uri = Cookies.get('REGISTRY_URI');  // 쿠키에서 REGISTRY_URI를 가져옴
       const response = await axios.get(REGISTER_ITEM_LIST_URL, {
         params: {
           regi_uri,
@@ -77,7 +78,7 @@ function Register() {
       item_id: item._id.encrypted_data,
       item_iv: item._id.iv,
     });
-    navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/concept/detail`);
+    navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);  // 쿠키에서 REGISTRY_URI를 가져옴
   };
 
   const renderSortArrow = (key) => {

@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import Cookies from 'js-cookie'; 
 import { POST_MANAGEMENT_INFO, POST_REFERENCE_SOURCE, POST_REFERENCE } from '../Concept/api';
 import { POST_ENUMERATED_VALUE, POST_SIMPLE_ATTRIBUTE, POST_COMPLEX_ATTRIBUTE, POST_FEATURE, POST_INFORMATION, POST_CONCEPT_ITEM, POST_ATTRIBUTE_CONSTRAINTS } from '../DataDictionary/api.js';
 import ManagementInfoInput from './components/ManagementInfoInput';
@@ -23,11 +23,20 @@ function Item() {
     const [managementInfos, setManagementInfos] = useState([]); // 관리 정보 입력 창 배열
     const [referenceSource, setReferenceSource] = useState(null);
     const [references, setReferences] = useState([]);
-    const [attributeContsraints, setAttributeContsraints] = useState(null);
+    const [attributeConstraints, setAttributeConstraints] = useState(null);
     const [selectedApiUrl, setSelectedApiUrl] = useState(POST_CONCEPT_ITEM);
     const [apiType, setApiType] = useState('ConceptItem');
     const { setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
+    const regi_uri = Cookies.get('REGISTRY_URI');
+
+    useEffect(() => {
+        const role = Cookies.get('role');
+        // if (!role || role === 'guest') {
+        //     alert('권한이 없습니다. 접근이 제한됩니다.');
+        //     navigate(`/${regi_uri}`); // 권한이 없으면 메인 페이지로 리디렉션
+        // }
+    }, [navigate]);
 
     const validationTest = (validateType) => {
         if (!managementInfos || managementInfos.length === 0) {
@@ -37,7 +46,7 @@ function Item() {
     
         if (
             performValidation(item, validateType) &&
-            (attributeContsraints === null || performValidation(attributeContsraints, 'AttributeConstraints')) &&
+            (attributeConstraints === null || performValidation(attributeConstraints, 'AttributeConstraints')) &&
             managementInfos.every(info => performValidation(info, 'ManagementInfo')) &&
             (referenceSource === null || performValidation(referenceSource, 'ReferenceSource')) &&
             references.every(ref => performValidation(ref, 'Reference'))
@@ -45,9 +54,6 @@ function Item() {
             handleSubmitItem();
         }
     };
-    
-
-    const regi_uri = sessionStorage.getItem('REGISTRY_URI');
 
     const handleSubmitItem = async () => {
         try {
@@ -63,8 +69,8 @@ function Item() {
             const itemId = itemResponse.data.encrypted_data;
             const item_iv = itemResponse.data.iv;
 
-            if (attributeContsraints) {
-                await axios.post(POST_ATTRIBUTE_CONSTRAINTS, attributeContsraints, {
+            if (attributeConstraints) {
+                await axios.post(POST_ATTRIBUTE_CONSTRAINTS, attributeConstraints, {
                     params: {
                         item_id: itemId,
                         item_iv: item_iv,
@@ -104,7 +110,7 @@ function Item() {
                 item_id: itemId,
                 item_iv: item_iv
             });
-            navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/concept/detail`);
+            navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);
         } catch (error) {
             console.error('Error posting data:', error);
             console.log(item);
@@ -115,7 +121,7 @@ function Item() {
     const MIChange = (formData) => { setManagementInfos(formData); };
     const RSChange = (formData) => { setReferenceSource(formData); };
     const RChange = (formData) => { setReferences(formData); };
-    const ACChange = (formData) => { setAttributeContsraints(formData); };
+    const ACChange = (formData) => { setAttributeConstraints(formData); };
 
     const getSelestedApi = (type) => {
         switch (type) {
@@ -174,5 +180,3 @@ function Item() {
 }
 
 export default Item;
-
-

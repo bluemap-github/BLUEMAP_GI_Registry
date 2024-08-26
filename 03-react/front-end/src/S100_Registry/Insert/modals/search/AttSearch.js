@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {SEARCH_RELATED_ITEM} from '../../../DataDictionary/api.js';
-
+import Cookies from 'js-cookie'; 
 
 
 function AttSearch({ onSearch }) {
-    const regi_uri = sessionStorage.getItem('REGISTRY_URI');
+    const regi_uri = Cookies.get('REGISTRY_URI');
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleSearch = () => {

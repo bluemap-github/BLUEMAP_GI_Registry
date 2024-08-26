@@ -1,15 +1,18 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import {SIGN_IN} from './PageLinks';
-function NavDropDown({userInfo}) {
+import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
+import { SIGN_IN } from './PageLinks';
+
+function NavDropDown({ userInfo }) {
     const navigate = useNavigate();
+
     const handleLogout = () => {
-        localStorage.removeItem('jwt');
-        sessionStorage.removeItem('itemDetails');
-        sessionStorage.removeItem('REGISTRY_NAME');
-        sessionStorage.removeItem('REGISTRY_URI');
-        navigate(SIGN_IN); 
+        localStorage.removeItem('jwt')
+        Cookies.remove('itemDetails'); // 아이템 세부사항을 쿠키에서 제거
+        Cookies.remove('REGISTRY_NAME'); // 레지스트리 이름을 쿠키에서 제거
+        Cookies.remove('REGISTRY_URI'); // 레지스트리 URI를 쿠키에서 제거
+        navigate(SIGN_IN);
         window.location.reload();
     };
   return (

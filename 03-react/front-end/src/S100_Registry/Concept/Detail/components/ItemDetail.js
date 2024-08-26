@@ -1,10 +1,9 @@
-import React, {useState, useEffect, useContext} from 'react';
-import Toast from '../../../Toast';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ItemContext } from '../../../../context/ItemContext';
-import { USER_SERIAL } from '../../../../userSerial';   
 import TableContents from './tags/TableContens';
-import { DDR_DETAIL } from '../../../../Common/PageLinks';
+import Cookies from 'js-cookie'; 
+
 const tableFields = [
     { name: 'Item Type', key: 'itemType' },
     { name: 'Name', key: 'name' },
@@ -24,9 +23,6 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
     const navigate = useNavigate();
     const { itemDetails, setItemDetails } = useContext(ItemContext);
 
-    // useEffect(() => {
-        
-    // }, [itemList]);
     const gotoDDR = () => {
         setItemDetails({
             ...itemDetails,
@@ -35,16 +31,17 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
             item_iv: itemList.item._id.iv,
         });
         setTimeout(() => {
-            navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/detail`);
+            navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
         }, 0);
-    }
-
+    };
 
     const handleClick = () => handleUpdateButtonClick(1);
     const handleDelete = (idx) => {
         handleUpdateButtonClick(8);
         handleKeyIdx(idx);
     };
+
+    const role = Cookies.get('role'); // 쿠키에서 role 정보를 가져옴
 
     return (
         <div className='mt-1 mb-3 p-3' style={{ backgroundColor: '#F8F8F8' }}>
@@ -58,7 +55,7 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {itemList.item.itemType === 'ConceptItem' ? (<></>) : (
+                        {itemList.item.itemType === 'ConceptItem' ? null : (
                             <tr>
                                 <th className='text-center' scope="row" style={{ width: '25%' }}>Go to Detail Page</th>
                                 <td>
@@ -79,10 +76,12 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
                     </tbody>
                 </table>
             </div>
-            <div className='text-end'>
-                <button className='btn btn-secondary btn-sm' onClick={handleClick}>Update</button>
-                <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(itemList.item._id)}>Delete</button>
-            </div>
+            {role === 'owner' && ( // role이 'owner'일 때만 버튼을 렌더링
+                <div className='text-end'>
+                    <button className='btn btn-secondary btn-sm' onClick={handleClick}>Update</button>
+                    <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(itemList.item._id)}>Delete</button>
+                </div>
+            )}
         </div>
     );
 }

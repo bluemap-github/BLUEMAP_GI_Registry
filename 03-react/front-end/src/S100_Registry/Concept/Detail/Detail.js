@@ -2,13 +2,13 @@ import React, { useEffect, useState, useContext } from 'react';
 import { ItemContext } from '../../../context/ItemContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
 import { CONCEPT_ITEM_ONE, GET_MANAGEMENT_INFO, GET_REFERENCE_SOURCE, GET_REFERENCE } from '../api';
 import ItemDetail from './components/ItemDetail';
 import ManagementInfoDetail from './components/ManagementInfoDetail';
 import ReferenceSourceDetail from './components/ReferenceSourceDetail';
 import ReferenceDetail from './components/ReferenceDetail';
 import Base from './modals/Base';
-import { CONCEPT_LIST } from '../../../Common/PageLinks';
 
 const componentDetails = [
   { Component: ItemDetail, state: 'itemList', setState: 'setItemList', api: CONCEPT_ITEM_ONE },
@@ -42,10 +42,8 @@ function Detail() {
   const handleUpdateButtonClick = (int) => {
     openModal();
   
-    // 상태 업데이트를 위한 객체를 정의합니다.
     const newState = { numModal: int };
   
-    // 조건에 따라 originData 속성을 설정합니다.
     if (int < 5) {
       newState.originData = state[componentDetails[int - 1].state];
     }
@@ -60,7 +58,7 @@ function Detail() {
   const handleKeyIdx = (int) => setState(prev => ({ ...prev, keyIdx: int }));
 
   const moveToList = () => {
-    navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/concept/list`)
+    navigate(`/${Cookies.get('REGISTRY_URI')}/concept/list`); // Cookies에서 REGISTRY_URI를 가져옴
   };
     
 

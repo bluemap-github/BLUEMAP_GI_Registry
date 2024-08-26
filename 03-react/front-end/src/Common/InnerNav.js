@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
 import { RERI_HOME } from '../Common/PageLinks';
 
 const InnerNav = () => {
-    const registry_name = sessionStorage.getItem('REGISTRY_NAME');
+    const registry_name = Cookies.get('REGISTRY_NAME');
     const location = useLocation();
     const navigate = useNavigate();
     const moveToHome = () => {
-        navigate(`/${sessionStorage.getItem('REGISTRY_URI')}`);
+        // 쿠키에서 REGISTRY_URI를 가져옴
+        navigate(`/${Cookies.get('REGISTRY_URI')}`);
     };
     const [error, setError] = useState('');
     const [pathSegments, setPathSegments] = useState(['Home', '']);

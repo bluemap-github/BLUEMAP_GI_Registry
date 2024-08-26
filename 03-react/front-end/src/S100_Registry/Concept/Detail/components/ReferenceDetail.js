@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Cookies from 'js-cookie'; // Import Cookies to check the role
 import TableContents from './tags/TableContens';
 
 const ToggleButtonIcon = ({ isOpened }) => (
@@ -20,6 +21,7 @@ const tableFields = [
 
 function ReferenceDetail({ itemList, handleUpdateButtonClick, handleFollowIdx, handleKeyIdx }) {
     const [toggleOpened, setToggleOpened] = useState(true);
+    const role = Cookies.get('role'); // Get the user's role from cookies
 
     const handleClick = (idx) => {
         handleUpdateButtonClick(4);
@@ -43,7 +45,9 @@ function ReferenceDetail({ itemList, handleUpdateButtonClick, handleFollowIdx, h
                         <ToggleButtonIcon isOpened={toggleOpened} />
                     </button>
                 </div>
-                {toggleOpened && <button className='btn btn-outline-secondary btn-sm' onClick={handleAddClick}>+ Add</button>}
+                {toggleOpened && role === 'owner' && (
+                    <button className='btn btn-outline-secondary btn-sm' onClick={handleAddClick}>+ Add</button>
+                )}
             </div>
 
             {toggleOpened && (
@@ -67,10 +71,12 @@ function ReferenceDetail({ itemList, handleUpdateButtonClick, handleFollowIdx, h
                                             ))}
                                         </tbody>
                                     </table>
-                                    <div className='text-end'>
-                                        <button className='btn btn-secondary btn-sm' style={{ maxWidth: "70px" }} onClick={() => handleClick(idx)}>Update</button>
-                                        <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(ref._id)}>Delete</button>
-                                    </div>
+                                    {role === 'owner' && (
+                                        <div className='text-end'>
+                                            <button className='btn btn-secondary btn-sm' style={{ maxWidth: "70px" }} onClick={() => handleClick(idx)}>Update</button>
+                                            <button className='btn btn-sm btn-danger m-1' onClick={() => handleDelete(ref._id)}>Delete</button>
+                                        </div>
+                                    )}
                                 </li>
                             ))}
                         </div>

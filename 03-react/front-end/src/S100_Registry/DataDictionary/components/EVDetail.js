@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 import { DDR_DETAIL } from '../../../Common/PageLinks';
+import Cookies from 'js-cookie'; 
 const EVDetail = ({item}) => {
     const { itemDetails, setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ const EVDetail = ({item}) => {
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/detail`);
+        navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
     }
 
     return (

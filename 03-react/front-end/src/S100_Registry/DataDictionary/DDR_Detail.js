@@ -11,6 +11,7 @@ import CADetail from './components/CADetail';
 import FDetail from './components/FDetail';
 import IDetail from './components/IDetail';
 import { DDR_LIST } from '../../Common/PageLinks';
+import Cookies from 'js-cookie'; 
 
 const componentMap = {
     'EnumeratedValue': EVDetail,
@@ -27,7 +28,7 @@ const DDR_Detail = () => {
     const [item, setItem] = useState(null);
     const navigate = useNavigate();
     const moveToPage = () => {
-        navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/list`);
+        navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/list`);
     }
     useEffect(() => {
         const fetchItemList = async () => {

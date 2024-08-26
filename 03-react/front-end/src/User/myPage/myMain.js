@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
 import { CHECK_AUTH } from '../api';
 import { useNavigate } from 'react-router-dom';
 import { getOwnRegistries } from './GetRegistery';
-import {SIGN_IN, ACCESS, CREATE_REGI, ENTER_REGI} from '../../Common/PageLinks';
+import { SIGN_IN, CREATE_REGI, ENTER_REGI } from '../../Common/PageLinks';
 
 function MyMain() {
     const navigate = useNavigate();
@@ -12,14 +13,13 @@ function MyMain() {
     const [ownRegistries, setOwnRegistries] = useState([]);
     const [guestRegistries, setGuestRegistries] = useState([]);
 
-    const handleCreateRegi = () => {navigate(CREATE_REGI)};
+    const handleCreateRegi = () => { navigate(CREATE_REGI) };
 
     useEffect(() => {
-        sessionStorage.removeItem('USER_SERIAL');
+        // Cookies.remove('USER_SERIAL'); // 쿠키에서 USER_SERIAL 제거
         const token = localStorage.getItem('jwt');
 
         if (token) {
-            // 사용자 정보를 가져오기 위해 API 요청 보내기
             axios.get(CHECK_AUTH, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,11 +56,10 @@ function MyMain() {
     }, [navigate]);
 
     const connectToRegistry = (e, registry) => {
-        sessionStorage.setItem('REGISTRY_URI', registry.uniformResourceIdentifier);
-        sessionStorage.setItem('REGISTRY_NAME', registry.name);
+        Cookies.set('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 }); // 쿠키에 REGISTRY_URI 저장
+        Cookies.set('REGISTRY_NAME', registry.name, { expires: 7 }); // 쿠키에 REGISTRY_NAME 저장
         navigate(ENTER_REGI(registry.uniformResourceIdentifier));
     };
-    
     
     if (error) {
         return <div>Error: {error}</div>;
@@ -69,7 +68,6 @@ function MyMain() {
     if (!userInfo) {
         return <div>Loading...</div>;
     }
-
     return (
         <div>
             <div className='p-5'>

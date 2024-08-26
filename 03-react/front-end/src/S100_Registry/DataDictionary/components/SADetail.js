@@ -4,6 +4,7 @@ import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 import {getAttributeConstraints} from '../../components/requestAPI.js'
 import { DDR_DETAIL } from '../../../Common/PageLinks';
+import Cookies from 'js-cookie'; 
 
 const SADetail = ({ item }) => {
     
@@ -18,7 +19,7 @@ const SADetail = ({ item }) => {
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate(`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/detail`);
+        navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
     }
     useEffect(() => {
         const fetchData = async () => {

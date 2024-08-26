@@ -26,6 +26,10 @@ import Browsing from './Common/Browsing/Browsing';
 
 import PrivateRoute from './PrivateRoute';
 import EnterRegi from './Common/EnterRegi';
+import IsLogined from './Common/IsLogined';
+import CheckRole from './Common/CheckRole';
+import IsOwnRegi from './Common/IsOwnRegi';
+import NotAllowed from './Common/NotAllowed'; 
 import {ENTER_REGI,BROWSING,  INTRO, SIGN_IN, SIGN_UP, MY_MAIN, CREATE_REGI, ACCESS, ERROR, RERI_HOME, CONCEPT_LIST, CONCEPT_DETAIL, CREATE_ITEM, DDR_LIST, DDR_DETAIL, PORTAYAL_LIST} from './Common/PageLinks';
 function App() {
   return (
@@ -66,20 +70,21 @@ function AppContent() {
             </>
           )}
           <Routes>
-            <Route path={INTRO} element={<SignIn />} />
-            <Route path={SIGN_IN} element={<SignIn />} />
-            <Route path={SIGN_UP} element={<SignUp />} />
+            <Route path={INTRO} element={<IsLogined><SignIn /></IsLogined>} />
+            <Route path={SIGN_IN} element={<IsLogined><SignIn /></IsLogined>} />
+            <Route path={SIGN_UP} element={<IsLogined><SignUp /></IsLogined>} />
             <Route path={MY_MAIN} element={<PrivateRoute><MyMain /></PrivateRoute>} />
             <Route path={CREATE_REGI} element={<PrivateRoute><CreateRegistry /></PrivateRoute>} />
             
             
             <Route path=":id" element={<EnterRegi><RegiHome /></EnterRegi>} />
-            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/concept/list`} element={<ConceptRegister />} />
-            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/concept/detail`} element={<ConceptDetail />} />
-            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/create`} element={<PrivateRoute><InsertItem /></PrivateRoute>} />
-            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/list`} element={<DataDictionaryRegister/>} />
-            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/dataDictionary/detail`} element={<DDR_Detail />} />
-            <Route path={`/${sessionStorage.getItem('REGISTRY_URI')}/portrayal/list`} element={<PortrayalRegister />} />
+            <Route path=":id/concept/list" element={<CheckRole><ConceptRegister /></CheckRole>} />
+            <Route path=":id/concept/detail" element={<CheckRole><ConceptDetail /></CheckRole>} />
+            <Route path=":id/create" element={<IsOwnRegi><InsertItem /></IsOwnRegi>} />
+            <Route path="/notallowed" element={<NotAllowed />} />
+            <Route path=":id/dataDictionary/list" element={<CheckRole><DataDictionaryRegister/></CheckRole>} />
+            <Route path=":id/dataDictionary/detail" element={<CheckRole><DDR_Detail /></CheckRole>} />
+            <Route path=":id/portrayal/list" element={<CheckRole><PortrayalRegister /></CheckRole>} />
 
             <Route path="/browsing" element={<Browsing />}/>
 
