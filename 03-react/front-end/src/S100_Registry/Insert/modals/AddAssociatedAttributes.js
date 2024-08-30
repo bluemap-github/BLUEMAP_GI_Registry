@@ -40,22 +40,30 @@ const AddAssociatedAttributes = ({isOpen, onClose, handleRelatedValueList}) => {
                 </div>
             <div>
             <AttSearch onSearch={handleSetData} />
-            <div>
-                {data.length === 0 ? (<p>no data</p>) : (
+            <div
+                style={{
+                    maxHeight: '300px', // 원하는 높이로 설정
+                    overflowY: 'auto',  // 내용이 넘칠 경우 스크롤 가능
+                    padding: '10px',   // 패딩 추가 (선택 사항)
+                    border: '1px solid #ccc',  // 테두리 추가 (선택 사항)
+                    marginBottom: '20px' // 하단 여백 추가 (선택 사항)
+                }}
+            >
+                {data.length === 0 ? (
+                    <p>no data</p>
+                ) : (
                     <>
-                    {
-                        data.map((item, index) => (
+                        {data.map((item, index) => (
                             <div key={index}>
-                                <input 
-                                    type="checkbox" 
-                                    value={item._id} 
+                                <input
+                                    type="checkbox"
+                                    value={item._id}
                                     checked={selectedID === item._id}
-                                    onChange={(e) => handleChange(e, item)} 
+                                    onChange={(e) => handleChange(e, item)}
                                 />
                                 <label>{item.name}</label>
                             </div>
-                        ))
-                    }
+                        ))}
                     </>
                 )}
             </div>
