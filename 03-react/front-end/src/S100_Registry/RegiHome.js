@@ -32,7 +32,7 @@ const RegiHome = () => {
     };
 
     return (
-        <div className="p-5">
+        <div>
             {registryInfo ? (
                 <div style={{ maxWidth: '70vw', margin: '0 auto', backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>

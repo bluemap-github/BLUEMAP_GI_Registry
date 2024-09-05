@@ -3,7 +3,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from regiSystem.models import (
     S100_Concept_Item,
-    S100_CD_AttributeConstraints
+    S100_CD_AttributeConstraints,
+    ListedValue,
+    AttributeUsage,
+    Distinction
 )
 from regiSystem.serializers.CD import (
         SimpleAttributeSerializer,
@@ -22,13 +25,7 @@ itemTypeSet = {
 }
 
 from regiSystem.info_sec.encryption import (get_encrypted_id, decrypt)
-itemIncryption = {
-        "EnumeratedValue": "attributeId",
-        "SimpleAttribute": "listedValue",
-        "ComplexAttribute": "subAttribute",
-        "FeatureType": "distinctedFeature",
-        "InformationType": "distinctedInformation"
-}
+
 
 
 def getItemType(itemType, C_id):
@@ -118,6 +115,71 @@ def one_encrypt_process(id_attribute_set):
         print(res)
         return res
 
+class GetRelatedValues:
+    itemIncryption = {
+        "EnumeratedValue": "attributeId",
+        "SimpleAttribute": "listedValue",
+        "ComplexAttribute": "subAttribute",
+        "FeatureType": "distinction",
+        "InformationType": "distinction"
+    }
+
+    def __init__(self, parent_id, data):
+        self.parent_id = parent_id
+        self.data = data
+
+    def get_listed_value(self):
+        self.data["listedValue"] = []
+        items = ListedValue.get_listed_value(self.parent_id)
+        for item in items:
+            self.data["listedValue"].append(item["child_id"])
+        return self.data
+
+    def get_attribute_id(self):
+        self.data["attributeId"] = []
+        parent_id = ListedValue.get_parent_id(self.parent_id)
+        self.data["attributeId"].append(parent_id)
+        return self.data
+    
+    def get_sub_attribute_id(self):
+        self.data["subAttribute"] = []
+        sub_attribute = AttributeUsage.get_sub_attributes(self.parent_id)
+        for item in sub_attribute:
+            self.data["subAttribute"].append(item["child_id"])
+        return self.data
+    
+    def get_distincted_item(self):
+        self.data["distinction"] = []
+        items = Distinction.get_distincted_item(self.parent_id)
+        for item in items:
+            self.data["distinction"].append(item["child_id"])
+        return self.data
+
+
+    
+    def call_function(self, key):
+        get_related_values_function = {
+            "EnumeratedValue": "get_attribute_id",
+            "SimpleAttribute": "get_listed_value",
+            "ComplexAttribute": "get_sub_attribute_id",
+            "FeatureType": "get_distincted_item",
+            "InformationType": "get_distincted_item"
+        }
+        
+        function_name = get_related_values_function.get(key)
+        
+        if function_name:
+            return getattr(self, function_name)()
+        else:
+            raise ValueError(f"Invalid item_type: {key}")
+
+    def get_encryption_key(self, key):
+        if key in self.itemIncryption:
+            return self.itemIncryption[key]
+        else:
+            raise ValueError(f"Invalid item_type for encryption: {key}")
+
+
 @api_view(['GET'])
 def ddr_item_one(request):
     item_type = request.GET.get('item_type')
@@ -129,15 +191,25 @@ def ddr_item_one(request):
             c_item = S100_Concept_Item.find_one({"_id": ObjectId(I_id)})
             if c_item is None:
                 return Response(status=404, data={"error": "Item not found"})
+            
+            parent_id = str(c_item["_id"])
             c_item["_id"] = get_encrypted_id([c_item["_id"]])
             serializer = itemTypeSet[item_type](c_item)
-            serializer.data[itemIncryption[item_type]] = one_encrypt_process(serializer.data[itemIncryption[item_type]])
+            data = dict(serializer.data)
             
-            return Response(serializer.data)
+            related_values = GetRelatedValues(parent_id, data)
+            data = related_values.call_function(item_type)
+            encryption_key = related_values.get_encryption_key(item_type)
+            data[encryption_key] = one_encrypt_process(data[encryption_key])
+            
+            return Response(data)
         
         except Exception as e:
             return Response(status=500, data={"error": str(e)})
+    
     return Response(status=400, data={"error": "Invalid request method"})
+
+
 
 
 @api_view(['GET'])

@@ -12,8 +12,8 @@ const getValidationItem = (formType) => {
             return ['name', 'itemStatus'];
         case 'EnumeratedValue':
             return ['name', 'attributeId', 'enumType'];
-        case 'AttributeConstraints':
-            return ['constraints'];
+        // case 'AttributeConstraints':
+        //     return [];
         case 'ManagementInfo':
             return [
                 'proposalType',

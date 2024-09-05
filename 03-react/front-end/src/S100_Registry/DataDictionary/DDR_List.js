@@ -16,7 +16,7 @@ const DDR_FilterList = ({ viewType }) => {
   const [sortKey, setSortKey] = useState('name');
   const [sortDirection, setSortDirection] = useState('ascending');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10); // Default to 10
+  const [pageSize, setPageSize] = useState(15); // Default to 10
   const [totalPages, setTotalPages] = useState(1);
   const { setItemDetails } = useContext(ItemContext);
   const navigate = useNavigate();
@@ -186,7 +186,7 @@ const DDR_FilterList = ({ viewType }) => {
               >
                 Camel Case {renderSortArrow('camelCase')}
               </th>
-              <th scope="col" style={{ width: '40%' }}>Definition</th>
+              <th scope="col" style={{ width: '40%', alignContent: 'center' }}>Definition</th>
               <th scope="col" style={{ width: '11%' }}>Status</th>
             </tr>
           </thead>
@@ -236,8 +236,8 @@ const DDR_FilterList = ({ viewType }) => {
         <div style={{ display: 'flex',  alignItems: 'center'}}>
           <div style={{ display: 'flex', alignContent: 'center'}}>
             <select className='form-select form-select-sm' value={pageSize} onChange={handlePageSizeChange}>
-              <option value="10">10</option>
-              <option value="20">20</option>
+              <option value="15">15</option>
+              <option value="30">30</option>
               <option value="50">50</option>
             </select>
           </div>
@@ -250,13 +250,49 @@ const DDR_FilterList = ({ viewType }) => {
                 Previous
               </button>
             </li>
-            {[...Array(totalPages)].map((_, i) => (
-              <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
-                <button className="page-link" onClick={() => handlePageChange(i + 1)}>
-                  {i + 1}
-                </button>
-              </li>
-            ))}
+
+            {/* 처음 몇 개의 페이지 표시 */}
+            {page > 3 && (
+              <>
+                <li className="page-item">
+                  <button className="page-link" onClick={() => handlePageChange(1)}>1</button>
+                </li>
+                {page > 4 && (
+                  <li className="page-item disabled">
+                    <span className="page-link">...</span>
+                  </li>
+                )}
+              </>
+            )}
+
+            {/* 현재 페이지 기준으로 앞뒤 2개 페이지 표시 */}
+            {[...Array(totalPages)].map((_, i) => {
+              if (i + 1 >= page - 2 && i + 1 <= page + 2) {
+                return (
+                  <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+                    <button className="page-link" onClick={() => handlePageChange(i + 1)}>
+                      {i + 1}
+                    </button>
+                  </li>
+                );
+              }
+              return null;
+            })}
+
+            {/* 마지막 몇 개의 페이지 표시 */}
+            {page < totalPages - 2 && (
+              <>
+                {page < totalPages - 3 && (
+                  <li className="page-item disabled">
+                    <span className="page-link">...</span>
+                  </li>
+                )}
+                <li className="page-item">
+                  <button className="page-link" onClick={() => handlePageChange(totalPages)}>{totalPages}</button>
+                </li>
+              </>
+            )}
+
             <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
               <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
                 Next
@@ -264,6 +300,7 @@ const DDR_FilterList = ({ viewType }) => {
             </li>
           </ul>
         </nav>
+
       </div>
       
     </div>

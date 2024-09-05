@@ -155,7 +155,7 @@ function Item() {
     };
 
     return (
-        <div className="p-5">
+        <div>
             <ChooseType getSelestedApi={getSelestedApi} />
 
             <div className='mt-1'>

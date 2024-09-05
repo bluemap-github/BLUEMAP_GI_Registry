@@ -63,14 +63,7 @@ function ManagementInfoDetail({ itemList, handleUpdateButtonClick, handleFollowI
                                 <thead>
                                     <tr>
                                         <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%" }}>
-                                                <div className='text-center' style={{ display: 'flex', alignItems: 'center', width: "80%" }}>
-                                                    <div>
-                                                        Management Detail
-                                                        {itemList.management_infos.length > 1 && <span><span> </span>{idx + 1}</span>}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        Management Detail
                                         </th>
                                     </tr>
                                 </thead>

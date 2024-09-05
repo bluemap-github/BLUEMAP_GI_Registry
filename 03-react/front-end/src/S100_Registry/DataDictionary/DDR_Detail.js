@@ -21,6 +21,14 @@ const componentMap = {
     'InformationType': IDetail
 };
 
+const itemTypes = {
+    'EnumeratedValue': 'Listed Value',
+    'SimpleAttribute': 'Simple Attribute',
+    'ComplexAttribute': 'Complex Attribute',
+    'FeatureType': 'Feature Type',
+    'InformationType': 'Information Type'
+};
+
 
 const DDR_Detail = () => {
     const { itemDetails } = useContext(ItemContext); 
@@ -56,11 +64,10 @@ const DDR_Detail = () => {
     const DetailComponent = componentMap[view_item_type] || null;
 
     return (
-        <div className='p-5'>
-            <div style={{border: "1px solid gray", borderRadius: "10px", width: "85%"}}>
+        <div>
+            <div>
                 {DetailComponent ? <DetailComponent item={item} /> : null}
             </div>
-            
             <button onClick={moveToPage} className='btn btn-primary mt-3'>Back to List</button>
         </div>
     );

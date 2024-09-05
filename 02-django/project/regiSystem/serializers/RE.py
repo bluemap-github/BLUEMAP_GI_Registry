@@ -15,7 +15,7 @@ class ObjectIdField(serializers.Field):
 
 class ConceptItemSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
-    itemType = serializers.CharField()  # EnumeratedValue, SimpleAttribute, ComplexAttribute, Feature, Information.. 더 생기면 추가하기
+    itemType = serializers.CharField()  
     concept_id = serializers.CharField()
     itemIdentifier = serializers.IntegerField()
     name = serializers.CharField(max_length=100)

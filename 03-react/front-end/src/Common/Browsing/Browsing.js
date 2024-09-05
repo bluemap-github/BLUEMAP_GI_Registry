@@ -10,7 +10,7 @@ const Browsing = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(15);
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
 
@@ -86,8 +86,8 @@ const Browsing = () => {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <select className='form-select form-select-sm' value={pageSize} onChange={handlePageSizeChange}>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
                             <option value="50">50</option>
                         </select>
                     </div>

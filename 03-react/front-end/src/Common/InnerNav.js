@@ -49,7 +49,7 @@ const InnerNav = () => {
                 <div>{error}</div>
             ) : (
                 <>
-                    <h5 style={{ fontWeight: 'bold' }}>{registry_name}</h5>
+                    {/* <h5 style={{ fontWeight: 'bold' }}>{registry_name}</h5> */}
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div
                             className='inner-nav-link inner-nav-link-click'

@@ -15,7 +15,7 @@ function Register() {
   const [sortKey, setSortKey] = useState('name');
   const [sortDirection, setSortDirection] = useState('ascending');
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [totalPages, setTotalPages] = useState(1);
   const { setItemDetails } = useContext(ItemContext);
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ function Register() {
   };
 
   return (
-    <div className="p-5">
+    <div>
       <div>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <div className='input-group' style={{width: "12%"}}>
@@ -129,14 +129,14 @@ function Register() {
       <table className="table table-hover table-bordered" style={{ tableLayout: 'fixed', marginTop: '20px' }}>
         <thead>
           <tr className='table-primary'>
-            <th style={{ cursor: 'pointer', color: sortKey === 'name' ? 'blue' : 'black' }} onClick={() => handleSortChange('name')}>
+            <th style={{ width: '15%', cursor: 'pointer', color: sortKey === 'name' ? 'blue' : 'black' }} onClick={() => handleSortChange('name')}>
               Name {renderSortArrow('name')}
             </th>
-            <th style={{ cursor: 'pointer', color: sortKey === 'camelCase' ? 'blue' : 'black' }} onClick={() => handleSortChange('camelCase')}>
+            <th style={{ width: '15%', cursor: 'pointer', color: sortKey === 'camelCase' ? 'blue' : 'black' }} onClick={() => handleSortChange('camelCase')}>
               Camel Case {renderSortArrow('camelCase')}
             </th>
-            <th>Definition</th>
-            <th>Status</th>
+            <th style={{ width: '40%', alignContent: 'center'}}>Definition</th>
+            <th style={{ width: '11%' }}>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -147,10 +147,34 @@ function Register() {
           )}
           {itemList.map((item) => (
             <tr key={item._id.encrypted_data} onClick={() => handleDetailClick(item)} style={{ cursor: 'pointer' }}>
-              <td>{item.name}</td>
-              <td>{item.camelCase}</td>
-              <td>{item.definition}</td>
-              <td>{item.itemStatus}</td>
+              <td
+                  onClick={() => handleDetailClick(item)}
+                  className="th-inner sortable both"
+                  style={{ width: '15%' }}
+                >
+                  <div className="single-line-ellipsis">{item.name}</div>
+                </td>
+                <td
+                  onClick={() => handleDetailClick(item)}
+                  className="th-inner sortable both"
+                  style={{ width: '15%' }}
+                >
+                  <div className="single-line-ellipsis">{item.camelCase}</div>
+                </td>
+                <td
+                  onClick={() => handleDetailClick(item)}
+                  className="th-inner sortable both"
+                  style={{ width: '40%' }}
+                >
+                  <div className="single-line-ellipsis">{item.definition}</div>
+                </td>
+                <td
+                  onClick={() => handleDetailClick(item)}
+                  className="th-inner sortable both"
+                  style={{ width: '11%' }}
+                >
+                  <div className="single-line-ellipsis">{item.itemStatus}</div>
+                </td>
             </tr>
           ))}
         </tbody>
@@ -159,8 +183,8 @@ function Register() {
         <div style={{ display: 'flex',  alignItems: 'center'}}>
           <div style={{ display: 'flex', alignContent: 'center'}}>
             <select className='form-select form-select-sm' value={pageSize} onChange={handlePageSizeChange}>
-              <option value="10">10</option>
-              <option value="20">20</option>
+              <option value="15">15</option>
+              <option value="30">30</option>
               <option value="50">50</option>
             </select>
           </div>
@@ -174,13 +198,39 @@ function Register() {
                 Previous
               </button>
             </li>
-            {[...Array(totalPages)].map((_, i) => (
-              <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
-                <button className="page-link" onClick={() => handlePageChange(i + 1)} disabled={page === i + 1}>
-                  {i + 1}
-                </button>
-              </li>
-            ))}
+            {page > 3 && (
+              <>
+                <li className="page-item">
+                  <button className="page-link" onClick={() => handlePageChange(1)}>1</button>
+                </li>
+                <li className="page-item disabled">
+                  <span className="page-link">...</span>
+                </li>
+              </>
+            )}
+            {[...Array(totalPages)].map((_, i) => {
+              if (i + 1 >= page - 2 && i + 1 <= page + 2) {
+                return (
+                  <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+                    <button className="page-link" onClick={() => handlePageChange(i + 1)} disabled={page === i + 1}>
+                      {i + 1}
+                    </button>
+                  </li>
+                );
+              } else {
+                return null;
+              }
+            })}
+            {page < totalPages - 2 && (
+              <>
+                <li className="page-item disabled">
+                  <span className="page-link">...</span>
+                </li>
+                <li className="page-item">
+                  <button className="page-link" onClick={() => handlePageChange(totalPages)}>{totalPages}</button>
+                </li>
+              </>
+            )}
             <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
               <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
                 Next
@@ -188,6 +238,7 @@ function Register() {
             </li>
           </ul>
         </nav>
+
       </div>
 
       

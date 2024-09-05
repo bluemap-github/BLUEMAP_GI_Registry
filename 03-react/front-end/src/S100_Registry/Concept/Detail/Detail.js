@@ -89,7 +89,7 @@ function Detail() {
   }
 
   return (
-    <div className="p-5" style={{width: "85%"}}>
+    <div>
       <Base
         itemList={state.originData}
         isOpen={state.isModalOpen}
