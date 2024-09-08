@@ -85,7 +85,7 @@ function ComplexAttribute({ onFormSubmit, selectedApiUrl }) {
     
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
-            <div className='p-3'>
+            <div>
                 <div className='row'>
                     <h3>Complex Attribute</h3>
                     <div className='col'>

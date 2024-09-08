@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
-from regiSystem.models import (
+from regiSystem.models.Concept import (
     S100_Concept_Item,
     S100_CD_AttributeConstraints,
     S100_CD_AttributeUsage,

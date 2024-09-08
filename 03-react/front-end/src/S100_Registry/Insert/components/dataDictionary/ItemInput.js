@@ -61,7 +61,7 @@ function ItemInput({ onFormSubmit, apiType }) {
 
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
-            <div className='p-3'>
+            <div>
                 <div className='row'>
                     <h3>Concept Item</h3>
                     <div className='col'>

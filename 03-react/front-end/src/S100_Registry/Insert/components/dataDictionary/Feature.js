@@ -86,7 +86,7 @@ function Feature({ onFormSubmit, selectedApiUrl }) {
 
     return (
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
-            <div className='p-3'>
+            <div>
                 <h3>Feature Item</h3>
                 <div className='row'>
                     <div className='col'>

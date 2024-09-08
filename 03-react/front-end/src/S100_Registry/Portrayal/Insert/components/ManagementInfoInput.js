@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import React, { useState, forwardRef, useEffect } from "react";
 import Base from '../modals/Base';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,7 +14,7 @@ const managementInfoInit = {
     controlBodyNotes: []
 };
 
-function ManagementInfoInput({ onFormSubmit }) {
+function ManagementInfoInput({ onFormSubmit, apiType }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const mandatoryFields = ["proposalType", "submittingOrganisation", "proposedChange", "proposalStatus"];
     const mandatoryDateFields = ["dateProposed", "dateAmended"];
@@ -29,6 +29,10 @@ function ManagementInfoInput({ onFormSubmit }) {
         setIsModalOpen(false);
     };
 
+    useEffect(() => {
+        setManagementInfos([managementInfoInit]);
+    }, [apiType]);
+    
     const [managementInfos, setManagementInfos] = useState([managementInfoInit]);
     const [toggleOpened, setToggleOpened] = useState(true);
     

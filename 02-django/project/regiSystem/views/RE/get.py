@@ -9,7 +9,7 @@ from rest_framework.status import (
         HTTP_200_OK,
         HTTP_500_INTERNAL_SERVER_ERROR
     )
-from regiSystem.models import (
+from regiSystem.models.Concept import (
     S100_Concept_Register,
     S100_Concept_Item,
     S100_Concept_ManagementInfo,

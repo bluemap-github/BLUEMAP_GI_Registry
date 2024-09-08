@@ -1,4 +1,4 @@
-from regiSystem.models import S100_Concept_Register
+from regiSystem.models.Concept import S100_Concept_Register
 
 def uri_to_serial(uri):
     if not uri:

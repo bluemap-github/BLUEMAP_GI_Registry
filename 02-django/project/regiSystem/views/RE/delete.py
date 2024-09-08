@@ -1,5 +1,5 @@
 from bson.objectid import ObjectId
-from regiSystem.models import (
+from regiSystem.models.Concept import (
         S100_Concept_Register,
         S100_Concept_Item,
         S100_Concept_ManagementInfo,

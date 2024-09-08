@@ -1,7 +1,7 @@
 from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from regiSystem.models import S100_Concept_Item, S100_Concept_Register
+from regiSystem.models.Concept import S100_Concept_Item, S100_Concept_Register
 from regiSystem.serializers.CD import (
         SimpleAttributeSerializer,
         EnumeratedValueSerializer,

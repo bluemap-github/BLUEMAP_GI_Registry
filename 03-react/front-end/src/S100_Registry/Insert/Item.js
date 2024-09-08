@@ -15,7 +15,7 @@ import Feature from './components/dataDictionary/Feature';
 import Information from './components/dataDictionary/Information';
 import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import { ItemContext } from '../../context/ItemContext';
-import { performValidation, checkPostList } from './validation/ValidateItems.js';
+import { performValidation } from './validation/ValidateItems.js';
 import AttributeConstraints from './components/AttributeConstraints.js';
 
 function Item() {

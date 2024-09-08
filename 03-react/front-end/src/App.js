@@ -22,6 +22,7 @@ import RegiNavBar from './Common/RegiNavBar';
 import ConceptPage from './rootComponent/ConceptPage';
 import DataDictionaryPage from './rootComponent/DataDictionaryPage';
 import UserPage from './rootComponent/UserPage';
+import InsertPortrayalItem from './S100_Registry/Portrayal/Insert/InsertPortrayalItem';
 
 function App() {
   return (
@@ -78,6 +79,7 @@ function RegistrySection() {
               <Route path="dataDictionary/*" element={<DataDictionaryPage />} />
               <Route path="portrayal/*" element={<PortrayalRegister />} />
               <Route path="create" element={<IsOwnRegi><InsertItem /></IsOwnRegi>} />
+              <Route path="create-portrayal" element={<IsOwnRegi><InsertPortrayalItem /></IsOwnRegi>} />
             </Routes>
           </div>
         </div>

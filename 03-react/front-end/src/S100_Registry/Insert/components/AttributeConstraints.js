@@ -63,7 +63,7 @@ function AttributeConstraints({ onFormSubmit }) {
                         </div>
                     </div>
                     {referenceSource ? (
-                        <div className='p-3 row'>
+                        <div className='row'>
                             <div className='col'>
                                 <div className='input-group input-group-sm mt-2' style={{ zIndex: '0' }}>
                                     <span 

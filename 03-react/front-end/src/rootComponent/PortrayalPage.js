@@ -10,6 +10,7 @@ function PortrayalPage() {
       
       <Routes>
         <Route path="list" element={<CheckRole><PortrayalRegister /></CheckRole>} />
+        
       </Routes>
     </div>
   );

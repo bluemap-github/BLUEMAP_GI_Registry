@@ -18,7 +18,7 @@ from .manage_auth.check_auth import get_email_from_jwt
 
 SECRET_KEY = settings.SECRET_KEY
 
-from regiSystem.models import S100_Concept_Register
+from regiSystem.models.Concept import S100_Concept_Register
 
 @csrf_exempt
 def check_email(request):

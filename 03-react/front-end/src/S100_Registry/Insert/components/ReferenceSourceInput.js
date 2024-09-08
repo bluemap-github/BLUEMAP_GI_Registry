@@ -70,7 +70,7 @@ function ReferenceSourceInput({ onFormSubmit }) {
                         </div>
                     </div>
                     {referenceSource ? (
-                        <div className='p-3 mt-2'>
+                        <div>
                             <div className='input-group input-group-sm' style={{ zIndex: '0' }}>
                                 <span 
                                     className={`input-group-text ${mandatoryFields.includes('referenceIdentifier') && referenceSource.referenceIdentifier.trim() === '' ? 'tag-invalid' : ''}`}

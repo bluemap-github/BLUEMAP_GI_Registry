@@ -2,7 +2,7 @@
 
 from mongo_driver import db
 from django.contrib.auth.hashers import make_password, check_password
-from regiSystem.models import S100_Concept_Register
+from regiSystem.models.Concept import S100_Concept_Register
 
 User = db['User']
 Participation = db['Participation']

@@ -60,7 +60,7 @@ function SimpleAttribute({ onFormSubmit, selectedApiUrl }) {
     };
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
-            <div className='p-3'>
+            <div>
                 <div className='row'>
                     <h3>Simple Attribute</h3>
                     <div className='col'>

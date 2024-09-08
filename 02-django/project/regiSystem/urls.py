@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import (RE, CD, SEARCH)
+from .views import (RE, CD, SEARCH, PR)
 
 app_name = 'regiSystem'
 urlpatterns = [
@@ -63,5 +63,32 @@ urlpatterns = [
     # RelatedValue
     path('related_item/search/', SEARCH.search.related_item),
     # path('browsing_registries/get/', SEARCH.search.browsing_registries),
+
+
+
+    # Portrayal > Visual Item
+    path('portrayal_item/symbol/post/', PR.post.insert_symbol_item),
+    path('portrayal_item/line_style/post/', PR.post.insert_line_style_item),
+    path('portrayal_item/area_fill/post/', PR.post.insert_area_fill_item),
+    path('portrayal_item/pixmap/post/', PR.post.insert_pixmap_item),
+
+    # Portrayal > Item Schema
+    path('portrayal_item/symbol_schema/post/', PR.post.insert_symbol_schema),
+    path('portrayal_item/line_style_schema/post/', PR.post.insert_line_style_schema),
+    path('portrayal_item/area_fill_schema/post/', PR.post.insert_area_fill_schema),
+    path('portrayal_item/pixmap_schema/post/', PR.post.insert_pixmap_schema),
+    path('portrayal_item/colour_profile_schema/post/', PR.post.insert_colour_profile_schema),
+
+    path('portrayal_item/symbol_schema_list/get/', PR.get.get_symbol_schema_list),
+    path('portrayal_item/symbol_schema/get/', PR.get.get_symbol_schema),
+
+    # Portrayal > Colour Token
+    path('portrayal_item/colour_token/post/', PR.post.insert_colour_token),
+
+    # Portrayal > Palette Item
+    path('portrayal_item/palette_item/post/', PR.post.insert_palette_item),
+
+    # Portrayal > Colour Palette
+    path('portrayal_item/colour_palette/post/', PR.post.insert_colour_palette),
 ]
 
