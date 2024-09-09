@@ -18,7 +18,7 @@ import EnterRegi from './Common/EnterRegi';
 import IsLogined from './Common/IsLogined';
 import IsOwnRegi from './Common/IsOwnRegi';
 import RegiNavBar from './Common/RegiNavBar';
-
+import PortrayalPage from './rootComponent/PortrayalPage';
 import ConceptPage from './rootComponent/ConceptPage';
 import DataDictionaryPage from './rootComponent/DataDictionaryPage';
 import UserPage from './rootComponent/UserPage';
@@ -77,7 +77,7 @@ function RegistrySection() {
               <Route path="/" element={<EnterRegi><RegiHome /></EnterRegi>} />
               <Route path="concept/*" element={<ConceptPage />} />
               <Route path="dataDictionary/*" element={<DataDictionaryPage />} />
-              <Route path="portrayal/*" element={<PortrayalRegister />} />
+              <Route path="portrayal/*" element={<PortrayalPage />} />
               <Route path="create" element={<IsOwnRegi><InsertItem /></IsOwnRegi>} />
               <Route path="create-portrayal" element={<IsOwnRegi><InsertPortrayalItem /></IsOwnRegi>} />
             </Routes>

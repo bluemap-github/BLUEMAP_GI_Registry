@@ -20,27 +20,47 @@ from regiSystem.models.PR_Visual import (
 )  
 @api_view(['POST'])
 def insert_symbol_item(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    SymbolModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = SymbolModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 @api_view(['POST'])
 def insert_line_style_item(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    LineStyleModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = LineStyleModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 @api_view(['POST'])
 def insert_area_fill_item(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    AreaFillModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = AreaFillModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 @api_view(['POST'])
 def insert_pixmap_item(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    PixmapModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = PixmapModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 
 ### Item Schema
@@ -56,11 +76,8 @@ from regiSystem.models.PR_Visual import (
 def insert_symbol_schema(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    # data['concept_id'] = ObjectId(C_id)
-    print(data, "!!!!!!!!!!!!!!!")
     inserted_ = SymbolSchemaModel.insert(data, ObjectId(C_id))
     if inserted_["status"] == "error":
-        print(inserted_["errors"])
         return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
     encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
     RegiModel.update_date(C_id)
@@ -68,48 +85,84 @@ def insert_symbol_schema(request):
 
 @api_view(['POST'])
 def insert_line_style_schema(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    LineStyleSchemaModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = LineStyleSchemaModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 @api_view(['POST'])
 def insert_area_fill_schema(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    AreaFillSchemaModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = AreaFillSchemaModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 @api_view(['POST'])
 def insert_pixmap_schema(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    PixmapSchemaModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = PixmapSchemaModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 @api_view(['POST'])
 def insert_colour_profile_schema(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    ColourProfileSchemaModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = ColourProfileSchemaModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 ## Colour Token
 from regiSystem.models.PR_Visual import ColourTokenModel
 @api_view(['POST'])
 def insert_colour_token(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    ColourTokenModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = ColourTokenModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 ## Palette Item
 from regiSystem.models.PR_Visual import PaletteItemModel
 @api_view(['POST'])
 def insert_palette_item(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    PaletteItemModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = PaletteItemModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
 
 ## Colour Palette
 from regiSystem.models.PR_Visual import ColourPaletteModel
 @api_view(['POST'])
 def insert_colour_palette(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
-    ColourPaletteModel.insert(data)
-    return Response(status=HTTP_201_CREATED)
+    inserted_ = ColourPaletteModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
+

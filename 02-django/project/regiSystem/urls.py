@@ -72,6 +72,19 @@ urlpatterns = [
     path('portrayal_item/area_fill/post/', PR.post.insert_area_fill_item),
     path('portrayal_item/pixmap/post/', PR.post.insert_pixmap_item),
 
+    path('portrayal_item/symbol_list/get/', PR.get.get_symbol_list),
+    path('portrayal_item/symbol/get/', PR.get.get_symbol),
+
+    path('portrayal_item/line_style_list/get/', PR.get.get_line_style_list),
+    path('portrayal_item/line_style/get/', PR.get.get_line_style),
+
+    path('portrayal_item/area_fill_list/get/', PR.get.get_area_fill_list),
+    path('portrayal_item/area_fill/get/', PR.get.get_area_fill),
+
+    path('portrayal_item/pixmap_list/get/', PR.get.get_pixmap_list),
+    path('portrayal_item/pixmap/get/', PR.get.get_pixmap),
+
+
     # Portrayal > Item Schema
     path('portrayal_item/symbol_schema/post/', PR.post.insert_symbol_schema),
     path('portrayal_item/line_style_schema/post/', PR.post.insert_line_style_schema),
@@ -82,8 +95,25 @@ urlpatterns = [
     path('portrayal_item/symbol_schema_list/get/', PR.get.get_symbol_schema_list),
     path('portrayal_item/symbol_schema/get/', PR.get.get_symbol_schema),
 
+    path('portrayal_item/line_style_schema_list/get/', PR.get.get_line_style_schema_list),
+    path('portrayal_item/line_style_schema/get/', PR.get.get_line_style_schema),
+
+    path('portrayal_item/area_fill_schema_list/get/', PR.get.get_area_fill_schema_list),
+    path('portrayal_item/area_fill_schema/get/', PR.get.get_area_fill_schema),
+
+    path('portrayal_item/pixmap_schema_list/get/', PR.get.get_pixmap_schema_list),
+    path('portrayal_item/pixmap_schema/get/', PR.get.get_pixmap_schema),
+
+    path('portrayal_item/colour_profile_schema_list/get/', PR.get.get_colour_profile_schema_list),
+    path('portrayal_item/colour_profile_schema/get/', PR.get.get_colour_profile_schema),
+
+
+
+
     # Portrayal > Colour Token
     path('portrayal_item/colour_token/post/', PR.post.insert_colour_token),
+    path('portrayal_item/colour_token_list/get/', PR.get.get_colour_token_list),
+    path('portrayal_item/colour_token/get/', PR.get.get_colour_token),
 
     # Portrayal > Palette Item
     path('portrayal_item/palette_item/post/', PR.post.insert_palette_item),
