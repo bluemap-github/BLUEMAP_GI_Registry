@@ -44,19 +44,44 @@ class S100_PR_ColourValueSerializer(serializers.Serializer):
     cie = S100_PR_CIEValueSerializer(allow_null=True, required=False)  # 0~1개
 
 class S100_PR_PaletteItemSerializer(S100_PR_RegisterItemSerializer):
-    trancparency = serializers.CharField(allow_blank=True, allow_null=True)
-    colour = S100_PR_ColourValueSerializer(allow_null=True, required=False)
+    transparency = serializers.CharField(allow_blank=True, allow_null=True)
+    colourValue = S100_PR_ColourValueSerializer(allow_null=True, required=False)
 
 class S100_PR_ColourPalletteSerializer(S100_PR_RegisterItemSerializer):
     pass
 
 
 
+class S100_PR_DisplayPlaneSerializer(S100_PR_RegisterItemSerializer):
+    order = serializers.CharField()
+
+class S100_PR_DisplayModeSerializer(S100_PR_RegisterItemSerializer):
+    pass
+
+class S100_PR_ViewingGroupLayerSerializer(S100_PR_RegisterItemSerializer):
+    pass
+
+class S100_PR_ViewingGroupSerializer(S100_PR_RegisterItemSerializer):
+    foundationMode = serializers.CharField(allow_blank=True, allow_null=True)
+
+class S100_PR_FontSerializer(S100_PR_RegisterItemSerializer):
+    fontFile = serializers.CharField()
+    fontType = serializers.CharField()
+
+class S100_PR_ContextParameterSerializer(S100_PR_RegisterItemSerializer):
+    parameterType = serializers.CharField()
+    defaultValue = serializers.CharField(allow_blank=True, allow_null=True)
+
+class S100_PR_DrawingPrioritySerializer(S100_PR_RegisterItemSerializer):
+    priority = serializers.CharField()
+
+class S100_PR_AlertHighlightSerializer(S100_PR_RegisterItemSerializer):
+    optional = serializers.CharField(allow_blank=True, allow_null=True)
+    style = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 
-
-## 추후 작업 필요함
+## 상속안받음
 class S100_PR_AlertPrioritySerializer(serializers.Serializer):
     priority = serializers.CharField()
     default = serializers.CharField()

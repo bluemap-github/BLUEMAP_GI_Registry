@@ -20,6 +20,7 @@ const InsertPortrayalItem = () => {
   const [schema, setSchema] = useState(null);
   const [colourToken, setColourToken] = useState(null);
   const [paletteItem, setPaletteItem] = useState(null);
+  const [colourPalette, setColourPalette] = useState(null);
   const [selectedApiUrl, setSelectedApiUrl] = useState(POST_SYMBOL);
   const [managementInfos, setManagementInfos] = useState([]);
   const [apiType, setApiType] = useState("Symbol");
@@ -31,6 +32,7 @@ const InsertPortrayalItem = () => {
   const SchemaChange = (formData) => { setSchema(formData); };
   const ColourTokenChange = (formData) => { setColourToken(formData); };
   const PaletteItemChange = (formData) => { setPaletteItem(formData); };
+  const ColourPaletteChange = (formData) => { setColourPalette(formData); };
   const MIChange = (formData) => { setManagementInfos(formData); };
 
   // Reset all data when apiType changes
@@ -55,9 +57,11 @@ const InsertPortrayalItem = () => {
     ColourProfileSchema: schema,
     ColourToken: colourToken,
     PaletteItem: paletteItem,
+    ColourPalette: colourPalette,
   };
   
   const validationTest = (validateType) => {
+    console.log('Validation Test:', item, managementInfos, validationData[validateType], selectedApiUrl);
     let errorMessages = [];
   
     // 1. Check if item and managementInfos (MI) are provided
@@ -98,6 +102,7 @@ const InsertPortrayalItem = () => {
   };
   
   const combiningData = (validateType) => {
+    console.log('Combining Data:', item, validationData[validateType]);
     const mainData = validationData[validateType] || {}; // Ensure mainData is not null
   
     const combinedData = {
@@ -109,6 +114,7 @@ const InsertPortrayalItem = () => {
   };
   
   const handleSubmitItem = async (combinedData) => {
+    console.log('Combined Data:', combinedData, managementInfos);
     try {
       const itemResponse = await axios.post(
         selectedApiUrl,
@@ -171,7 +177,7 @@ const InsertPortrayalItem = () => {
         {(apiType === 'SymbolSchema' || apiType === 'LineStyleSchema' || apiType === 'AreaFillSchema' || apiType === 'PixmapSchema' || apiType === 'ColourProfileSchema') && <ItemSchemaInput onFormSubmit={SchemaChange} apiType={apiType}/>}
         {(apiType === 'ColourToken') && <ColourTokenInput onFormSubmit={ColourTokenChange} apiType={apiType}/>}
         {(apiType === 'PaletteItem') && <PaletteItemInput onFormSubmit={PaletteItemChange} apiType={apiType}/>}
-        {(apiType === 'ColourPalette') && <ColourPaletteInput  />}
+        {(apiType === 'ColourPalette') && <ColourPaletteInput onFormSubmit={ColourPaletteChange} apiType={apiType}/>}
       </div>
 
       <div>

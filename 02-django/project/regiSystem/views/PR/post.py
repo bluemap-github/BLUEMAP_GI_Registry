@@ -166,3 +166,98 @@ def insert_colour_palette(request):
     RegiModel.update_date(C_id)
     return Response(encrypted_id, status=HTTP_201_CREATED)
 
+from regiSystem.models.PR_Display import DisplayModeModel
+@api_view(['POST'])
+def insert_display_mode(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    data = request.data
+    inserted_ = DisplayModeModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
+
+from regiSystem.models.PR_Display import DisplayPlaneModel
+@api_view(['POST'])
+def insert_display_plane(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    data = request.data
+    inserted_ = DisplayPlaneModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
+
+from regiSystem.models.PR_Display import ViewingGroupLayerModel
+@api_view(['POST'])
+def insert_viewing_group_layer(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    data = request.data
+    inserted_ = ViewingGroupLayerModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
+
+from regiSystem.models.PR_Display import ViewingGroupModel
+@api_view(['POST'])
+def insert_viewing_group(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    data = request.data
+    inserted_ = ViewingGroupModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
+
+from regiSystem.models.PR_Display import FontModel
+@api_view(['POST'])
+def insert_font(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    data = request.data
+    inserted_ = FontModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
+
+from regiSystem.models.PR_Display import ContextParameterModel
+@api_view(['POST'])
+def insert_context_parameter(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    data = request.data
+    inserted_ = ContextParameterModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
+
+from regiSystem.models.PR_Display import DrawingPriorityModel
+@api_view(['POST'])
+def insert_drawing_priority(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    data = request.data
+    inserted_ = DrawingPriorityModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)
+
+from regiSystem.models.PR_Display import AlertHighlightModel
+@api_view(['POST'])
+def insert_alert_highlight(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    data = request.data
+    inserted_ = AlertHighlightModel.insert(data, ObjectId(C_id))
+    if inserted_["status"] == "error":
+        return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    encrypted_id = get_encrypted_id([inserted_["inserted_id"]])
+    RegiModel.update_date(C_id)
+    return Response(encrypted_id, status=HTTP_201_CREATED)

@@ -41,7 +41,11 @@ const specificFields = {
     'ColourToken': [
         { name: 'Token', key: 'token' },
     ],
-    'PaletteItem': [],
+    'PaletteItem': [
+        { name: 'Transparency', key: 'transparency' },
+        { name: 'Colour (sRGB)', key: 'colourValue.sRGB', isColourValue: true },
+        { name: 'Colour (CIE)', key: 'colourValue.cie', isColourValue: true }
+    ],
     'ColourPalette': [],
     'DisplayMode': [],
     'DisplayPlane': [],

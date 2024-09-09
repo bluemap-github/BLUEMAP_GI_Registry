@@ -117,8 +117,45 @@ urlpatterns = [
 
     # Portrayal > Palette Item
     path('portrayal_item/palette_item/post/', PR.post.insert_palette_item),
+    path('portrayal_item/palette_item_list/get/', PR.get.palette_item_list),
+    path('portrayal_item/palette_item/get/', PR.get.palette_item),
 
     # Portrayal > Colour Palette
     path('portrayal_item/colour_palette/post/', PR.post.insert_colour_palette),
+    path('portrayal_item/colour_palette_list/get/', PR.get.colour_palette_list),
+    path('portrayal_item/colour_palette/get/', PR.get.colour_palette),
+
+    # Portrayal > Display Plane
+    path('portrayal_item/display_plane/post/', PR.post.insert_display_plane),
+    path('portrayal_item/display_plane_list/get/', PR.get.display_plane_list),
+    path('portrayal_item/display_plane/get/', PR.get.display_plane),
+    # Portrayal > Display Mode
+    path('portrayal_item/display_mode/post/', PR.post.insert_display_mode),
+    path('portrayal_item/display_mode_list/get/', PR.get.display_mode_list),
+    path('portrayal_item/display_mode/get/', PR.get.display_mode),
+    # Portrayal > Viewing Group Layer
+    path('portrayal_item/viewing_group_layer/post/', PR.post.insert_viewing_group_layer),
+    path('portrayal_item/viewing_group_layer_list/get/', PR.get.viewing_group_layer_list),
+    path('portrayal_item/viewing_group_layer/get/', PR.get.viewing_group_layer),
+    # Portrayal > Viewing Group
+    path('portrayal_item/viewing_group/post/', PR.post.insert_viewing_group),
+    path('portrayal_item/viewing_group_list/get/', PR.get.viewing_group_list),
+    path('portrayal_item/viewing_group/get/', PR.get.viewing_group),
+    # Portrayal > Font
+    path('portrayal_item/font/post/', PR.post.insert_font),
+    path('portrayal_item/font_list/get/', PR.get.font_list),
+    path('portrayal_item/font/get/', PR.get.font),
+    # Portrayal > Context Parameter
+    path('portrayal_item/context_parameter/post/', PR.post.insert_context_parameter),
+    path('portrayal_item/context_parameter_list/get/', PR.get.context_parameter_list),
+    path('portrayal_item/context_parameter/get/', PR.get.context_parameter),
+    # Portrayal > Drawing Priority
+    path('portrayal_item/drawing_priority/post/', PR.post.insert_drawing_priority),
+    path('portrayal_item/drawing_priority_list/get/', PR.get.drawing_priority_list),
+    path('portrayal_item/drawing_priority/get/', PR.get.drawing_priority),
+    # Portrayal > Alert Highlight
+    path('portrayal_item/alert_highlight/post/', PR.post.insert_alert_highlight),
+    path('portrayal_item/alert_highlight_list/get/', PR.get.alert_highlight_list),
+    path('portrayal_item/alert_highlight/get/', PR.get.alert_highlight),
 ]
 

@@ -1,5 +1,6 @@
 from mongo_driver import db
 from bson.objectid import ObjectId
+from regiSystem.info_sec.encryption import (get_encrypted_id, decrypt)
 
 S100_Portrayal_PaletteItem = db['S100_Portrayal_PaletteItem']
 S100_Portrayal_ColourPalette = db['S100_Portrayal_ColourPalette']
@@ -11,7 +12,7 @@ S100_Portrayal_NationalLanguageString = db['S100_Portrayal_NationalLanguageStrin
 from regiSystem.serializers.PR import (
     S100_PR_NationalLanguageStringSerializer
 )
-from regiSystem.info_sec.encryption import (get_encrypted_id, decrypt)
+
 
 class RegisterItemModel:
     @staticmethod
@@ -361,7 +362,7 @@ class PaletteItemModel:
     collection = db['S100_Portrayal_PaletteItem']
     
     @classmethod
-    def insert(cls, data):
+    def insert(cls, data, C_id):
         if cls.collection is None:
             raise NotImplementedError("This model does not have a collection assigned.")
         
@@ -380,26 +381,102 @@ class PaletteItemModel:
             del validated_data['description']
 
             # 2. sRGB 처리 (SRGBModel에서 처리)
-            if 'colour' in validated_data and validated_data['colour'].get('sRGB'):
-                srgb_result = SRGBModel.process_srgb(validated_data['colour']['sRGB'])
+            if 'colourValue' in validated_data and validated_data['colourValue'].get('sRGB'):
+                srgb_result = SRGBModel.process_srgb(validated_data['colourValue']['sRGB'])
                 if isinstance(srgb_result, dict) and "errors" in srgb_result:
                     return srgb_result
-                validated_data['colour']['sRGB_id'] = srgb_result
-                del validated_data['colour']['sRGB']
+                validated_data['colourValue']['sRGB_id'] = srgb_result
+                del validated_data['colourValue']['sRGB']
 
             # 3. cie 처리 (CIEModel에서 처리)
-            if 'colour' in validated_data and validated_data['colour'].get('cie'):
-                cie_result = CIEModel.process_cie(validated_data['colour']['cie'])
+            if 'colourValue' in validated_data and validated_data['colourValue'].get('cie'):
+                cie_result = CIEModel.process_cie(validated_data['colourValue']['cie'])
                 if isinstance(cie_result, dict) and "errors" in cie_result:
                     return cie_result
-                validated_data['colour']['cie_id'] = cie_result
-                del validated_data['colour']['cie']
+                validated_data['colourValue']['cie_id'] = cie_result
+                del validated_data['colourValue']['cie']
 
+            # 4. concept_id 추가
+            validated_data['concept_id'] = C_id
             # 4. 최종적으로 PaletteItemModel에 삽입
             result = cls.collection.insert_one(validated_data)
             return {"status": "success", "inserted_id": str(result.inserted_id)}
         else:
             return {"status": "error", "errors": serializer.errors}
+
+    @classmethod
+    def get_list(cls, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        
+        result = cls.collection.find({"concept_id": ObjectId(C_id)})
+        data = []
+        for item in result:
+            item['_id'] = get_encrypted_id([item['_id']])
+            if 'description_ids' in item:
+                item['description'] = [
+                    RegisterItemModel.get_national_language_string(desc_id)
+                    for desc_id in item['description_ids']
+                ]
+                del item['description_ids'] # description_ids 필드는 삭제   
+            if 'colourValue' in item:
+                if 'sRGB_id' in item['colourValue']:
+                    item['colourValue']['sRGB'] = S100_Portrayal_SRGBValue.find_one({"_id": ObjectId(item['colourValue']['sRGB_id'])})
+                    del item['colourValue']['sRGB_id']
+                if 'cie_id' in item['colourValue']:
+                    item['colourValue']['cie'] = S100_Portrayal_CIEValue.find_one({"_id": ObjectId(item['colourValue']['cie_id'])})
+                    del item['colourValue']['cie_id']
+            data.append(item)
+        return {"status": "success", "data": data}
+    
+    @classmethod
+    def get_one(cls, I_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        
+        # MongoDB에서 _id로 해당 데이터를 찾음
+        result = cls.collection.find_one({"_id": ObjectId(I_id)})
+
+        if not result:
+            return {"status": "error", "message": "Item not found"}
+
+        # Convert the ObjectId fields to strings
+        result['_id'] = str(result['_id'])
+        
+        description_ids = result.get('description_ids', [])
+        if description_ids:
+            descriptions = []
+            for desc_id in description_ids:
+                nls_data = RegisterItemModel.get_national_language_string(desc_id)
+                if nls_data:
+                    if '_id' in nls_data:
+                        nls_data.pop('_id')
+                    descriptions.append(nls_data)
+                else:
+                    return {"status": "error", "message": f"NationalLanguageString with id {desc_id} not found"}
+
+            # description 필드로 복원
+            result['description'] = descriptions
+            del result['description_ids']  # description_ids 필드는 삭제
+        if 'colourValue' in result:
+            if 'sRGB_id' in result['colourValue']:
+                result['colourValue']['sRGB'] = S100_Portrayal_SRGBValue.find_one({"_id": ObjectId(result['colourValue']['sRGB_id'])})
+                if "_id" in result['colourValue']['sRGB']:
+                    result['colourValue']['sRGB'].pop("_id")
+                del result['colourValue']['sRGB_id']
+            if 'cie_id' in result['colourValue']:
+                result['colourValue']['cie'] = S100_Portrayal_CIEValue.find_one({"_id": ObjectId(result['colourValue']['cie_id'])})
+                if "_id" in result['colourValue']['cie']:
+                    result['colourValue']['cie'].pop("_id")
+                del result['colourValue']['cie_id']
+        # 모든 ObjectId를 문자열로 변환
+        result['_id'] = str(result['_id'])
+
+        # 다른 ObjectId 필드가 있다면 문자열로 변환
+        if 'concept_id' in result:
+            result['concept_id'] = str(result['concept_id'])
+        
+        return {"status": "success", "data": result}
 
 ## Colour Palette Model
 from regiSystem.serializers.PR import S100_PR_ColourPalletteSerializer
@@ -407,7 +484,7 @@ class ColourPaletteModel:
     collection = db['S100_Portrayal_ColourPalette']
     
     @classmethod
-    def insert(cls, data):
+    def insert(cls, data, C_id):
         if cls.collection is None:
             raise NotImplementedError("This model does not have a collection assigned.")
         
@@ -424,9 +501,64 @@ class ColourPaletteModel:
                 return description_ids  # description 처리 중 에러 발생 시 반환
             validated_data['description_ids'] = description_ids
             del validated_data['description']
+            # 4. concept_id 추가
+            validated_data['concept_id'] = C_id
 
             # 2. 최종적으로 ColourPaletteModel에 삽입
             result = cls.collection.insert_one(validated_data)
             return {"status": "success", "inserted_id": str(result.inserted_id)}
         else:
             return {"status": "error", "errors": serializer.errors}
+    
+    @classmethod
+    def get_list(cls, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        
+        result = cls.collection.find({"concept_id": ObjectId(C_id)})
+        data = []
+        for item in result:
+            item['_id'] = get_encrypted_id([item['_id']])
+            if 'description_ids' in item:
+                item['description'] = [
+                    RegisterItemModel.get_national_language_string(desc_id)
+                    for desc_id in item['description_ids']
+                ]
+                del item['description_ids'] # description_ids 필드는 삭제
+            data.append(item)
+        return {"status": "success", "data": data}
+
+    @classmethod
+    def get_one(cls, I_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        
+        # MongoDB에서 _id로 해당 데이터를 찾음
+        result = cls.collection.find_one({"_id": ObjectId(I_id)})
+
+        if not result:
+            return {"status": "error", "message": "Item not found"}
+
+        description_ids = result.get('description_ids', [])
+        if description_ids:
+            descriptions = []
+            for desc_id in description_ids:
+                nls_data = RegisterItemModel.get_national_language_string(desc_id)
+                if nls_data:
+                    if '_id' in nls_data:
+                        nls_data.pop('_id')
+                    descriptions.append(nls_data)
+                else:
+                    return {"status": "error", "message": f"NationalLanguageString with id {desc_id} not found"}
+
+            # description 필드로 복원
+            result['description'] = descriptions
+            del result['description_ids']  # description_ids 필드는 삭제
+        # 모든 ObjectId를 문자열로 변환
+        result['_id'] = str(result['_id'])
+
+        # 다른 ObjectId 필드가 있다면 문자열로 변환
+        if 'concept_id' in result:
+            result['concept_id'] = str(result['concept_id'])
+        
+        return {"status": "success", "data": result}
