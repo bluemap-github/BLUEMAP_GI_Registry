@@ -1,28 +1,41 @@
 const getValidationItem = (formType) => {
     switch (formType) {
         case 'Symbol':
-            return ['xmlID'];
         case 'LineStyle':
-            return ['xmlID'];
         case 'AreaFill':
-            return ['xmlID'];
         case 'Pixmap':
             return ['xmlID'];
         case 'SymbolSchema':
-            return ['xmlID', 'xmlSchema'];
         case 'LineStyleSchema':
-            return ['xmlID', 'xmlSchema'];
         case 'AreaFillSchema':
-            return ['xmlID', 'xmlSchema'];
         case 'PixmapSchema':
-            return ['xmlID', 'xmlSchema'];
         case 'ColourProfileSchema':
             return ['xmlID', 'xmlSchema'];
         case 'ColourToken':
             return ['xmlID', 'token'];
         case 'PaletteItem':
-            return ['xmlID', 'colourValue'];
+            return ['xmlID'];
         case 'ColourPalette':
+            return ['xmlID'];
+        case 'DisplayPlane':
+            return ['xmlID', 'order'];
+        case 'DisplayMode':
+            return ['xmlID'];
+        case 'ViewingGroupLayer':
+            return ['xmlID'];
+        case 'ViewingGroup':
+            return ['xmlID', 'foundationMode'];
+        case 'Font':
+            return ['xmlID', 'fontFile', 'fontType'];
+        case 'ContextParameter':
+            return ['xmlID'];
+        case 'DrawingPriority':
+            return ['xmlID', 'priority'];
+        case 'Alert':
+            return ['xmlID'];
+        case 'AlertHighlight':
+            return ['xmlID', 'optional', 'style'];
+        case 'AlertMessage':
             return ['xmlID'];
         case 'ManagementInfo':
             return [
@@ -41,19 +54,33 @@ const getValidationItem = (formType) => {
 };
 
 const performValidation = (formData, formType) => {
-    // formData가 null 또는 undefined인 경우 경고를 표시하고 검증 실패로 처리
+    console.log('formData', formData);
     if (!formData) {
         alert(`[${formType}] The form data is missing or null.`);
         return false;
     }
 
     const validateList = getValidationItem(formType);
-    const missingFields = validateList.filter(field =>
-        formData[field] === undefined ||
-        formData[field] === null ||
-        (Array.isArray(formData[field]) && formData[field].length === 0) ||
-        (typeof formData[field] === 'string' && formData[field].trim() === '')
-    );
+
+    const missingFields = validateList.reduce((missing, field) => {
+        const fieldParts = field.split('.');
+        let value = formData;
+
+        for (let part of fieldParts) {
+            if (value && typeof value === 'object') {
+                value = value[part];
+            } else {
+                value = undefined;
+                break;
+            }
+        }
+
+        if (value === undefined || value === null || (Array.isArray(value) && value.length === 0) || (typeof value === 'string' && value.trim() === '')) {
+            missing.push(field);
+        }
+
+        return missing;
+    }, []);
 
     if (missingFields.length > 0) {
         alert(`[${formType}] The following fields are missing or empty: ${missingFields.join(', ')}`);
@@ -61,6 +88,6 @@ const performValidation = (formData, formType) => {
     } else {
         return true;
     }
-}
+};
 
 export { performValidation };

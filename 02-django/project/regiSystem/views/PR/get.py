@@ -10,513 +10,369 @@ from regiSystem.models.PR_Visual import (
     SymbolModel,
     LineStyleModel,
     AreaFillModel,
-    PixmapModel
+    PixmapModel,
+    ColourTokenModel,
+    PaletteItemModel,
+    ColourPaletteModel,
+    DisplayModeModel,
+    ViewingGroupLayerModel,
+    DisplayPlaneModel,
+    ViewingGroupModel,
+    FontModel,
+    ContextParameterModel,
+    DrawingPriorityModel,
+    AlertHighlightModel,
+    AlertModel,
+    AlertMessageModel
 )
-from regiSystem.serializers.PR import (S100_PR_ItemSchemaSerializer, S100_PR_VisualItemSerializer)
 
-from regiSystem.info_sec.encryption import (get_encrypted_id, decrypt)
+from regiSystem.serializers.PR import (
+    S100_PR_ItemSchemaSerializer,
+    S100_PR_VisualItemSerializer,
+    S100_PR_PaletteItemSerializer,
+    S100_PR_ColourPalletteSerializer,
+    S100_PR_DisplayPlaneSerializer,
+    S100_PR_DisplayModeSerializer,
+    S100_PR_ViewingGroupLayerSerializer,
+    S100_PR_ViewingGroupSerializer,
+    S100_PR_FontSerializer,
+    S100_PR_ContextParameterSerializer,
+    S100_PR_DrawingPrioritySerializer,
+    S100_PR_AlertHighlightSerializer,
+    S100_PR_ColourTokenSerializer,
+    S100_PR_AlertSerializer,
+    S100_PR_AlertMessageSerializer
+)
+
+from regiSystem.info_sec.encryption import decrypt
 from regiSystem.info_sec.getByURI import uri_to_serial
 
+
+# 공통 헬퍼 함수들
+def get_one_item(Model, item_id, serializer_class=None):
+    try:
+        item = Model.get_one(item_id)
+        if 'status' in item and item['status'] == 'error':
+            return Response({"status": "error", "message": item.get("message", "Unknown error")}, status=400)
+
+        # if serializer_class:
+        #     item = serializer_class(item['data']).data
+
+        return Response({"status": "success", "data": item}, status=200)
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=400)
+
+
+def get_list_items(Model, C_id, serializer_class):
+    try:
+        items = Model.get_list(C_id)
+        if 'status' in items and items['status'] == 'error':
+            return Response({"status": "error", "message": items.get("message", "Unknown error")}, status=400)
+
+        serializer = serializer_class(items['data'], many=True)
+        return Response({"status": "success", "data": serializer.data}, status=200)
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=400)
+
+
+# 각 API 핸들러들
+
+# Symbol
 @api_view(['GET'])
 def get_symbol_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = SymbolModel.get_list(C_id)
+    return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_VisualItemSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def get_symbol(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = SymbolModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
+    return get_one_item(SymbolModel, I_id, S100_PR_VisualItemSerializer)
 
+
+# LineStyle
 @api_view(['GET'])
 def get_line_style_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = LineStyleModel.get_list(C_id)
+    return get_list_items(LineStyleModel, C_id, S100_PR_VisualItemSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_VisualItemSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def get_line_style(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(LineStyleModel, I_id, S100_PR_VisualItemSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = LineStyleModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
+# AreaFill
 @api_view(['GET'])
 def get_area_fill_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = AreaFillModel.get_list(C_id)
+    return get_list_items(AreaFillModel, C_id, S100_PR_VisualItemSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_VisualItemSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def get_area_fill(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(AreaFillModel, I_id, S100_PR_VisualItemSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = AreaFillModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
+# Pixmap
 @api_view(['GET'])
 def get_pixmap_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = PixmapModel.get_list(C_id)
+    return get_list_items(PixmapModel, C_id, S100_PR_VisualItemSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_VisualItemSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def get_pixmap(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(PixmapModel, I_id, S100_PR_VisualItemSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = PixmapModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
+# SymbolSchema
 @api_view(['GET'])
 def get_symbol_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_schema_data = SymbolSchemaModel.get_list(C_id)  
-
-    if symbol_schema_data['status'] == 'success':
-        serializer = S100_PR_ItemSchemaSerializer(symbol_schema_data['data'], many=True)
-        return Response(serializer.data, status=200) 
-    else:
-        return Response(symbol_schema_data, status=400)
+    return get_list_items(SymbolSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
 
 
 @api_view(['GET'])
 def get_symbol_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(SymbolSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = SymbolSchemaModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
+# LineStyleSchema
 @api_view(['GET'])
 def get_line_style_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_schema_data = LineStyleSchemaModel.get_list(C_id)
+    return get_list_items(LineStyleSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
 
-    if symbol_schema_data['status'] == 'success':
-        serializer = S100_PR_ItemSchemaSerializer(symbol_schema_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_schema_data, status=400)
 
 @api_view(['GET'])
 def get_line_style_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(LineStyleSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = LineStyleSchemaModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
+# AreaFillSchema
 @api_view(['GET'])
 def get_area_fill_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_schema_data = AreaFillSchemaModel.get_list(C_id)
+    return get_list_items(AreaFillSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
 
-    if symbol_schema_data['status'] == 'success':
-        serializer = S100_PR_ItemSchemaSerializer(symbol_schema_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_schema_data, status=400)
 
 @api_view(['GET'])
 def get_area_fill_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(AreaFillSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = AreaFillSchemaModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
+# PixmapSchema
 @api_view(['GET'])
 def get_pixmap_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_schema_data = PixmapSchemaModel.get_list(C_id)
+    return get_list_items(PixmapSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
 
-    if symbol_schema_data['status'] == 'success':
-        serializer = S100_PR_ItemSchemaSerializer(symbol_schema_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_schema_data, status=400)
-    
-@api_view(['GET'])  
+
+@api_view(['GET'])
 def get_pixmap_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(PixmapSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = PixmapSchemaModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
+# ColourProfileSchema
 @api_view(['GET'])
 def get_colour_profile_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_schema_data = ColourProfileSchemaModel.get_list(C_id)
+    return get_list_items(ColourProfileSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
 
-    if symbol_schema_data['status'] == 'success':
-        serializer = S100_PR_ItemSchemaSerializer(symbol_schema_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_schema_data, status=400)
-    
+
 @api_view(['GET'])
 def get_colour_profile_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = ColourProfileSchemaModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
+    return get_one_item(ColourProfileSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
 
-
-from regiSystem.models.PR_Visual import ColourTokenModel
+# ColourToken
 @api_view(['GET'])
 def get_colour_token_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = ColourTokenModel.get_list(C_id)
+    return get_list_items(ColourTokenModel, C_id, S100_PR_ColourTokenSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_VisualItemSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def get_colour_token(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(ColourTokenModel, I_id, S100_PR_ColourTokenSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = ColourTokenModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Visual import PaletteItemModel
-from regiSystem.serializers.PR import S100_PR_PaletteItemSerializer
+# PaletteItem
 @api_view(['GET'])
 def palette_item_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = PaletteItemModel.get_list(C_id)
+    return get_list_items(PaletteItemModel, C_id, S100_PR_PaletteItemSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_PaletteItemSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def palette_item(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(PaletteItemModel, I_id, S100_PR_PaletteItemSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = PaletteItemModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
+@api_view(['GET'])
+def alert_list(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    return get_list_items(AlertModel, C_id, S100_PR_AlertSerializer)
 
-from regiSystem.models.PR_Visual import ColourPaletteModel
-from regiSystem.serializers.PR import S100_PR_ColourPalletteSerializer
+@api_view(['GET'])
+def alert(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(AlertModel, I_id, S100_PR_AlertSerializer)
 
+@api_view(['GET'])
+def alert_message_list(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    return get_list_items(AlertMessageModel, C_id, S100_PR_AlertMessageSerializer)
+
+@api_view(['GET'])
+def alert_message(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(AlertMessageModel, I_id, S100_PR_AlertMessageSerializer)
+
+# ColourPalette
 @api_view(['GET'])
 def colour_palette_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = ColourPaletteModel.get_list(C_id)
+    return get_list_items(ColourPaletteModel, C_id, S100_PR_ColourPalletteSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_ColourPalletteSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def colour_palette(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(ColourPaletteModel, I_id, S100_PR_ColourPalletteSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = ColourPaletteModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Display import DisplayPlaneModel
-from regiSystem.serializers.PR import S100_PR_DisplayPlaneSerializer
+# DisplayPlane
 @api_view(['GET'])
 def display_plane_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = DisplayPlaneModel.get_list(C_id)
+    return get_list_items(DisplayPlaneModel, C_id, S100_PR_DisplayPlaneSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_DisplayPlaneSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
-    
+
 @api_view(['GET'])
 def display_plane(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(DisplayPlaneModel, I_id, S100_PR_DisplayPlaneSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = DisplayPlaneModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Display import DisplayModeModel
-from regiSystem.serializers.PR import S100_PR_DisplayModeSerializer
+# DisplayMode
 @api_view(['GET'])
 def display_mode_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = DisplayModeModel.get_list(C_id)
+    return get_list_items(DisplayModeModel, C_id, S100_PR_DisplayModeSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_DisplayModeSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def display_mode(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(DisplayModeModel, I_id, S100_PR_DisplayModeSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = DisplayModeModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Display import ViewingGroupLayerModel
-from regiSystem.serializers.PR import S100_PR_ViewingGroupLayerSerializer
+# ViewingGroupLayer
 @api_view(['GET'])
 def viewing_group_layer_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = ViewingGroupLayerModel.get_list(C_id)
+    return get_list_items(ViewingGroupLayerModel, C_id, S100_PR_ViewingGroupLayerSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_ViewingGroupLayerSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def viewing_group_layer(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(ViewingGroupLayerModel, I_id, S100_PR_ViewingGroupLayerSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = ViewingGroupLayerModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Display import ViewingGroupModel
-from regiSystem.serializers.PR import S100_PR_ViewingGroupSerializer
+# ViewingGroup
 @api_view(['GET'])
 def viewing_group_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = ViewingGroupModel.get_list(C_id)
+    return get_list_items(ViewingGroupModel, C_id, S100_PR_ViewingGroupSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_ViewingGroupSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
-    
+
 @api_view(['GET'])
 def viewing_group(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(ViewingGroupModel, I_id, S100_PR_ViewingGroupSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = ViewingGroupModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Display import FontModel
-from regiSystem.serializers.PR import S100_PR_FontSerializer
+# Font
 @api_view(['GET'])
 def font_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = FontModel.get_list(C_id)
+    return get_list_items(FontModel, C_id, S100_PR_FontSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_FontSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
-    
+
 @api_view(['GET'])
 def font(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(FontModel, I_id, S100_PR_FontSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = FontModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Display import ContextParameterModel
-from regiSystem.serializers.PR import S100_PR_ContextParameterSerializer
+# ContextParameter
 @api_view(['GET'])
 def context_parameter_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = ContextParameterModel.get_list(C_id)
+    return get_list_items(ContextParameterModel, C_id, S100_PR_ContextParameterSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_ContextParameterSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def context_parameter(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(ContextParameterModel, I_id, S100_PR_ContextParameterSerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = ContextParameterModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Display import DrawingPriorityModel
-from regiSystem.serializers.PR import S100_PR_DrawingPrioritySerializer
+# DrawingPriority
 @api_view(['GET'])
 def drawing_priority_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = DrawingPriorityModel.get_list(C_id)
+    return get_list_items(DrawingPriorityModel, C_id, S100_PR_DrawingPrioritySerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_DrawingPrioritySerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
 
 @api_view(['GET'])
 def drawing_priority(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
+    return get_one_item(DrawingPriorityModel, I_id, S100_PR_DrawingPrioritySerializer)
 
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = DrawingPriorityModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
 
-from regiSystem.models.PR_Display import AlertHighlightModel
-from regiSystem.serializers.PR import S100_PR_AlertHighlightSerializer
+# AlertHighlight
 @api_view(['GET'])
 def alert_highlight_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    symbol_data = AlertHighlightModel.get_list(C_id)
+    return get_list_items(AlertHighlightModel, C_id, S100_PR_AlertHighlightSerializer)
 
-    if symbol_data['status'] == 'success':
-        serializer = S100_PR_AlertHighlightSerializer(symbol_data['data'], many=True)
-        return Response(serializer.data, status=200)
-    else:
-        return Response(symbol_data, status=400)
-    
+
 @api_view(['GET'])
 def alert_highlight(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-
-    # 복호화된 ID가 유효한 ObjectId인지 확인
-    try:
-        symbol_schema = AlertHighlightModel.get_one(I_id)
-    except Exception as e:
-        return Response({"status": "error", "message": str(e)}, status=400)
-    
-    return Response(symbol_schema, status=200)
+    return get_one_item(AlertHighlightModel, I_id, S100_PR_AlertHighlightSerializer)

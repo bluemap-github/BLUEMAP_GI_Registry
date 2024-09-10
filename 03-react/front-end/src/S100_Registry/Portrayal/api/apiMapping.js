@@ -10,7 +10,17 @@ import {
   POST_COLOUR_PROFILE_SCHEMA,
   POST_COLOUR_TOKEN,
   POST_PALETTE_ITEM,
-  POST_COLOUR_PALETTE
+  POST_COLOUR_PALETTE,
+  POST_DISPLAY_PLANE,
+  POST_DISPLAY_MODE,
+  POST_VIEWING_GROUP_LAYER,
+  POST_VIEWING_GROUP,
+  POST_FONT,
+  POST_CONTEXT_PARAMETER,
+  POST_DRAWING_PRIORITY,
+  POST_ALERT,
+  POST_ALERT_HIGHLIGHT,
+  POST_ALERT_MESSAGE
 } from './api';
 
 
@@ -27,16 +37,16 @@ export const apiMapping = {
   ColourToken: { url: POST_COLOUR_TOKEN, type: 'ColourToken' },
   PaletteItem: { url: POST_PALETTE_ITEM, type: 'PaletteItem' },
   ColourPalette: { url: POST_COLOUR_PALETTE, type: 'ColourPalette' },
-  // DisplayPlane: { url: POST_DISPLAY_PLANE, type: 'DisplayPlane' },
-  // DisplayMode: { url: POST_DISPLAY_MODE, type: 'DisplayMode' },
-  // ViewingGroupLayer: { url: POST_VIEWING_GROUP_LAYER, type: 'ViewingGroupLayer' },
-  // ViewingGroup: { url: POST_VIEWING_GROUP, type: 'ViewingGroup' },
-  // Font: { url: POST_FONT, type: 'Font' },
-  // ContextParameter: { url: POST_CONTEXT_PARAMETER, type: 'ContextParameter' },
-  // DrawingPriority: { url: POST_DRAWING_PRIORITY, type: 'DrawingPriority' },
-  // Alert: { url: POST_ALERT, type: 'Alert' },
-  // AlertHighlight: { url: POST_ALERT_HIGHLIGHT, type: 'AlertHighlight' },
-  // AlertMessage: { url: POST_ALERT_MESSAGE, type: 'AlertMessage' },
+  DisplayPlane: { url: POST_DISPLAY_PLANE, type: 'DisplayPlane' },
+  DisplayMode: { url: POST_DISPLAY_MODE, type: 'DisplayMode' },
+  ViewingGroupLayer: { url: POST_VIEWING_GROUP_LAYER, type: 'ViewingGroupLayer' },
+  ViewingGroup: { url: POST_VIEWING_GROUP, type: 'ViewingGroup' },
+  Font: { url: POST_FONT, type: 'Font' },
+  ContextParameter: { url: POST_CONTEXT_PARAMETER, type: 'ContextParameter' },
+  DrawingPriority: { url: POST_DRAWING_PRIORITY, type: 'DrawingPriority' },
+  Alert: { url: POST_ALERT, type: 'Alert' },
+  AlertHighlight: { url: POST_ALERT_HIGHLIGHT, type: 'AlertHighlight' },
+  AlertMessage: { url: POST_ALERT_MESSAGE, type: 'AlertMessage' },
 };
 
 export const getSelestedApi = (type, setSelectedApiUrl, setApiType) => {

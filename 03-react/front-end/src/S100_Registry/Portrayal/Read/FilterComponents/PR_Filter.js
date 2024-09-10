@@ -13,6 +13,17 @@ const buttonTypes = [
     { type: 'ColourToken', label: 'Colour Token' },
     { type: 'PaletteItem', label: 'Palette Item' },
     { type: 'ColourPalette', label: 'Colour Palette' },
+    { type: 'DisplayMode', label: 'Display Mode' },
+    { type: 'DisplayPlane', label: 'Display Plane' },
+    { type: 'ViewingGroupLayer', label: 'Viewing Group Layer' },
+    { type: 'ViewingGroup', label: 'Viewing Group' },
+    { type: 'Font', label: 'Font' },
+    { type: 'ContextParameter', label: 'Context Parameter' },
+    { type: 'DrawingPriority', label: 'Drawing Priority' },
+    { type: 'Alert', label: 'Alert' },
+    { type: 'AlertHighlight', label: 'Alert Highlight' },
+    { type: 'AlertMessage', label: 'Alert Message' },
+
 
 ];
 

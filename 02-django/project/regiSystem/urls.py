@@ -157,5 +157,15 @@ urlpatterns = [
     path('portrayal_item/alert_highlight/post/', PR.post.insert_alert_highlight),
     path('portrayal_item/alert_highlight_list/get/', PR.get.alert_highlight_list),
     path('portrayal_item/alert_highlight/get/', PR.get.alert_highlight),
+
+    # Portrayal > Alert
+    path('portrayal_item/alert/post/', PR.post.insert_alert),
+    path('portrayal_item/alert_list/get/', PR.get.alert_list),
+    path('portrayal_item/alert/get/', PR.get.alert),
+    # Portrayal > Alert Message
+    path('portrayal_item/alert_message/post/', PR.post.insert_alert_message),
+    path('portrayal_item/alert_message_list/get/', PR.get.alert_message_list),
+    path('portrayal_item/alert_message/get/', PR.get.alert_message),
+
 ]
 

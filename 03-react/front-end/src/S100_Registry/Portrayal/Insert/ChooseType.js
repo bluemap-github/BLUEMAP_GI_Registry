@@ -21,7 +21,7 @@ const ChooseType = ({ getSelestedApi }) => {
                 <option value="ColourToken">Colour Token</option>
                 <option value="PaletteItem">Palette Item</option>
                 <option value="ColourPalette">Colour Palette</option>
-                {/* <option value="DisplayPlane">Display Plane</option>
+                <option value="DisplayPlane">Display Plane</option>
                 <option value="DisplayMode">Display Mode</option>
                 <option value="ViewingGroupLayer">Viewing Group Layer</option>
                 <option value="ViewingGroup">Viewing Group</option>
@@ -30,7 +30,7 @@ const ChooseType = ({ getSelestedApi }) => {
                 <option value="DrawingPriority">Drawing Priority</option>
                 <option value="Alert">Alert</option>
                 <option value="AlertHighlight">Alert Highlight</option>
-                <option value="AlertMessage">Alert Message</option> */}
+                <option value="AlertMessage">Alert Message</option>
             </select>
         </div>
     );

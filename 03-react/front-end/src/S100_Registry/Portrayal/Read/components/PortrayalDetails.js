@@ -43,20 +43,40 @@ const specificFields = {
     ],
     'PaletteItem': [
         { name: 'Transparency', key: 'transparency' },
-        { name: 'Colour (sRGB)', key: 'colourValue.sRGB', isColourValue: true },
-        { name: 'Colour (CIE)', key: 'colourValue.cie', isColourValue: true }
+        { name: 'Colour (sRGB)', key: 'colourValue.sRGB', isColourValue: 'sRGB' },
+        { name: 'Colour (CIE)', key: 'colourValue.cie', isColourValue: 'CIE' }
     ],
     'ColourPalette': [],
     'DisplayMode': [],
-    'DisplayPlane': [],
+    'DisplayPlane': [
+        { name: 'Order', key: 'order' }
+    ],
     'ViewingGroupLayer': [],
-    'ViewingGroup': [],
-    'Font': [],
-    'ContextParameter': [],
-    'DrowingPriority': [],
-    'Alert': [],
-    'AlertHighlight': [],
-    'AlertMessage': [],
+    'ViewingGroup': [
+        { name: 'Foundation Mode', key: 'foundationMode' }
+    ],
+    'Font': [
+        { name: 'Font File', key: 'fontFile' },
+        { name: 'Font Type', key: 'fontType' }
+    ],
+    'ContextParameter': [
+        { name: 'Parameter Type', key: 'parameterType' },
+        { name: 'Default Value', key: 'defaultValue' }
+    ],
+    'DrawingPriority': [
+        { name: 'Priority', key: 'priority' }
+    ],
+    'Alert': [
+        { name: 'Route Monitor', key: 'routeMonitor', isAlert: true },
+        { name: 'Route Plan', key: 'routePlan', isAlert: true }
+    ],
+    'AlertHighlight': [
+        { name: 'Optional', key: 'optional' },
+        { name: 'Style', key: 'style' }
+    ],
+    'AlertMessage': [
+        { name: 'Text', key: 'text', isText: true },
+    ],
 };
 
 // 테이블 필드를 리팩토링하여 공통 필드 + 특정 필드를 결합
@@ -68,6 +88,7 @@ const getTableFields = (itemType) => [
 const PortrayalDetails = ({ items, itemType }) => {
     const navigate = useNavigate();
     const role = Cookies.get('role');  // role 가져오기
+    console.log(items, "이거");
 
     const moveToList = () => {
         navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
@@ -101,7 +122,7 @@ const PortrayalDetails = ({ items, itemType }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {fields.map(({ name, key, isAlias, isDescription }) => (
+                            {fields.map(({ name, key, isAlias, isDescription, isColourValue, isText, isAlert }) => (
                                 <tr key={key}>
                                     <th className="text-center" style={{ width: '25%' }}>{name}</th>
                                     <td>
@@ -115,6 +136,41 @@ const PortrayalDetails = ({ items, itemType }) => {
                                             </ul>
                                         ) : isAlias && Array.isArray(items[key]) ? (
                                             items[key].map((alias, index) => <span key={index}>{alias} </span>)
+                                        ) : isColourValue === 'sRGB' ? (
+                                            <div>
+                                                <strong>Red:</strong> {items.colourValue?.sRGB?.red || "--"} <br />
+                                                <strong>Green:</strong> {items.colourValue?.sRGB?.green || "--"} <br />
+                                                <strong>Blue:</strong> {items.colourValue?.sRGB?.blue || "--"}
+                                            </div>
+                                        ) : isColourValue === 'CIE' ? (
+                                            <div>
+                                                <strong>X:</strong> {items.colourValue?.cie?.x || "--"} <br />
+                                                <strong>Y:</strong> {items.colourValue?.cie?.y || "--"} <br />
+                                                <strong>L:</strong> {items.colourValue?.cie?.L || "--"}
+                                            </div>
+                                        ) : isText && Array.isArray(items[key]) ? (
+                                            <ul>
+                                                {items[key].map((txt, index) => (
+                                                    <li key={index}>
+                                                        <strong>Text:</strong> {txt.text || "--"}, <strong>Language:</strong> {txt.language || "--"}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : isAlert && Array.isArray(items[key]) ? (
+                                            <ul>
+                                                {items[key].map((alert, alertIndex) => (
+                                                    <li key={alertIndex}>
+                                                        <strong>{name} Set {alertIndex + 1}:</strong>
+                                                        <ul>
+                                                            {alert.priority.map((priority, priorityIndex) => (
+                                                                <li key={priorityIndex}>
+                                                                    <strong>Priority:</strong> {priority.priority || "--"}, <strong>Default:</strong> {priority.default || "--"}, <strong>Optional:</strong> {priority.optional || "--"}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         ) : (
                                             items[key] || "--"
                                         )}

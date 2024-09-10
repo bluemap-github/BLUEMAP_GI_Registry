@@ -1,33 +1,33 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { ItemContext } from '../../../../context/ItemContext';
-
 
 // 테이블 필드 정의
 const tableFields = [
-    { name: 'ID', key: '_id' },
-    { name: 'Item Type', key: 'itemType' },
-    { name: 'Concept ID', key: 'concept_id' },
-    { name: 'Item Identifier', key: 'itemIdentifier' },
     { name: 'Name', key: 'name' },
-    { name: 'Item Status', key: 'itemStatus' },
+    { name: 'Item Type', key: 'itemType' },
     { name: 'Definition', key: 'definition' },
     { name: 'Remarks', key: 'remarks' },
+    { name: 'Item Status', key: 'itemStatus' },
+    { name: 'Alias', key: 'alias', isAlias: true }, // isAlias 추가
+    { name: 'Camel Case', key: 'camelCase' },
+    { name: 'Definition Source', key: 'definitionSource' },
+    { name: 'Reference', key: 'reference' },
+    { name: 'Similarity to Source', key: 'similarityToSource' },
+    { name: 'Justification', key: 'justification' },
+    { name: 'Proposed Change', key: 'proposedChange' },
 ];
 
 const ConceptInformation = ({ items }) => {
     const navigate = useNavigate();
     const role = Cookies.get('role');  // role 가져오기
-    
-   
 
     const handleUpdateClick = () => {
-        console.log("Update clicked"); // 이곳에 업데이트 로직을 추가할 수 있음
+        console.log("Update clicked");
     };
 
     const handleDeleteClick = () => {
-        console.log("Delete clicked"); // 이곳에 삭제 로직을 추가할 수 있음
+        console.log("Delete clicked");
     };
 
     if (!items) {
@@ -42,27 +42,35 @@ const ConceptInformation = ({ items }) => {
                         <thead>
                             <tr>
                                 <th colSpan="2" className="text-center table-primary" scope="col" style={{ width: '25%' }}>
-                                Concept Informations
+                                    Concept Informations
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {tableFields.map(({ name, key, isXML, isDescription }) => (
+                            {tableFields.map(({ name, key, isAlias, isXML, isDescription }) => (
                                 <tr key={key}>
                                     <th className="text-center" style={{ width: '25%' }}>{name}</th>
                                     <td>
                                         {isXML ? (
                                             <pre>{items[key]}</pre>
-                                        ) : isDescription && Array.isArray(items[key]) ? ( // description 필드가 배열일 경우에만 map을 실행
+                                        ) : isDescription && Array.isArray(items[key]) ? ( 
                                             <ul>
                                                 {items[key].map((desc, index) => (
                                                     <li key={index}>
-                                                        <strong>Text:</strong> {desc.text}, <strong>Language:</strong> {desc.language}
+                                                        <strong>Text:</strong> {desc.text || "--"}, <strong>Language:</strong> {desc.language || "--"}
                                                     </li>
                                                 ))}
                                             </ul>
+                                        ) : isAlias && Array.isArray(items[key]) ? (  // isAlias 처리
+                                            items[key].length > 0 ? (
+                                                <ul>
+                                                    {items[key].map((alias, index) => (
+                                                        <li key={index}>{alias}</li>
+                                                    ))}
+                                                </ul>
+                                            ) : "--"
                                         ) : (
-                                            items[key] || "--" // 값이 없을 경우 "N/A" 출력
+                                            items[key] || "--"
                                         )}
                                     </td>
                                 </tr>
