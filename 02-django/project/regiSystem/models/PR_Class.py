@@ -165,6 +165,44 @@ class ItemSchemaModel(RE_RegisterItemModel):
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_ItemSchemaSerializer)
 
+    @classmethod
+    def get_schema_list(cls, C_id):
+        from bson.objectid import ObjectId  # ensure ObjectId is imported
+
+        # 각 하위 클래스의 데이터를 수집
+        schema_classes = [
+            SymbolSchemaModel,
+            LineStyleSchemaModel,
+            AreaFillSchemaModel,
+            PixmapSchemaModel,
+            ColourProfileSchemaModel
+        ]
+        
+        all_schemas = []
+
+        for schema_class in schema_classes:
+            if schema_class.collection is not None:  # 안전하게 None과 비교
+                try:
+                    result = schema_class.collection.find({"concept_id": ObjectId(C_id)})  # MongoDB에서 모든 항목 조회
+                    for item in result:
+                        # _id를 암호화하고 문자열로 변환
+                        item['_id'] = get_encrypted_id([item['_id']])
+                        
+                        # concept_id가 있으면 문자열로 변환
+                        if 'concept_id' in item:
+                            item['concept_id'] = str(item['concept_id'])
+                        
+                        # 스키마 데이터 리스트에 추가
+                        all_schemas.append(item)
+
+                except Exception as e:
+                    return {"status": "error", "message": str(e)}  # 쿼리 실패 시 에러 메시지 반환
+        
+        return {"status": "success", "data": all_schemas}
+
+
+
+
 
 class SymbolSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_SymbolSchema']

@@ -93,6 +93,9 @@ export const GET_ALERT_MESSAGE_ONE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_
 export const GET_ALERT_HIGHLIGHT_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight_list/get/`;
 export const GET_ALERT_HIGHLIGHT_ONE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight/get/`;
 
+
+export const GET_ITEM_SCHEMA_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/item_schema_list/get/`;
+
 export const POST_COLOUR_TOKEN_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/colour_token_association/post/`;
 export const POST_PALETTE_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/palette_association/post/`;
 export const POST_DISPLAY_MODE_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/display_mode_association/post/`;
@@ -103,3 +106,16 @@ export const POST_VALUE_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/value
 export const POST_ICON_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/icon_association/post/`;
 export const POST_SYMBOL_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_association/post/`;
 export const POST_ITEM_SCHEMA_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/item_schema_association/post/`;
+
+export const GET_COLOUR_TOKEN_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/colour_token_association_list/get/`;
+export const GET_PALLETE_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/palette_association_list/get/`;
+export const GET_DISPLAY_MODE_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/display_mode_association_list/get/`;
+export const GET_VIEWING_GROUP_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/viewing_group_association_list/get/`;
+export const GET_VIEWING_GROUP_LAYER_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/viewing_group_layer_association_list/get/`;
+export const GET_MESSAGE_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/message_association_list/get/`;
+export const GET_HIGHLIGHT_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/highlight_association_list/get/`;
+export const GET_VALUE_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/value_association_list/get/`;
+export const GET_ICON_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/icon_association_list/get/`;
+export const GET_SYMBOL_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_association_list/get/`;
+export const GET_ITEM_SCHEMA_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/item_schema_association_list/get/`;
+

@@ -88,7 +88,6 @@ const getTableFields = (itemType) => [
 const PortrayalDetails = ({ items, itemType }) => {
     const navigate = useNavigate();
     const role = Cookies.get('role');  // role 가져오기
-    console.log(items, "이거");
 
     const moveToList = () => {
         navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);

@@ -91,6 +91,7 @@ urlpatterns = [
     path('portrayal_item/area_fill_schema/post/', PR.post.insert_area_fill_schema),
     path('portrayal_item/pixmap_schema/post/', PR.post.insert_pixmap_schema),
     path('portrayal_item/colour_profile_schema/post/', PR.post.insert_colour_profile_schema),
+    path('portrayal_item/item_schema_list/get/', PR.get.get_item_schema_list),
 
     path('portrayal_item/symbol_schema_list/get/', PR.get.get_symbol_schema_list),
     path('portrayal_item/symbol_schema/get/', PR.get.get_symbol_schema),
@@ -166,6 +167,30 @@ urlpatterns = [
     path('portrayal_item/alert_message/post/', PR.post.insert_alert_message),
     path('portrayal_item/alert_message_list/get/', PR.get.alert_message_list),
     path('portrayal_item/alert_message/get/', PR.get.alert_message),
+
+    ## Associations
+    path('portrayal_item/colour_token_association/post/', PR.post.insert_colour_token_association),
+    path('portrayal_item/palette_association/post/', PR.post.insert_palette_association),
+    path('portrayal_item/display_mode_association/post/', PR.post.insert_display_mode_association),
+    path('portrayal_item/viewing_group_association/post/', PR.post.insert_viewing_group_association),
+    path('portrayal_item/message_association/post/', PR.post.insert_message_association),
+    path('portrayal_item/highlight_association/post/', PR.post.insert_highlight_association),
+    path('portrayal_item/value_association/post/', PR.post.insert_value_association),
+    path('portrayal_item/icon_association/post/', PR.post.insert_icon_association),
+    path('portrayal_item/symbol_association/post/', PR.post.insert_symbol_association),
+    path('portrayal_item/item_schema_association/post/', PR.post.insert_item_schema_association),
+
+    path('portrayal_item/colour_token_association_list/get/', PR.get.colour_token_association_list),
+    path('portrayal_item/palette_association_list/get/', PR.get.palette_association_list),
+    path('portrayal_item/display_mode_association_list/get/', PR.get.display_mode_association_list),
+    path('portrayal_item/viewing_group_association_list/get/', PR.get.viewing_group_association_list),
+    path('portrayal_item/viewing_group_layer_association_list/get/', PR.get.viewing_group_layer_association_list),
+    path('portrayal_item/message_association_list/get/', PR.get.message_association_list),
+    path('portrayal_item/highlight_association_list/get/', PR.get.highlight_association_list),
+    path('portrayal_item/value_association_list/get/', PR.get.value_association_list),
+    path('portrayal_item/icon_association_list/get/', PR.get.icon_association_list),
+    path('portrayal_item/symbol_association_list/get/', PR.get.symbol_association_list),
+    path('portrayal_item/item_schema_association_list/get/', PR.get.item_schema_association_list),
 
 ]
 

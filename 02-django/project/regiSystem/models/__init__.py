@@ -1,3 +1,3 @@
-from .PR_Visual import *
-from .PR_Display import *
+from .PR_Class import *
+from .PR_Association import *
 from .Concept import *

@@ -1,7 +1,7 @@
 from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from regiSystem.models.PR_Visual import (
+from regiSystem.models.PR_Class import (
     SymbolSchemaModel,
     LineStyleSchemaModel,
     AreaFillSchemaModel,
@@ -76,6 +76,16 @@ def get_list_items(Model, C_id, serializer_class):
 
 
 # 각 API 핸들러들
+from regiSystem.models.PR_Class import ItemSchemaModel
+@api_view(['GET'])
+def get_item_schema_list(request):
+    # regi_uri에서 C_id를 변환
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    
+    # ItemSchemaModel의 get_schema_list 호출
+    result = ItemSchemaModel.get_schema_list(C_id)
+    
+    return Response(result)
 
 # Symbol
 @api_view(['GET'])
@@ -376,3 +386,83 @@ def alert_highlight(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
     return get_one_item(AlertHighlightModel, I_id, S100_PR_AlertHighlightSerializer)
+
+from regiSystem.models.PR_Association import (
+    SymbolAssociation,
+    IconAssociation,
+    ItemSchemaAssociation,
+    ColourTokenAssociation,
+    ValueAssociation,
+    PaletteAssociation,
+    DisplayModeAssociation,
+    ViewingGroupAssociation,
+    HighlightAssociation,
+    MessageAssociation
+)
+
+## Associations
+@api_view(['GET'])
+def colour_token_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def palette_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def display_mode_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def viewing_group_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def viewing_group_layer_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def message_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def highlight_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def value_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def icon_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def symbol_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass
+
+@api_view(['GET'])
+def item_schema_association_list(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    pass

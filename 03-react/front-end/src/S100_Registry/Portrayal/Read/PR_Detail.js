@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ConceptInformation from './components/ConceptInformation'; // 개념 정보 컴포넌트
 import PortrayalDetails from './components/PortrayalDetails'; // 기타 컴포넌트
 import ManagementInformation from './components/ManagementInformation';
+import DynamicAssociations from './components/DynamicAssociations';
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -32,6 +33,10 @@ import {
   GET_MANAGEMENT_INFO,
 } from '../api/api';
 import { ItemContext } from '../../../context/ItemContext';
+import {GET_COLOUR_TOKEN_ASSOCIATION_LIST, GET_PALLETE_ASSOCIATION_LIST, GET_DISPLAY_MODE_ASSOCIATION_LIST,
+  GET_VIEWING_GROUP_ASSOCIATION_LIST, GET_VIEWING_GROUP_LAYER_ASSOCIATION_LIST, GET_MESSAGE_ASSOCIATION_LIST,
+  GET_HIGHLIGHT_ASSOCIATION_LIST, GET_VALUE_ASSOCIATION_LIST, GET_ICON_ASSOCIATION_LIST, GET_SYMBOL_ASSOCIATION_LIST,
+  GET_ITEM_SCHEMA_ASSOCIATION_LIST } from '../api/api';
 
 // 스키마 및 비주얼 아이템 관련 API 매핑 객체
 const schemaApiTypes = {
@@ -57,6 +62,80 @@ const schemaApiTypes = {
     Alert: GET_ALERT_ONE,
     AlertHighlight: GET_ALERT_HIGHLIGHT_ONE,
     AlertMessage: GET_ALERT_MESSAGE_ONE,
+};
+
+const associationList = {
+  'Symbol': [ 
+    { 
+      associationName: 'colourToken',
+      api: GET_COLOUR_TOKEN_ASSOCIATION_LIST }, 
+    { 
+      associationName: 'itemSchema',
+      api: GET_ITEM_SCHEMA_ASSOCIATION_LIST } 
+  ],
+  'LineStyle': [ 
+    { 
+      associationName: 'colourToken',
+      api: GET_COLOUR_TOKEN_ASSOCIATION_LIST }, 
+    { 
+      associationName: 'symbol',
+      api: GET_SYMBOL_ASSOCIATION_LIST }, 
+    { 
+      associationName: 'itemSchema',
+      api: GET_ITEM_SCHEMA_ASSOCIATION_LIST } 
+  ],
+  'AreaFill': [ 
+    { 
+      associationName: 'colourToken',
+      api: GET_COLOUR_TOKEN_ASSOCIATION_LIST }, 
+    { 
+      associationName: 'symbol',
+      api: GET_SYMBOL_ASSOCIATION_LIST }, 
+    { 
+      associationName: 'itemSchema',
+      api: GET_ITEM_SCHEMA_ASSOCIATION_LIST } 
+  ],
+  'Pixmap': [ 
+    { 
+      associationName: 'colourToken',
+      api: GET_COLOUR_TOKEN_ASSOCIATION_LIST }, 
+    { 
+      associationName: 'itemSchema',
+      api: GET_ITEM_SCHEMA_ASSOCIATION_LIST } 
+  ],
+  'ColourToken': [ 
+    { 
+      associationName: 'value',
+      api: GET_VALUE_ASSOCIATION_LIST } 
+  ],
+  'PaletteItem': [ 
+    { 
+      associationName: 'palette',
+      api: GET_PALLETE_ASSOCIATION_LIST } 
+  ],
+  'ViewingGroup': [ 
+    { 
+      associationName: 'viewingGroup',
+      api: GET_VIEWING_GROUP_LAYER_ASSOCIATION_LIST } 
+  ],
+  'ViewingGroupLayer': [ 
+    { 
+      associationName: 'displayMode',
+      api: GET_DISPLAY_MODE_ASSOCIATION_LIST } 
+  ],
+  'AlertHighlight': [ 
+    { 
+      associationName: 'msg',
+      api: GET_MESSAGE_ASSOCIATION_LIST }, 
+    { 
+      associationName: 'viewingGroup',
+      api: GET_VIEWING_GROUP_ASSOCIATION_LIST } 
+  ],
+  'AlertMessage': [ 
+    { 
+      associationName: 'icon',
+      api: GET_ICON_ASSOCIATION_LIST } 
+  ]
 };
 
 const PR_Detail = () => {
@@ -122,6 +201,7 @@ const PR_Detail = () => {
   return (
     <div>
       {data ? <PortrayalDetails items={data} itemType={item_type} /> : <div>Loading...</div>}
+      {associationList[item_type]? <DynamicAssociations associationItems={associationList[item_type]} /> : <></>}
       {data ? <ConceptInformation items={data} /> : <div>Loading...</div>}
       {managementInfo ? <ManagementInformation items={managementInfo.management_infos} /> : <div>Loading...</div>}
       

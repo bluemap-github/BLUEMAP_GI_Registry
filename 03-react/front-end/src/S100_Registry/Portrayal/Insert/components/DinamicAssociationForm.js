@@ -9,23 +9,32 @@ import {
     GET_DISPLAY_MODE_LIST,
     GET_VIEWING_GROUP_LAYER_LIST,
     GET_VIEWING_GROUP_LIST,
-    GET_ALERT_MESSAGE_LIST
+    GET_ALERT_MESSAGE_LIST,
+    GET_ITEM_SCHEMA_LIST
 } from '../../api/api';  // Import the API URLs here
 
 const callAPI = {
     'Symbol': [
         { 
             name: 'Colour Token List', 
-            associationName: 'colorToken',
+            associationName: 'colourToken',
             required: false,
             apiCall: GET_COLOUR_TOKEN_LIST, 
             defaultData: { parent_id: "", child_id: "" } 
+        },
+        {
+            name: 'Item Schema List',
+            associationName: 'itemSchema',
+            required: false,
+            apiCall: GET_ITEM_SCHEMA_LIST,
+            defaultData: { parent_id: "", child_id: "" }
         }
+
     ],
     'LineStyle': [
         { 
             name: 'Colour Token List', 
-            associationName: 'colorToken',
+            associationName: 'colourToken',
             required: false,
             apiCall: GET_COLOUR_TOKEN_LIST, 
             defaultData: { parent_id: "", child_id: "" } 
@@ -36,12 +45,19 @@ const callAPI = {
             required: false,
             apiCall: GET_SYMBOL_LIST, 
             defaultData: { parent_id: "", child_id: "" } 
+        },
+        {
+            name: 'Item Schema List',
+            associationName: 'itemSchema',
+            required: false,
+            apiCall: GET_ITEM_SCHEMA_LIST,
+            defaultData: { parent_id: "", child_id: "" }
         }
     ],
     'AreaFill': [
         { 
             name: 'Colour Token List', 
-            associationName: 'colorToken',
+            associationName: 'colourToken',
             required: false,
             apiCall: GET_COLOUR_TOKEN_LIST, 
             defaultData: { parent_id: "", child_id: "" } 
@@ -52,15 +68,29 @@ const callAPI = {
             required: false,
             apiCall: GET_SYMBOL_LIST, 
             defaultData: { parent_id: "", child_id: "" } 
+        },
+        {
+            name: 'Item Schema List',
+            associationName: 'itemSchema',
+            required: false,
+            apiCall: GET_ITEM_SCHEMA_LIST,
+            defaultData: { parent_id: "", child_id: "" }
         }
     ],
     'Pixmap': [
         { 
             name: 'Colour Token List', 
-            associationName: 'colorToken',
+            associationName: 'colourToken',
             required: false,
             apiCall: GET_COLOUR_TOKEN_LIST, 
             defaultData: { parent_id: "", child_id: "" } 
+        },
+        {
+            name: 'Item Schema List',
+            associationName: 'itemSchema',
+            required: false,
+            apiCall: GET_ITEM_SCHEMA_LIST,
+            defaultData: { parent_id: "", child_id: "" }
         }
     ],
     'ColourToken': [

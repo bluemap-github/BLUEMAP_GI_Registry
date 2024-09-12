@@ -20,7 +20,7 @@ def insert_item(model_class, request):
     return Response(encrypted_id, status=HTTP_201_CREATED)
 
 # Visual Item Models
-from regiSystem.models.PR_Visual import (
+from regiSystem.models.PR_Class import (
     SymbolModel, 
     LineStyleModel, 
     AreaFillModel, 
@@ -101,7 +101,6 @@ def insert_colour_profile_schema(request):
     return insert_item(ColourProfileSchemaModel, request)
 
 
-
 @api_view(['POST'])
 def insert_display_mode(request):
     return insert_item(DisplayModeModel, request)
@@ -137,3 +136,72 @@ def insert_alert_highlight(request):
 @api_view(['POST'])
 def insert_alert_message(request):
     return insert_item(AlertMessageModel, request)
+
+
+## Association 공통함수 정의
+from regiSystem.info_sec.encryption import decrypt
+def insert_association_item(model_class, request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    data = request.data
+    if data.get("child_id") is not None:
+        A_id = decrypt(data.get("child_id").get("encrypted_data"), data.get("child_id").get("iv"))
+        inserted_ = model_class.insert(ObjectId(I_id), ObjectId(A_id))
+        if inserted_["status"] == "error":
+            return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+    else:
+        return Response("child_id is required.", status=HTTP_400_BAD_REQUEST)
+    return Response("successfuly inserted.", status=HTTP_201_CREATED)
+
+from regiSystem.models.PR_Association import (
+    SymbolAssociation,
+    IconAssociation,
+    ItemSchemaAssociation,
+    ColourTokenAssociation,
+    ValueAssociation,
+    PaletteAssociation,
+    DisplayModeAssociation,
+    ViewingGroupAssociation,
+    HighlightAssociation,
+    MessageAssociation
+)
+@api_view(['POST'])
+def insert_colour_token_association(request):
+    return insert_association_item(ColourTokenAssociation, request)
+
+@api_view(['POST'])
+def insert_palette_association(request):
+    return insert_association_item(PaletteAssociation, request)
+
+@api_view(['POST'])
+def insert_display_mode_association(request):
+    return insert_association_item(DisplayModeAssociation, request)
+
+@api_view(['POST'])
+def insert_viewing_group_association(request):
+    return insert_association_item(ViewingGroupAssociation, request)
+
+@api_view(['POST'])
+def insert_message_association(request):
+    return insert_association_item(MessageAssociation, request)
+
+@api_view(['POST'])
+def insert_highlight_association(request):
+    return insert_association_item(HighlightAssociation, request)
+
+@api_view(['POST'])
+def insert_value_association(request):
+    return insert_association_item(ValueAssociation, request)
+
+@api_view(['POST'])
+def insert_icon_association(request):
+    return insert_association_item(IconAssociation, request)
+
+@api_view(['POST'])
+def insert_symbol_association(request):
+    return insert_association_item(SymbolAssociation, request)
+
+@api_view(['POST'])
+def insert_item_schema_association(request):
+    return insert_association_item(ItemSchemaAssociation, request)
+

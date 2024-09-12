@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ItemInput from './components/ItemInput';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ChooseType from './ChooseType';
@@ -20,6 +21,21 @@ const InsertPortrayalItem = () => {
   const [apiType, setApiType] = useState("Symbol");              // Selected API Type
   const regi_uri = Cookies.get('REGISTRY_URI');
   const { setItemDetails } = useContext(ItemContext);
+  const navigate = useNavigate();
+  const [associationAndAPI, setAssociationAndAPI] = useState([]);
+
+  const associationPostAPI = {
+    'symbol': POST_SYMBOL_ASSOCIATION,
+    'icon': POST_ICON_ASSOCIATION,
+    'viewingGroup': POST_VIEWING_GROUP_ASSOCIATION,
+    'itemSchema': POST_ITEM_SCHEMA_ASSOCIATION,
+    'colourToken': POST_COLOUR_TOKEN_ASSOCIATION,
+    'palette': POST_PALETTE_ASSOCIATION,
+    'displayMode': POST_DISPLAY_MODE_ASSOCIATION,
+    'msg': POST_MESSAGE_ASSOCIATION,
+    'highlight': POST_HIGHLIGHT_ASSOCIATION,
+    'value': POST_VALUE_ASSOCIATION,
+  }
 
   // Handler for DynamicItemForm submission
   const handleDynamicFormSubmit = (formData) => { 
@@ -41,6 +57,7 @@ const InsertPortrayalItem = () => {
     setDynamicFormData(null);
     setItemInputData(null);
     setManagementInfos([]);
+    setAssociationAndAPI([]);
   }, [apiType]);
 
   const validationData = {
@@ -123,6 +140,7 @@ const InsertPortrayalItem = () => {
   const handleSubmitItem = async (combinedData) => {
     console.log('Combined Data:', combinedData, managementInfos);
     try {
+      // 첫 번째 POST 요청
       const itemResponse = await axios.post(
         selectedApiUrl,
         combinedData,
@@ -132,10 +150,11 @@ const InsertPortrayalItem = () => {
           }
         }
       );
-
+  
       const itemId = itemResponse.data.encrypted_data;
       const item_iv = itemResponse.data.iv;
-
+  
+      // 관리 정보에 대한 POST 요청들 (for-of로 순차 처리)
       for (const managementInfo of managementInfos) {
         await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
           params: {
@@ -144,58 +163,91 @@ const InsertPortrayalItem = () => {
           }
         });
       }
+  
+      // associationAndAPI에 값이 있는지 확인 후 POST 요청
+      if (associationAndAPI.length > 0) {
+        for (const association of associationAndAPI) {
+          await axios.post(association.api, association.data, {
+            params: {
+              item_id: itemId,
+              item_iv: item_iv,
+            }
+          });
+        }
+      } else {
+        console.log('No associations to post');
+      }
 
-      // Set item details or navigate
+      // 모든 POST 요청 완료 후 아이템 정보 설정 및 페이지 이동
       setItemDetails({
         item_id: itemId,
-        item_iv: item_iv
+        item_iv: item_iv,
+        item_type: apiType,
       });
-
-      // navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`); // Uncomment if using navigation
-
+  
+      // 모든 요청 완료 후에 navigate 실행
+      navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+  
     } catch (error) {
+      // 에러 핸들링
       console.error('Error posting data:', error);
       console.log('Combined Data:', combinedData);
     }
   };
 
-
   const log = () => { console.log(itemInputData); }
   const dynamicLog = () => { console.log(dynamicFormData); }
   const apiLog = () => { console.log(selectedApiUrl, apiType); }
   const MILog = () => { console.log(managementInfos); }
+  const assAPILog = () => { console.log(associationAndAPI); }
   
-  const associationPostAPI = {
-    'symbol': POST_SYMBOL_ASSOCIATION,
-    'icon': POST_ICON_ASSOCIATION,
-    'viewingGroup': POST_VIEWING_GROUP_ASSOCIATION,
-    'itemSchema': POST_ITEM_SCHEMA_ASSOCIATION,
-    'colourToken': POST_COLOUR_TOKEN_ASSOCIATION,
-    'palette': POST_PALETTE_ASSOCIATION,
-    'displayMode': POST_DISPLAY_MODE_ASSOCIATION,
-    'msg': POST_MESSAGE_ASSOCIATION,
-    'highlight': POST_HIGHLIGHT_ASSOCIATION,
-    'value': POST_VALUE_ASSOCIATION,
-  }
   const handleAssociation = (updatedData) => { 
-    const parsedData = Object.keys(updatedData).reduce((acc, key) => {
-        try {
-            acc[key] = JSON.parse(updatedData[key]); // JSON 형태면 파싱
-        } catch (e) {
-            acc[key] = updatedData[key]; // JSON이 아니면 그대로 유지
-        }
-        return acc;
-    }, {});
-
-    console.log('Parsed Data:', parsedData);
+      const parsedData = Object.keys(updatedData).reduce((acc, key) => {
+          try {
+              acc[key] = JSON.parse(updatedData[key]); // JSON 형태면 파싱
+          } catch (e) {
+              acc[key] = updatedData[key]; // JSON이 아니면 그대로 유지
+          }
+          return acc;
+      }, {});
+  
+      setAssociationAndAPI(prevState => {
+          // 업데이트된 배열을 처리하기 위해 복사
+          let updatedState = [...prevState];
+  
+          Object.keys(parsedData).forEach(key => {
+              if (associationPostAPI[key]) {  
+                  const existingIndex = updatedState.findIndex(item => item.api === associationPostAPI[key]);
+  
+                  if (existingIndex !== -1) {
+                      // 이미 존재하면 해당 항목을 업데이트
+                      updatedState[existingIndex] = {
+                          api: associationPostAPI[key], 
+                          data: { "child_id": parsedData[key] }
+                      };
+                  } else {
+                      // 존재하지 않으면 새로운 항목을 추가
+                      updatedState.push({
+                          api: associationPostAPI[key], 
+                          data: { "child_id": parsedData[key] }
+                      });
+                  }
+              } else {
+                  console.log(`No API found for ${key}`);
+              }
+          });
+  
+          return updatedState; // 최종 업데이트된 배열 반환
+      });
   };
-
+  
   return (
     <>
       <button onClick={log}>log</button>
       <button onClick={apiLog}>api</button>
       <button onClick={MILog}>MI</button>
       <button onClick={dynamicLog}>dynamic</button>
+      <button onClick={assAPILog}>association</button>
       <div>
         <ChooseType getSelestedApi={(type) => getSelestedApi(type, setSelectedApiUrl, setApiType)} /> 
       </div>
