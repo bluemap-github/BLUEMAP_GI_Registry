@@ -106,7 +106,9 @@ class S100_PR_AlertMessageSerializer(S100_PR_RegisterItemSerializer):
         child=S100_PR_NationalLanguageStringSerializer()
     )
 
-
+# class PR_AssociationSerealizer(serializers.Serializer):
+#     parent_id = ObjectIdField()
+#     child_id = ObjectIdField()
 
 
 

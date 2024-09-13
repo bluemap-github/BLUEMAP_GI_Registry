@@ -400,69 +400,79 @@ from regiSystem.models.PR_Association import (
     MessageAssociation
 )
 
+def get_list_associations(Model, I_id):
+    try:
+        associations = Model.get_list(I_id)
+        if 'status' in associations and associations['status'] == 'error':
+            return Response({"status": "error", "message": associations.get("message", "Unknown error")}, status=400)
+        
+        return Response({"status": "success",  "data": associations}, status=200)
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=400)
+
 ## Associations
 @api_view(['GET'])
 def colour_token_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(ColourTokenAssociation, I_id)
 
 @api_view(['GET'])
 def palette_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(PaletteAssociation, I_id)
 
 @api_view(['GET'])
 def display_mode_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(DisplayModeAssociation, I_id)
 
 @api_view(['GET'])
 def viewing_group_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(ViewingGroupAssociation, I_id)
 
 @api_view(['GET'])
 def viewing_group_layer_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(ViewingGroupAssociation, I_id)
 
 @api_view(['GET'])
 def message_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(MessageAssociation, I_id)
 
 @api_view(['GET'])
 def highlight_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(HighlightAssociation, I_id)
 
 @api_view(['GET'])
 def value_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(ValueAssociation, I_id)
 
 @api_view(['GET'])
 def icon_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(IconAssociation, I_id)
 
 @api_view(['GET'])
 def symbol_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(SymbolAssociation, I_id)
 
 @api_view(['GET'])
 def item_schema_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    pass
+    return get_list_associations(ItemSchemaAssociation, I_id)

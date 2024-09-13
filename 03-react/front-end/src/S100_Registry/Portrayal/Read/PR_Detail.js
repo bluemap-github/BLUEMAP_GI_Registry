@@ -68,7 +68,8 @@ const associationList = {
   'Symbol': [ 
     { 
       associationName: 'colourToken',
-      api: GET_COLOUR_TOKEN_ASSOCIATION_LIST }, 
+      api: GET_COLOUR_TOKEN_ASSOCIATION_LIST,
+     }, 
     { 
       associationName: 'itemSchema',
       api: GET_ITEM_SCHEMA_ASSOCIATION_LIST } 
@@ -144,6 +145,7 @@ const PR_Detail = () => {
   const { item_id, item_iv, item_type } = itemDetails; // item_type에 따라 API를 변경
   const [data, setData] = useState(null); // 데이터를 관리할 상태
   const [managementInfo, setManagementInfo] = useState(null);
+  const [associations, setAssociations] = useState(null);
 
   const regi_uri = Cookies.get('REGISTRY_URI');
   
@@ -152,56 +154,112 @@ const PR_Detail = () => {
   };
 
   useEffect(() => {
-    const apiEndpoint = schemaApiTypes[item_type]; // 해당 item_type에 맞는 API 선택
+    const apiEndpoint = schemaApiTypes[item_type]; // Select the API based on item_type
     if (!apiEndpoint) {
       console.error(`Unknown item type: ${item_type}`);
       return;
     }
-
-    // 두 개의 GET 요청을 Promise.all로 묶어서 병렬 처리
-    Promise.all([
-      axios.get(apiEndpoint, {
-        params: {
-          regi_uri,
-          item_id,
-          item_iv,
-        },
-      }),
-      axios.get(GET_MANAGEMENT_INFO, {
-        params: {
-          item_id,
-          item_iv,
-        },
+  
+    // Fetch data and management info
+    const fetchAllData = () => {
+      return Promise.all([
+        axios.get(apiEndpoint, {
+          params: {
+            regi_uri,
+            item_id,
+            item_iv,
+          },
+        }),
+        axios.get(GET_MANAGEMENT_INFO, {
+          params: {
+            item_id,
+            item_iv,
+          },
+        }),
+      ])
+        .then(([apiResponse, managementResponse]) => {
+          // Handle first request
+          if (apiResponse.data.data) {
+            setData(apiResponse.data.data);
+          } else {
+            setData(null);
+          }
+  
+          // Handle second request
+          if (managementResponse.data) {
+            setManagementInfo(managementResponse.data);
+          } else {
+            setManagementInfo(null);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          setData(null);
+          setManagementInfo(null);
+        });
+    };
+  
+    // Check if the item_type has associations in the list
+    const fetchAssociations = () => {
+      const associations = associationList[item_type];
+      if (!associations) {
+        return Promise.resolve([]); // Return an empty array if no associations
+      }
+  
+      // Fetch each association's API
+      const associationRequests = associations.map((association) =>
+        axios
+          .get(association.api, {
+            params: {
+              item_id,
+              item_iv,
+            },
+          })
+          .then((response) => {
+            return { associationName: association.associationName, data: response.data };
+          })
+          .catch((error) => {
+            console.error(`Error fetching association ${association.associationName}:`, error);
+            return null;
+          })
+      );
+  
+      return Promise.all(associationRequests); // Return a promise that resolves when all association requests are done
+    };
+  
+    // Trigger both the main data fetching and associations fetching
+    Promise.all([fetchAllData(), fetchAssociations()])
+      .then(([mainData, associationData]) => {
+        const formattedAssociations = associationData
+          .filter(item => item && item.data && item.data.data) // Ensure the item has valid data
+          .map(item => {
+            return item.data.data.map(association => ({
+              associationName: item.associationName, // associationName from the fetched data
+              itemType: association.item_type,
+              child_id: association.child_id.encrypted_data,
+              child_iv: association.child_id.iv,
+              xml_id: association.xmlID,
+            }));
+          })
+          .flat(); // Flatten the nested arrays into a single array
+  
+        setAssociations(formattedAssociations); 
       })
-    ])
-    .then(([apiResponse, managementResponse]) => {
-      // 첫 번째 요청 처리
-      if (apiResponse.data.data) {
-        setData(apiResponse.data.data);
-      } else {
-        setData(null); // 데이터가 없을 경우 null
-      }
-
-      // 두 번째 요청 처리
-      if (managementResponse.data) {
-        setManagementInfo(managementResponse.data);
-      } else {
-        setManagementInfo(null); // 데이터가 없을 경우 null
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      setData(null);
-      setManagementInfo(null); // 에러 발생 시 null
-    });
-
+      .catch((error) => {
+        console.error("Error fetching all data:", error);
+      });
   }, [item_id, item_iv, item_type, regi_uri]);
-
+  
+  const assoLogs = () => {
+    console.log(associations);
+  };
+  
   // 스키마 및 비주얼 아이템 타입에 따라 렌더링
   return (
     <div>
+      <button onClick={assoLogs}>assoLog</button>
       {data ? <PortrayalDetails items={data} itemType={item_type} /> : <div>Loading...</div>}
-      {associationList[item_type]? <DynamicAssociations associationItems={associationList[item_type]} /> : <></>}
+      {associations? <DynamicAssociations associationItems={associations} /> : <></>}
       {data ? <ConceptInformation items={data} /> : <div>Loading...</div>}
       {managementInfo ? <ManagementInformation items={managementInfo.management_infos} /> : <div>Loading...</div>}
       

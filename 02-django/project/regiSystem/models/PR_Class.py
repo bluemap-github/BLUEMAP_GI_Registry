@@ -125,8 +125,15 @@ class RE_RegisterItemModel:
 
         return result
 
-
-
+    @classmethod
+    def get_terget_itemType(cls, I_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        result = cls.collection.find_one({"_id": ObjectId(I_id)})
+        if not result:
+            return {"status": "error", "message": "Item not found"}
+        return result['itemType']
+    
 # 각 모델들은 공통 기능을 RE_RegisterItemModel에서 상속받고 필요에 따라 고유한 메서드를 추가할 수 있음
 class SymbolModel(RE_RegisterItemModel):
     collection = db['S100_Portrayal_Symbol']
