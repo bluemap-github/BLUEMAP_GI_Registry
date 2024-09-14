@@ -29,9 +29,6 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-# ALLOWED_HOSTS = [
-#     # 'hjk0815.pythonanywhere.com'
-# ]
 
 ALLOWED_HOSTS = ['bluemap.kr', 'localhost', '127.0.0.1']
 
@@ -40,6 +37,7 @@ ALLOWED_HOSTS = ['bluemap.kr', 'localhost', '127.0.0.1']
 INSTALLED_APPS = [
     'regiSystem',
     'userSystem',
+    'openApiSystem',
     'drf_yasg', #drf_yasg
     'rest_framework',    # pip install djangorestframework
     'django_extensions', # pip install django-extensions

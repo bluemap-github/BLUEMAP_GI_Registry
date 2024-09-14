@@ -1,5 +1,6 @@
 # userSystem/views.py
 from django.contrib.auth import authenticate
+from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -9,6 +10,7 @@ from .models import (UserModel, ParticipationModel)
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from bson.objectid import ObjectId
+from drf_yasg.utils import swagger_auto_schema
 
 
 from .serializers import ParticipationSerializer
@@ -21,6 +23,8 @@ SECRET_KEY = settings.SECRET_KEY
 from regiSystem.models.Concept import S100_Concept_Register
 
 @csrf_exempt
+@api_view(['POST'])
+@swagger_auto_schema(auto_schema=None)
 def check_email(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -32,6 +36,8 @@ def check_email(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @csrf_exempt
+@api_view(['POST'])
+@swagger_auto_schema(auto_schema=None)
 def signup(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -44,6 +50,8 @@ def signup(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @csrf_exempt
+@api_view(['POST'])
+@swagger_auto_schema(auto_schema=None)
 def login(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -58,6 +66,8 @@ def login(request):
 
 
 @csrf_exempt
+@api_view(['GET'])
+@swagger_auto_schema(auto_schema=None)
 def check_auth(request):
     auth_header = request.headers.get('Authorization')
     if not auth_header or not auth_header.startswith('Bearer '):
@@ -87,6 +97,8 @@ def check_auth(request):
         return JsonResponse({'error': 'Unauthorized: Invalid token'}, status=401)
 
 @csrf_exempt
+@api_view(['GET'])
+@swagger_auto_schema(auto_schema=None)
 def get_registry_list(request):
     if request.method == 'GET':
         email = get_email_from_jwt(request)
@@ -117,46 +129,7 @@ def make_role_payload(role):
     }
 
 @api_view(['GET'])
-# def register_info_for_guest(request): 
-#     auth_header = request.headers.get('Authorization')
-#     regi_uri = request.GET.get('regi_uri')
-    
-#     if not auth_header or not auth_header.startswith('Bearer '):
-#         # Guest 용 JWT 발급
-#         guest_payload = make_role_payload('guest')
-#         guest_token = jwt.encode(guest_payload, settings.SECRET_KEY, algorithm='HS256')
-#         # return Response({"token": guest_token}, status=200)
-#         return Response({"role" : "guest"}, status=200)
-    
-#     token = auth_header.split(' ')[1]
-#     try:
-#         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-#         user_id = UserModel.get_user_id_by_email(payload.get('email'))
-#         if not user_id:
-#             return Response({"error": "User not found"}, status=404)
-        
-#         s_item = S100_Concept_Register.find_one({'uniformResourceIdentifier': regi_uri})
-#         if not s_item:
-#             return Response({"error": "Item not found"}, status=404)
-        
-#         regi_id = s_item["_id"]
-#         print(user_id, regi_id)
-        
-#         role = ParticipationModel.get_role(user_id, regi_id)
-#         if not role:
-#             # Guest 용 JWT 발급
-#             guest_payload = make_role_payload('guest')
-#             guest_token = jwt.encode(guest_payload, settings.SECRET_KEY, algorithm='HS256')
-#             return Response({"role" : "guest"}, status=200)
-        
-#         # Owner 용 JWT 발급
-#         owner_payload = make_role_payload('owner')
-#         owner_token = jwt.encode(owner_payload, settings.SECRET_KEY, algorithm='HS256')
-#         return Response({"role" : "owner"}, status=200)
-
-#     except Exception as e:
-#         print("An unexpected error occurred:", str(e))
-#         return Response({"error": "Internal Server Error"}, status=500)
+@swagger_auto_schema(auto_schema=None)
 def register_info_for_guest(request): 
     auth_header = request.headers.get('Authorization')
     regi_uri = request.GET.get('regi_uri')
