@@ -1,6 +1,13 @@
 from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
+regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING)
+serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING)
+itemID = openapi.Parameter('itemID', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
+
 from openApiSystem.models.registry.item import RE_Register
 from openApiSystem.views.checkAccess import check_key_validation
 from openApiSystem.models.dataDictionary.item import (
@@ -20,7 +27,7 @@ from openApiSystem.serializers.dataDictionary.item import (
     CD_InformationSerializer,
 )
 
-
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def enumerated_value_list(request):
     regi_uri = request.GET.get('regiURI')
@@ -36,6 +43,7 @@ def enumerated_value_list(request):
     serialized_items = CD_EnumeratedValueSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def enumerated_value_detail(request):
     regi_uri = request.GET.get('regiURI')
@@ -51,7 +59,7 @@ def enumerated_value_detail(request):
     serialized_item = CD_EnumeratedValueSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def attribute_list(request):
     regi_uri = request.GET.get('regiURI')
@@ -66,7 +74,8 @@ def attribute_list(request):
         return Response({"status": "error", "message": "No item found"}, status=404)
     serialized_items = CD_AttributeSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
-    
+
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def simple_attribute_list(request):
     regi_uri = request.GET.get('regiURI')
@@ -82,6 +91,7 @@ def simple_attribute_list(request):
     serialized_items = CD_SimpleAttributeSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def simple_attribute_detail(request):
     regi_uri = request.GET.get('regiURI')
@@ -97,6 +107,7 @@ def simple_attribute_detail(request):
     serialized_item = CD_SimpleAttributeSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def complex_attribute_list(request):
     regi_uri = request.GET.get('regiURI')
@@ -112,6 +123,7 @@ def complex_attribute_list(request):
     serialized_items = CD_ComplexAttributeSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def complex_attribute_detail(request):
     regi_uri = request.GET.get('regiURI')
@@ -127,6 +139,7 @@ def complex_attribute_detail(request):
     serialized_item = CD_ComplexAttributeSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def feature_list(request):
     regi_uri = request.GET.get('regiURI')
@@ -142,7 +155,7 @@ def feature_list(request):
     serialized_items = CD_FeatureSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
     
-
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def feature_detail(request):
     regi_uri = request.GET.get('regiURI')
@@ -158,7 +171,7 @@ def feature_detail(request):
     serialized_item = CD_FeatureSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def information_list(request):
     regi_uri = request.GET.get('regiURI')
@@ -174,6 +187,7 @@ def information_list(request):
     serialized_items = CD_InformationSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def information_detail(request):
     regi_uri = request.GET.get('regiURI')

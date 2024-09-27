@@ -2,6 +2,12 @@ from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from openApiSystem.views.checkAccess import check_key_validation
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
+regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING)
+serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING)
+itemID = openapi.Parameter('itemID', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 from openApiSystem.models.concept.item import (
     Concept,
@@ -17,6 +23,7 @@ from openApiSystem.serializers.registry.item import (
     RE_ReferenceSourceSerializer,
 )
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def item_list(request):
     regi_uri = request.GET.get('regiURI')
@@ -32,6 +39,7 @@ def item_list(request):
     serialized_items = RE_ItemSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def item_detail(request):
     regi_uri = request.GET.get('regiURI')
@@ -47,6 +55,7 @@ def item_detail(request):
     serialized_item = RE_ItemSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def management_info_list_related_item(request):
     regi_uri = request.GET.get('regiURI')
@@ -63,6 +72,7 @@ def management_info_list_related_item(request):
     return Response({"status": "success", "data": serialized_management_info.data}, status=200)
 
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def reference_list_related_item(request):
     regi_uri = request.GET.get('regiURI')
@@ -78,7 +88,7 @@ def reference_list_related_item(request):
     serialized_reference = RE_ReferenceSerializer(get_reference_list, many=True)
     return Response({"status": "success", "data": serialized_reference.data}, status=200)
 
-
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
 def reference_source_related_item(request):
     regi_uri = request.GET.get('regiURI')

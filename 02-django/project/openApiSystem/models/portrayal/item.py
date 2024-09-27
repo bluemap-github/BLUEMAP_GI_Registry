@@ -58,6 +58,44 @@ class PR_RegisterItem:
             data.append(item)
         
         return data
+    
+    @classmethod
+    def get_item_detail(cls, I_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # MongoDB에서 _id로 해당 데이터를 찾음
+        result = cls.collection[0].find_one({"_id": ObjectId(I_id)})
+
+        if not result:
+            return {"status": "error", "message": "Item not found"}
+
+        # _id를 문자열로 변환
+        result['_id'] = str(result['_id'])
+
+        # description_ids 처리 로직
+        if 'description_ids' in result:
+            descriptions = []
+            for desc_id in result['description_ids']:
+                nls_data = PR_RegisterItem.get_national_language_string(desc_id)
+                if nls_data:
+                    # _id 필드를 제거
+                    if '_id' in nls_data:
+                        nls_data.pop('_id')
+                    descriptions.append(nls_data)
+                else:
+                    return {"status": "error", "message": f"NationalLanguageString with id {desc_id} not found"}
+            
+            # description 필드로 복원
+            result['description'] = descriptions
+            del result['description_ids']  # description_ids 필드는 삭제
+
+        # concept_id 처리 로직
+        if 'concept_id' in result:
+            result['concept_id'] = str(result['concept_id'])
+
+        return result
+
 
 class PR_VisualItem(PR_RegisterItem):
     collection = [
@@ -90,6 +128,7 @@ class PR_VisualItem(PR_RegisterItem):
                 data.append(item)
         
         return data
+
 
 
 # 각 컬렉션을 다루는 클래스는 그대로 유지
