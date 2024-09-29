@@ -19,7 +19,9 @@ from openApiSystem.serializers.portrayal.item import (
     S100_PR_ViewingGroupLayerSerializer, S100_PR_ViewingGroupSerializer,
     S100_PR_FontSerializer, S100_PR_ContextParameterSerializer,
     S100_PR_DrawingPrioritySerializer, S100_PR_AlertHighlightSerializer,
-    S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer
+    S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer,
+    S100_PR_PaletteItemSerializer,
+    S100_PR_AlertMessageSerializer
 )
 from openApiSystem.models.portrayal.item import (
     PR_VisualItem, PR_RegisterItem, PR_NationalLanguageString,
@@ -28,7 +30,8 @@ from openApiSystem.models.portrayal.item import (
     PR_SymbolSchema, PR_LineStyleSchema, PR_AreaFillSchema, PR_PixmapSchema, PR_ColourProfileSchema,
     PR_ColourPalette, PR_PaletteItem,
     PR_DisplayPlane, PR_DisplayMode, PR_ViewingGroupLayer, PR_ViewingGroup,
-    PR_Font, PR_ContextParameter, PR_DrawingPriority, PR_AlertHighlight, PR_Alert, PR_AlertInfo
+    PR_Font, PR_ContextParameter, PR_DrawingPriority, PR_AlertHighlight, 
+    PR_Alert, PR_AlertInfo, PR_AlertMessage
 )
 
 regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING)
@@ -179,3 +182,21 @@ def alert_highlight(request):
     I_id = request.GET.get('itemID')
     return update_item(PR_AlertHighlight, request, I_id, S100_PR_AlertHighlightSerializer)
 
+
+@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_PaletteItemSerializer)
+@api_view(['PUT'])
+def palette_item(request):
+    I_id = request.GET.get('itemID')
+    return update_item(PR_PaletteItem, request, I_id, S100_PR_PaletteItemSerializer)
+
+@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_AlertMessageSerializer)
+@api_view(['PUT'])
+def alert_message(request):
+    I_id = request.GET.get('itemID')
+    return update_item(PR_AlertMessage, request, I_id, S100_PR_AlertMessageSerializer)
+
+@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_AlertSerializer)
+@api_view(['PUT'])
+def alert(request):
+    I_id = request.GET.get('itemID')
+    return update_item(PR_Alert, request, I_id, S100_PR_AlertSerializer)

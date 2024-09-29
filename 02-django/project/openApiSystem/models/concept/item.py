@@ -19,6 +19,23 @@ class Concept(RE_Item):
         if res is None:
             return None
         return res    
+    
+    @classmethod
+    def insert(cls, C_id, data):
+        data['concept_id'] = ObjectId(C_id)
+        result = cls.collection.insert_one(data)
+        return {"status": "success", "inserted_id": str(result.inserted_id)}
+
+    @classmethod
+    def update(cls, I_id, data):
+        object_id = ObjectId(I_id)
+        result = cls.collection.update_one(
+            {'_id': object_id},  
+            {'$set': data}       
+        )
+        if result.matched_count == 0:
+            return {"status": "error", "message": "Item not found or no changes made"}
+        return {"status": "success", "updated_id": I_id, "modified_count": result.modified_count}
 
 
 class ManagementInfo(RE_ManagementInfo):
@@ -28,7 +45,23 @@ class ManagementInfo(RE_ManagementInfo):
         if res is None:
             return None
         return res
+    
+    @classmethod
+    def insert(cls, I_id, data):
+        data['concept_item_id'] = ObjectId(I_id) 
+        result = cls.collection.insert_one(data)
+        return {"status": "success", "inserted_id": str(result.inserted_id)}
 
+    @classmethod
+    def update(cls, I_id, data):
+        object_id = ObjectId(I_id)
+        result = cls.collection.update_one(
+            {'_id': object_id},  
+            {'$set': data}       
+        )
+        if result.matched_count == 0:
+            return {"status": "error", "message": "Item not found or no changes made"}
+        return {"status": "success", "updated_id": I_id, "modified_count": result.modified_count}
 
 
 class Reference(RE_Reference):
@@ -39,6 +72,23 @@ class Reference(RE_Reference):
             return None
         return res
     
+    @classmethod
+    def insert(cls, I_id, data):
+        data['concept_item_id'] = ObjectId(I_id) 
+        result = cls.collection.insert_one(data)
+        return {"status": "success", "inserted_id": str(result.inserted_id)}
+
+    @classmethod
+    def update(cls, I_id, data):
+        object_id = ObjectId(I_id)
+        result = cls.collection.update_one(
+            {'_id': object_id},  
+            {'$set': data}       
+        )
+        if result.matched_count == 0:
+            return {"status": "error", "message": "Item not found or no changes made"}
+        return {"status": "success", "updated_id": I_id, "modified_count": result.modified_count}
+
 
 class ReferenceSource(RE_ReferenceSource):
     @classmethod
@@ -47,3 +97,20 @@ class ReferenceSource(RE_ReferenceSource):
         if res is None:
             return None
         return res
+    
+    @classmethod
+    def insert(cls, I_id, data):
+        data['concept_item_id'] = ObjectId(I_id) 
+        result = cls.collection.insert_one(data)
+        return {"status": "success", "inserted_id": str(result.inserted_id)}
+
+    @classmethod
+    def update(cls, I_id, data):
+        object_id = ObjectId(I_id)
+        result = cls.collection.update_one(
+            {'_id': object_id},  
+            {'$set': data}       
+        )
+        if result.matched_count == 0:
+            return {"status": "error", "message": "Item not found or no changes made"}
+        return {"status": "success", "updated_id": I_id, "modified_count": result.modified_count}

@@ -2,8 +2,7 @@ from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-from regiSystem.info_sec.encryption import get_encrypted_id
-from regiSystem.info_sec.getByURI import uri_to_serial
+from openApiSystem.models.registry.item import RE_Register
 from regiSystem.models.Concept import RegiModel
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -14,7 +13,7 @@ serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='serv
 
 # 공통 함수 정의
 def insert_item(model_class, request):
-    C_id = uri_to_serial(request.GET.get('regiURI'))
+    C_id = RE_Register.get_register_by_url(request.GET.get('regiURI'))
     data = request.data
     inserted_ = model_class.insert(data, ObjectId(C_id))
 
@@ -36,7 +35,8 @@ from openApiSystem.serializers.portrayal.item import (
     S100_PR_ViewingGroupLayerSerializer, S100_PR_ViewingGroupSerializer,
     S100_PR_FontSerializer, S100_PR_ContextParameterSerializer,
     S100_PR_DrawingPrioritySerializer, S100_PR_AlertHighlightSerializer,
-    S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer
+    S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer, S100_PR_AlertMessageSerializer,
+    S100_PR_PaletteItemSerializer
 )
 from openApiSystem.models.portrayal.item import (
     PR_VisualItem, PR_RegisterItem, PR_NationalLanguageString,
@@ -45,7 +45,8 @@ from openApiSystem.models.portrayal.item import (
     PR_SymbolSchema, PR_LineStyleSchema, PR_AreaFillSchema, PR_PixmapSchema, PR_ColourProfileSchema,
     PR_ColourPalette, PR_PaletteItem,
     PR_DisplayPlane, PR_DisplayMode, PR_ViewingGroupLayer, PR_ViewingGroup,
-    PR_Font, PR_ContextParameter, PR_DrawingPriority, PR_AlertHighlight, PR_Alert, PR_AlertInfo
+    PR_Font, PR_ContextParameter, PR_DrawingPriority, PR_AlertHighlight, 
+    PR_Alert, PR_AlertInfo, PR_AlertMessage
 )
 # API 엔드포인트
 @swagger_auto_schema(
@@ -94,13 +95,32 @@ def insert_pixmap_item(request):
 def insert_colour_token(request):
     return insert_item(PR_ColourToken, request)
 
-# @api_view(['POST'])
-# def insert_palette_item(request):
-#     return insert_item(PaletteItemModel, request)
+@swagger_auto_schema(
+    method='post', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=S100_PR_PaletteItemSerializer  # 여기에 요청 body 시리얼라이저를 추가
+)
+@api_view(['POST'])
+def insert_palette_item(request):
+    return insert_item(PR_PaletteItem, request)
 
-# @api_view(['POST'])
-# def insert_alert(request):
-#     return insert_item(AlertModel, request)
+@swagger_auto_schema(
+    method='post', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=S100_PR_AlertSerializer  # 여기에 요청 body 시리얼라이저를 추가
+)
+@api_view(['POST'])
+def insert_alert(request):
+    return insert_item(PR_Alert, request)
+
+@swagger_auto_schema(
+    method='post', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=S100_PR_AlertMessageSerializer  # 여기에 요청 body 시리얼라이저를 추가
+)
+@api_view(['POST'])
+def insert_alert_message(request):
+    return insert_item(PR_AlertMessage, request)
 
 @swagger_auto_schema(
     method='post', 

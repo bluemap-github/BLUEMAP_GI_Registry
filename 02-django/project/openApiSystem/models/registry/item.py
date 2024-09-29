@@ -14,6 +14,8 @@ class RE_Register:
     @classmethod
     def get_register_by_url(cls, uri):
         res = cls.collection.find_one({'uniformResourceIdentifier': uri})
+        if not res:
+            return None
         return res["_id"]
 
 class RE_Item:

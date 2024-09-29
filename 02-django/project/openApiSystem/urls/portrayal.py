@@ -4,6 +4,9 @@ from openApiSystem.views.portrayal import (get, post, put, delete)
 
 app_name = 'openApiSystem'
 urlpatterns = [
+    # '''
+    # 객체 url
+    # '''
     path('get/visual_item_list/', get.visual_item_list),
     path('get/symbol_list/', get.symbol_list),
     path('get/line_style_list/', get.line_style_list),
@@ -28,6 +31,7 @@ urlpatterns = [
     path('get/alert_list/', get.alert_list),
     path('get/alert_highlight_list/', get.alert_highlight_list),
     path('get/alert_info_list/', get.alert_info_list),
+    path('get/alert_message_list/', get.alert_message_list),
 
     path('get/symbol_detail/', get.symbol_detail),
     path('get/line_style_detail/', get.line_style_detail),
@@ -40,7 +44,7 @@ urlpatterns = [
     path('get/pixmap_schema_detail/', get.pixmap_schema_detail),
     path('get/colour_profile_schema_detail/', get.colour_profile_schema_detail),
     path('get/colour_token_detail/', get.colour_token_detail),
-    # path('get/palette_item_detail/', get.palette_item_detail),
+    path('get/palette_item_detail/', get.palette_item_detail),
     path('get/colour_palette_detail/', get.colour_palette_detail),
     path('get/display_plane_detail/', get.display_plane_detail),
     path('get/display_mode_detail/', get.display_mode_detail),
@@ -49,9 +53,10 @@ urlpatterns = [
     path('get/font_detail/', get.font_detail),
     path('get/context_parameter_detail/', get.context_parameter_detail),
     path('get/drawing_priority_detail/', get.drawing_priority_detail),
-    # path('get/alert_detail/', get.alert_detail),
+    path('get/alert_detail/', get.alert_detail),
     path('get/alert_highlight_detail/', get.alert_highlight_detail),
     path('get/alert_info_detail/', get.alert_info_detail),
+    path('get/alert_message_detail/', get.alert_message_detail),
     
 
     path('post/symbol/', post.insert_symbol_item),
@@ -65,7 +70,7 @@ urlpatterns = [
     path('post/pixmap_schema/', post.insert_pixmap_schema),
     path('post/colour_profile_schema/', post.insert_colour_profile_schema),
     path('post/colour_token/', post.insert_colour_token),
-    # path('post/palette_item/', post.palette_item),
+    path('post/palette_item/', post.insert_palette_item),
     path('post/colour_palette/', post.insert_colour_palette),
     path('post/display_plane/', post.insert_display_plane),
     path('post/display_mode/', post.insert_display_mode),
@@ -74,9 +79,9 @@ urlpatterns = [
     path('post/font/', post.insert_font),
     path('post/context_parameter/', post.insert_context_parameter),
     path('post/drawing_priority/', post.insert_drawing_priority),
-    # path('post/alert/', post.alert),
+    path('post/alert/', post.insert_alert),
     path('post/alert_highlight/', post.insert_alert_highlight),
-    # path('post/alert_info/', post.alert_info),
+    path('post/alert_message/', post.insert_alert_message),
 
     path('put/symbol/', put.symbol),
     path('put/line_style/', put.line_style),
@@ -89,7 +94,7 @@ urlpatterns = [
     path('put/pixmap_schema/', put.pixmap_schema),
     path('put/colour_profile_schema/', put.colour_profile_schema),
     path('put/colour_token/', put.colour_token),
-    # path('put/palette_item/', put.palette_item),
+    path('put/palette_item/', put.palette_item),
     path('put/colour_palette/', put.colour_palette),
     path('put/display_plane/', put.display_plane),
     path('put/display_mode/', put.display_mode),
@@ -98,9 +103,9 @@ urlpatterns = [
     path('put/font/', put.font),
     path('put/context_parameter/', put.context_parameter),
     path('put/drawing_priority/', put.drawing_priority),
-    # path('put/alert/', put.alert),
+    path('put/alert/', put.alert),
     path('put/alert_highlight/', put.alert_highlight),
-    # path('put/alert_info/', put.alert_info),
+    path('put/alert_message/', put.alert_message),
 
     # path('delete/symbol/', delete.symbol),
     # path('delete/line_style/', delete.line_style),
@@ -124,5 +129,40 @@ urlpatterns = [
     # path('delete/drawing_priority/', delete.drawing_priority),
     # path('delete/alert/', delete.alert),
     # path('delete/alert_highlight/', delete.alert_highlight),
-    # path('delete/alert_info/', delete.alert_info),
+    # path('delete/alert_message/', delete.alert_message),
+
+
+    ### 연관관계 url
+    # path('get/symbol_association/', get.symbol_association),
+    # path('get/item_schema_association/', get.item_schema_association),
+    # path('get/colour_token_association/', get.colour_token_association),
+    # path('get/palette_association/', get.palette_association),
+    # path('get/display_mode_association/', get.display_mode_association),
+    # path('get/viewing_group_association/', get.viewing_group_association),
+    # path('get/highlight_association/', get.highlight_association),
+    # path('get/icon_association/', get.icon_association),
+    # path('get/value_association/', get.value_association),
+    # path('get/msg_association/', get.msg_association),
+
+    # path('post/symbol_association/', post.symbol_association),
+    # path('post/item_schema_association/', post.item_schema_association),
+    # path('post/colour_token_association/', post.colour_token_association),
+    # path('post/palette_association/', post.palette_association),
+    # path('post/display_mode_association/', post.display_mode_association),
+    # path('post/viewing_group_association/', post.viewing_group_association),
+    # path('post/highlight_association/', post.highlight_association),
+    # path('post/icon_association/', post.icon_association),
+    # path('post/value_association/', post.value_association),
+    # path('post/msg_association/', post.msg_association),
+
+    # path('delete/symbol_association/', delete.symbol_association),
+    # path('delete/item_schema_association/', delete.item_schema_association),
+    # path('delete/colour_token_association/', delete.colour_token_association),
+    # path('delete/palette_association/', delete.palette_association),
+    # path('delete/display_mode_association/', delete.display_mode_association),
+    # path('delete/viewing_group_association/', delete.viewing_group_association),
+    # path('delete/highlight_association/', delete.highlight_association),
+    # path('delete/icon_association/', delete.icon_association),
+    # path('delete/value_association/', delete.value_association),
+    # path('delete/msg_association/', delete.msg_association),
 ]

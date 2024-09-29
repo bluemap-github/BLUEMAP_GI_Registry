@@ -14,11 +14,13 @@ from openApiSystem.serializers.portrayal.item import (
     S100_PR_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
     S100_PR_VisualItemSerializer, S100_PR_ItemSchemaSerializer,
     S100_PR_ColourTokenSerializer, S100_PR_ColourPalletteSerializer,
+    S100_PR_PaletteItemSerializer,
     S100_PR_DisplayPlaneSerializer, S100_PR_DisplayModeSerializer,
     S100_PR_ViewingGroupLayerSerializer, S100_PR_ViewingGroupSerializer,
     S100_PR_FontSerializer, S100_PR_ContextParameterSerializer,
     S100_PR_DrawingPrioritySerializer, S100_PR_AlertHighlightSerializer,
-    S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer
+    S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer,
+    S100_PR_AlertMessageSerializer
 )
 from openApiSystem.models.portrayal.item import (
     PR_VisualItem, PR_RegisterItem, PR_NationalLanguageString,
@@ -27,7 +29,9 @@ from openApiSystem.models.portrayal.item import (
     PR_SymbolSchema, PR_LineStyleSchema, PR_AreaFillSchema, PR_PixmapSchema, PR_ColourProfileSchema,
     PR_ColourPalette, PR_PaletteItem,
     PR_DisplayPlane, PR_DisplayMode, PR_ViewingGroupLayer, PR_ViewingGroup,
-    PR_Font, PR_ContextParameter, PR_DrawingPriority, PR_AlertHighlight, PR_Alert, PR_AlertInfo
+    PR_Font, PR_ContextParameter, PR_DrawingPriority, PR_AlertHighlight, PR_Alert, PR_AlertInfo,
+    PR_AlertMessage
+
 )
 @swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
@@ -221,10 +225,22 @@ def colour_token_list(request):
         return Response({"status": "error", "message": "No item found"}, status=404)
     serialized_items = S100_PR_ColourTokenSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
-
+    
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def palette_item_list(request):
-    pass
+    regi_uri = request.GET.get('regiURI')
+    service_key = request.GET.get('serviceKey')
+    validation_response = check_key_validation(service_key, regi_uri)
+    if isinstance(validation_response, Response):
+        return validation_response
+    
+    C_id = RE_Register.get_register_by_url(regi_uri)
+    get_item_list = PR_PaletteItem.get_list_by_id(C_id)
+    if get_item_list is None:
+        return Response({"status": "error", "message": "No item found"}, status=404)
+    serialized_items = S100_PR_PaletteItemSerializer(get_item_list, many=True)
+    return Response({"status": "success", "data": serialized_items.data}, status=200)
 
 @swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
@@ -566,9 +582,21 @@ def colour_token_detail(request):
     serialized_item = S100_PR_ColourTokenSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@api_view(['GET'])
+def palette_item_detail(request):
+    regi_uri = request.GET.get('regiURI')
+    service_key = request.GET.get('serviceKey')
+    validation_response = check_key_validation(service_key, regi_uri)
+    if isinstance(validation_response, Response):
+        return validation_response
+    I_id = request.GET.get('itemID')
+    get_item_detail = PR_PaletteItem.get_item_detail(I_id)
+    if get_item_detail.get("status") == "error":
+        return Response({"status": "error", "message": get_item_detail.get("message")}, status=404)
+    serialized_item = S100_PR_PaletteItemSerializer(get_item_detail)
+    return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-# @api_view(['GET'])
-# def palette_item_detail(request):
     
 @swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
 @api_view(['GET'])
@@ -727,5 +755,79 @@ def alert_info_detail(request):
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
 
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@api_view(['GET'])
+def alert_message_detail(request):
+    regi_uri = request.GET.get('regiURI')
+    service_key = request.GET.get('serviceKey')
+    validation_response = check_key_validation(service_key, regi_uri)
+    if isinstance(validation_response, Response):
+        return validation_response
+    I_id = request.GET.get('itemID')
+    get_item_detail = PR_AlertMessage.get_item_detail(I_id)
+    if get_item_detail.get("status") == "error":
+        return Response({"status": "error", "message": get_item_detail.get("message")}, status=404)
+    
+    serialized_item = S100_PR_AlertMessageSerializer(get_item_detail)
+    return Response({"status": "success", "data": serialized_item.data}, status=200)
 
+
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@api_view(['GET'])
+def alert_message_list(request):
+    regi_uri = request.GET.get('regiURI')
+    service_key = request.GET.get('serviceKey')
+    validation_response = check_key_validation(service_key, regi_uri)
+    if isinstance(validation_response, Response):
+        return validation_response
+    
+    C_id = RE_Register.get_register_by_url(regi_uri)
+    get_item_list = PR_AlertMessage.get_list_by_id(C_id)
+    if get_item_list is None:
+        return Response({"status": "error", "message": "No item found"}, status=404)
+    serialized_items = S100_PR_AlertMessageSerializer(get_item_list, many=True)
+    return Response({"status": "success", "data": serialized_items.data}, status=200)
+
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@api_view(['GET'])
+def alert_detail(request):
+    regi_uri = request.GET.get('regiURI')
+    service_key = request.GET.get('serviceKey')
+    validation_response = check_key_validation(service_key, regi_uri)
+    if isinstance(validation_response, Response):
+        return validation_response
+    I_id = request.GET.get('itemID')
+    get_item_detail = PR_Alert.get_item_detail(I_id)
+    if get_item_detail.get("status") == "error":
+        return Response({"status": "error", "message": get_item_detail.get("message")}, status=404)
+    
+    serialized_item = S100_PR_AlertSerializer(get_item_detail)
+    return Response({"status": "success", "data": serialized_item.data}, status=200)
+
+@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@api_view(['GET'])
+def alert_list(request):
+    regi_uri = request.GET.get('regiURI')
+    service_key = request.GET.get('serviceKey')
+    validation_response = check_key_validation(service_key, regi_uri)
+    if isinstance(validation_response, Response):
+        return validation_response
+    
+    C_id = RE_Register.get_register_by_url(regi_uri)
+    get_item_list = PR_Alert.get_list_by_id(C_id)
+    if get_item_list is None:
+        return Response({"status": "error", "message": "No item found"}, status=404)
+    serialized_items = S100_PR_AlertSerializer(get_item_list, many=True)
+    return Response({"status": "success", "data": serialized_items.data}, status=200)
+
+# from openApiSystem.serializers.portrayal.association import (
+
+# )
+# from openApiSystem.models.portrayal.association import (
+    
+# )
+
+# #### 연관관계
+# @swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+# @api_view(['GET'])
 

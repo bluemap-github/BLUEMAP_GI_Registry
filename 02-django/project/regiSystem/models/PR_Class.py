@@ -448,6 +448,17 @@ class AlertModel(RE_RegisterItemModel):
         return {"status": "success", "data": data}
 
     @staticmethod
+    def get_alert_priority(priority_id):
+        # AlertPriority에서 priority 조회
+        priority_data = db['S100_Portrayal_AlertPriority'].find_one({"_id": ObjectId(priority_id)})
+
+        if not priority_data:
+            return {"status": "error", "message": f"AlertPriority with id {priority_id} not found"}
+
+        priority_data['_id'] = str(priority_data['_id'])
+        return priority_data
+        
+    @staticmethod
     def get_alert_info(info_id):
         # AlertInfo에서 priority_ids 조회
         info_data = db['S100_Portrayal_AlertInfo'].find_one({"_id": ObjectId(info_id)})
@@ -470,16 +481,7 @@ class AlertModel(RE_RegisterItemModel):
 
         return info_data
 
-    @staticmethod
-    def get_alert_priority(priority_id):
-        # AlertPriority에서 priority 조회
-        priority_data = db['S100_Portrayal_AlertPriority'].find_one({"_id": ObjectId(priority_id)})
-
-        if not priority_data:
-            return {"status": "error", "message": f"AlertPriority with id {priority_id} not found"}
-
-        priority_data['_id'] = str(priority_data['_id'])
-        return priority_data
+    
     @classmethod
     def get_one(cls, I_id):
         # MongoDB에서 _id로 해당 데이터를 찾음

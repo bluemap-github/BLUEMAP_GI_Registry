@@ -27,9 +27,6 @@ class ItemSchemaAssociation(Association):
 class ColourTokenAssociation(Association):
     collection = S100_PR_ColourToken_Association
 
-class ValueAssociation(Association):
-    collection = S100_PR_Value_Association
-
 class PaletteAssociation(Association):
     collection = S100_PR_Palette_Association
 
@@ -42,6 +39,10 @@ class ViewingGroupAssociation(Association):
 class HighlightAssociation(Association):
     collection = S100_PR_Highlight_Association
 
+
+class ValueAssociation(Association):
+    collection = S100_PR_Value_Association
+    
 class MessageAssociation(Association):
     collection = S100_PR_Message_Association
 
