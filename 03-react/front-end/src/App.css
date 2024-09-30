@@ -228,10 +228,6 @@ hr {
   cursor: pointer;
 }
 
-.regi-card:hover {
-  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
 
 .inner-nav {
   width: 100%;
@@ -275,4 +271,10 @@ hr {
   border-bottom: 1px solid #cccccc8c;
   display: flex;
   justify-content: space-between;
+}
+.regi-card-dots:hover {
+  cursor: pointer;
+}
+.regi-card-uri-links:hover {
+  text-decoration: underline;
 }

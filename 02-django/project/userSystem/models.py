@@ -38,11 +38,12 @@ class UserModel:
 
 class ParticipationModel:
     @staticmethod
-    def create_participation(user_id, registry_id, role):
+    def create_participation(user_id, registry_id, role, serial_key):
         participation = {
             "user_id": user_id,
             "registry_id": registry_id,
-            "role": role
+            "role": role,
+            "serial_key": serial_key
         }
         Participation.insert_one(participation)
     
@@ -73,3 +74,8 @@ class ParticipationModel:
         if participation:
             return participation["role"]
         return None
+    
+    @classmethod
+    def get_participation_by_regi_id(cls, regi_id):
+        return Participation.find_one({"registry_id": regi_id})
+    

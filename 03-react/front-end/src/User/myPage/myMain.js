@@ -56,10 +56,16 @@ function MyMain() {
     }, [navigate]);
 
     const connectToRegistry = (e, registry) => {
+        
         Cookies.set('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 }); // 쿠키에 REGISTRY_URI 저장
         Cookies.set('REGISTRY_NAME', registry.name, { expires: 7 }); // 쿠키에 REGISTRY_NAME 저장
         navigate(ENTER_REGI(registry.uniformResourceIdentifier));
     };
+    const connectToSetting = (e, registry) => {
+        Cookies.set('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 }); // 쿠키에 REGISTRY_URI 저장
+
+        navigate('/user/setting-registry')
+    }
     
     if (error) {
         return <div>Error: {error}</div>;
@@ -97,13 +103,18 @@ function MyMain() {
                     ) : (
                         <div>
                             {ownRegistries.map((registry) => (
-                                <div key={registry._id} onClick={(e) => connectToRegistry(e, registry)}>
-                                    <div className='card regi-card mb-4' style={{}}>
+                                <div key={registry._id} >
+                                    <div className='card regi-card mb-4' style={{position: 'relative'}}>
+                                        <div onClick={(e) => connectToSetting(e, registry)} className='regi-card-dots' style={{position: 'absolute', top: '10px', right: '10px', backgroundColor: 'white', width: "50px"}}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="1em" viewBox="0 0 20 20">
+                                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0"/>
+                                            </svg>
+                                        </div>
                                         <div className="card-body">
                                             <h4>{registry.name}</h4>
                                             <div>Last updated : {registry.dateOfLastChange}</div>
                                             <div>Description : {registry.contentSummary}</div>
-                                            <div style={{color : 'gray'}}>http://bluemap.kr:21804/{registry.uniformResourceIdentifier}</div>
+                                            <div className='regi-card-dots regi-card-uri-links' onClick={(e) => connectToRegistry(e, registry)} style={{color : 'gray'}}>http://bluemap.kr:21804/{registry.uniformResourceIdentifier}</div>
                                         </div>
                                     </div>
                                 </div>    

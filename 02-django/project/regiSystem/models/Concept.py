@@ -27,6 +27,10 @@ class RegiModel:
         date = datetime.datetime.now().strftime("%Y-%m-%d")
         S100_Concept_Register.update_one({"_id": registry_id}, {"$set": {"dateOfLastChange": date}})
 
+    @classmethod
+    def get_registry(cls, registry_uri):
+        return S100_Concept_Register.find_one({"uniformResourceIdentifier": registry_uri})
+    
 
 class ListedValue:
     @staticmethod

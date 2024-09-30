@@ -2,6 +2,8 @@ from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+import random
+import string
 
 from regiSystem.models.Concept import (
         S100_Concept_Register,
@@ -25,6 +27,13 @@ from userSystem.manage_auth.check_auth import (get_email_from_jwt)
 import json
 from regiSystem.info_sec.encryption import (encrypt, get_encrypted_id, decrypt)
 
+def generate_random_string(length=12): 
+    all_characters = string.ascii_letters + string.digits + string.punctuation
+    exclude_characters = "\"./:;<=>[\]`{|}'(),#+-&"
+    allowed_characters = ''.join(c for c in all_characters if c not in exclude_characters)
+    random_string = ''.join(random.choice(allowed_characters) for _ in range(length))
+    return random_string
+
 @api_view(['POST'])
 def concept_register(request):
     if request.method == 'POST':
@@ -42,7 +51,8 @@ def concept_register(request):
             S100_Concept_Register.insert_one(validated_data)
             registry_id = ObjectId(serializer.data.get("_id"))
             role = "owner"
-            ParticipationModel.create_participation(user_id, registry_id, role)
+            serial_key = generate_random_string()
+            ParticipationModel.create_participation(user_id, registry_id, role, serial_key)
             RegiModel.update_date(registry_id)
             return Response(serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

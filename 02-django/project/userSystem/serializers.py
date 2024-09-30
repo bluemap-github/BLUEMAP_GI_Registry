@@ -8,3 +8,4 @@ class ParticipationSerializer(serializers.Serializer):
     user_id = ObjectIdField(read_only=True)
     registry_id = ObjectIdField(read_only=True)
     role = serializers.CharField()
+    serial_key = serializers.CharField()

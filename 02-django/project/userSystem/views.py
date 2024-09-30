@@ -20,8 +20,7 @@ from .manage_auth.check_auth import get_email_from_jwt
 
 SECRET_KEY = settings.SECRET_KEY
 
-from regiSystem.models.Concept import S100_Concept_Register
-
+from regiSystem.models.Concept import (S100_Concept_Register, RegiModel)
 @csrf_exempt
 @api_view(['POST'])
 @swagger_auto_schema(auto_schema=None)
@@ -163,3 +162,21 @@ def register_info_for_guest(request):
     except Exception as e:
         print("An unexpected error occurred:", str(e))
         return Response({"error": "Internal Server Error"}, status=500)
+
+@api_view(['GET'])
+def get_regi_api_info(request):
+    regi_uri = request.GET.get('regiURI')
+    regi_item = RegiModel.get_registry(regi_uri)
+    if not regi_item:
+        return Response({"error": "Item not found"}, status=404)
+    regi_obj_id = regi_item["_id"]
+    regi_item.pop("_id")
+    participate_item = ParticipationModel.get_participation_by_regi_id(regi_obj_id)
+    participate_item.pop("_id")
+    participate_item.pop("user_id")
+    participate_item.pop("registry_id")
+
+    return Response({
+        "regi_item": regi_item,
+        "participate_item": participate_item
+    }, status=200)

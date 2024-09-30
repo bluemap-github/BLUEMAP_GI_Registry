@@ -10,4 +10,5 @@ urlpatterns = [
     path('check-auth/', views.check_auth, name='check_auth'),
     path('registery_list/get/', views.get_registry_list, name='get_registry_list'),
     path('register_info_for_guest/get/', views.register_info_for_guest),
+    path('get_regi_api_info/', views.get_regi_api_info),
 ]
