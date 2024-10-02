@@ -12,7 +12,7 @@ const NotAllowed = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-            <h2 style={{ color: '#333', marginBottom: '20px' }}>Not Allowed</h2>
+            <h2 style={{ color: '#333' }}>Not Allowed</h2>
             <p style={{ color: '#666', fontSize: '16px', textAlign: 'center', maxWidth: '600px' }}>
                 You do not have permission to access this feature.
             </p>

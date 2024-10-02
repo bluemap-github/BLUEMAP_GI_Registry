@@ -18,7 +18,7 @@ const Navbar = ({ userInfo }) => {
     };
 
     return (
-        <nav className='nav-bar-top'>
+        <nav className='nav-inner'>
             <div style={{ display: 'flex', alignItems: 'center'}}>
                 <div style={{ fontSize: '23px', fontWeight: 'bold', color: '#007bff', marginLeft: '10px'}}>BLUEMAP GI Registry</div>
                 <div style={{ display: 'flex',height: '40px', borderRadius: '5px', border: '0.5px solid #dfe1e5', backgroundColor: '#fff', alignItems: 'center', marginLeft: '30px'}}>

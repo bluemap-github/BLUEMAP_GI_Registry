@@ -80,9 +80,9 @@ const CreateRegistry = () => {
 
     return (
         <div>
-            <div className="container mt-4">
+            <div className="mt-4">
                 <h4 style={{ fontWeight: 'bold' }}>새 레지스트리 만들기</h4>
-                <div style={{ backgroundColor: '#F8F8F8', width: '70vw'}} className='p-5 mt-4'>
+                <div style={{ backgroundColor: '#F8F8F8'}} className='p-5 mt-4'>
                     <form onSubmit={postRegistry}>
                         <div className="mb-3">
                             <label htmlFor="registryName" className="form-label">레지스트리 이름</label>
@@ -96,7 +96,7 @@ const CreateRegistry = () => {
                             {errors.name && <span style={{ color: 'red', fontSize: '12px' }}>{errors.name}</span>}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="uniformResourceIdentifier" className="form-label">레지스트리 주소</label>
+                            <label htmlFor="uniformResourceIdentifier" className="form-label">레지스트리 URI</label>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <input
                                     type="text"
@@ -104,9 +104,7 @@ const CreateRegistry = () => {
                                     placeholder="URI"
                                     name="uniformResourceIdentifier"
                                     onChange={handleChange}
-                                    style={{ width: '95%' }}
                                 />
-                                <span>.registry</span>
                             </div>
                             <label style={{ color: 'gray', fontSize: '12px' }}>
                                 {validation}

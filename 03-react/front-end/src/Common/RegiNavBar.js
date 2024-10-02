@@ -18,7 +18,7 @@ const RegiNavBar = ({ userInfo }) => {
     };
 
     return (
-        <nav className='nav-bar-top'>
+        <nav className='nav-inner'>
             <div style={{ display: 'flex', alignItems: 'center'}}>
                 <div style={{ fontSize: '23px', fontWeight: 'bold', color: '#007bff', marginLeft: '10px'}}>레지스트리 이름</div>                
             </div>

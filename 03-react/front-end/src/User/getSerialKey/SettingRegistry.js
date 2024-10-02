@@ -34,40 +34,41 @@ const SettingRegistry = () => {
     const { regi_item, participate_item } = registry; // 데이터 구조에서 각 객체를 추출
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', width: '80%' }}>
-            {/* Basic Information Section */}
-            <h2>레지스트리 기본정보</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+        <div style={{ fontFamily: 'Arial, sans-serif' }}>
+            <h2 style={{fontWeight: "bold"}}>Open API 정보</h2>
+            <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1' }}></div>
+            <h5 style={{fontWeight: "bold", marginTop: "35px"}}>레지스트리 기본정보</h5>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }} className="table">
                 <tbody>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>Name</td>
+                        <th className='table-primary' style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>Name</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd', width: '75%' }}>{regi_item.name || 'N/A'}</td>
                     </tr>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>Description</td>
+                        <th className='table-primary' style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>Description</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd', width: '75%' }}>{regi_item.contentSummary || 'N/A'}</td>
                     </tr>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>활용기간</td>
+                        <th className='table-primary' style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>활용기간</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd' }}>제한 없음</td>
                     </tr>
                 </tbody>
             </table>
 
             {/* Service Information Section */}
-            <h2>서비스정보</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+            <h5 style={{fontWeight: "bold", marginTop: "35px"}}>서비스정보</h5>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <tbody>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>서비스 유형</td>
+                        <th style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>서비스 유형</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd' }}>REST</td>
                     </tr>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>데이터포맷</td>
+                        <th style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>데이터포맷</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd' }}>JSON</td>
                     </tr>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>End Point</td>
+                        <th style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>End Point</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd' }}>
                             <a href={'http://bluemap.kr:21803/'} target="_blank" rel="noopener noreferrer">
                                 {'http://bluemap.kr:21803/'}
@@ -75,7 +76,7 @@ const SettingRegistry = () => {
                         </td>
                     </tr>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>swagger 주소</td>
+                        <th style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>swagger 주소</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd' }}>
                             <a href={`http://bluemap.kr:21803/swagger`} target="_blank" rel="noopener noreferrer">
                                 {`http://bluemap.kr:21803/swagger`}
@@ -83,19 +84,19 @@ const SettingRegistry = () => {
                         </td>
                     </tr>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>registry URI 정보</td>
+                        <th style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>registry URI 정보</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd' }}>{regi_item.uniformResourceIdentifier || 'N/A'}</td>
                     </tr>
                     <tr>
-                        <td style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>API 인증키 (serviceKey)</td>
+                        <th style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2', width: '25%' }}>API 인증키 (serviceKey)</th>
                         <td style={{ padding: '8px', border: '1px solid #ddd' }}>{participate_item.serial_key || 'N/A'}</td>
                     </tr>
                 </tbody>
             </table>
 
             {/* Request Parameter Section */}
-            <h2>요청변수(Request Parameter)</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+            <h5 style={{fontWeight: "bold", marginTop: "35px"}}>요청변수(Request Parameter)</h5>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr>
                         <th style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>항목명</th>
@@ -116,8 +117,8 @@ const SettingRegistry = () => {
             </table>
 
             {/* Request Parameter Section */}
-            <h2>제공 api 목록</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+            <h5 style={{fontWeight: "bold", marginTop: "35px"}}>제공 api 목록</h5>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr>
                         <th style={{ padding: '8px', border: '1px solid #ddd', backgroundColor: '#f2f2f2' }}>구분</th>

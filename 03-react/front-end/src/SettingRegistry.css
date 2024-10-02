@@ -1,0 +1,78 @@
+/* 전체 페이지를 Flexbox로 구성 */
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    min-height: 90vh;
+    font-family: Arial, sans-serif;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+    width: 250px;
+    margin-right: 20px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+/* 메인 콘텐츠 스타일 */
+.content {
+    flex: 1;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px 0;
+    bottom: 0; /* 하단에 위치 */
+    width: 100%; /* 전체 너비를 차지 */
+    max-height: 70px;
+}
+
+
+.footer-content {
+    max-width: 1440px;
+    margin: 0 auto;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer p {
+    margin: 5px 0;
+}

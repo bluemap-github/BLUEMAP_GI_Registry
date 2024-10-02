@@ -23,6 +23,9 @@ import ConceptPage from './rootComponent/ConceptPage';
 import DataDictionaryPage from './rootComponent/DataDictionaryPage';
 import UserPage from './rootComponent/UserPage';
 import InsertPortrayalItem from './S100_Registry/Portrayal/Insert/InsertPortrayalItem';
+import './SettingRegistry.css'; 
+
+
 
 function App() {
   return (
@@ -31,6 +34,18 @@ function App() {
     </Router>
   );
 }
+
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <div className="footer-content">
+        <p>© 2024 BLUEMAP Inc. All rights reserved.</p>
+        <p>v0.0.3</p>
+      </div>
+    </footer>
+  );
+};
+
 
 function AppContent() {
   return (
@@ -45,18 +60,30 @@ function AppContent() {
         <Route path="/error" element={<ErrorPage />} />
         <Route path="*" element={<ErrorPage />} /> {/* 올바르지 않은 경로를 처리 */}
       </Routes>
+      <Footer />
     </div>
   );
 }
 
+
+
+
 function Others() {
   return (
     <>
-      <GetUserInfo><Navbar /></GetUserInfo>
-      <Routes>
-        <Route path="browsing" element={<Browsing />} />
-        {/* 필요한 경우 여기에 더 많은 하위 라우트 추가 가능 */}
-      </Routes>
+      <div className='nav-bar-top'>
+        <GetUserInfo><Navbar /></GetUserInfo>
+      </div>
+      <div className="container">
+        <div style={{maxWidth: '1800px', minWidth: '1440px'}}>
+          <Routes>
+            <Route path="browsing" element={<Browsing />} />
+            {/* 필요한 경우 여기에 더 많은 하위 라우트 추가 가능 */}
+          </Routes>
+        </div>
+      </div>
+
+      
     </>
   );
 }
@@ -67,12 +94,14 @@ function Others() {
 function RegistrySection() {
   return (
     <>
-      <GetUserInfo><RegiNavBar /></GetUserInfo>
-      <div style={{ display: 'flex', height: 'calc(100vh - 50px)'}}>
-        <SideBar />
-        <div style={{ flex: 1 }}>
+      <div className='nav-bar-top'>
+        <GetUserInfo><RegiNavBar /></GetUserInfo>
+      </div>
+      <div className="container"> {/* Flexbox로 컨테이너 지정 */}
+        <SideBar className="sidebar" /> {/* 사이드바 스타일 적용 */}
+        <div className="content"> {/* 메인 콘텐츠 스타일 적용 */}
           <InnerNav />
-          <div className='p-5 pt-3' style={{maxWidth: '1800px', minWidth: '1300px'}}>
+          <div className='p-5 pt-3' style={{maxWidth: '1800px', minWidth: '1200px'}}>
             <Routes>
               <Route path="/" element={<EnterRegi><RegiHome /></EnterRegi>} />
               <Route path="concept/*" element={<ConceptPage />} />
@@ -85,24 +114,29 @@ function RegistrySection() {
         </div>
       </div>
     </>
-    
   );
 }
+
 
 function UserSection() {
   return (
     <>
-      <GetUserInfo><Navbar /></GetUserInfo>
-      <div style={{ display: 'flex', height: 'calc(100vh - 50px)' }}>
-        <GetUserInfo><MySidebar /></GetUserInfo>
-        <div style={{ flex: 1}}>
+      <div className='nav-bar-top'>
+        <GetUserInfo><Navbar /></GetUserInfo>
+      </div>
+      <div className="container"> {/* Flexbox로 컨테이너 지정 */}
+        <GetUserInfo><MySidebar className="sidebar" /></GetUserInfo> {/* 사이드바 스타일 적용 */}
+        <div className="content"> {/* 메인 콘텐츠 스타일 적용 */}
           <GetUserInfo><InnerMyNav/></GetUserInfo>
-          <Routes>
-            <Route path="/*" element={<UserPage />} />
-          </Routes>
+          <div className='p-5 pt-3' style={{maxWidth: '1800px', minWidth: '1200px'}}>
+            <Routes>
+              <Route path="/*" element={<UserPage />} />
+            </Routes>
+          </div>
         </div>
       </div>
     </>
   );
 }
+
 export default App;

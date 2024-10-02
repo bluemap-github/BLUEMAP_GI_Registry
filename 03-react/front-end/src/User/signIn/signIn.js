@@ -49,7 +49,7 @@ const SignIn = () => {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#f0f4f8' }}>
             {/* <h1 className='m-5' style={{ color: '#007bff' }}>BLUEMAP GI Registry</h1> */}
             <div style={{ width: '500px', padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginTop: '70px'}}>
-                <h2 style={{ textAlign: 'center', marginBottom: '20px', fontWeight: 'bold', color: '#007bff' }}>Sign In</h2>
+                <h2 style={{ textAlign: 'center', fontWeight: 'bold', color: '#007bff' }}>Sign In</h2>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div style={{ marginBottom: '15px', width: '100%' }}>

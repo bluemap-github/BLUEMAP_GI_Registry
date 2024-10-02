@@ -96,7 +96,7 @@ const DDR_FilterList = ({ viewType }) => {
 
   return (
     <div>
-      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+      <div style={{ marginTop: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexGrow: 1 }}>
             {viewType === 'EnumeratedValue' && (
