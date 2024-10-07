@@ -134,7 +134,7 @@ function ManagementInfoInput({ onFormSubmit, apiType }) {
     ));
 
     return (
-        <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
+        <div className='item-input-form-bg p-3 mt-4'>
             <Base 
                 onformdata={((data) => {handleCheck(data, CBNIdx)})}
                 isOpen={isModalOpen} 

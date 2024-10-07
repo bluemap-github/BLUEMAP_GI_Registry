@@ -9,12 +9,13 @@ import { POST_SYMBOL_ASSOCIATION, POST_ICON_ASSOCIATION, POST_VIEWING_GROUP_ASSO
 import { performValidation } from './validation/ValidateItems';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import {basicJSONs} from './components/basicJSONs';
 import { ItemContext } from '../../../context/ItemContext';
 import DynamicItemForm from './components/DynamicItemForm'; // Import the DynamicItemForm component
 import DinamicAssociationForm from './components/DinamicAssociationForm'; // Import the DynamicItemForm component
 
 const InsertPortrayalItem = () => {
-  const [dynamicFormData, setDynamicFormData] = useState(null);  // State for DynamicItemForm
+  const [dynamicFormData, setDynamicFormData] = useState(basicJSONs["Symbol"]);  // State for DynamicItemForm
   const [itemInputData, setItemInputData] = useState(null);      // State for ItemInput
   const [managementInfos, setManagementInfos] = useState([]);    // State for Management Info
   const [selectedApiUrl, setSelectedApiUrl] = useState(POST_SYMBOL);  // Selected API URL
@@ -40,6 +41,7 @@ const InsertPortrayalItem = () => {
   // Handler for DynamicItemForm submission
   const handleDynamicFormSubmit = (formData) => { 
     setDynamicFormData(formData); 
+    console.log("Form Data Submitted: ", formData);
   };
 
   // Handler for ItemInput submission
@@ -139,61 +141,86 @@ const InsertPortrayalItem = () => {
 
   const handleSubmitItem = async (combinedData) => {
     console.log('Combined Data:', combinedData, managementInfos);
-    try {
-      // 첫 번째 POST 요청
-      const itemResponse = await axios.post(
-        selectedApiUrl,
-        combinedData,
-        {
-          params: {
-            regi_uri: regi_uri, // regi_uri 변수 확인 필요
-          }
+
+    // FormData 객체 생성
+    const formData = new FormData();
+
+    // combinedData를 FormData로 변환
+    Object.keys(combinedData).forEach(key => {
+        const value = combinedData[key];
+        if (value instanceof File) {
+            formData.append(key, value); // 파일 처리
+        } else if (typeof value === 'object' && value !== null) {
+            formData.append(key, JSON.stringify(value)); // JSON 데이터 처리
+        } else {
+            formData.append(key, value); // 일반 텍스트 데이터 처리
         }
-      );
-  
-      const itemId = itemResponse.data.encrypted_data;
-      const item_iv = itemResponse.data.iv;
-  
-      // 관리 정보에 대한 POST 요청들 (for-of로 순차 처리)
-      for (const managementInfo of managementInfos) {
-        await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
-          params: {
+    });
+
+    // 관리 정보도 추가
+    managementInfos.forEach((info, index) => {
+        formData.append(`managementInfo[${index}]`, JSON.stringify(info));
+    });
+
+    try {
+        // 첫 번째 POST 요청
+        const itemResponse = await axios.post(
+            selectedApiUrl,
+            formData,  // FormData로 전송
+            {
+                params: {
+                    regi_uri: regi_uri,
+                },
+                headers: {
+                    'Content-Type': 'multipart/form-data',  // FormData를 전송할 때는 이 헤더 필요
+                },
+            }
+        );
+
+        const itemId = itemResponse.data.encrypted_data;
+        const item_iv = itemResponse.data.iv;
+
+        // 관리 정보에 대한 POST 요청들 (for-of로 순차 처리)
+        for (const managementInfo of managementInfos) {
+            await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
+                params: {
+                    item_id: itemId,
+                    item_iv: item_iv,
+                }
+            });
+        }
+
+        // associationAndAPI에 값이 있는지 확인 후 POST 요청
+        if (associationAndAPI.length > 0) {
+            for (const association of associationAndAPI) {
+                await axios.post(association.api, association.data, {
+                    params: {
+                        item_id: itemId,
+                        item_iv: item_iv,
+                    }
+                });
+            }
+        } else {
+            console.log('No associations to post');
+        }
+
+        // 모든 POST 요청 완료 후 아이템 정보 설정 및 페이지 이동
+        setItemDetails({
             item_id: itemId,
             item_iv: item_iv,
-          }
+            item_type: apiType,
         });
-      }
-  
-      // associationAndAPI에 값이 있는지 확인 후 POST 요청
-      if (associationAndAPI.length > 0) {
-        for (const association of associationAndAPI) {
-          await axios.post(association.api, association.data, {
-            params: {
-              item_id: itemId,
-              item_iv: item_iv,
-            }
-          });
-        }
-      } else {
-        console.log('No associations to post');
-      }
 
-      // 모든 POST 요청 완료 후 아이템 정보 설정 및 페이지 이동
-      setItemDetails({
-        item_id: itemId,
-        item_iv: item_iv,
-        item_type: apiType,
-      });
-  
-      // 모든 요청 완료 후에 navigate 실행
-      navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
-  
+        // 모든 요청 완료 후 navigate 실행
+        navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+
     } catch (error) {
-      // 에러 핸들링
-      console.error('Error posting data:', error);
-      console.log('Combined Data:', combinedData);
+        // 에러 핸들링
+        console.error('Error posting data:', error);
+        console.log('FormData:', formData); // FormData 확인용
     }
-  };
+};
+
 
   const log = () => { console.log(itemInputData); }
   const dynamicLog = () => { console.log(dynamicFormData); }

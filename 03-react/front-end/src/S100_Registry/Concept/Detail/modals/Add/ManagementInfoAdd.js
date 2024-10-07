@@ -54,7 +54,7 @@ function ManagementInfoAdd({onClose}) {
 
     const ExampleCustomInput = forwardRef(({ value, onClick }) => (
         <div onClick={onClick}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-calendar-fill" viewBox="0 0 16 16">
                 <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5"/>
             </svg>
         </div>
@@ -62,14 +62,14 @@ function ManagementInfoAdd({onClose}) {
     return (
         <div>
             <div className='text-end'>
-                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+                <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
             </div>
             <div>
                 <div>
                     <h3 className='mb-2'>Add management Info</h3>
                     <div className='input-group input-group-sm mt-2'>
-                        <label style={{width:"50%", fontWeight: "bold"}} class="input-group-text" htmlFor="proposalType">*proposalType</label>
-                        <select class="form-select" id="proposalType" name="proposalType" onChange={handleChange}>
+                        <label style={{width:"50%", fontWeight: "bold"}} className="input-group-text" htmlFor="proposalType">*proposalType</label>
+                        <select className="form-select" id="proposalType" name="proposalType" onChange={handleChange}>
                             <option selected>Choose</option>
                             <option value="addition">addition</option>
                             <option value="clarification">clarification</option>
@@ -143,8 +143,8 @@ function ManagementInfoAdd({onClose}) {
                         </div>
                     </div>
                     <div className='input-group input-group-sm mt-2'>
-                        <label style={{ width: "50%" , fontWeight: "bold"}} class="input-group-text" htmlFor="proposalStatus">*proposalStatus</label>
-                        <select class="form-select" id="proposalStatus" name="proposalStatus" onChange={handleChange}>
+                        <label style={{ width: "50%" , fontWeight: "bold"}} className="input-group-text" htmlFor="proposalStatus">*proposalStatus</label>
+                        <select className="form-select" id="proposalStatus" name="proposalStatus" onChange={handleChange}>
                             <option selected>Choose</option>
                             <option value="notYetDetermined">notYetDetermined</option>
                             <option value="transferred">transferred</option>

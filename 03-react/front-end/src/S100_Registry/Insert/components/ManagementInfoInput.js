@@ -164,7 +164,12 @@ function ManagementInfoInput({ onFormSubmit }) {
                     
                     {managementInfos.map((managementInfo, index) => (
                         <div key={index}>
-                            {index !== 0 && <hr style={{margin: "5px"}}></hr>}
+                            {index !== 0 && <hr style={{marginTop: "20px" }}></hr>}
+                            {index !== 0 && 
+                                <div className='text-end'>
+                                    <button className='btn btn-sm btn-outline-danger' onClick={() => popMIInput(index)}>Remove</button>
+                                </div>
+                            }
                             
                             <div className='row'>
                                 <div className='col'>
@@ -346,11 +351,6 @@ function ManagementInfoInput({ onFormSubmit }) {
                                     </div>
                                 </div>
                             </div>
-                            {index !== 0 && 
-                                <div className='text-end mt-2'>
-                                    <button className='btn btn-sm btn-outline-danger' onClick={() => popMIInput(index)}>Remove</button>
-                                </div>
-                            }
                         </div>
                     ))}
                 </div>

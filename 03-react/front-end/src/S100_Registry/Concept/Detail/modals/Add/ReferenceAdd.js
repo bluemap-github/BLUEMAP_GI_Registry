@@ -35,7 +35,7 @@ function ReferenceAdd({onClose}){
     return (
         <div>
             <div className='text-end mb-3'>
-                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+                <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
             </div>
             <div>
                 <h3 className='mb-2'>Add Reference</h3>

@@ -86,7 +86,7 @@ function ItemInput({ onFormSubmit, apiType }) {
     };
 
     return (
-        <div style={{ backgroundColor: '#F8F8F8' }} className='p-3 mt-4'>
+        <div className='item-input-form-bg p-3 mt-4'>
             {toggleOpened ? (
                 <div>
                     <div className='' style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>

@@ -2,7 +2,6 @@
 .container {
     display: flex;
     justify-content: center;
-    padding: 20px;
     min-height: 90vh;
     font-family: Arial, sans-serif;
 }

@@ -36,7 +36,7 @@ function ReferenceSourceAdd({onClose}){
     return (
         <div>
             <div className='text-end mb-3'>
-                <button onClick={onClose} type="button" class="btn-close" aria-label="Close"></button>
+                <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
             </div>
             <div>
             <h3 className='mb-2'>Add Reference Source</h3>
@@ -49,8 +49,8 @@ function ReferenceSourceAdd({onClose}){
                     <input type="text" className="form-control" placeholder="sourceDocument" name="sourceDocument" onChange={RSChange} />
                 </div>
                 <div className='input-group input-group-sm mt-2'>
-                    <label class="input-group-text" htmlFor="similarity" style={{width:"40%", fontWeight: "bold"}}>*similarity</label>
-                    <select class="form-select" id="similarity" name="similarity" onChange={RSChange}>
+                    <label className="input-group-text" htmlFor="similarity" style={{width:"40%", fontWeight: "bold"}}>*similarity</label>
+                    <select className="form-select" id="similarity" name="similarity" onChange={RSChange}>
                         <option selected>Choose</option>
                         <option value="identical">identical</option>
                         <option value="restyled">restyled</option>

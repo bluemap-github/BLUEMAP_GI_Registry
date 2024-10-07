@@ -43,7 +43,7 @@ class S100_PR_ViewingGroupLayerSerializer(S100_PR_RegisterItemSerializer):
     pass
 
 class S100_PR_ViewingGroupSerializer(S100_PR_RegisterItemSerializer):
-    foundationMode = serializers.CharField(allow_blank=True, allow_null=True)
+    foundationMode = serializers.BooleanField(allow_null=True, required=False)
 
 class S100_PR_FontSerializer(S100_PR_RegisterItemSerializer):
     fontFile = serializers.CharField()
@@ -57,7 +57,7 @@ class S100_PR_DrawingPrioritySerializer(S100_PR_RegisterItemSerializer):
     priority = serializers.CharField()
 
 class S100_PR_AlertHighlightSerializer(S100_PR_RegisterItemSerializer):
-    optional = serializers.CharField(allow_blank=True, allow_null=True)
+    optional = serializers.BooleanField(allow_null=True, required=False)
     style = serializers.CharField(allow_blank=True, allow_null=True)
 
 
@@ -86,8 +86,8 @@ class S100_PR_PaletteItemSerializer(S100_PR_RegisterItemSerializer):
 # alert comlex
 class S100_PR_AlertPrioritySerializer(serializers.Serializer):
     priority = serializers.CharField()
-    default = serializers.CharField()
-    optional = serializers.CharField(allow_blank=True, allow_null=True)
+    default = serializers.BooleanField(allow_null=True, required=False)
+    optional = serializers.BooleanField(allow_null=True, required=False)
 
 class S100_PR_AlertInfoSerializer(serializers.Serializer):
     priority = serializers.ListField( child=S100_PR_AlertPrioritySerializer() )

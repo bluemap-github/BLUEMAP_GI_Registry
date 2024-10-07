@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import FileInput from './FileInput';
+import NationalLangueString from './NationalLanguageString';
+import {basicJSONs} from './basicJSONs';
+import BooleanTag from './BooleanTag';
+import AlertInfoTags from './AlertInfoTags';
 
 const DynamicItemForm = ({ itemType, onFormSubmit }) => {
-  const [formData, setFormData] = useState({ 
+  const baseInformationFields = {
     description: [{ text: '', language: '' }],
-    colourValue: { sRGB: { red: '', green: '', blue: '' }, cie: { x: '', y: '', L: '' } }, // Initialize nested structure
-    text: [{ text: '', language: '' }], // For AlertMessage
-    routeMonitor: [{ priority: [{ priority: '', default: '', optional: '' }] }],
-    routePlan: [{ priority: [{ priority: '', default: '', optional: '' }] }]
-  });
+    colourValue: { sRGB: { red: '', green: '', blue: '' }, cie: { x: '', y: '', L: '' } },
+    text: [{ text: '', language: '' }],
+    alertPriority: { priority: '', default: '', optional: '' }, 
+    alertInfo: { priority: { priority: '', default: '', optional: '' } }, // alertPriority를 직접 설정
+    routeMonitor: { priority: { priority: '', default: '', optional: '' } }, // alertInfo를 직접 설정
+    routePlan: { priority: { priority: '', default: '', optional: '' } }, // alertInfo를 직접 설정
+    style: ''
+  };
+
+  const [formData, setFormData] = useState(basicJSONs[itemType]);
+
+  useEffect(() => {
+    setFormData(basicJSONs[itemType]);
+    onFormSubmit(basicJSONs[itemType]);
+  }, [itemType]);
+  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -37,144 +53,15 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
     });
   };
 
-  const handleDescriptionChange = (index, event) => {
-    const { name, value } = event.target;
-    const updatedDescription = [...formData.description];
-    updatedDescription[index] = {
-      ...updatedDescription[index],
-      [name]: value,
-    };
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      description: updatedDescription,
-    }));
-    onFormSubmit({
-      ...formData,
-      description: updatedDescription,
-    });
-  };
-
-  const handleTextChange = (index, event) => {
-    const { name, value } = event.target;
-    const updatedText = [...formData.text];
-    updatedText[index] = {
-      ...updatedText[index],
-      [name]: value,
-    };
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      text: updatedText,
-    }));
-    onFormSubmit({
-      ...formData,
-      text: updatedText,
-    });
-  };
-
-  const handlePriorityChange = (groupType, index, priorityIndex, event) => {
-    const { name, value } = event.target;
-    const updatedGroup = [...formData[groupType]];
-    updatedGroup[index].priority[priorityIndex] = {
-      ...updatedGroup[index].priority[priorityIndex],
-      [name]: value,
-    };
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [groupType]: updatedGroup,
-    }));
-    onFormSubmit({
-      ...formData,
-      [groupType]: updatedGroup,
-    });
-  };
-
-  const addPriority = (groupType, index) => {
-    const updatedGroup = [...formData[groupType]];
-    updatedGroup[index].priority.push({ priority: '', default: '', optional: '' });
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [groupType]: updatedGroup,
-    }));
-  };
-
-  const addGroup = (groupType) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [groupType]: [...prevFormData[groupType], { priority: [{ priority: '', default: '', optional: '' }] }]
-    }));
-  };
-
-  const removeGroup = (groupType, index) => {
-    const updatedGroup = formData[groupType].filter((_, i) => i !== index);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [groupType]: updatedGroup,
-    }));
-    onFormSubmit({
-      ...formData,
-      [groupType]: updatedGroup,
-    });
-  };
-
-  const removePriority = (groupType, index, priorityIndex) => {
-    const updatedGroup = [...formData[groupType]];
-    updatedGroup[index].priority = updatedGroup[index].priority.filter((_, i) => i !== priorityIndex);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [groupType]: updatedGroup,
-    }));
-  };
-
-  const addDescription = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      description: [...prevFormData.description, { text: '', language: '' }],
-    }));
-  };
-
-  const removeDescription = (index) => {
-    const updatedDescription = formData.description.filter((_, i) => i !== index);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      description: updatedDescription,
-    }));
-    onFormSubmit({
-      ...formData,
-      description: updatedDescription,
-    });
-  };
-
-  const addText = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      text: [...prevFormData.text, { text: '', language: '' }],
-    }));
-  };
-
-  const removeText = (index) => {
-    const updatedText = formData.text.filter((_, i) => i !== index);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      text: updatedText,
-    }));
-    onFormSubmit({
-      ...formData,
-      text: updatedText,
-    });
-  };
-
   const commonFields = [
-    { name: 'XML ID', key: 'xmlID' },
+    { name: 'XML ID', key: 'xmlID', inputType: 'text' },
     { name: 'Descriptions', key: 'description', isDescription: true },
   ];
 
-  // Visual Item 공통 필드 정의
   const visualItemFields = [
-    { name: 'Item Detail', key: 'itemDetail' },
-    { name: 'Preview Image', key: 'previewImage' },
-    { name: 'Engineering Image', key: 'engineeringImage' },
-    { name: 'Preview Type', key: 'previewType' },
-    { name: 'Engineering Image Type', key: 'engineeringImageType' },
+    { name: 'Item Detail (svg) Upload', key: 'itemDetail', fileType: 'svg' },
+    { name: 'Preview Image', key: 'previewImage', fileType: 'image' },
+    { name: 'Engineering Image', key: 'engineeringImage', fileType: 'image' },
   ];
 
   const specificFields = {
@@ -183,63 +70,48 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
     'AreaFill': visualItemFields,
     'Pixmap': visualItemFields,
     'SymbolSchema': [
-        { name: 'XML Schema', key: 'xmlSchema', isXML: true },
+        { name: 'XML Schema', key: 'xmlSchema', fileType: 'xml' },
     ],
     'LineStyleSchema': [
-        { name: 'XML Schema', key: 'xmlSchema', isXML: true },
+        { name: 'XML Schema', key: 'xmlSchema', fileType: 'xml' },
     ],
     'AreaFillSchema': [
-        { name: 'XML Schema', key: 'xmlSchema', isXML: true },
+        { name: 'XML Schema', key: 'xmlSchema', fileType: 'xml' },
     ],
     'PixmapSchema': [
-        { name: 'XML Schema', key: 'xmlSchema', isXML: true },
+        { name: 'XML Schema', key: 'xmlSchema', fileType: 'xml' },
     ],
     'ColourProfileSchema': [
-        { name: 'XML Schema', key: 'xmlSchema', isXML: true },
+        { name: 'XML Schema', key: 'xmlSchema', fileType: 'xml' },
     ],
     'ColourToken': [
-        { name: 'Token', key: 'token' },
+        { name: 'Token', key: 'token', inputType: 'text'  },
     ],
     'PaletteItem': [
-      { name: 'Transparency', key: 'transparency' },
-      { name: 'Red (sRGB)', key: 'colourValue.sRGB.red' },
-      { name: 'Green (sRGB)', key: 'colourValue.sRGB.green' },
-      { name: 'Blue (sRGB)', key: 'colourValue.sRGB.blue' },
-      { name: 'X (CIE)', key: 'colourValue.cie.x' },
-      { name: 'Y (CIE)', key: 'colourValue.cie.y' },
-      { name: 'L (CIE)', key: 'colourValue.cie.L' }
+      { name: 'Transparency', key: 'transparency', inputType: 'number'  },
+      { name: 'Red (sRGB)', key: 'colourValue.sRGB.red', inputType: 'number' },
+      { name: 'Green (sRGB)', key: 'colourValue.sRGB.green', inputType: 'number' },
+      { name: 'Blue (sRGB)', key: 'colourValue.sRGB.blue', inputType: 'number' },
+      { name: 'X (CIE)', key: 'colourValue.cie.x', inputType: 'number' },
+      { name: 'Y (CIE)', key: 'colourValue.cie.y', inputType: 'number' },
+      { name: 'L (CIE)', key: 'colourValue.cie.L', inputType: 'number' }
     ],
-    'ColourPalette': [],
-    'DisplayMode': [],
     'DisplayPlane': [
-        { name: 'Order', key: 'order' }
+        { name: 'Order', key: 'order', inputType: 'number' }
     ],
-    'ViewingGroupLayer': [],
-    'ViewingGroup': [
-        { name: 'Foundation Mode', key: 'foundationMode' }
-    ],
+    'ViewingGroup': [],
     'Font': [
-        { name: 'Font File', key: 'fontFile' },
-        { name: 'Font Type', key: 'fontType' }
+        { name: 'Font File Upload', key: 'fontFile', fileType: 'font' }
     ],
     'ContextParameter': [
-      { name: 'Parameter Type', key: 'parameterType' },
-      { name: 'Default Value', key: 'defaultValue' }
+        { name: 'Default Value', key: 'defaultValue', inputType: 'text' }
     ],
     'DrawingPriority': [
-        { name: 'Priority', key: 'priority' }
+        { name: 'Priority', key: 'priority', inputType: 'number' }
     ],
-    'AlertHighlight': [
-        { name: 'Optional', key: 'optional' },
-        { name: 'Style', key: 'style' }
-    ],
-    'Alert': [
-      { name: 'Route Monitor', key: 'routeMonitor', isGroup: 'routeMonitor' },
-      { name: 'Route Plan', key: 'routePlan', isGroup: 'routePlan' },
-    ],
-    'AlertMessage': [
-      { name: 'Text', key: 'text', isText: true },
-    ],
+    'Alert' : [],
+    'AlertHighlight': [],
+    'AlertMessage': []
   };
 
   const getTableFields = (itemType) => [
@@ -249,164 +121,151 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
 
   const fields = getTableFields(itemType);
 
-  return (
-    <div style={{ backgroundColor: '#F8F8F8' }}  className="p-3 mt-4">
-      <h3>{itemType} Input</h3>
+  // 이미지 입력란이 필요한 itemType 목록
+  const imageItemTypes = ['Symbol', 'LineStyle', 'AreaFill', 'Pixmap'];
+  const NLS = ['AlertMessage']
+  const Enums = {
+    'AlertHighlight': {'style': ['AlamHighlight', 'CautionHighlight']},
+    // 'AlertPriority': ['alam', 'warning', 'caution', 'indication'],
+    'ContextParameter': {'parameterType': ['boolean', 'integer', 'double', 'string', 'date']},
+  }
+  const Booleans = {
+    'AlertHighlight': 'optional', 
+    'ViewingGroup': 'foundationMode',
+  }
+  const onFileChange = (key, file) => {
+    const updatedFormData = { ...formData, [key]: file };
+    setFormData(updatedFormData);
+    onFormSubmit(updatedFormData); // 부모로 전달
+  };
 
+  const onNLSChange = (key, addNLS) => {
+    const updatedFormData = { ...formData, [key]: addNLS };
+    setFormData(updatedFormData);
+    onFormSubmit(updatedFormData); // 부모로 전달
+  }
+
+  const onBooleanChange = (key, boolOption) => {
+    const updatedFormData = { ...formData, [key]: boolOption };
+    setFormData(updatedFormData);
+    onFormSubmit(updatedFormData); // Pass updated data to parent
+  };
+
+  const onAlertinfoChange = (key, alertInfo) => {
+    const updatedFormData = { ...formData, [key]: alertInfo };
+    setFormData(updatedFormData);
+    onFormSubmit(updatedFormData); // Pass updated data to parent
+  };
+
+  const viewFormData = () => {
+    console.log(formData);
+  };
+
+  
+
+  return (
+    <div className="item-input-form-bg p-3 pb-1 mt-4">
+      <h3>{itemType}</h3>
+      <button onClick={viewFormData}>logg</button>
       {fields.length > 0 ? (
-        fields.map(({ name, key, isDescription, isText, isGroup }) => (
+        fields.map(({ name, key, isDescription, fileType, inputType }) => (
           <div key={key}>
-            {isDescription ? (
-              <div>
-                <h5>{name}</h5>
-                {formData.description.map((desc, index) => (
-                  <div key={index} className="input-group input-group-sm mt-2">
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      placeholder="Description text"
-                      value={desc.text}
-                      onChange={(e) => handleDescriptionChange(index, e)}
-                    />
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="language"
-                      placeholder="Language"
-                      value={desc.language}
-                      onChange={(e) => handleDescriptionChange(index, e)}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-danger"
-                      onClick={() => removeDescription(index)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button type="button" className="btn btn-primary mt-2" onClick={addDescription}>
-                  Add Description
-                </button>
-              </div>
-            ) : isText ? (
-              <div>
-                <h5>{name}</h5>
-                {formData.text.map((txt, index) => (
-                  <div key={index} className="input-group input-group-sm mt-2">
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      placeholder="Text"
-                      value={txt.text}
-                      onChange={(e) => handleTextChange(index, e)}
-                    />
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="language"
-                      placeholder="Language"
-                      value={txt.language}
-                      onChange={(e) => handleTextChange(index, e)}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-danger"
-                      onClick={() => removeText(index)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button type="button" className="btn btn-primary mt-2" onClick={addText}>
-                  Add Text
-                </button>
-              </div>
-            ) : isGroup ? (
-              <div>
-                <h5>{name}</h5>
-                {formData[isGroup].map((group, index) => (
-                  <div key={index}>
-                    {group.priority.map((priority, priorityIndex) => (
-                      <div key={priorityIndex} className="input-group input-group-sm mt-2">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="priority"
-                          placeholder="Priority"
-                          value={priority.priority}
-                          onChange={(e) => handlePriorityChange(isGroup, index, priorityIndex, e)}
-                        />
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="default"
-                          placeholder="Default"
-                          value={priority.default}
-                          onChange={(e) => handlePriorityChange(isGroup, index, priorityIndex, e)}
-                        />
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="optional"
-                          placeholder="Optional"
-                          value={priority.optional}
-                          onChange={(e) => handlePriorityChange(isGroup, index, priorityIndex, e)}
-                        />
-                        <button
-                          type="button"
-                          className="btn btn-danger"
-                          onClick={() => removePriority(isGroup, index, priorityIndex)}
-                        >
-                          Remove Priority
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      className="btn btn-primary mt-2"
-                      onClick={() => addPriority(isGroup, index)}
-                    >
-                      Add Priority
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-danger mt-2"
-                      onClick={() => removeGroup(isGroup, index)}
-                    >
-                      Remove Group
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  className="btn btn-primary mt-2"
-                  onClick={() => addGroup(isGroup)}
-                >
-                  Add Group
-                </button>
-              </div>
-            ) : (
-              <div className="input-group input-group-sm mt-2">
-                <span className="input-group-text" style={{ width: '40%', fontWeight: 'bold' }}>
-                  {name}
-                </span>
-                <input
-                  type="text"
-                  className="form-control"
-                  name={key}
-                  placeholder={`Enter ${name}`}
-                  value={key.split('.').reduce((acc, part) => acc && acc[part], formData) || ''}
-                  onChange={handleChange}
-                />
-              </div>
+            {key === "previewImage" || key === "engineeringImage" ? null : (
+              fileType ? (
+                <div>
+                  <FileInput 
+                    tagName={name} 
+                    fileType={fileType} 
+                    setFile={(file) => setFormData((prevFormData) => ({ ...prevFormData, [key]: file }))} 
+                    // setFile={(file) => onFileChange(key, file)} 
+                  />
+                </div>
+              ) : isDescription ? (
+                <NationalLangueString itemType={itemType} tagName={"Description"} onFormSubmit={(addNLS) => onNLSChange("description", addNLS)}/>
+              ) : (
+                <div className="input-group input-group-sm mb-4">
+                  <span className="input-group-text" style={{ width: '40%', fontWeight: 'bold' }}>
+                    {name}
+                  </span>
+                  <input
+                    type={inputType}
+                    className="form-control"
+                    name={key}
+                    placeholder={`Enter ${name}`}
+                    value={key.split('.').reduce((acc, part) => acc && acc[part], formData) || ''}
+                    onChange={handleChange}
+                  />
+                </div>
+              )
             )}
           </div>
         ))
       ) : (
         <p>No fields available for {itemType}</p>
+      )}
+      {
+        itemType === 'Alert' ? (
+          <div className='mb-2'>
+            <AlertInfoTags tagName={"Route Modnitor"} onFormSubmit={(addMonitor) => onAlertinfoChange("routeMonitor", addMonitor)}/>
+            <AlertInfoTags tagName={"Route Plan"} onFormSubmit={(addPlan) => onAlertinfoChange("routePlan", addPlan)}/>
+          </div>
+        ) : null
+      }
+      {
+        NLS.includes(itemType) ? (<NationalLangueString tagName={"Text"} onFormSubmit={(addNLS) => onNLSChange("text", addNLS)}/>) : null
+      }
+      { itemType in Booleans ? (
+          <BooleanTag
+            optionName={Booleans[itemType]}  // Pass the option name
+            onFormsubmit={onBooleanChange}  // Directly pass the function
+          />
+      ) : null }
+      {
+        itemType in Enums ? (
+          <div>
+            {Object.keys(Enums[itemType]).map((fieldKey) => (
+              <div key={fieldKey} className="input-group input-group-sm mb-4">
+                <span className="input-group-text" style={{ width: '40%', fontWeight: 'bold' }}>
+                  Select {fieldKey}
+                </span>
+                <select
+                  className="form-select"
+                  name={fieldKey}
+                  value={formData[fieldKey] || ''}  // Set the selected value from formData
+                  onChange={handleChange}  // Update formData when the selection changes
+                >
+                  <option value="" disabled>Select {fieldKey}</option>
+                  {Enums[itemType][fieldKey].map((enumValue) => (
+                    <option key={enumValue} value={enumValue}>
+                      {enumValue}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+        ) : null
+      }
+      {/* 이미지 입력란은 itemType이 imageItemTypes에 있을 때만 렌더링 */}
+      {imageItemTypes.includes(itemType) && (
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <div style={{ flex: 1 }}>
+            <FileInput
+              tagName={'Preview Image Upload'}
+              fileType="image"
+              setFile={(file) => onFileChange("previewImage", file)}  // 괄호 수정
+              ImageType={(imageType) => onFileChange("previewType", imageType)}  // 괄호 수정
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <FileInput
+              tagName={'Engineering Image Upload'}
+              fileType="image"
+              setFile={(file) => onFileChange("engineeringImage", file)}  // onFileChange로 변경
+              ImageType={(imageType) => onFileChange("engineeringImageType", imageType)}  // onFileChange로 변경
+            />
+          </div>
+        </div>
       )}
     </div>
   );

@@ -33,15 +33,15 @@ function AttSearch({ onSearch }) {
         <div>
             <h3>Connect to Simple Attribute</h3>
             {/* <p>{SEARCH_RELATED_ITEM}</p> */}
-            <div class="input-group">
+            <div className="input-group">
                 <input 
-                    class="form-control" 
+                    className="form-control" 
                     type="text" 
                     value={searchTerm} 
                     onChange={(e) => setSearchTerm(e.target.value)} 
                     placeholder="Search term" 
                 />
-                <button class="btn btn-outline-secondary" onClick={handleSearch}>Search</button>
+                <button className="btn btn-outline-secondary" onClick={handleSearch}>Search</button>
             </div>
             
         </div>

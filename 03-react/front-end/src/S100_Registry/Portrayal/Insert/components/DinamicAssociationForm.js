@@ -204,7 +204,7 @@ const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
 
     if (!callAPI[itemType]) {
         return (
-            <div style={{ backgroundColor: '#F8F8F8' }} className="p-3 mt-4">
+            <div className="item-input-form-bg p-3 mt-4">
                 <h3>{itemType} Association Form</h3>
                 <div className="size-block-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <strong>No Association here</strong>
@@ -216,7 +216,7 @@ const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div style={{ backgroundColor: '#F8F8F8' }} className="p-3 mt-4">
+        <div className="item-input-form-bg p-3 mt-4">
             <h3>{itemType} Association Form</h3>
             <div>
                 {(callAPI[itemType] || []).map((item, index) => (

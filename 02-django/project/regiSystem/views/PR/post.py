@@ -46,9 +46,42 @@ from regiSystem.models.PR_Class import (
 )
 
 # API 엔드포인트
+import os
+from django.conf import settings
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 @api_view(['POST'])
 def insert_symbol_item(request):
-    return insert_item(SymbolModel, request)
+    # 파일 업로드 처리
+    preview_image = request.FILES.get('previewImage')
+    engineering_image = request.FILES.get('engineeringImage')
+
+    # 기본 정보 처리
+    concept_id = request.data.get('concept_id')
+    # name = request.data.get('name')
+
+    # 파일이 있다면 파일 시스템에 저장
+    preview_image_path = None
+    engineering_image_path = None
+
+    # previewImage 저장
+    if preview_image:
+        preview_image_path = os.path.join(settings.MEDIA_ROOT, 'preview_image', f"{concept_id}_preview_{preview_image.name}")
+        with open(preview_image_path, 'wb+') as destination:
+            for chunk in preview_image.chunks():
+                destination.write(chunk)
+
+    # engineeringImage 저장
+    if engineering_image:
+        engineering_image_path = os.path.join(settings.MEDIA_ROOT, 'engineering_image', f"{concept_id}_engineering_{engineering_image.name}")
+        with open(engineering_image_path, 'wb+') as destination:
+            for chunk in engineering_image.chunks():
+                destination.write(chunk)
+
+
+    return Response({"message": "Symbol item successfully inserted"})
+
 
 @api_view(['POST'])
 def insert_line_style_item(request):

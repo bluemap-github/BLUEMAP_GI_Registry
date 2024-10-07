@@ -237,3 +237,8 @@ hr {
 .regi-card-uri-links:hover {
   text-decoration: underline;
 }
+
+.item-input-form-bg {
+  background-color: #F8F8F8;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}

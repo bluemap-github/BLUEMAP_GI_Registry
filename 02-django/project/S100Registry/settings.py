@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from decouple import config
 import base64
@@ -18,6 +18,25 @@ import base64
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# 파일 저장 경로 설정
+FILES_DIR = os.path.join(BASE_DIR, 'files')
+
+# 개별 디렉토리 설정
+PREVIEW_IMAGE_DIR = os.path.join(FILES_DIR, 'preview_image')
+ENGINEERING_IMAGE_DIR = os.path.join(FILES_DIR, 'engineering_image')
+XML_DIR = os.path.join(FILES_DIR, 'xml')
+FONT_DIR = os.path.join(FILES_DIR, 'font')
+
+# 디렉토리 생성 (필요 시 자동으로 생성)
+os.makedirs(PREVIEW_IMAGE_DIR, exist_ok=True)
+os.makedirs(ENGINEERING_IMAGE_DIR, exist_ok=True)
+os.makedirs(XML_DIR, exist_ok=True)
+os.makedirs(FONT_DIR, exist_ok=True)
+
+# 파일을 저장할 기본 경로 설정
+MEDIA_ROOT = FILES_DIR  # 'files' 폴더 안에 저장
+MEDIA_URL = '/media/'   # 파일에 접근할 때 사용할 URL
 
 
 # Quick-start development settings - unsuitable for production
