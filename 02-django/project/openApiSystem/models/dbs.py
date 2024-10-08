@@ -1,6 +1,6 @@
 from mongo_driver import db
 
-RegistryAccess = db['RegistryAccess']
+RegistryAccess = db['Participation']
 
 
 ### concept registry

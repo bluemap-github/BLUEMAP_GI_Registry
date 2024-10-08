@@ -35,5 +35,6 @@ class RE_Access:
 
     @classmethod
     def get_access(cls, regi_id):
-        return cls.collection.find({'registry_id': ObjectId(regi_id)})
+        res = cls.collection.find({'registry_id': ObjectId(regi_id)})
+        return res
         

@@ -8,7 +8,6 @@ def check_key_validation(serial, regi_uri):
     
     acess_res = RE_Access.get_access(regi_res)
     for acess in acess_res:
-        print(acess['serial_key']==serial)
         if acess['serial_key'] == serial:
             return True
     else:

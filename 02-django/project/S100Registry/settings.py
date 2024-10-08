@@ -38,6 +38,10 @@ os.makedirs(FONT_DIR, exist_ok=True)
 MEDIA_ROOT = FILES_DIR  # 'files' 폴더 안에 저장
 MEDIA_URL = '/media/'   # 파일에 접근할 때 사용할 URL
 
+# STATIC_ROOT = os.path.join(BASE_DIR, '_static') 
+STATIC_ROOT = "/usr/src/app/_static/" 
+STATIC_URL = '/static/'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
