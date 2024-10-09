@@ -10,6 +10,7 @@ allow_patterns = [
     re_path('dataDictionary/', include('openApiSystem.urls.dataDictionary')),
     re_path('portrayal/', include('openApiSystem.urls.portrayal')),
     re_path('registry/', include('openApiSystem.urls.registry')),
+    # re_path('api/v1/', include('regiSystem.urls')),
 ]
 
 schema_view = get_schema_view(

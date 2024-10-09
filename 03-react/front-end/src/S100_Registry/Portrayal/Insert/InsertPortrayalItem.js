@@ -20,6 +20,7 @@ const InsertPortrayalItem = () => {
   const [managementInfos, setManagementInfos] = useState([]);    // State for Management Info
   const [selectedApiUrl, setSelectedApiUrl] = useState(POST_SYMBOL);  // Selected API URL
   const [apiType, setApiType] = useState("Symbol");              // Selected API Type
+  const [postType, setPostType] = useState("formData");          // Selected POST Type
   const regi_uri = Cookies.get('REGISTRY_URI');
   const { setItemDetails } = useContext(ItemContext);
   const navigate = useNavigate();
@@ -140,86 +141,96 @@ const InsertPortrayalItem = () => {
   };
 
   const handleSubmitItem = async (combinedData) => {
-    console.log('Combined Data:', combinedData, managementInfos);
+      console.log('Combined Data:', combinedData);
 
-    // FormData 객체 생성
-    const formData = new FormData();
+      let dataToSend;
+      let headers = {};
+      
+      if (postType === 'formData') {
+          console.log('formData 들어간다 ~');
+          // FormData 객체 생성
+          const formData = new FormData();
+          
+          // combinedData를 FormData로 변환
+          Object.keys(combinedData).forEach(key => {
+              const value = combinedData[key];
+              if (value instanceof File) {
+                  formData.append(key, value); // 파일 처리
+              } else if (typeof value === 'object' && value !== null) {
+                  formData.append(key, JSON.stringify(value)); // JSON 데이터 처리
+              } else {
+                  formData.append(key, value); // 일반 텍스트 데이터 처리
+              }
+          });
 
-    // combinedData를 FormData로 변환
-    Object.keys(combinedData).forEach(key => {
-        const value = combinedData[key];
-        if (value instanceof File) {
-            formData.append(key, value); // 파일 처리
-        } else if (typeof value === 'object' && value !== null) {
-            formData.append(key, JSON.stringify(value)); // JSON 데이터 처리
-        } else {
-            formData.append(key, value); // 일반 텍스트 데이터 처리
-        }
-    });
+          // FormData로 전송할 데이터와 헤더 설정
+          dataToSend = formData;
+          headers['Content-Type'] = 'multipart/form-data';
 
-    // 관리 정보도 추가
-    managementInfos.forEach((info, index) => {
-        formData.append(`managementInfo[${index}]`, JSON.stringify(info));
-    });
+      } else if (postType === 'json') {
+          // JSON으로 전송할 데이터 설정
+          dataToSend = combinedData;
 
-    try {
-        // 첫 번째 POST 요청
-        const itemResponse = await axios.post(
-            selectedApiUrl,
-            formData,  // FormData로 전송
-            {
-                params: {
-                    regi_uri: regi_uri,
-                },
-                headers: {
-                    'Content-Type': 'multipart/form-data',  // FormData를 전송할 때는 이 헤더 필요
-                },
-            }
-        );
+          headers['Content-Type'] = 'application/json'; // JSON 헤더 설정
+      }
 
-        const itemId = itemResponse.data.encrypted_data;
-        const item_iv = itemResponse.data.iv;
+      try {
+          // 첫 번째 POST 요청 (아이템 데이터 전송)
+          const itemResponse = await axios.post(
+              selectedApiUrl,
+              dataToSend,  // postType에 따라 formData 또는 json으로 전송
+              {
+                  params: {
+                      regi_uri: regi_uri,
+                  },
+                  headers: headers,
+              }
+          );
 
-        // 관리 정보에 대한 POST 요청들 (for-of로 순차 처리)
-        for (const managementInfo of managementInfos) {
-            await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
-                params: {
-                    item_id: itemId,
-                    item_iv: item_iv,
-                }
-            });
-        }
+          const itemId = itemResponse.data.encrypted_data;
+          const item_iv = itemResponse.data.iv;
 
-        // associationAndAPI에 값이 있는지 확인 후 POST 요청
-        if (associationAndAPI.length > 0) {
-            for (const association of associationAndAPI) {
-                await axios.post(association.api, association.data, {
-                    params: {
-                        item_id: itemId,
-                        item_iv: item_iv,
-                    }
-                });
-            }
-        } else {
-            console.log('No associations to post');
-        }
+          // 관리 정보에 대한 별도의 POST 요청들 (for-of로 순차 처리)
+          for (const managementInfo of managementInfos) {
+              await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
+                  params: {
+                      item_id: itemId,
+                      item_iv: item_iv,
+                  }
+              });
+          }
 
-        // 모든 POST 요청 완료 후 아이템 정보 설정 및 페이지 이동
-        setItemDetails({
-            item_id: itemId,
-            item_iv: item_iv,
-            item_type: apiType,
-        });
+          // associationAndAPI에 값이 있는지 확인 후 POST 요청
+          if (associationAndAPI.length > 0) {
+              for (const association of associationAndAPI) {
+                  await axios.post(association.api, association.data, {
+                      params: {
+                          item_id: itemId,
+                          item_iv: item_iv,
+                      }
+                  });
+              }
+          } else {
+              console.log('No associations to post');
+          }
 
-        // 모든 요청 완료 후 navigate 실행
-        navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+          // 모든 POST 요청 완료 후 아이템 정보 설정 및 페이지 이동
+          setItemDetails({
+              item_id: itemId,
+              item_iv: item_iv,
+              item_type: apiType,
+          });
 
-    } catch (error) {
-        // 에러 핸들링
-        console.error('Error posting data:', error);
-        console.log('FormData:', formData); // FormData 확인용
-    }
-};
+          // 모든 요청 완료 후 navigate 실행
+          navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+
+      } catch (error) {
+          // 에러 핸들링
+          console.error('Error posting data:', error);
+          console.log('Data sent:', dataToSend); // FormData 또는 JSON 확인용
+      }
+  };
+
 
 
   const log = () => { console.log(itemInputData); }
@@ -276,7 +287,7 @@ const InsertPortrayalItem = () => {
       <button onClick={dynamicLog}>dynamic</button>
       <button onClick={assAPILog}>association</button>
       <div>
-        <ChooseType getSelestedApi={(type) => getSelestedApi(type, setSelectedApiUrl, setApiType)} /> 
+        <ChooseType getSelestedApi={(type) => getSelestedApi(type, setSelectedApiUrl, setApiType, setPostType)} /> 
       </div>
       
       <div>

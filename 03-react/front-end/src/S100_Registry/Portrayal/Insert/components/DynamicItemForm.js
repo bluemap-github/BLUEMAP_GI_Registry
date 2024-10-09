@@ -4,6 +4,7 @@ import NationalLangueString from './NationalLanguageString';
 import {basicJSONs} from './basicJSONs';
 import BooleanTag from './BooleanTag';
 import AlertInfoTags from './AlertInfoTags';
+import RGBandCIE from './RGBandCIE';
 
 const DynamicItemForm = ({ itemType, onFormSubmit }) => {
   const baseInformationFields = {
@@ -87,15 +88,7 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
     'ColourToken': [
         { name: 'Token', key: 'token', inputType: 'text'  },
     ],
-    'PaletteItem': [
-      { name: 'Transparency', key: 'transparency', inputType: 'number'  },
-      { name: 'Red (sRGB)', key: 'colourValue.sRGB.red', inputType: 'number' },
-      { name: 'Green (sRGB)', key: 'colourValue.sRGB.green', inputType: 'number' },
-      { name: 'Blue (sRGB)', key: 'colourValue.sRGB.blue', inputType: 'number' },
-      { name: 'X (CIE)', key: 'colourValue.cie.x', inputType: 'number' },
-      { name: 'Y (CIE)', key: 'colourValue.cie.y', inputType: 'number' },
-      { name: 'L (CIE)', key: 'colourValue.cie.L', inputType: 'number' }
-    ],
+    'PaletteItem': [],
     'DisplayPlane': [
         { name: 'Order', key: 'order', inputType: 'number' }
     ],
@@ -160,6 +153,11 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
   const viewFormData = () => {
     console.log(formData);
   };
+  const onRGBandCIEChange = (transparency, addPIValue) => {
+    const updatedFormData = { ...formData, transparency: transparency, colourValue: addPIValue };
+    setFormData(updatedFormData);
+    onFormSubmit(updatedFormData);
+  }
 
   
 
@@ -176,8 +174,8 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
                   <FileInput 
                     tagName={name} 
                     fileType={fileType} 
-                    setFile={(file) => setFormData((prevFormData) => ({ ...prevFormData, [key]: file }))} 
-                    // setFile={(file) => onFileChange(key, file)} 
+                    // setFile={(file) => setFormData((prevFormData) => ({ ...prevFormData, [key]: file }))} 
+                    setFile={(file) => onFileChange(key, file)} 
                   />
                 </div>
               ) : isDescription ? (
@@ -203,6 +201,11 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
       ) : (
         <p>No fields available for {itemType}</p>
       )}
+      {
+        itemType === 'PaletteItem' ? (
+          <RGBandCIE onValuesChange={(transparency, addPIValue) => onRGBandCIEChange(transparency, addPIValue)}/>
+        ) : null
+      }
       {
         itemType === 'Alert' ? (
           <div className='mb-2'>

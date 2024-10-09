@@ -27,12 +27,14 @@ PREVIEW_IMAGE_DIR = os.path.join(FILES_DIR, 'preview_image')
 ENGINEERING_IMAGE_DIR = os.path.join(FILES_DIR, 'engineering_image')
 XML_DIR = os.path.join(FILES_DIR, 'xml')
 FONT_DIR = os.path.join(FILES_DIR, 'font')
+SVG_DIR = os.path.join(FILES_DIR, 'svg')
 
 # 디렉토리 생성 (필요 시 자동으로 생성)
 os.makedirs(PREVIEW_IMAGE_DIR, exist_ok=True)
 os.makedirs(ENGINEERING_IMAGE_DIR, exist_ok=True)
 os.makedirs(XML_DIR, exist_ok=True)
 os.makedirs(FONT_DIR, exist_ok=True)
+os.makedirs(SVG_DIR, exist_ok=True)
 
 # 파일을 저장할 기본 경로 설정
 MEDIA_ROOT = FILES_DIR  # 'files' 폴더 안에 저장
@@ -50,7 +52,8 @@ STATIC_URL = '/static/'
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['bluemap.kr', 'localhost', '127.0.0.1']

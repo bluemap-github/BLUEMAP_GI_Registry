@@ -65,6 +65,7 @@ class RE_RegisterItemModel:
             result = cls.collection.insert_one(validated_data)
             return {"status": "success", "inserted_id": str(result.inserted_id)}
         else:
+            print("안걸러짐", serializer.errors)
             return {"status": "error", "errors": serializer.errors}
 
     @classmethod
@@ -140,6 +141,7 @@ class SymbolModel(RE_RegisterItemModel):
 
     @classmethod
     def insert(cls, data, C_id):
+        print(data, "여기로 오냐?")
         return super().insert(data, C_id, S100_PR_VisualItemSerializer)
 
 
@@ -671,6 +673,7 @@ class ViewingGroupLayerModel(RE_RegisterItemModel):
 
     @classmethod
     def insert(cls, data, C_id):
+        print(data, "여기로 오냐?")
         return super().insert(data, C_id, S100_PR_ViewingGroupLayerSerializer)
 
 from regiSystem.serializers.PR import S100_PR_DisplayPlaneSerializer
