@@ -87,6 +87,7 @@ def get_item_schema_list(request):
     
     return Response(result)
 
+
 # Symbol
 @api_view(['GET'])
 def get_symbol_list(request):
@@ -94,11 +95,89 @@ def get_symbol_list(request):
     return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer)
 
 
+import os
+from django.conf import settings
+from rest_framework.decorators import api_view
+
+@api_view(['GET'])
+def get_symbol_list(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer)
+
+
+
+def get_visual_file_one(Model, item_id, serializer_class=None):
+    try:
+        # Model에서 항목 가져오기
+        item = Model.get_one(item_id)
+        
+        # 오류가 있는 경우 처리
+        if 'status' in item and item['status'] == 'error':
+            return Response({"status": "error", "errors": item}, status=400)
+
+        # ID 복호화
+        encrypted_data, item_iv = item["_id"].get("encrypted_data"), item.get("_id").get("iv")
+        item_id = decrypt(encrypted_data, item_iv)
+
+        # 이미지 경로 조합 후 item에 직접 할당
+        if item['itemDetail']:
+            item['itemDetail'] = os.path.join(settings.MEDIA_URL,'svg', item_id + ".svg")
+
+        if item['previewImage']:
+            item['previewImage'] = os.path.join(settings.MEDIA_URL, 'preview_image', item_id + "." + item['previewType'])
+
+        if item['engineeringImage']:
+            item['engineeringImage'] = os.path.join(settings.MEDIA_URL, 'engineering_image', item_id + "." + item['engineeringImageType'])
+
+
+        # 직렬화 클래스가 제공된 경우 처리
+        if serializer_class:
+            serializer = serializer_class(item)
+            return Response({"status": "success", "data": serializer.data}, status=200)
+
+        # JSON 응답으로 반환
+        return Response({"status": "success", "data": item}, status=200)
+
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=400)
+
+# def get_schema_file_one(Model, item_id, serializer_class=None):
+#     try:
+#         # Model에서 항목 가져오기
+#         item = Model.get_one(item_id)
+        
+#         # 오류가 있는 경우 처리
+#         if 'status' in item and item['status'] == 'error':
+#             return Response({"status": "error", "errors": item}, status=400)
+
+#         # ID 복호화
+#         encrypted_data, item_iv = item["_id"].get("encrypted_data"), item.get("_id").get("iv")
+#         item_id = decrypt(encrypted_data, item_iv)
+
+#         # 이미지 경로 조합 후 item에 직접 할당
+#         if item['xmlSchema']:
+#             item['xmlSchema'] = os.path.join(settings.MEDIA_URL,'xml', item_id + ".svg")
+
+#         # 직렬화 클래스가 제공된 경우 처리
+#         if serializer_class:
+#             serializer = serializer_class(item)
+#             return Response({"status": "success", "data": serializer.data}, status=200)
+
+#         # JSON 응답으로 반환
+#         return Response({"status": "success", "data": item}, status=200)
+
+#     except Exception as e:
+#         return Response({"status": "error", "message": str(e)}, status=400)
+        
+
+
 @api_view(['GET'])
 def get_symbol(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(SymbolModel, I_id, S100_PR_VisualItemSerializer)
+    return get_visual_file_one(SymbolModel, I_id, S100_PR_VisualItemSerializer)
+    
+    
 
 
 # LineStyle
@@ -112,7 +191,7 @@ def get_line_style_list(request):
 def get_line_style(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(LineStyleModel, I_id, S100_PR_VisualItemSerializer)
+    return get_visual_file_one(LineStyleModel, I_id, S100_PR_VisualItemSerializer)
 
 
 # AreaFill
@@ -126,7 +205,7 @@ def get_area_fill_list(request):
 def get_area_fill(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(AreaFillModel, I_id, S100_PR_VisualItemSerializer)
+    return get_visual_file_one(AreaFillModel, I_id, S100_PR_VisualItemSerializer)
 
 
 # Pixmap
@@ -140,7 +219,7 @@ def get_pixmap_list(request):
 def get_pixmap(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(PixmapModel, I_id, S100_PR_VisualItemSerializer)
+    return get_visual_file_one(PixmapModel, I_id, S100_PR_VisualItemSerializer)
 
 
 # SymbolSchema

@@ -112,7 +112,6 @@ def one_encrypt_process(id_attribute_set):
         return id_attribute_set
     elif type(id_attribute_set) == str:
         res = get_encrypted_id([str(id_attribute_set), *offer_item_nameNtype(id_attribute_set)])
-        print(res)
         return res
 
 class GetRelatedValues:

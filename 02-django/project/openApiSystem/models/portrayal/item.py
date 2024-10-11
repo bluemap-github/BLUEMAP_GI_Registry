@@ -152,6 +152,7 @@ class PR_RegisterItem:
         else:
             return {"status": "error", "errors": serializer.errors}
     
+
     @classmethod
     def update(cls, data, C_id, serializer_class, item_id):
         if cls.collection[0] is None:
@@ -176,7 +177,7 @@ class PR_RegisterItem:
             validated_data['description_ids'] = description_ids
             if 'description' in validated_data:
                 del validated_data['description']
-            validated_data['concept_id'] = C_id
+            # validated_data['concept_id'] = C_id
 
             # 업데이트 실행
             cls.collection[0].update_one({"_id": ObjectId(item_id)}, {"$set": validated_data})
@@ -184,6 +185,12 @@ class PR_RegisterItem:
         else:
             return {"status": "error", "errors": serializer.errors}
 
+    @classmethod
+    def get_exixting_by_id(cls, I_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection[0].find_one({"_id": ObjectId(I_id)})
+    
 class PR_VisualItem(PR_RegisterItem):
     collection = [
         S100_Portrayal_Symbol,
@@ -215,6 +222,7 @@ class PR_VisualItem(PR_RegisterItem):
                 data.append(item)
         
         return data
+    
 
 # 각 컬렉션을 다루는 클래스는 그대로 유지
 class PR_Symbol(PR_VisualItem):

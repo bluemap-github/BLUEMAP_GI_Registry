@@ -10,17 +10,13 @@ function FileInput({ tagName, fileType, setFile, ImageType }) {
   useEffect(() => {
     // fileType에 따라 허용된 파일 형식 및 확장자 설정
     switch (fileType) {
-      case "image":
-        setAllowedFormats(["image/jpg", "image/jpeg", "image/png", "image/tif", "image/tiff"]);
-        setAllowedExtensions(["jpg", "jpeg", "png", "tif", "tiff"]);
-        break;
       case "svg":
         setAllowedFormats(["image/svg+xml"]);
         setAllowedExtensions(["svg"]);
         break;
       case "xml":
         setAllowedFormats(["application/xml", "text/xml"]);
-        setAllowedExtensions(["xml", "xsd"]);
+        setAllowedExtensions(["xml"]);
         break;
       case "font":
         setAllowedFormats([]);  // MIME 타입 검사 생략
@@ -91,29 +87,10 @@ function FileInput({ tagName, fileType, setFile, ImageType }) {
           <input
               type="file"
               className="form-control"
-              accept={fileType === "font" ? "" : allowedFormats.join(", ")} // 폰트일 경우 accept 비움
+              accept={fileType === "font" ? ".ttf" : allowedFormats.join(", ")}
               onChange={handleImageChange}
             />
           {error && <p className="text-danger">{error}</p>}
-          {
-            fileType === "image" && 
-            <>
-              {preview ? (
-                <div className="preview-container" style={{width: '100%', height: '150px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                  <img
-                    src={preview}
-                    alt="미리보기"
-                    className="img-thumbnail"
-                    style={{ height: '100%', objectFit: 'contain' }} // 이미지가 세로 크기에 맞추어지고 비율을 유지
-                  />
-                </div>
-              ): (
-                <div style={{width: '100%', height: '150px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                  <span style={{ color: 'gray', fontSize: '16px' }}>미리보기 없음</span>
-                </div>
-              )}
-            </>
-          }
         </div>
       </div>
     </div>

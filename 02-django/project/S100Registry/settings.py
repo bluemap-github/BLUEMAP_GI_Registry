@@ -36,14 +36,30 @@ os.makedirs(XML_DIR, exist_ok=True)
 os.makedirs(FONT_DIR, exist_ok=True)
 os.makedirs(SVG_DIR, exist_ok=True)
 
+
 # 파일을 저장할 기본 경로 설정
 MEDIA_ROOT = FILES_DIR  # 'files' 폴더 안에 저장
 MEDIA_URL = '/media/'   # 파일에 접근할 때 사용할 URL
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 # STATIC_ROOT = os.path.join(BASE_DIR, '_static') 
 STATIC_ROOT = "/usr/src/app/_static/" 
 STATIC_URL = '/static/'
 
+# STATIC_ROOT = '/usr/src/app/files/static/'
+
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.AllowAny',
+#     ],
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.BasicAuthentication',
+#     ],
+# }
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -109,7 +125,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'S100Registry.wsgi.application'
-
+SWAGGER_SETTINGS = {
+    # 'DEFAULT_API_URL': 'http://bluemap.kr:21803',
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -153,10 +171,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -165,7 +179,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
-    "http://bluemap.kr",
+    "http://bluemap.kr:21803",
 ]
 
 ##CORS

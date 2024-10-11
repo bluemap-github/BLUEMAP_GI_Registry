@@ -1,6 +1,15 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import PRItemUpdateModal from '../../Update/PRItemUpdateModal';
+import { DEPLOY_URL } from '../../../index';
+import {
+    DELETE_SYMBOL, DELETE_LINE_STYLE, DELETE_AREA_FILL, DELETE_PIXMAP, 
+    DELETE_SYMBOL_SCHEMA, DELETE_LINE_STYLE_SCHEMA, DELETE_AREA_FILL_SCHEMA, DELETE_PIXMAP_SCHEMA, DELETE_COLOUR_PROFILE_SCHEMA,
+    DELETE_COLOUR_TOKEN, DELETE_PALETTE_ITEM, DELETE_COLOUR_PALETTE, DELETE_DISPLAY_PLANE, DELETE_DISPLAY_MODE, DELETE_VIEWING_GROUP_LAYER,
+    DELETE_VIEWING_GROUP, DELETE_FONT, DELETE_CONTEXT_PARAMETER, DELETE_DRAWING_PRIORITY, DELETE_ALERT, DELETE_ALERT_HIGHLIGHT, DELETE_ALERT_MESSAGE
+} from '../../api/api';
+import axios from 'axios';
 
 // 공통 테이블 필드 정의
 const commonFields = [
@@ -79,6 +88,31 @@ const specificFields = {
     ],
 };
 
+const deleteAPIs = {
+    'Symbol': DELETE_SYMBOL,
+    'LineStyle': DELETE_LINE_STYLE,
+    'AreaFill': DELETE_AREA_FILL,
+    'Pixmap': DELETE_PIXMAP,
+    'SymbolSchema': DELETE_SYMBOL_SCHEMA,
+    'LineStyleSchema': DELETE_LINE_STYLE_SCHEMA,
+    'AreaFillSchema': DELETE_AREA_FILL_SCHEMA,
+    'PixmapSchema': DELETE_PIXMAP_SCHEMA,
+    'ColourProfileSchema': DELETE_COLOUR_PROFILE_SCHEMA,
+    'ColourToken': DELETE_COLOUR_TOKEN,
+    'PaletteItem': DELETE_PALETTE_ITEM,
+    'ColourPalette': DELETE_COLOUR_PALETTE,
+    'DisplayPlane': DELETE_DISPLAY_PLANE,
+    'DisplayMode': DELETE_DISPLAY_MODE,
+    'ViewingGroupLayer': DELETE_VIEWING_GROUP_LAYER,
+    'ViewingGroup': DELETE_VIEWING_GROUP,
+    'Font': DELETE_FONT,
+    'ContextParameter': DELETE_CONTEXT_PARAMETER,
+    'DrawingPriority': DELETE_DRAWING_PRIORITY,
+    'Alert': DELETE_ALERT,
+    'AlertHighlight': DELETE_ALERT_HIGHLIGHT,
+    'AlertMessage': DELETE_ALERT_MESSAGE,
+};
+
 // 테이블 필드를 리팩토링하여 공통 필드 + 특정 필드를 결합
 const getTableFields = (itemType) => [
     ...commonFields,
@@ -93,14 +127,36 @@ const PortrayalDetails = ({ items, itemType }) => {
         navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
     };
 
+    const [IsOpened, setIsOpened] = useState(false);
     const handleUpdateClick = () => {
-        console.log("Update clicked");
+        setIsOpened(true);
+    };
+    const handleDeleteClick = async () => {
+
+        try {
+            const res = await axios.delete(deleteAPIs[itemType], {
+                params: {
+                    item_id: items._id.encrypted_data,
+                    item_iv: items._id.iv
+                }
+            });
+
+            if (res.status === 200) {
+                console.log('res:', res);
+                alert('Item deleted successfully');
+                moveToList();  // 삭제 후 목록으로 이동
+            }
+        } catch (error) {
+            console.error('Error during deletion:', error);
+            alert('Failed to delete item');
+        } finally {
+            console.log('Delete request sent');
+        }
     };
 
-    const handleDeleteClick = () => {
-        console.log("Delete clicked");
+    const onClose = () => {
+        setIsOpened(false);
     };
-
     if (!items) {
         return <div>Loading...</div>;
     }
@@ -108,8 +164,10 @@ const PortrayalDetails = ({ items, itemType }) => {
     // itemType에 맞는 테이블 필드 선택
     const fields = getTableFields(itemType);
 
+    
     return (
         <>
+        <PRItemUpdateModal IsOpened={IsOpened} onClose={onClose} data={items}/>
             <div className="mb-3 p-3" style={{ backgroundColor: '#F8F8F8' }}>
                 <div className="mt-3 mb-3 card p-3">
                     <table className="table table-sm table-bordered">
@@ -120,6 +178,7 @@ const PortrayalDetails = ({ items, itemType }) => {
                                 </th>
                             </tr>
                         </thead>
+                        
                         <tbody>
                             {fields.map(({ name, key, isAlias, isDescription, isColourValue, isText, isAlert }) => (
                                 <tr key={key}>
@@ -170,6 +229,28 @@ const PortrayalDetails = ({ items, itemType }) => {
                                                     </li>
                                                 ))}
                                             </ul>
+                                        ) : key === 'itemDetail' && items[key] ? (
+                                            // Item Detail 항목의 경우 다운로드 버튼만 표시
+                                            <div>
+                                                <a href={`${DEPLOY_URL}${items[key]}`} download={items[key]} className="btn btn-sm btn-primary">
+                                                    자세히
+                                                </a>
+                                            </div>
+                                        ) : (key === 'previewImage' || key === 'engineeringImage') && items[key] ? (
+                                            // Preview Image와 Engineering Image는 미리보기와 다운로드 버튼
+                                            <div style={{display: 'flex'}}>
+                                                <img 
+                                                    src={`${DEPLOY_URL}${items[key]}`} 
+                                                    alt={name} 
+                                                    style={{ maxWidth: '250px', height: 'auto' }} 
+                                                />
+                                                <div>
+                                                    <a href={`${DEPLOY_URL}${items[key]}`} download={items[key]} className="btn btn-sm btn-primary mt-2">
+                                                        다운로드
+                                                    </a>
+                                                </div>
+                                                <p>{items[key]}</p>
+                                            </div>
                                         ) : (
                                             items[key] || "--"
                                         )}
@@ -177,6 +258,7 @@ const PortrayalDetails = ({ items, itemType }) => {
                                 </tr>
                             ))}
                         </tbody>
+
                     </table>
                     {role === 'owner' && (
                         <div className="text-end">

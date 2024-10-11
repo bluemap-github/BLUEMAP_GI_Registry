@@ -20,8 +20,8 @@ urlpatterns = [
     path('put/reference/', put.reference),
     path('put/reference_source/', put.reference_source),
 
-    # path('delete/item/', delete.item),
-    # path('delete/management_info/', delete.management_info),
-    # path('delete/reference/', delete.reference),
-    # path('delete/reference_source/', delete.reference_source),
+    path('delete/item/', delete.item),
+    path('delete/management_info/', delete.management_info),
+    path('delete/reference/', delete.reference),
+    path('delete/reference_source/', delete.reference_source),
 ]

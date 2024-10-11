@@ -245,7 +245,6 @@ def register_info_for_guest(request):
         if not s_item:
             return Response({"error": "Item not found"}, status=HTTP_404_NOT_FOUND)
         regi_id = s_item["_id"]
-        print(user_id, regi_id)
         role = ParticipationModel.get_role(user_id, regi_id)
         if not role:
             return Response({"message": "Guest"}, status=HTTP_200_OK)

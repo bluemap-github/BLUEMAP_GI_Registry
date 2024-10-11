@@ -1,14 +1,14 @@
 import React from 'react';
 
-const ChooseType = ({ getSelestedApi }) => {
+const ChooseType = ({ initial,  getSelestedApi }) => {
     
     const handleChange = (event) => {
         getSelestedApi(event.target.value);
     };
 
     return (
-        <div className='input-group' style={{width: "12%"}}>
-            <select className='form-select' id="typeSelect" onChange={handleChange}>
+        <div className='input-group' style={{width: "40%"}}>
+            <select className='form-select' id="typeSelect" onChange={handleChange} value={initial}  >
                 <option value="Symbol">Symbol</option>
                 <option value="LineStyle">Line Style</option>
                 <option value="AreaFill">Area Fill</option>

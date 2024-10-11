@@ -6,7 +6,6 @@ import Cookies from 'js-cookie';
 import {DEPLOY_URL} from "../../../index";
 
 function Delete({onClose, DEL_API, itemSerial}){
-    console.log('DEL_API:', itemSerial);
     const navigate = useNavigate();
     const handleDelete = async () => {
         try {
@@ -16,7 +15,6 @@ function Delete({onClose, DEL_API, itemSerial}){
                     "item_iv": itemSerial.iv
                 }
             });
-            console.log('Item data successfully deleted:', response.data);
             onClose()
             if (DEL_API === `${DEPLOY_URL}/api/v1/concept_item/delete/`) {
                 navigate(`/${Cookies.get('REGISTRY_URI')}/concept/list`);

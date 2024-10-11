@@ -5,6 +5,7 @@ import {basicJSONs} from './basicJSONs';
 import BooleanTag from './BooleanTag';
 import AlertInfoTags from './AlertInfoTags';
 import RGBandCIE from './RGBandCIE';
+import ImageInput from './ImageInput';
 
 const DynamicItemForm = ({ itemType, onFormSubmit }) => {
   const baseInformationFields = {
@@ -132,6 +133,13 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
     onFormSubmit(updatedFormData); // 부모로 전달
   };
 
+  const onImageTypeChange = (key, imageType, key2, imageType2) => {
+    console.log("얌마", key, imageType); // 최종 타입 확인
+    const updatedFormData = { ...formData, [key]: imageType , [key2]: imageType2};
+    setFormData(updatedFormData);
+    onFormSubmit(updatedFormData); // Pass updated data to parent
+  };
+
   const onNLSChange = (key, addNLS) => {
     const updatedFormData = { ...formData, [key]: addNLS };
     setFormData(updatedFormData);
@@ -253,23 +261,22 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
       {imageItemTypes.includes(itemType) && (
         <div style={{ display: 'flex', gap: '20px' }}>
           <div style={{ flex: 1 }}>
-            <FileInput
+            <ImageInput
               tagName={'Preview Image Upload'}
               fileType="image"
-              setFile={(file) => onFileChange("previewImage", file)}  // 괄호 수정
-              ImageType={(imageType) => onFileChange("previewType", imageType)}  // 괄호 수정
+              setImageType={(file, imageType) => onImageTypeChange("previewImage", file, "previewType", imageType)}  // Use a different name to clarify usage
             />
           </div>
           <div style={{ flex: 1 }}>
-            <FileInput
+            <ImageInput
               tagName={'Engineering Image Upload'}
               fileType="image"
-              setFile={(file) => onFileChange("engineeringImage", file)}  // onFileChange로 변경
-              ImageType={(imageType) => onFileChange("engineeringImageType", imageType)}  // onFileChange로 변경
+              setImageType={(file, imageType) => onImageTypeChange("engineeringImage", file, "engineeringImageType", imageType)}  // Same here
             />
           </div>
         </div>
       )}
+
     </div>
   );
 };

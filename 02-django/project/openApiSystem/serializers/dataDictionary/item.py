@@ -8,6 +8,7 @@ class ConceptSerializer(RE_ItemSerializer):
 class CD_EnumeratedValueSerializer(ConceptSerializer):
     numericCode = serializers.CharField(allow_blank=True)
     enumType = serializers.CharField()
+    itemType = serializers.CharField(default='EnumeratedValue')
 
 class CD_AttributeSerializer(ConceptSerializer):
     pass
@@ -15,12 +16,15 @@ class CD_AttributeSerializer(ConceptSerializer):
 class CD_SimpleAttributeSerializer(CD_AttributeSerializer):
     valueType = serializers.CharField()# Enum - S100_CD_AttributeValueType
     quantitySpecification = serializers.CharField()
+    itemType = serializers.CharField(default='SimpleAttribute')
 
 class CD_ComplexAttributeSerializer(CD_AttributeSerializer):
-    pass
+    itemType = serializers.CharField(default='ComplexAttribute')
 
 class CD_FeatureSerializer(ConceptSerializer):
     featureUseType = serializers.CharField() 
+    itemType = serializers.CharField(default='Feature')
 
 class CD_InformationSerializer(ConceptSerializer):
-    pass
+    itemType = serializers.CharField(default='Information')
+    

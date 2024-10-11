@@ -20,19 +20,12 @@ const tableFields = [
 
 const ConceptInformation = ({ items }) => {
     const navigate = useNavigate();
-    const role = Cookies.get('role');  // role 가져오기
-
-    const handleUpdateClick = () => {
-        console.log("Update clicked");
-    };
-
-    const handleDeleteClick = () => {
-        console.log("Delete clicked");
-    };
+    const role = Cookies.get('role');  
 
     if (!items) {
         return <div>Loading...</div>;
     }
+    
 
     return (
         <>

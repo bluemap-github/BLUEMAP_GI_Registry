@@ -58,6 +58,8 @@ def concept_managemant_info(request):
             return Response({'message': 'Concept item deleted successfully'}, status=HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
+
+
         
 
 @api_view(['DELETE'])

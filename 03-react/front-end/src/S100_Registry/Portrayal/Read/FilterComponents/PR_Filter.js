@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const buttonTypes = [
     { type: 'Symbol', label: 'Symbol' },
@@ -28,19 +30,36 @@ const buttonTypes = [
 ];
 
 function PR_Filter({ clickHandler, viewType }) {
-        return (
-            <div>
-                {buttonTypes.map((btn) => (
-                    <button
-                        key={btn.type}
-                        className={`btn btn-outline-primary ${viewType === btn.type ? 'active' : ''}`}
-                        onClick={() => clickHandler(btn.type)} 
-                    >
-                        {btn.label}
-                    </button>
-                ))}
+    const navigate = useNavigate();
+    const handleCreateClick = () => {
+        if (viewType) {
+            Cookies.set('createViewType', viewType);
+            navigate(`/${Cookies.get('REGISTRY_URI')}/create-portrayal`);
+        }
+    };
+    return (
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <div style={{width: '40%'}}>
+                <select
+                    className="form-select"
+                    value={viewType}
+                    onChange={(e) => clickHandler(e.target.value)}
+                >
+                    <option value="">Select an option</option> {/* 기본 선택 옵션 */}
+                    {buttonTypes.map((btn) => (
+                        <option key={btn.type} value={btn.type}>
+                            {btn.label}
+                        </option>
+                    ))}
+                </select>
             </div>
-        );
+            <div>
+                <button type="button" className="btn btn-outline-primary btn-sm" onClick={handleCreateClick}>
+                    + Create {viewType}
+                </button>
+            </div>
+        </div>
+    );
 }
 
 export default PR_Filter;

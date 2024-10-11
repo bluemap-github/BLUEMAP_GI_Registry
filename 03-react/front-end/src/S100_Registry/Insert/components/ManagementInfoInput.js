@@ -53,10 +53,13 @@ function ManagementInfoInput({ onFormSubmit }) {
     };
 
     const handleDateChange = (date, idx, name) => {
+        // date가 문자열일 경우 Date 객체로 변환
+        const updatedDate = new Date(date);
+        
         const updatedManagementInfos = [...managementInfos];
         updatedManagementInfos[idx] = {
             ...updatedManagementInfos[idx],
-            [name]: formatDate(date)
+            [name]: formatDate(updatedDate) // 변환된 Date 객체를 사용
         };
         setManagementInfos(updatedManagementInfos);
         onFormSubmit(updatedManagementInfos);
@@ -115,6 +118,11 @@ function ManagementInfoInput({ onFormSubmit }) {
     };
 
     const formatDate = (date) => {
+        // Date 객체인지 확인
+        if (Object.prototype.toString.call(date) !== "[object Date]" || isNaN(date.getTime())) {
+            return ""; // 유효하지 않은 Date 객체일 경우 빈 문자열 반환
+        }
+        
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -231,19 +239,12 @@ function ManagementInfoInput({ onFormSubmit }) {
                                         <span className="input-group-text" id="basic-addon1" style={{ width: "45%" }}>Accepted Date</span>
                                         <div className="form-control" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
-                                                type="text" 
+                                                type="date" 
                                                 className="date-input" 
                                                 placeholder="Accepted Date" 
                                                 name="dateAccepted" 
                                                 value={managementInfo.dateAccepted} 
-                                                onChange={(e) => handleChange(e, index)}
-                                                disabled
-                                            />
-                                            <DatePicker 
-                                                name="dateAccepted" 
-                                                selected={managementInfo.dateAccepted ? new Date(managementInfo.dateAccepted) : null} 
-                                                onChange={(date) => handleDateChange(date, index, 'dateAccepted')} 
-                                                customInput={<ExampleCustomInput />}
+                                                onChange={(e) => handleDateChange(e.target.value, index, 'dateAccepted')}
                                             />
                                         </div>
                                     </div>
@@ -259,19 +260,12 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             className={`form-control ${mandatoryDateFields.includes('dateProposed') && managementInfo.dateProposed.trim() === '' ? 'tag-invalid' : ''}`} 
                                             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
-                                                type="text" 
+                                                type="date" 
                                                 className="date-input" 
                                                 placeholder="Proposed Date" 
                                                 name="dateProposed" 
                                                 value={managementInfo.dateProposed} 
-                                                onChange={(e) => handleChange(e, index)}
-                                                disabled
-                                            />
-                                            <DatePicker 
-                                                name="dateProposed" 
-                                                selected={managementInfo.dateProposed ? new Date(managementInfo.dateProposed) : null} 
-                                                onChange={(date) => handleDateChange(date, index, 'dateProposed')} 
-                                                customInput={<ExampleCustomInput />}
+                                                onChange={(e) => handleDateChange(e.target.value, index, 'dateProposed')}
                                             />
                                         </div>
                                     </div>
@@ -287,24 +281,17 @@ function ManagementInfoInput({ onFormSubmit }) {
                                             className={`form-control ${mandatoryDateFields.includes('dateAmended') && managementInfo.dateAmended.trim() === '' ? 'tag-invalid' : ''}`} 
                                             style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                                             <input  
-                                                type="text" 
+                                                type="date" 
                                                 className="date-input" 
                                                 placeholder="Amended Date" 
                                                 name="dateAmended" 
                                                 value={managementInfo.dateAmended} 
-                                                onChange={(e) => handleChange(e, index)}
-                                                disabled
-                                            />
-                                            <DatePicker 
-                                                name="dateAmended" 
-                                                selected={managementInfo.dateAmended ? new Date(managementInfo.dateAmended) : null} 
-                                                onChange={(date) => handleDateChange(date, index, 'dateAmended')} 
-                                                customInput={<ExampleCustomInput />}
+                                                onChange={(e) => handleDateChange(e.target.value, index, 'dateAmended')}
                                             />
                                         </div>
                                     </div>
-
                                 </div>
+
                             </div>
                             <div className='row'>
                                 <div className='col'>

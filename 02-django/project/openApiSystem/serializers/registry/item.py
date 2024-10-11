@@ -10,20 +10,21 @@ class RE_RegisterSerializer(serializers.Serializer):
 
 class RE_ItemSerializer(serializers.Serializer):
     _id = ObjectIdField(read_only=True)
-    itemType = serializers.CharField()  
+    itemType = serializers.CharField(default='ConceptItem')  # 기본값 'Symbol'
     concept_id = ObjectIdField(read_only=True)
-    itemIdentifier = serializers.IntegerField()
-    name = serializers.CharField(max_length=100)
-    definition = serializers.CharField(allow_blank=True)
-    remarks = serializers.CharField(allow_blank=True)
-    itemStatus = serializers.CharField()# Enum - S100_RE_ItemStatus
-    alias = serializers.JSONField(default=list) 
-    camelCase = serializers.CharField(max_length=100, allow_blank=True)
-    definitionSource = serializers.CharField(max_length=100, allow_blank=True)
-    reference = serializers.CharField(max_length=100, allow_blank=True)
-    similarityToSource = serializers.CharField(max_length=100, allow_blank=True)
-    justification = serializers.CharField(max_length=100, allow_blank=True)
-    proposedChange = serializers.CharField(max_length=100, allow_blank=True)
+    itemIdentifier = serializers.IntegerField(default=1)  # 기본값 1
+    name = serializers.CharField(max_length=100, default='Default Name')  # 기본값 'Default Name'
+    definition = serializers.CharField(allow_blank=True, default='No definition available')  # 기본값
+    remarks = serializers.CharField(allow_blank=True, default='No remarks')  # 기본값
+    itemStatus = serializers.CharField(default='processing')  # 기본값 'processing'
+    alias = serializers.JSONField(default=list)  # 기본값은 빈 리스트
+    camelCase = serializers.CharField(max_length=100, allow_blank=True, default='defaultCamelCase')  # 기본값
+    definitionSource = serializers.CharField(max_length=100, allow_blank=True, default='Unknown Source')  # 기본값
+    reference = serializers.CharField(max_length=100, allow_blank=True, default='No reference')  # 기본값
+    similarityToSource = serializers.CharField(max_length=100, allow_blank=True, default='0%')  # 기본값
+    justification = serializers.CharField(max_length=100, allow_blank=True, default='No justification')  # 기본값
+    proposedChange = serializers.CharField(max_length=100, allow_blank=True, default='No changes proposed')  # 기본값
+
 
 class RE_ManagementInfoSerializer(serializers.Serializer):
     concept_item_id = ObjectIdField(read_only=True)

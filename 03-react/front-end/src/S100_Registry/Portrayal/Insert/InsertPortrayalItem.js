@@ -15,15 +15,35 @@ import DynamicItemForm from './components/DynamicItemForm'; // Import the Dynami
 import DinamicAssociationForm from './components/DinamicAssociationForm'; // Import the DynamicItemForm component
 
 const InsertPortrayalItem = () => {
+  const navigate = useNavigate();
+  const createViewType = Cookies.get('createViewType');
+
+  useEffect(() => {
+    
+    if (createViewType) { // createViewType이 존재하면 처리
+      console.log("createViewType detected:", createViewType);
+      
+      // API와 관련된 세팅을 업데이트
+      getSelestedApi(createViewType, setSelectedApiUrl, setApiType, setPostType);
+      setDynamicFormData(basicJSONs[createViewType] || basicJSONs["Symbol"]);
+      
+      // 쿠키 삭제
+      Cookies.remove('createViewType');
+    } else {
+      console.log("createViewType not set");
+    }
+  }, [createViewType, navigate]);
+
   const [dynamicFormData, setDynamicFormData] = useState(basicJSONs["Symbol"]);  // State for DynamicItemForm
+  const [selectedApiUrl, setSelectedApiUrl] = useState(POST_SYMBOL);  // Selected API URL
+  const [apiType, setApiType] = useState("Symbol");  
+
+  const [postType, setPostType] = useState("formData");  
   const [itemInputData, setItemInputData] = useState(null);      // State for ItemInput
   const [managementInfos, setManagementInfos] = useState([]);    // State for Management Info
-  const [selectedApiUrl, setSelectedApiUrl] = useState(POST_SYMBOL);  // Selected API URL
-  const [apiType, setApiType] = useState("Symbol");              // Selected API Type
-  const [postType, setPostType] = useState("formData");          // Selected POST Type
   const regi_uri = Cookies.get('REGISTRY_URI');
   const { setItemDetails } = useContext(ItemContext);
-  const navigate = useNavigate();
+  
   const [associationAndAPI, setAssociationAndAPI] = useState([]);
 
   const associationPostAPI = {
@@ -147,7 +167,6 @@ const InsertPortrayalItem = () => {
       let headers = {};
       
       if (postType === 'formData') {
-          console.log('formData 들어간다 ~');
           // FormData 객체 생성
           const formData = new FormData();
           
@@ -176,6 +195,7 @@ const InsertPortrayalItem = () => {
 
       try {
           // 첫 번째 POST 요청 (아이템 데이터 전송)
+          console.log('Sending POST request to:', combinedData);
           const itemResponse = await axios.post(
               selectedApiUrl,
               dataToSend,  // postType에 따라 formData 또는 json으로 전송
@@ -186,7 +206,6 @@ const InsertPortrayalItem = () => {
                   headers: headers,
               }
           );
-
           const itemId = itemResponse.data.encrypted_data;
           const item_iv = itemResponse.data.iv;
 
@@ -287,7 +306,7 @@ const InsertPortrayalItem = () => {
       <button onClick={dynamicLog}>dynamic</button>
       <button onClick={assAPILog}>association</button>
       <div>
-        <ChooseType getSelestedApi={(type) => getSelestedApi(type, setSelectedApiUrl, setApiType, setPostType)} /> 
+        <ChooseType initial={apiType} getSelestedApi={(type) => getSelestedApi(type, setSelectedApiUrl, setApiType, setPostType)} /> 
       </div>
       
       <div>

@@ -83,3 +83,15 @@ class Distinction:
     
     def insert_distinction(parent_id, child_id):
         S100_DD_distinction.insert_one({"parent_id": ObjectId(parent_id), "child_id": ObjectId(child_id)})
+
+
+class ManagementInfoModel:
+    collection = S100_Concept_ManagementInfo
+
+    @classmethod
+    def delete(cls, Item_id):
+        if Item_id is None:
+            return {"status": "failed", "message": "Item_id is None"}
+        result = cls.collection.delete_many({"concept_item_id": ObjectId(Item_id)})
+        
+        return {"status": "success", "deleted_count": result.deleted_count}

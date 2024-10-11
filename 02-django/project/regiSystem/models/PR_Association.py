@@ -17,6 +17,13 @@ S100_PR_Message_Association = db["S100_PR_Message_Association"]
 from regiSystem.info_sec.encryption import get_encrypted_id
 class PR_Association:
     collection = None
+    @classmethod
+    def delete(cls, Item_id, attribute):
+        print(Item_id, attribute)
+        if Item_id is None or attribute is None:
+            return {"status": "failed", "message": "Item_id or attribute is None"}
+        result = cls.collection.delete_one({attribute: ObjectId(Item_id)})
+        return {"status": "success", "deleted_count": result.deleted_count}
 
     @classmethod
     def insert(cls, I_id, A_id):

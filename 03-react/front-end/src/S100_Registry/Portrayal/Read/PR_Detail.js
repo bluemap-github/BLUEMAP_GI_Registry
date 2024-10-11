@@ -139,6 +139,19 @@ const associationList = {
   ]
 };
 
+const associationKeys = [
+  'Symbol',
+  'LineStyle',
+  'AreaFill',
+  'Pixmap',
+  'ColourToken',
+  'PaletteItem',
+  'ViewingGroup',
+  'ViewingGroupLayer',
+  'AlertHighlight',
+  'AlertMessage'
+];
+
 const PR_Detail = () => {
   const navigate = useNavigate();
   const { itemDetails } = useContext(ItemContext);
@@ -202,6 +215,7 @@ const PR_Detail = () => {
     // Check if the item_type has associations in the list
     const fetchAssociations = () => {
       const associations = associationList[item_type];
+      console.log(associations);
       if (!associations) {
         return Promise.resolve([]); // Return an empty array if no associations
       }
@@ -259,9 +273,15 @@ const PR_Detail = () => {
     <div>
       <button onClick={assoLogs}>assoLog</button>
       {data ? <PortrayalDetails items={data} itemType={item_type} /> : <div>Loading...</div>}
-      {associations? <DynamicAssociations associationItems={associations} /> : <></>}
+      {associationKeys.includes(item_type) ? (
+          <DynamicAssociations associationItems={associations} />
+        ) : null}
       {data ? <ConceptInformation items={data} /> : <div>Loading...</div>}
-      {managementInfo ? <ManagementInformation items={managementInfo.management_infos} /> : <div>Loading...</div>}
+      {managementInfo ? <ManagementInformation 
+                      items={managementInfo.management_infos} 
+                      item_id={item_id}
+                      item_iv={item_iv}
+                      /> : <div>Loading...</div>}
       
       <div>
         <button onClick={moveToList} className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>

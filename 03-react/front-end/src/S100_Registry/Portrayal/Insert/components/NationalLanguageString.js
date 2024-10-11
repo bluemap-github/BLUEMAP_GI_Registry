@@ -33,7 +33,7 @@ const NationalLanguageStringInput = ({itemType, tagName, onFormSubmit }) => {
         onFormSubmit(updatedNAString)
     };
     return (
-        <div style={{ backgroundColor: 'white', padding: '10px', paddingTop: '5px'}} className='mb-4'>
+        <div style={{ backgroundColor: 'white', padding: '10px', paddingTop: '5px', maxHeight: '300px', overflowY: 'auto'}} className='mb-4'>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', marginTop: '8px'}}>
                 <h5>{tagName}</h5>
                 <button className='btn btn-outline-secondary btn-sm' onClick={() => addNLS()} style={{ display: 'flex', alignItems: 'center' }}>
@@ -45,33 +45,35 @@ const NationalLanguageStringInput = ({itemType, tagName, onFormSubmit }) => {
                     </div>
                 </button>
             </div>
-            {stringList.map((desc, index) => (
-                <div key={index} className="input-group input-group-sm mb-2">
-                    <input
-                        type="text"
-                        className="form-control"
-                        name="text"
-                        placeholder={`${tagName} Text`}
-                        value={desc.text}
-                        onChange={(e) => handleNLSChange(index, e)}
-                    />
-                    <input
-                        type="text"
-                        className="form-control"
-                        name="language"
-                        placeholder="Language"
-                        value={desc.language}
-                        onChange={(e) => handleNLSChange(index, e)}
-                    />
-                    <button
-                        type="button"
-                        className="btn btn-outline-danger"
-                        onClick={() => removeNLS(index)}
-                    >
-                        Remove
-                    </button>
-                </div>
-            ))}
+            <div style={{ maxHeight: '150px', overflowY: 'auto' }}> {/* 스크롤이 가능하도록 하는 부분 */}
+                {stringList.map((desc, index) => (
+                    <div key={index} className="input-group input-group-sm mb-2">
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="text"
+                            placeholder={`${tagName} Text`}
+                            value={desc.text}
+                            onChange={(e) => handleNLSChange(index, e)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="language"
+                            placeholder="Language"
+                            value={desc.language}
+                            onChange={(e) => handleNLSChange(index, e)}
+                        />
+                        <button
+                            type="button"
+                            className="btn btn-outline-danger"
+                            onClick={() => removeNLS(index)}
+                        >
+                            Remove
+                        </button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

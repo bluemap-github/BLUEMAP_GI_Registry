@@ -5,9 +5,9 @@ from openApiSystem.views.checkAccess import check_key_validation
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING)
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING)
-itemID = openapi.Parameter('itemID', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
+regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+item_id = openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 from openApiSystem.models.registry.item import RE_Register
 from openApiSystem.models.dataDictionary.item import (
@@ -28,7 +28,7 @@ from openApiSystem.serializers.dataDictionary.item import (
 def get_params(request):
     regi_uri = request.GET.get('regiURI')
     service_key = request.GET.get('serviceKey')
-    item_id = request.GET.get('itemID')
+    item_id = request.GET.get('item_id')
     if not item_id:
         return regi_uri, service_key
     return regi_uri, service_key, item_id

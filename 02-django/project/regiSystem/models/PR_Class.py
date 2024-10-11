@@ -22,6 +22,7 @@ S100_Portrayal_NationalLanguageString = db['S100_Portrayal_NationalLanguageStrin
 
 
 class RegisterItemModel:
+    
     @staticmethod
     def process_description(description_data):
         description_ids = []
@@ -42,6 +43,18 @@ class RegisterItemModel:
 class RE_RegisterItemModel:
     collection = None  # 하위 클래스에서 MongoDB 컬렉션 설정
 
+    @ classmethod
+    def delete(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        
+        # MongoDB에서 해당 데이터를 삭제
+        result = cls.collection.delete_one({"_id": ObjectId(M_id)})
+        if result.deleted_count == 1:
+            return {"status": "success", "deleted_id": str(M_id)}
+        else:
+            return {"status": "error", "errors": "Failed to delete the item"}
+    
     @classmethod
     def insert(cls, data, C_id, serializer_class):
         if cls.collection is None:
@@ -49,8 +62,10 @@ class RE_RegisterItemModel:
 
         # 시리얼라이저로 데이터 검증
         serializer = serializer_class(data=data)
+        print(serializer, "시리")
         if serializer.is_valid():
             validated_data = serializer.validated_data
+            print("잘 들어갓다면?", validated_data)
             description_data = validated_data.get('description', [])
 
             # description 처리
@@ -65,9 +80,45 @@ class RE_RegisterItemModel:
             result = cls.collection.insert_one(validated_data)
             return {"status": "success", "inserted_id": str(result.inserted_id)}
         else:
-            print("안걸러짐", serializer.errors)
             return {"status": "error", "errors": serializer.errors}
 
+    @classmethod
+    def update(cls, M_id, data, C_id, serializer_class):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # 업데이트할 기존 데이터를 먼저 찾음
+        existing_item = cls.collection.find_one({"_id": ObjectId(M_id)})
+
+        if not existing_item:
+            return {"status": "error", "errors": "Item not found"}
+
+        # 시리얼라이저로 데이터 검증
+        serializer = serializer_class(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            if 'description' in validated_data:
+                description_ids = RegisterItemModel.process_description(description_data)
+                if isinstance(description_ids, dict) and "errors" in description_ids:
+                    return description_ids  # 에러 반환
+
+                validated_data['description_ids'] = description_ids
+                del validated_data['description']
+
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # 기존 데이터를 업데이트
+            result = cls.collection.update_one({"_id": ObjectId(M_id)}, {"$set": validated_data})
+            if result.modified_count == 1:
+                return {"status": "success", "updated_id": str(M_id)}
+            else:
+                return {"status": "error", "errors": "Failed to update the item"}
+        else:
+            return {"status": "error", "errors": serializer.errors}
+        
     @classmethod
     def get_list(cls, C_id):
         if cls.collection is None:
@@ -101,7 +152,7 @@ class RE_RegisterItemModel:
             return {"status": "error", "message": "Item not found"}
 
         # _id를 문자열로 변환
-        result['_id'] = str(result['_id'])
+        result['_id'] = get_encrypted_id([result['_id']])
 
         # description_ids 처리 로직
         if 'description_ids' in result:
@@ -141,8 +192,18 @@ class SymbolModel(RE_RegisterItemModel):
 
     @classmethod
     def insert(cls, data, C_id):
-        print(data, "여기로 오냐?")
         return super().insert(data, C_id, S100_PR_VisualItemSerializer)
+    
+    @classmethod
+    def update(cls, M_id, data, C_id, serializer_class=S100_PR_VisualItemSerializer):
+        return super().update(M_id, data, C_id, serializer_class)
+
+    @classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
+    
 
 
 class LineStyleModel(RE_RegisterItemModel):
@@ -151,6 +212,16 @@ class LineStyleModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_VisualItemSerializer)
+    
+    @classmethod
+    def update(cls, M_id, data, C_id, serializer_class=S100_PR_VisualItemSerializer):
+        return super().update(M_id, data, C_id, serializer_class)
+
+    @classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
 
 
 class AreaFillModel(RE_RegisterItemModel):
@@ -159,6 +230,16 @@ class AreaFillModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_VisualItemSerializer)
+    
+    @classmethod
+    def update(cls, M_id, data, C_id, serializer_class=S100_PR_VisualItemSerializer):
+        return super().update(M_id, data, C_id, serializer_class)
+    
+    @classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
 
 
 class PixmapModel(RE_RegisterItemModel):
@@ -167,6 +248,16 @@ class PixmapModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_VisualItemSerializer)
+    
+    @classmethod
+    def update(cls, M_id, data, C_id, serializer_class=S100_PR_VisualItemSerializer):
+        return super().update(M_id, data, C_id, serializer_class)
+    
+    @classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
 
 
 class ItemSchemaModel(RE_RegisterItemModel):
@@ -216,21 +307,72 @@ class ItemSchemaModel(RE_RegisterItemModel):
 class SymbolSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_SymbolSchema']
 
+    @classmethod
+    def update(cls, M_id, data, C_id):
+        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+    
+    @classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
+
 
 class LineStyleSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_LineStyleSchema']
+
+    @classmethod
+    def update(cls, M_id, data, C_id):
+        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+
+    @ classmethod
+    def get_exixting_by_id(cls, M_id):
+        print(cls.collection[0], "잇어???")
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
 
 
 class AreaFillSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_AreaFillSchema']
 
+    @classmethod
+    def update(cls, M_id, data, C_id):
+        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+    
+    @ classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
+
 
 class PixmapSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_PixmapSchema']
 
+    @classmethod
+    def update(cls, M_id, data, C_id):
+        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+    
+    @ classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
+
 
 class ColourProfileSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_ColourProfileSchema']
+
+    @classmethod
+    def update(cls, M_id, data, C_id):
+        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+    
+    @ classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
 
 
 # Colour Token Model
@@ -240,6 +382,48 @@ class ColourTokenModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_ColourTokenSerializer)
+
+    @classmethod
+    def put(cls, _id, data, C_id):
+        # MongoDB 컬렉션이 설정되어 있는지 확인
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        
+        # 해당 항목의 _id를 사용하여 데이터를 업데이트
+        existing_item = cls.collection.find_one({'_id': ObjectId(_id)})
+        if not existing_item:
+            return {"status": "error", "errors": "Item not found"}
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_ColourTokenSerializer(data=data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB에서 기존 데이터를 업데이트 (덮어쓰기)
+            result = cls.collection.update_one(
+                {'_id': ObjectId(_id)}, 
+                {'$set': validated_data}
+            )
+
+            if result.modified_count == 0:
+                return {"status": "error", "errors": "Failed to update item"}
+
+            return {"status": "success", "updated_id": _id}
+        else:
+            return {"status": "error", "errors": serializer.errors}
+    
+
+
 
 
 # Palette Item Model
@@ -299,6 +483,49 @@ class PaletteItemModel(RE_RegisterItemModel):
             validated_data['concept_id'] = C_id
             result = cls.collection.insert_one(validated_data)
             return {"status": "success", "inserted_id": str(result.inserted_id)}
+        else:
+            return {"status": "error", "errors": serializer.errors}
+    
+    @classmethod
+    def put(cls, item_id, data, C_id):
+        serializer = S100_PR_PaletteItemSerializer(data=data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+
+            description_data = validated_data.get('description', [])
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+
+            if 'colourValue' in validated_data:
+                if 'sRGB' in validated_data['colourValue']:
+                    srgb_result = SRGBModel.process_srgb(validated_data['colourValue']['sRGB'])
+                    if isinstance(srgb_result, dict) and "errors" in srgb_result:
+                        return srgb_result
+                    validated_data['colourValue']['sRGB_id'] = srgb_result
+                    del validated_data['colourValue']['sRGB']
+
+                if 'cie' in validated_data['colourValue']:
+                    cie_result = CIEModel.process_cie(validated_data['colourValue']['cie'])
+                    if isinstance(cie_result, dict) and "errors" in cie_result:
+                        return cie_result
+                    validated_data['colourValue']['cie_id'] = cie_result
+                    del validated_data['colourValue']['cie']
+
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # 기존 아이템을 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(item_id)},
+                {"$set": validated_data}
+            )
+
+            if result.matched_count == 1:
+                return {"status": "success", "updated_id": str(item_id)}
+            else:
+                return {"status": "error", "errors": "Item not found or update failed"}
         else:
             return {"status": "error", "errors": serializer.errors}
         
@@ -397,6 +624,59 @@ class AlertModel(RE_RegisterItemModel):
             validated_data['concept_id'] = C_id
             result = cls.collection.insert_one(validated_data)
             return {"status": "success", "inserted_id": str(result.inserted_id)}
+        else:
+            return {"status": "error", "errors": serializer.errors}
+    
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        
+        if not ObjectId.is_valid(M_id):
+            return {"status": "error", "errors": "Invalid ID"}
+
+        serializer = S100_PR_AlertSerializer(data=data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+
+            routeMonitor_data = validated_data.get('routeMonitor', [])
+            routeMonitor_ids = []
+            for info in routeMonitor_data:
+                info_result = AlertInfoModel.process_info(info)
+                if isinstance(info_result, dict) and "errors" in info_result:
+                    return info_result
+                routeMonitor_ids.append(info_result)
+            validated_data['routeMonitor_ids'] = routeMonitor_ids
+            del validated_data['routeMonitor']
+
+            routePlan_data = validated_data.get('routePlan', [])
+            routePlan_ids = []
+            for info in routePlan_data:
+                info_result = AlertInfoModel.process_info(info)
+                if isinstance(info_result, dict) and "errors" in info_result:
+                    return info_result
+                routePlan_ids.append(info_result)
+            validated_data['routePlan_ids'] = routePlan_ids
+            del validated_data['routePlan']
+
+            description_data = validated_data.get('description', [])
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB update
+            result = cls.collection.update_one(
+                {'_id': ObjectId(M_id)}, 
+                {'$set': validated_data}
+            )
+
+            if result.matched_count == 1:
+                return {"status": "success", "updated_id": str(M_id)}
+            else:
+                return {"status": "error", "errors": "No matching record found"}
+
         else:
             return {"status": "error", "errors": serializer.errors}
     
@@ -579,6 +859,51 @@ class AlertMessageModel(RE_RegisterItemModel):
         else:
             # 데이터 검증 실패 시 에러 반환
             return {"status": "error", "errors": serializer.errors}
+    
+
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        # MongoDB ID 유효성 확인
+        if not ObjectId.is_valid(M_id):
+            return {"status": "error", "errors": "Invalid ID"}
+
+        # 데이터 검증
+        serializer = S100_PR_AlertMessageSerializer(data=data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+
+            # description 처리 (NationalLanguageString 데이터)
+            description_data = validated_data.get('description', [])
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+
+            # text 처리 (NationalLanguageString 데이터)
+            text_data = validated_data.get('text', [])
+            text_ids = RegisterItemModel.process_description(text_data)  # 기존에 사용한 process_description을 재사용
+            if isinstance(text_ids, dict) and "errors" in text_ids:
+                return text_ids  # 에러 반환
+            validated_data['text_ids'] = text_ids
+            del validated_data['text']
+
+            # concept_id 추가
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB에 데이터 업데이트
+            result = cls.collection.update_one(
+                {'_id': ObjectId(M_id)},
+                {'$set': validated_data}
+            )
+
+            if result.matched_count == 1:
+                return {"status": "success", "updated_id": str(M_id)}
+            else:
+                return {"status": "error", "errors": "No matching record found"}
+        else:
+            # 데이터 검증 실패 시 에러 반환
+            return {"status": "error", "errors": serializer.errors}
 
     @classmethod
     def get_list(cls, C_id):
@@ -647,7 +972,6 @@ class AlertMessageModel(RE_RegisterItemModel):
         if 'concept_id' in result:
             result['concept_id'] = str(result['concept_id'])
 
-        print(result)
         return result
 
 
@@ -657,6 +981,39 @@ class ColourPaletteModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_ColourPalletteSerializer)
+    
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_ColourPalletteSerializer(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB의 update_one을 사용하여 _id 기준으로 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(M_id)},
+                {"$set": validated_data}
+            )
+
+            if result.matched_count > 0:
+                return {"status": "success", "updated_id": M_id}
+            else:
+                return {"status": "error", "message": "No document found with that ID."}
+        else:
+            return {"status": "error", "errors": serializer.errors}
 
     
 from regiSystem.serializers.PR import S100_PR_DisplayModeSerializer
@@ -666,6 +1023,39 @@ class DisplayModeModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_DisplayModeSerializer)
+    
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_DisplayPlaneSerializer(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB의 update_one을 사용하여 _id 기준으로 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(M_id)},
+                {"$set": validated_data}
+            )
+
+            if result.matched_count > 0:
+                return {"status": "success", "updated_id": M_id}
+            else:
+                return {"status": "error", "message": "No document found with that ID."}
+        else:
+            return {"status": "error", "errors": serializer.errors}
 
 from regiSystem.serializers.PR import S100_PR_ViewingGroupLayerSerializer
 class ViewingGroupLayerModel(RE_RegisterItemModel):
@@ -673,8 +1063,40 @@ class ViewingGroupLayerModel(RE_RegisterItemModel):
 
     @classmethod
     def insert(cls, data, C_id):
-        print(data, "여기로 오냐?")
         return super().insert(data, C_id, S100_PR_ViewingGroupLayerSerializer)
+
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_ViewingGroupLayerSerializer(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB의 update_one을 사용하여 _id 기준으로 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(M_id)},
+                {"$set": validated_data}
+            )
+
+            if result.matched_count > 0:
+                return {"status": "success", "updated_id": M_id}
+            else:
+                return {"status": "error", "message": "No document found with that ID."}
+        else:
+            return {"status": "error", "errors": serializer.errors}
 
 from regiSystem.serializers.PR import S100_PR_DisplayPlaneSerializer
 class DisplayPlaneModel(RE_RegisterItemModel):
@@ -683,6 +1105,39 @@ class DisplayPlaneModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_DisplayPlaneSerializer)
+    
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_DisplayPlaneSerializer(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB의 update_one을 사용하여 _id 기준으로 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(M_id)},
+                {"$set": validated_data}
+            )
+
+            if result.matched_count > 0:
+                return {"status": "success", "updated_id": M_id}
+            else:
+                return {"status": "error", "message": "No document found with that ID."}
+        else:
+            return {"status": "error", "errors": serializer.errors}
 
 from regiSystem.serializers.PR import S100_PR_ViewingGroupSerializer
 class ViewingGroupModel(RE_RegisterItemModel):
@@ -691,6 +1146,39 @@ class ViewingGroupModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_ViewingGroupSerializer)
+    
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_ViewingGroupSerializer(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB의 update_one을 사용하여 _id 기준으로 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(M_id)},
+                {"$set": validated_data}
+            )
+
+            if result.matched_count > 0:
+                return {"status": "success", "updated_id": M_id}
+            else:
+                return {"status": "error", "message": "No document found with that ID."}
+        else:
+            return {"status": "error", "errors": serializer.errors}
 
 from regiSystem.serializers.PR import S100_PR_FontSerializer
 class FontModel(RE_RegisterItemModel):
@@ -699,6 +1187,17 @@ class FontModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_FontSerializer)
+    
+    @classmethod
+    def update(cls, M_id, data, C_id):
+        return super().update(M_id, data, C_id, S100_PR_FontSerializer)
+    
+    @ classmethod
+    def get_exixting_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
+
 
 from regiSystem.serializers.PR import S100_PR_ContextParameterSerializer
 class ContextParameterModel(RE_RegisterItemModel):
@@ -708,6 +1207,39 @@ class ContextParameterModel(RE_RegisterItemModel):
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_ContextParameterSerializer)
 
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_ContextParameterSerializer(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB의 update_one을 사용하여 _id 기준으로 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(M_id)},
+                {"$set": validated_data}
+            )
+
+            if result.matched_count > 0:
+                return {"status": "success", "updated_id": M_id}
+            else:
+                return {"status": "error", "message": "No document found with that ID."}
+        else:
+            return {"status": "error", "errors": serializer.errors}
+
 from regiSystem.serializers.PR import S100_PR_DrawingPrioritySerializer
 class DrawingPriorityModel(RE_RegisterItemModel):
     collection = db['S100_Portrayal_DrawingPriority']
@@ -716,6 +1248,40 @@ class DrawingPriorityModel(RE_RegisterItemModel):
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_DrawingPrioritySerializer)
 
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_DrawingPrioritySerializer(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
+
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB의 update_one을 사용하여 _id 기준으로 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(M_id)},
+                {"$set": validated_data}
+            )
+
+            if result.matched_count > 0:
+                return {"status": "success", "updated_id": M_id}
+            else:
+                return {"status": "error", "message": "No document found with that ID."}
+        else:
+            return {"status": "error", "errors": serializer.errors}
+
+
 from regiSystem.serializers.PR import S100_PR_AlertHighlightSerializer
 class AlertHighlightModel(RE_RegisterItemModel):
     collection = db['S100_Portrayal_AlertHighlight']
@@ -723,5 +1289,36 @@ class AlertHighlightModel(RE_RegisterItemModel):
     @classmethod
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_AlertHighlightSerializer)
+    
+    @classmethod
+    def put(cls, M_id, data, C_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
 
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_AlertHighlightSerializer(data=data, partial=True)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            description_data = validated_data.get('description', [])
 
+            # description 처리
+            description_ids = RegisterItemModel.process_description(description_data)
+            if isinstance(description_ids, dict) and "errors" in description_ids:
+                return description_ids  # 에러 반환
+
+            validated_data['description_ids'] = description_ids
+            del validated_data['description']
+            validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
+
+            # MongoDB의 update_one을 사용하여 _id 기준으로 업데이트
+            result = cls.collection.update_one(
+                {"_id": ObjectId(M_id)},
+                {"$set": validated_data}
+            )
+            
+            if result.matched_count > 0:
+                return {"status": "success", "updated_id": M_id}
+            else:
+                return {"status": "error", "message": "No document found with that ID."}
+        else:
+            return {"status": "error", "errors": serializer.errors}

@@ -119,3 +119,58 @@ export const GET_ICON_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/ic
 export const GET_SYMBOL_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_association_list/get/`;
 export const GET_ITEM_SCHEMA_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/item_schema_association_list/get/`;
 
+export const PUT_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/put/`;
+export const DEL_MANAGEMENT_INFO  = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/delete/`;
+
+
+export const PUT_COLOUR_TOKEN = `${DEPLOY_URL}/api/v1/portrayal_item/colour_token_put/`;
+export const PUT_PALETTE_ITEM = `${DEPLOY_URL}/api/v1/portrayal_item/palette_item_put/`;
+export const PUT_COLOUR_PALETTE = `${DEPLOY_URL}/api/v1/portrayal_item/colour_palette_put/`;
+export const PUT_DISPLAY_PLANE = `${DEPLOY_URL}/api/v1/portrayal_item/display_plane_put/`;
+export const PUT_DISPLAY_MODE = `${DEPLOY_URL}/api/v1/portrayal_item/display_mode_put/`;
+export const PUT_VIEWING_GROUP_LAYER = `${DEPLOY_URL}/api/v1/portrayal_item/viewing_group_layer_put/`;
+export const PUT_VIEWING_GROUP = `${DEPLOY_URL}/api/v1/portrayal_item/viewing_group_put/`;
+export const PUT_FONT = `${DEPLOY_URL}/api/v1/portrayal_item/font_put/`;
+export const PUT_CONTEXT_PARAMETER = `${DEPLOY_URL}/api/v1/portrayal_item/context_parameter_put/`;
+export const PUT_DRAWING_PRIORITY = `${DEPLOY_URL}/api/v1/portrayal_item/drawing_priority_put/`;
+export const PUT_ALERT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_put/`;
+export const PUT_ALERT_MESSAGE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_message_put/`;
+export const PUT_ALERT_HIGHLIGHT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight_put/`;
+
+export const PUT_SYMBOL_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_schema_put/`;
+export const PUT_LINE_STYLE_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/line_style_schema_put/`;
+export const PUT_AREA_FILL_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/area_fill_schema_put/`;
+export const PUT_PIXMAP_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/pixmap_schema_put/`;
+export const PUT_COLOUR_PROFILE_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/colour_profile_schema_put/`;
+
+export const PUT_SYMBOL = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_put/`;
+export const PUT_LINE_STYLE = `${DEPLOY_URL}/api/v1/portrayal_item/line_style_put/`;
+export const PUT_AREA_FILL = `${DEPLOY_URL}/api/v1/portrayal_item/area_fill_put/`;
+export const PUT_PIXMAP = `${DEPLOY_URL}/api/v1/portrayal_item/pixmap_put/`;
+
+
+export const DELETE_SYMBOL = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_delete/`;
+export const DELETE_LINE_STYLE = `${DEPLOY_URL}/api/v1/portrayal_item/line_style_delete/`;
+export const DELETE_AREA_FILL = `${DEPLOY_URL}/api/v1/portrayal_item/area_fill_delete/`;
+export const DELETE_PIXMAP = `${DEPLOY_URL}/api/v1/portrayal_item/pixmap_delete/`;
+
+export const DELETE_SYMBOL_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_schema_delete/`;
+export const DELETE_LINE_STYLE_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/line_style_schema_delete/`;
+export const DELETE_AREA_FILL_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/area_fill_schema_delete/`;
+export const DELETE_PIXMAP_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/pixmap_schema_delete/`;
+export const DELETE_COLOUR_PROFILE_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/colour_profile_schema_delete/`;
+
+export const DELETE_COLOUR_TOKEN = `${DEPLOY_URL}/api/v1/portrayal_item/colour_token_delete/`;
+export const DELETE_PALETTE_ITEM = `${DEPLOY_URL}/api/v1/portrayal_item/palette_item_delete/`;
+export const DELETE_COLOUR_PALETTE = `${DEPLOY_URL}/api/v1/portrayal_item/colour_palette_delete/`;
+export const DELETE_DISPLAY_PLANE = `${DEPLOY_URL}/api/v1/portrayal_item/display_plane_delete/`;
+export const DELETE_DISPLAY_MODE = `${DEPLOY_URL}/api/v1/portrayal_item/display_mode_delete/`;
+export const DELETE_VIEWING_GROUP_LAYER = `${DEPLOY_URL}/api/v1/portrayal_item/viewing_group_layer_delete/`;
+export const DELETE_VIEWING_GROUP = `${DEPLOY_URL}/api/v1/portrayal_item/viewing_group_delete/`;
+export const DELETE_FONT = `${DEPLOY_URL}/api/v1/portrayal_item/font_delete/`;
+export const DELETE_CONTEXT_PARAMETER = `${DEPLOY_URL}/api/v1/portrayal_item/context_parameter_delete/`;
+export const DELETE_DRAWING_PRIORITY = `${DEPLOY_URL}/api/v1/portrayal_item/drawing_priority_delete/`;
+export const DELETE_ALERT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_delete/`;
+export const DELETE_ALERT_MESSAGE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_message_delete/`;
+export const DELETE_ALERT_HIGHLIGHT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight_delete/`;
+

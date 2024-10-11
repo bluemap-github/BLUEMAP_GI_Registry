@@ -24,7 +24,6 @@ def related_item(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
     search_term = request.query_params.get('search_term', '')
     item_type = list(request.GET.get('item_type').split(','))
-    print(item_type)
     
     if request.method == 'GET':
         query = {

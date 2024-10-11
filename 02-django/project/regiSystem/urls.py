@@ -84,6 +84,17 @@ urlpatterns = [
     path('portrayal_item/pixmap_list/get/', PR.get.get_pixmap_list),
     path('portrayal_item/pixmap/get/', PR.get.get_pixmap),
 
+    path('portrayal_item/symbol_put/', PR.put.update_symbol),
+    path('portrayal_item/line_style_put/', PR.put.update_line_style),
+    path('portrayal_item/area_fill_put/', PR.put.update_area_fill),
+    path('portrayal_item/pixmap_put/', PR.put.update_pixmap),
+
+    path('portrayal_item/symbol_delete/', PR.delete.delete_symbol),
+    path('portrayal_item/line_style_delete/', PR.delete.delete_line_style),
+    path('portrayal_item/area_fill_delete/', PR.delete.delete_area_fill),
+    path('portrayal_item/pixmap_delete/', PR.delete.delete_pixmap),
+
+
 
     # Portrayal > Item Schema
     path('portrayal_item/symbol_schema/post/', PR.post.insert_symbol_schema),
@@ -109,64 +120,111 @@ urlpatterns = [
     path('portrayal_item/colour_profile_schema/get/', PR.get.get_colour_profile_schema),
 
 
+    path('portrayal_item/symbol_schema_put/', PR.put.update_symbol_schema),
+    path('portrayal_item/line_style_schema_put/', PR.put.update_line_style_schema),
+    path('portrayal_item/area_fill_schema_put/', PR.put.update_area_fill_schema),
+    path('portrayal_item/pixmap_schema_put/', PR.put.update_pixmap_schema),
+    path('portrayal_item/colour_profile_schema_put/', PR.put.update_colour_profile_schema),
+
+    path('portrayal_item/symbol_schema_delete/', PR.delete.delete_symbol_schema),
+    path('portrayal_item/line_style_schema_delete/', PR.delete.delete_line_style_schema),
+    path('portrayal_item/area_fill_schema_delete/', PR.delete.delete_area_fill_schema),
+    path('portrayal_item/pixmap_schema_delete/', PR.delete.delete_pixmap_schema),
+    path('portrayal_item/colour_profile_schema_delete/', PR.delete.delete_colour_profile_schema),
 
 
     # Portrayal > Colour Token
     path('portrayal_item/colour_token/post/', PR.post.insert_colour_token),
+    path('portrayal_item/colour_token_put/', PR.put.update_colour_token),
     path('portrayal_item/colour_token_list/get/', PR.get.get_colour_token_list),
     path('portrayal_item/colour_token/get/', PR.get.get_colour_token),
+    path('portrayal_item/colour_token_delete/', PR.delete.delete_colour_token),
 
     # Portrayal > Palette Item
     path('portrayal_item/palette_item/post/', PR.post.insert_palette_item),
+    path('portrayal_item/palette_item_put/', PR.put.update_palette_item),
     path('portrayal_item/palette_item_list/get/', PR.get.palette_item_list),
     path('portrayal_item/palette_item/get/', PR.get.palette_item),
+    path('portrayal_item/palette_item_delete/', PR.delete.delete_palette_item),
 
     # Portrayal > Colour Palette
     path('portrayal_item/colour_palette/post/', PR.post.insert_colour_palette),
+    path('portrayal_item/colour_palette_put/', PR.put.update_colour_palette),
     path('portrayal_item/colour_palette_list/get/', PR.get.colour_palette_list),
     path('portrayal_item/colour_palette/get/', PR.get.colour_palette),
+    path('portrayal_item/colour_palette_delete/', PR.delete.delete_colour_palette),
 
     # Portrayal > Display Plane
     path('portrayal_item/display_plane/post/', PR.post.insert_display_plane),
+    path('portrayal_item/display_plane_put/', PR.put.update_display_plane),
     path('portrayal_item/display_plane_list/get/', PR.get.display_plane_list),
     path('portrayal_item/display_plane/get/', PR.get.display_plane),
+    path('portrayal_item/display_plane_delete/', PR.delete.delete_display_plane), 
+
     # Portrayal > Display Mode
     path('portrayal_item/display_mode/post/', PR.post.insert_display_mode),
+    path('portrayal_item/display_mode_put/', PR.put.update_display_mode),
     path('portrayal_item/display_mode_list/get/', PR.get.display_mode_list),
     path('portrayal_item/display_mode/get/', PR.get.display_mode),
+    path('portrayal_item/display_mode_delete/', PR.delete.delete_display_mode),
+
+
     # Portrayal > Viewing Group Layer
     path('portrayal_item/viewing_group_layer/post/', PR.post.insert_viewing_group_layer),
+    path('portrayal_item/viewing_group_layer_put/', PR.put.update_viewing_group_layer),
     path('portrayal_item/viewing_group_layer_list/get/', PR.get.viewing_group_layer_list),
     path('portrayal_item/viewing_group_layer/get/', PR.get.viewing_group_layer),
+    path('portrayal_item/viewing_group_layer_delete/', PR.delete.delete_viewing_group), 
+
+
     # Portrayal > Viewing Group
     path('portrayal_item/viewing_group/post/', PR.post.insert_viewing_group),
+    path('portrayal_item/viewing_group_put/', PR.put.update_viewing_group),
     path('portrayal_item/viewing_group_list/get/', PR.get.viewing_group_list),
     path('portrayal_item/viewing_group/get/', PR.get.viewing_group),
+    path('portrayal_item/viewing_group_delete/', PR.delete.delete_viewing_group),
+
     # Portrayal > Font
     path('portrayal_item/font/post/', PR.post.insert_font),
+    path('portrayal_item/font_put/', PR.put.update_font),
     path('portrayal_item/font_list/get/', PR.get.font_list),
     path('portrayal_item/font/get/', PR.get.font),
+    path('portrayal_item/font_delete/', PR.delete.delete_font),
+
     # Portrayal > Context Parameter
     path('portrayal_item/context_parameter/post/', PR.post.insert_context_parameter),
+    path('portrayal_item/context_parameter_put/', PR.put.update_context_parameter),
     path('portrayal_item/context_parameter_list/get/', PR.get.context_parameter_list),
     path('portrayal_item/context_parameter/get/', PR.get.context_parameter),
+    path('portrayal_item/context_parameter_delete/', PR.delete.delete_context_parameter),
+
     # Portrayal > Drawing Priority
     path('portrayal_item/drawing_priority/post/', PR.post.insert_drawing_priority),
+    path('portrayal_item/drawing_priority_put/', PR.put.update_drawing_priority),
     path('portrayal_item/drawing_priority_list/get/', PR.get.drawing_priority_list),
     path('portrayal_item/drawing_priority/get/', PR.get.drawing_priority),
+    path('portrayal_item/drawing_priority_delete/', PR.delete.delete_drawing_priority),
+
     # Portrayal > Alert Highlight
     path('portrayal_item/alert_highlight/post/', PR.post.insert_alert_highlight),
+    path('portrayal_item/alert_highlight_put/', PR.put.update_alert_highlight),
     path('portrayal_item/alert_highlight_list/get/', PR.get.alert_highlight_list),
     path('portrayal_item/alert_highlight/get/', PR.get.alert_highlight),
+    path('portrayal_item/alert_highlight_delete/', PR.delete.delete_alert_highlight),
 
     # Portrayal > Alert
     path('portrayal_item/alert/post/', PR.post.insert_alert),
+    path('portrayal_item/alert_put/', PR.put.update_alert),
     path('portrayal_item/alert_list/get/', PR.get.alert_list),
     path('portrayal_item/alert/get/', PR.get.alert),
+    path('portrayal_item/alert_delete/', PR.delete.delete_alert),
+
     # Portrayal > Alert Message
     path('portrayal_item/alert_message/post/', PR.post.insert_alert_message),
+    path('portrayal_item/alert_message_put/', PR.put.update_alert_message),
     path('portrayal_item/alert_message_list/get/', PR.get.alert_message_list),
     path('portrayal_item/alert_message/get/', PR.get.alert_message),
+    path('portrayal_item/alert_message_delete/', PR.delete.delete_alert_message),
 
     ## Associations
     path('portrayal_item/colour_token_association/post/', PR.post.insert_colour_token_association),
@@ -193,4 +251,3 @@ urlpatterns = [
     path('portrayal_item/item_schema_association_list/get/', PR.get.item_schema_association_list),
 
 ]
-
