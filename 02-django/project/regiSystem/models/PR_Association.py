@@ -19,10 +19,10 @@ class PR_Association:
     collection = None
     @classmethod
     def delete(cls, Item_id, attribute):
-        print(Item_id, attribute)
         if Item_id is None or attribute is None:
             return {"status": "failed", "message": "Item_id or attribute is None"}
         result = cls.collection.delete_many({attribute: ObjectId(Item_id)})
+
         return {"status": "success", "deleted_count": result.deleted_count}
 
     @classmethod

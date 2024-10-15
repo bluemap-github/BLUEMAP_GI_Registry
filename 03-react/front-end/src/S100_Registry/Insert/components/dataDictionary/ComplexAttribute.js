@@ -84,6 +84,7 @@ function ComplexAttribute({ onFormSubmit, selectedApiUrl }) {
     };
     
     return (
+    <div>
         <div style={{ backgroundColor: '#F8F8F8', borderColor: 'red' }} className='p-3 mt-4'>
             <div>
                 <div className='row'>
@@ -195,7 +196,7 @@ function ComplexAttribute({ onFormSubmit, selectedApiUrl }) {
                         </div>
                     </div>
                 </div>
-                <div className='row'>
+                {/* <div className='row'>
                     <AddAttributes 
                         isOpen={isRelModalOpen}
                         onClose={closeRelModal}
@@ -230,9 +231,14 @@ function ComplexAttribute({ onFormSubmit, selectedApiUrl }) {
                             )}
                         </div>
                     </div>
-                </div>
+                </div> */}
+                
             </div>
         </div>
+        <div className="item-input-form-bg p-3 mt-4">
+            <h3>Related Attribute Form</h3>
+        </div>
+    </div>
     );
 }
 

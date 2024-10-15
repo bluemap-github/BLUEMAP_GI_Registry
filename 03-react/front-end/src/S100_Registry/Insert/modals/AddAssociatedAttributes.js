@@ -41,34 +41,49 @@ const AddAssociatedAttributes = ({isOpen, onClose, handleRelatedValueList}) => {
             <div>
             <AttSearch onSearch={handleSetData} />
             <div
+                className="mt-2"
                 style={{
                     maxHeight: '300px', // 원하는 높이로 설정
                     overflowY: 'auto',  // 내용이 넘칠 경우 스크롤 가능
-                    padding: '10px',   // 패딩 추가 (선택 사항)
-                    border: '1px solid #ccc',  // 테두리 추가 (선택 사항)
-                    marginBottom: '20px' // 하단 여백 추가 (선택 사항)
+                    padding: '10px',   // 패딩 추가
+                    border: '1px solid #ccc',  // 테두리 추가
+                    borderRadius: '5px',  // 둥근 테두리 추가
+                    marginBottom: '10px' // 하단 여백 추가
                 }}
             >
                 {data.length === 0 ? (
-                    <p>no data</p>
+                    <p style={{ color: '#888' }}>No data available</p>
                 ) : (
                     <>
                         {data.map((item, index) => (
-                            <div key={index}>
+                            <div
+                                key={index}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: '10px',
+                                    borderBottom: '1px solid #ddd',
+                                    marginBottom: '5px',
+                                }}
+                            >
                                 <input
                                     type="checkbox"
                                     value={item._id}
                                     checked={selectedID === item._id}
                                     onChange={(e) => handleChange(e, item)}
+                                    style={{ marginRight: '10px' }}
                                 />
-                                <label>{item.name}</label>
+                                <label style={{ fontSize: '16px', color: '#333' }}>
+                                    {item.name}
+                                </label>
                             </div>
                         ))}
                     </>
                 )}
             </div>
-            <div>
-                <button onClick={handleSubmit}>Submit</button>
+
+            <div className='text-end'>
+                <button className='btn btn-outline-primary' onClick={handleSubmit}>Submit</button>
             </div>
         </div>
       </div>

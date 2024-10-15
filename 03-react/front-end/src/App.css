@@ -314,3 +314,9 @@ hr {
   margin-left: 20px;
   font-size: 15px;
 }
+
+.asso-name:hover{
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}

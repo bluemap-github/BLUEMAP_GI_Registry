@@ -86,9 +86,7 @@ def handle_file_data(request, model_class, file_fields, directory, file_extensio
     for file_field in file_fields:
         uploaded_file = request.FILES.get(file_field)
         if uploaded_file:
-            print(file_field)
             file_path = os.path.join(settings.MEDIA_ROOT, derectory_to_match_file[file_field])
-            print("여기니?")  
             mutable_data[file_field] = file_path
             
         else:  

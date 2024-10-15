@@ -275,6 +275,7 @@ const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemI
     };
 
     const handleInputChange = (associationName, idx, key, value) => {
+        console.log('handleInputChange:', associationName, idx, key, value);
         setInputFields((prevFields) => {
             const updatedFields = [...prevFields[associationName]];
             updatedFields[idx][key] = value;
@@ -364,11 +365,11 @@ const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemI
                                                 handleInputChange(associationName, idx, 'child_iv', child_iv);
                                             }}
                                         >
-                                            <option value="">{field.xml_id}</option>
+                                            <option value="">{field.child_id}, {field.xml_id}</option>
                                             {assoData[associationName] &&
                                                 assoData[associationName].map((entry, idx2) => (
                                                     <option key={idx2} value={`${entry._id.encrypted_data},${entry._id.iv}`}>
-                                                        {entry.name}
+                                                        {entry._id.encrypted_data}, {entry.name}
                                                     </option>
                                                 ))}
                                         </select>

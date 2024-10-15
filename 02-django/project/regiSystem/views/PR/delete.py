@@ -74,7 +74,6 @@ def delete_association(request, item_type):
             for model in association_list[item_type][ids]:
                 association_class = model_with_text[model]  # 연결된 Association 클래스 가져오기
                 result = association_class.delete(I_id, ids)  # 클래스 메서드 호출
-                print(f"Deleting {model}: {result}")
 
     return Response(f"{item_type} deleted")
 
@@ -82,7 +81,6 @@ def delete_association(request, item_type):
 def delete_MI(request, item_type):
     I_id = decrypt_item_id(request)  # 공통 함수 호출
     result = ManagementInfoModel.delete(I_id)  # 모든 엔드포인트에서 적용될 삭제
-    print(f"Deleting Management Info: {result}")
     return Response(f"{item_type} deleted")
 
 # 파일 삭제 함수
@@ -91,7 +89,6 @@ def delete_files(file_paths):
         if file_path and os.path.exists(file_path):
             try:
                 os.remove(file_path)  # 파일 삭제
-                print(f"Deleted file: {file_path}")
             except Exception as e:
                 print(f"Error deleting file {file_path}: {e}")
         else:
@@ -145,11 +142,7 @@ def delete_area_fill(request):
     delete_MI(request, "AreaFill")
 
     main_model = association_list["AreaFill"]["main"]
-    print()
-    print(M_Id, "?????")
-    print()
     document = main_model.get_exixting_by_id(M_Id)
-    print(document)
     preview_image_path = document.get('previewImage')
     engineering_image_path = document.get('engineeringImage')
     item_detail_path = document.get('itemDetail')

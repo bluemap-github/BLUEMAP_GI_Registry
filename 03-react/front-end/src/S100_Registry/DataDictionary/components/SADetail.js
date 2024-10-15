@@ -74,7 +74,10 @@ const SADetail = ({ item }) => {
                                     <button onClick={() => movetoConcept(item)} className='btn btn-outline-primary'>Concept Detail</button>
                                 </td>
                             </tr>
-                            <td style={{height: '20px'}}></td>
+                            <tr>
+                                <td style={{height: '20px'}}></td>
+                            </tr>
+                            
                         </tbody>
                         <thead>
                             <tr>

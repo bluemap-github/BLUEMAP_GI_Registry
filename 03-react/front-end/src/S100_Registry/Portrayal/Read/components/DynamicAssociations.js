@@ -44,7 +44,7 @@ const DynamicAssociations = ({ associationItems, UpdateAssoType , itemID, itemIV
                         associationItems.map((item, index) => (
                             <tr key={index}>
                                 <th className="text-center" style={{ width: '25%' }}>{item.associationName}</th>
-                                <td onClick={() => { moveToAssociatedItem(item) }}>{item.xml_id}</td>
+                                <td className="asso-name" onClick={() => { moveToAssociatedItem(item) }}>{item.xml_id}</td>
                             </tr>
                         ))
                     ) : (

@@ -62,10 +62,8 @@ class RE_RegisterItemModel:
 
         # 시리얼라이저로 데이터 검증
         serializer = serializer_class(data=data)
-        print(serializer, "시리")
         if serializer.is_valid():
             validated_data = serializer.validated_data
-            print("잘 들어갓다면?", validated_data)
             description_data = validated_data.get('description', [])
 
             # description 처리
@@ -121,8 +119,6 @@ class RE_RegisterItemModel:
         
     @classmethod
     def get_list(cls, C_id):
-        print()
-        print("???????????????????????????????????")
         if cls.collection is None:
             raise NotImplementedError("This model does not have a collection assigned.")
 
@@ -239,7 +235,6 @@ class AreaFillModel(RE_RegisterItemModel):
     
     @classmethod
     def get_exixting_by_id(cls, M_id):
-        print(cls.collection[0], M_id, "잇어???")
         if cls.collection is None:
             raise NotImplementedError("This model does not have a collection assigned.")
         return cls.collection.find_one({"_id": ObjectId(M_id)})
@@ -330,7 +325,6 @@ class LineStyleSchemaModel(ItemSchemaModel):
 
     @ classmethod
     def get_exixting_by_id(cls, M_id):
-        print(cls.collection[0], "잇어???")
         if cls.collection is None:
             raise NotImplementedError("This model does not have a collection assigned.")
         return cls.collection.find_one({"_id": ObjectId(M_id)})
@@ -685,8 +679,6 @@ class AlertModel(RE_RegisterItemModel):
     
     @classmethod
     def get_list(cls, C_id):
-        print()
-        print("???????????????????????????????????")
         # MongoDB에서 concept_id로 Alert 항목들 가져오기
         result = cls.collection.find({"concept_id": ObjectId(C_id)})
 

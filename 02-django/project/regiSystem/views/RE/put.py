@@ -56,7 +56,6 @@ def concept_item(request):
     item_type = request.GET.get('item_type')
 
     c_item = S100_Concept_Item.find_one({'_id': ObjectId(I_id)})
-    print(itemTypeSet[item_type])
     serializer = itemTypeSet[item_type](c_item, data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
