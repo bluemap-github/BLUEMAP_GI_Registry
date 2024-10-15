@@ -134,7 +134,6 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
   };
 
   const onImageTypeChange = (key, imageType, key2, imageType2) => {
-    console.log("얌마", key, imageType); // 최종 타입 확인
     const updatedFormData = { ...formData, [key]: imageType , [key2]: imageType2};
     setFormData(updatedFormData);
     onFormSubmit(updatedFormData); // Pass updated data to parent
@@ -172,7 +171,6 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
   return (
     <div className="item-input-form-bg p-3 pb-1 mt-4">
       <h3>{itemType}</h3>
-      <button onClick={viewFormData}>logg</button>
       {fields.length > 0 ? (
         fields.map(({ name, key, isDescription, fileType, inputType }) => (
           <div key={key}>

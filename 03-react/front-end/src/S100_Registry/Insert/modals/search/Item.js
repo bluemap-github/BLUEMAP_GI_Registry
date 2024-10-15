@@ -29,7 +29,6 @@ function Item({ onSearch, componentType}) {
         })
         .then(response => {
             onSearch(response.data.search_result);
-            console.log(response.data);
         })
         .catch(error => {
             console.error('There was an error!', error);

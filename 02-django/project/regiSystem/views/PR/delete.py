@@ -7,7 +7,8 @@ import os
 from regiSystem.models.PR_Class import (
     SymbolModel, SymbolSchemaModel, LineStyleSchemaModel, AreaFillSchemaModel, PixmapSchemaModel, ColourProfileSchemaModel,
     ColourTokenModel, ColourPaletteModel, PaletteItemModel, DisplayModeModel, ViewingGroupModel, ViewingGroupLayerModel,
-    AlertHighlightModel, AlertMessageModel, RE_RegisterItemModel
+    AlertHighlightModel, AlertMessageModel, RE_RegisterItemModel,
+    AreaFillModel, LineStyleModel, PixmapModel
 )
 from regiSystem.models.PR_Association import (
     SymbolAssociation, IconAssociation, ItemSchemaAssociation, ColourTokenAssociation,
@@ -39,9 +40,9 @@ from regiSystem.models.PR_Class import (
 )
 association_list = {
     "Symbol": {"parent_id": ["token", "schema"], "child_id": ["icon", "symbol"], "main": SymbolModel},
-    "LineStyle": {"parent_id": ["token", "schema"], "child_id": ["symbol"], "main": LineStyleSchemaModel},
-    "AreaFill": {"parent_id": ["token", "schema"], "child_id": ["symbol"], "main": AreaFillSchemaModel},
-    "Pixmap": {"parent_id": ["token", "schema"], "child_id": [], "main": PixmapSchemaModel},
+    "LineStyle": {"parent_id": ["token", "schema", "symbol"], "child_id": [], "main": LineStyleModel},
+    "AreaFill": {"parent_id": ["token", "schema", "symbol"], "child_id": [], "main": AreaFillModel},
+    "Pixmap": {"parent_id": ["token", "schema"], "child_id": [], "main": PixmapModel},
     "SymbolSchema": {"parent_id": ["schema"], "child_id": [], "main": SymbolSchemaModel},
     "LineStyleSchema": {"parent_id": ["schema"], "child_id": [], "main": LineStyleSchemaModel},
     "AreaFillSchema": {"parent_id": ["schema"], "child_id": [], "main": AreaFillSchemaModel},
@@ -98,7 +99,6 @@ def delete_files(file_paths):
 
 @api_view(['DELETE'])
 def delete_symbol(request):
-    # 1. 아이템 ID를 decrypt 해서 가져온다
     M_Id = decrypt_item_id(request)
     
     # 2. Management Info 및 Association 삭제
@@ -116,106 +116,263 @@ def delete_symbol(request):
     # 4. 메인 아이템 삭제
     main_model.delete(M_Id)
 
-    return Response(f"Symbol with ID {M_Id} deleted")
+    return Response(f"Symbol with ID {M_Id} deleted", status=200)
 
 
 @api_view(['DELETE'])
 def delete_line_style(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "LineStyle")
-    return delete_MI(request, "LineStyle")
+    delete_MI(request, "LineStyle")
+    
+    delete_association(request, "LineStyle")
+    delete_MI(request, "LineStyle")
+
+    main_model = association_list["LineStyle"]["main"]
+    document = main_model.get_exixting_by_id(M_Id)
+    preview_image_path = document.get('previewImage')
+    engineering_image_path = document.get('engineeringImage')
+    item_detail_path = document.get('itemDetail')
+    delete_files([preview_image_path, engineering_image_path, item_detail_path])
+
+    main_model.delete(M_Id)
+    return Response(f"LineStyle with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_area_fill(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "AreaFill")
-    return delete_MI(request, "AreaFill")
+    delete_MI(request, "AreaFill")
+
+    main_model = association_list["AreaFill"]["main"]
+    print()
+    print(M_Id, "?????")
+    print()
+    document = main_model.get_exixting_by_id(M_Id)
+    print(document)
+    preview_image_path = document.get('previewImage')
+    engineering_image_path = document.get('engineeringImage')
+    item_detail_path = document.get('itemDetail')
+    delete_files([preview_image_path, engineering_image_path, item_detail_path])
+
+    main_model.delete(M_Id)
+    return Response(f"AreaFill with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_pixmap(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "Pixmap")
-    return delete_MI(request, "Pixmap")
+    delete_MI(request, "Pixmap")
+
+    main_model = association_list["Pixmap"]["main"]
+    document = main_model.get_exixting_by_id(M_Id)
+    preview_image_path = document.get('previewImage')
+    engineering_image_path = document.get('engineeringImage')
+    item_detail_path = document.get('itemDetail')
+    delete_files([preview_image_path, engineering_image_path, item_detail_path])
+
+    main_model.delete(M_Id)
+    return Response(f"Pixmap with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_symbol_schema(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "SymbolSchema")
-    return delete_MI(request, "SymbolSchema")
+    delete_MI(request, "SymbolSchema")
+
+    main_model = association_list["SymbolSchema"]["main"]
+    document = main_model.get_exixting_by_id(M_Id)
+    xml_schema_path = document.get('xmlSchema')
+    delete_files([xml_schema_path])
+
+    main_model.delete(M_Id)
+    return Response(f"SymbolSchema with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_line_style_schema(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "LineStyleSchema")
-    return delete_MI(request, "LineStyleSchema")
+    delete_MI(request, "LineStyleSchema")
+
+    main_model = association_list["LineStyleSchema"]["main"]
+    document = main_model.get_exixting_by_id(M_Id)
+    xml_schema_path = document.get('xmlSchema')
+    delete_files([xml_schema_path])
+
+    main_model.delete(M_Id)
+    return Response(f"LineStyleSchema with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_area_fill_schema(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "AreaFillSchema")
-    return delete_MI(request, "AreaFillSchema")
+    delete_MI(request, "AreaFillSchema")
+
+    main_model = association_list["AreaFillSchema"]["main"]
+    document = main_model.get_exixting_by_id(M_Id)
+    xml_schema_path = document.get('xmlSchema')
+    delete_files([xml_schema_path])
+
+    main_model.delete(M_Id)
+    return Response(f"AreaFillSchema with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_colour_profile_schema(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "ColourProfileSchema")
-    return delete_MI(request, "ColourProfileSchema")
+    delete_MI(request, "ColourProfileSchema")
+
+    main_model = association_list["ColourProfileSchema"]["main"]
+    document = main_model.get_exixting_by_id(M_Id)
+    xml_schema_path = document.get('xmlSchema')
+    delete_files([xml_schema_path])
+
+    main_model.delete(M_Id)
+    return Response(f"ColourProfileSchema with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_pixmap_schema(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "PixmapSchema")
-    return delete_MI(request, "PixmapSchema")
+    delete_MI(request, "PixmapSchema")
+
+    main_model = association_list["PixmapSchema"]["main"]
+    document = main_model.get_exixting_by_id(M_Id)
+    xml_schema_path = document.get('xmlSchema')
+    delete_files([xml_schema_path])
+
+    main_model.delete(M_Id)
+    return Response(f"PixmapSchema with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_colour_token(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "ColourToken")
-    return delete_MI(request, "ColourToken")
+    delete_MI(request, "ColourToken")
+
+    main_model = association_list["ColourToken"]["main"]
+
+    main_model.delete(M_Id)
+    return Response(f"ColourToken with ID {M_Id} deleted", status=200)
+
 
 @api_view(['DELETE'])
 def delete_colour_palette(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "ColourPalette")
-    return delete_MI(request, "ColourPalette")
+    delete_MI(request, "ColourPalette")
+
+    main_model = association_list["ColourPalette"]["main"]
+
+    main_model.delete(M_Id)
+    return Response(f"ColourPalette with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_palette_item(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "PaletteItem")
-    return delete_MI(request, "PaletteItem")
+    delete_MI(request, "PaletteItem")
+
+    main_model = association_list["PaletteItem"]["main"]
+
+    main_model.delete(M_Id)
+    return Response(f"PaletteItem with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_display_mode(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "DisplayMode")
-    return delete_MI(request, "DisplayMode")
+    delete_MI(request, "DisplayMode")
+
+    main_model = association_list["DisplayMode"]["main"]
+
+    main_model.delete(M_Id)
+    return Response(f"DisplayMode with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_viewing_group(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "ViewingGroup")
-    return delete_MI(request, "ViewingGroup")
+    delete_MI(request, "ViewingGroup")
+
+    main_model = association_list["ViewingGroup"]["main"]
+
+    main_model.delete(M_Id)
+    return Response(f"ViewingGroup with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_viewing_group_layer(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "ViewingGroupLayer")
-    return delete_MI(request, "ViewingGroupLayer")
+    delete_MI(request, "ViewingGroupLayer")
+
+    main_model = association_list["ViewingGroupLayer"]["main"]
+
+    main_model.delete(M_Id)
+    return Response(f"ViewingGroupLayer with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_alert_highlight(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "AlertHighlight")
-    return delete_MI(request, "AlertHighlight")
+    delete_MI(request, "AlertHighlight")
+
+    main_model = association_list["AlertHighlight"]["main"]
+
+    main_model.delete(M_Id)
+    return Response(f"AlertHighlight with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_alert_message(request):
+    M_Id = decrypt_item_id(request)
     delete_association(request, "AlertMessage")
-    return delete_MI(request, "AlertMessage")
+    delete_MI(request, "AlertMessage")
+
+    main_model = association_list["AlertMessage"]["main"]
+
+    main_model.delete(M_Id)
+    return Response(f"AlertMessage with ID {M_Id} deleted", status=200)
 
 # 기타 삭제 엔드포인트 (Management Info 삭제만 적용)
 @api_view(['DELETE'])
 def delete_display_plane(request):
-    return delete_MI(request, "DisplayPlane")
+    M_Id = decrypt_item_id(request)
+    delete_MI(request, "DisplayPlane")
+    main_model = RE_RegisterItemModel
+    main_model.delete(M_Id)
+    return Response(f"DisplayPlane with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_font(request):
-    return delete_MI(request, "Font")
+    M_Id = decrypt_item_id(request)
+    delete_MI(request, "Font")
+    main_model = RE_RegisterItemModel
+    document = main_model.get_exixting_by_id(M_Id)
+    font_file_path = document.get('fontFile')
+    delete_files([font_file_path])
+    main_model.delete(M_Id)
+    return Response(f"Font with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_context_parameter(request):
-    return delete_MI(request, "ContextParameter")
+    M_Id = decrypt_item_id(request)
+    delete_MI(request, "ContextParameter")
+    main_model = RE_RegisterItemModel
+    main_model.delete(M_Id)
+    return Response(f"ContextParameter with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_drawing_priority(request):
-    return delete_MI(request, "DrawingPriority")
+    M_Id = decrypt_item_id(request)
+    delete_MI(request, "DrawingPriority")
+    main_model = RE_RegisterItemModel
+    main_model.delete(M_Id)
+    return Response(f"DrawingPriority with ID {M_Id} deleted", status=200)
 
 @api_view(['DELETE'])
 def delete_alert(request):
-    return delete_MI(request, "Alert")
+    M_Id = decrypt_item_id(request)
+    delete_MI(request, "Alert")
+    main_model = RE_RegisterItemModel
+    main_model.delete(M_Id)
+    return Response(f"Alert with ID {M_Id} deleted", status=200)

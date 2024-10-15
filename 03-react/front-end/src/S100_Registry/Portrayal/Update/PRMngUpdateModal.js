@@ -36,7 +36,6 @@ const PRMngUpdateModal = ({ IsOpened, onClose, data }) => {
         try {
             // _id는 파라미터로 추출
             const { _id, ...bodyData } = formData;
-            console.log('bodyData:', bodyData);
             // axios 요청
             await axios.put(PUT_MANAGEMENT_INFO, bodyData, {
                 params: {

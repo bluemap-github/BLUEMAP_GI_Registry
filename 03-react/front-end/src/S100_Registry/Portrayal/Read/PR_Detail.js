@@ -165,7 +165,7 @@ const PR_Detail = () => {
   const moveToList = () => {
     navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
   };
-
+  console.log(item_id, item_iv);
   useEffect(() => {
     const apiEndpoint = schemaApiTypes[item_type]; // Select the API based on item_type
     if (!apiEndpoint) {
@@ -215,7 +215,6 @@ const PR_Detail = () => {
     // Check if the item_type has associations in the list
     const fetchAssociations = () => {
       const associations = associationList[item_type];
-      console.log(associations);
       if (!associations) {
         return Promise.resolve([]); // Return an empty array if no associations
       }
@@ -271,10 +270,9 @@ const PR_Detail = () => {
   // 스키마 및 비주얼 아이템 타입에 따라 렌더링
   return (
     <div>
-      <button onClick={assoLogs}>assoLog</button>
       {data ? <PortrayalDetails items={data} itemType={item_type} /> : <div>Loading...</div>}
       {associationKeys.includes(item_type) ? (
-          <DynamicAssociations associationItems={associations} />
+          <DynamicAssociations associationItems={associations} UpdateAssoType={item_type} itemID={item_id} itemIV={item_iv}/>
         ) : null}
       {data ? <ConceptInformation items={data} /> : <div>Loading...</div>}
       {managementInfo ? <ManagementInformation 

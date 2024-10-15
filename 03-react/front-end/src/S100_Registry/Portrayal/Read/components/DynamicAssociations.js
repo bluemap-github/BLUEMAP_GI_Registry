@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { ItemContext } from '../../../../context/ItemContext';
 import PRAssoUpdateModal from '../../Update/PRAssoUpdateModal';
 
-const DynamicAssociations = ({ associationItems }) => {
+const DynamicAssociations = ({ associationItems, UpdateAssoType , itemID, itemIV}) => {
     
     const role = Cookies.get('role');  // role 가져오기
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const DynamicAssociations = ({ associationItems }) => {
     };
     return (
         <div style={{ backgroundColor: '#F8F8F8' }} className="p-3 mb-3">
-            <PRAssoUpdateModal IsOpened={IsOpened} onClose={onClose}/>
+            <PRAssoUpdateModal IsOpened={IsOpened} onClose={onClose} propsData={associationItems} UpdateAssoType={UpdateAssoType}  itemID={itemID} itemIV={itemIV}/>
             <div className="mt-3 mb-3 card p-3" >
                 <table className="table table-sm">
                     <thead>

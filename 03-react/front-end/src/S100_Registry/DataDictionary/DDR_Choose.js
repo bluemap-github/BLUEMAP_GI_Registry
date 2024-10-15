@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const buttonTypes = [
     { type: 'EnumeratedValue', label: 'Enumerated Values' },
@@ -9,17 +11,31 @@ const buttonTypes = [
 ];
 
 const DDRChoose = ({ clickHandler, viewType }) => {
+    // 현재 viewType에 해당하는 label 찾기
+    const navigate = useNavigate();
+    const selectedLabel = buttonTypes.find((btn) => btn.type === viewType)?.label || '';
+    const handleMovePage = () => {
+        Cookies.set('createViewType', viewType);
+        navigate(`/${Cookies.get('REGISTRY_URI')}/create`);
+    };
     return (
         <>
-            {buttonTypes.map((btn) => (
-                <button
-                    key={btn.type}
-                    className={`btn btn-outline-primary ${viewType === btn.type ? 'active' : ''}`}
-                    onClick={() => clickHandler(btn.type)}
-                >
-                    {btn.label}
-                </button>
-            ))}
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div className="btn-group btn-group-toggle">
+                    {buttonTypes.map((btn) => (
+                        <button
+                            key={btn.type}
+                            className={`btn btn-outline-secondary ${viewType === btn.type ? 'active' : ''}`}
+                            onClick={() => clickHandler(btn.type)}
+                        >
+                            {btn.label}
+                        </button>
+                    ))}
+                </div>
+                <div>
+                    <button className='btn btn-outline-primary' onClick={handleMovePage}> + Create {selectedLabel}</button>
+                </div>
+            </div>
         </>
     );
 };

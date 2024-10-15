@@ -142,7 +142,6 @@ const PortrayalDetails = ({ items, itemType }) => {
             });
 
             if (res.status === 200) {
-                console.log('res:', res);
                 alert('Item deleted successfully');
                 moveToList();  // 삭제 후 목록으로 이동
             }

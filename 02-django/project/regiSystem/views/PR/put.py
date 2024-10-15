@@ -250,3 +250,70 @@ def update_pixmap(request):
     return handle_file_update(request, PixmapModel, file_fields, 'pixmap')
 
 
+from regiSystem.models.PR_Association import (
+    SymbolAssociation, IconAssociation, ItemSchemaAssociation, ColourTokenAssociation,
+    PaletteAssociation, DisplayModeAssociation, ViewingGroupAssociation,
+    HighlightAssociation, MessageAssociation, PR_Association
+)
+from bson.objectid import ObjectId
+
+# 공통 로직 함수
+def update_association(request, AssociationClass):
+    item_iv = request.GET.get('item_iv')
+    item_id = decrypt(request.GET.get('item_id'), item_iv)
+
+    associations = request.data.get('associations')
+
+    # 먼저 모든 기존의 어소시에이션 삭제
+    AssociationClass.delete(item_id, "parent_id")
+
+    # 새로운 어소시에이션 삽입
+    for association in associations:
+        child_id = association.get('child_id')
+        child_iv = association.get('child_iv')
+        if child_id and child_iv:
+            child_id = decrypt(child_id, child_iv)
+            AssociationClass.insert(ObjectId(item_id), ObjectId(child_id))
+
+    return Response({"status": "success"}, status=HTTP_201_CREATED)
+
+# 각 어소시에이션 타입별로 공통 로직을 호출
+@api_view(['PUT'])
+def update_colour_token_association(request):
+    return update_association(request, ColourTokenAssociation)
+
+@api_view(['PUT'])
+def update_symbol_association(request):
+    return update_association(request, SymbolAssociation)
+
+@api_view(['PUT'])
+def update_icon_association(request):
+    return update_association(request, IconAssociation)
+
+@api_view(['PUT'])
+def update_viewing_group_association(request):
+    return update_association(request, ViewingGroupAssociation)
+
+@api_view(['PUT'])
+def update_item_schema_association(request):
+    return update_association(request, ItemSchemaAssociation)
+
+@api_view(['PUT'])
+def update_palette_association(request):
+    return update_association(request, PaletteAssociation)
+
+@api_view(['PUT'])
+def update_display_mode_association(request):
+    return update_association(request, DisplayModeAssociation)
+
+@api_view(['PUT'])
+def update_message_association(request):
+    return update_association(request, MessageAssociation)
+
+@api_view(['PUT'])
+def update_highlight_association(request):
+    return update_association(request, HighlightAssociation)
+
+@api_view(['PUT'])
+def update_value_association(request):
+    return update_association(request, PR_Association)

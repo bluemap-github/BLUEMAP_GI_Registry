@@ -51,7 +51,6 @@ const ColourToken = ({ data, onClose }) => {
         if (confirmed) {
             try {
                 const { _id, ...bodyData } = formData;
-                console.log('Sending PUT request with:', bodyData);
     
                 // PUT 요청 보내기
                 const response = await axios.put(PUT_COLOUR_TOKEN, bodyData, {

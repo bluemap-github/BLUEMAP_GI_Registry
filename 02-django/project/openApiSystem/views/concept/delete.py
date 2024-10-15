@@ -42,7 +42,8 @@ def register(request, C_id):
 )
 @api_view(['DELETE'])
 def item(request):
-    I_id = request.data.get('item_id')
+    I_id = request.GET.get('item_id')
+    print(I_id, "왜?")
 
     if request.method == 'DELETE':
         try:
@@ -65,7 +66,7 @@ def item(request):
 )
 @api_view(['DELETE'])
 def management_info(request):
-    M_id = request.data.get('item_id')
+    M_id = request.GET.get('item_id')
     if request.method == 'DELETE':
         try:
             result = S100_Concept_ManagementInfo.delete_one({'_id': ObjectId(M_id)})
@@ -82,7 +83,7 @@ def management_info(request):
 )
 @api_view(['DELETE'])
 def reference_source(request):
-    RS_id = request.data.get('item_id')
+    RS_id = request.GET.get('item_id')
     if request.method == 'DELETE':
         try:
             result = S100_Concept_ReferenceSource.delete_one({'_id': ObjectId(RS_id)})
@@ -99,7 +100,7 @@ def reference_source(request):
 )
 @api_view(['DELETE'])
 def reference(request):
-    R_id = request.data.get('item_id')
+    R_id = request.GET.get('item_id')
     if request.method == 'DELETE':
         try:
             result = S100_Concept_Reference.delete_one({'_id': ObjectId(R_id)})

@@ -19,6 +19,7 @@ import { performValidation } from './validation/ValidateItems.js';
 import AttributeConstraints from './components/AttributeConstraints.js';
 
 function Item() {
+    const createViewType = Cookies.get('createViewType');
     const [item, setItem] = useState(null);
     const [managementInfos, setManagementInfos] = useState([]); // 관리 정보 입력 창 배열
     const [referenceSource, setReferenceSource] = useState(null);
@@ -31,6 +32,9 @@ function Item() {
     const regi_uri = Cookies.get('REGISTRY_URI');
 
     useEffect(() => {
+        if (createViewType) {
+            setSelectedApiUrl(createViewType)
+        }
         const role = Cookies.get('role');
         // if (!role || role === 'guest') {
         //     alert('권한이 없습니다. 접근이 제한됩니다.');
@@ -113,7 +117,6 @@ function Item() {
             navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);
         } catch (error) {
             console.error('Error posting data:', error);
-            console.log(item);
         }
     };
 

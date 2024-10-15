@@ -90,9 +90,9 @@ function Register() {
 
   return (
     <div>
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between',width: '100%'}}> 
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <div className='input-group' style={{width: "12%"}}>
+          <div className='input-group' style={{width: "25%"}}>
             <label className='input-group-text'>Status</label>
             <select className='form-select' value={status} onChange={(e) => setStatus(e.target.value)}>
               <option value="">All</option>
@@ -104,7 +104,7 @@ function Register() {
               <option value="clarified">Clarified</option>
             </select>
           </div>
-          <div className='input-group' style={{width: "15%"}}>
+          <div className='input-group' style={{width: "30%"}}>
             <label className='input-group-text'>Category</label>
             <select className='form-select' value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="">Choose</option>
@@ -113,7 +113,7 @@ function Register() {
               <option value="definition">Definition</option>
             </select>
           </div>
-          <div className="input-group" style={{width: "20%"}}>
+          <div className="input-group" style={{width: "30%"}}>
               <input
                 className="form-control"
                 type="text"
@@ -122,9 +122,11 @@ function Register() {
                 placeholder="Search..."
               />
               <button className="btn btn-outline-secondary" onClick={handleSearch}>Search</button>
-            </div>
           </div>
-          
+        </div>
+        <div>
+          <button className="btn btn-outline-primary" onClick={() => navigate(`/${Cookies.get('REGISTRY_URI')}/create`)}>+ Create Concept data</button>
+        </div>
       </div>
       <table className="table table-hover table-bordered" style={{ tableLayout: 'fixed', marginTop: '20px' }}>
         <thead>

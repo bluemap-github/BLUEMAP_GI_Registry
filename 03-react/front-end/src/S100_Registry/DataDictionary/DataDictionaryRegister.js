@@ -19,7 +19,7 @@ function DataDictionaryRegister() {
 
   return (
     <div>
-      <div className="btn-group btn-group-toggle">
+      <div>
         <DDR_Choose clickHandler={clickHandler} viewType={viewType} />
       </div>
       <div>

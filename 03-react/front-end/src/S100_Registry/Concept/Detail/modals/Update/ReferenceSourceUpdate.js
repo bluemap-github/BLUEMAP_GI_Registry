@@ -28,7 +28,6 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
                     item_id: RSId,
                     item_iv: item_iv
                 }});
-            console.log('Item data successfully put:', RSResponse.data);
             onClose();
             window.location.reload();
         } catch (error) {

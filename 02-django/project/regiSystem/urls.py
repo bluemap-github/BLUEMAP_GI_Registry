@@ -250,4 +250,16 @@ urlpatterns = [
     path('portrayal_item/symbol_association_list/get/', PR.get.symbol_association_list),
     path('portrayal_item/item_schema_association_list/get/', PR.get.item_schema_association_list),
 
+
+    path('portrayal_item/symbol_association_put/', PR.put.update_symbol_association),
+    path('portrayal_item/icon_association_put/', PR.put.update_icon_association),
+    path('portrayal_item/viewing_group_association_put/', PR.put.update_viewing_group_association),
+    path('portrayal_item/item_schema_association_put/', PR.put.update_item_schema_association),
+    path('portrayal_item/colour_token_association_put/', PR.put.update_colour_token_association),
+    path('portrayal_item/palette_association_put/', PR.put.update_palette_association),
+    path('portrayal_item/display_mode_association_put/', PR.put.update_display_mode_association),
+    path('portrayal_item/message_association_put/', PR.put.update_message_association),
+    path('portrayal_item/highlight_association_put/', PR.put.update_highlight_association),
+    path('portrayal_item/value_association_put/', PR.put.update_value_association),
+
 ]

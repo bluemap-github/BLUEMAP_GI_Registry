@@ -121,6 +121,8 @@ class RE_RegisterItemModel:
         
     @classmethod
     def get_list(cls, C_id):
+        print()
+        print("???????????????????????????????????")
         if cls.collection is None:
             raise NotImplementedError("This model does not have a collection assigned.")
 
@@ -237,6 +239,7 @@ class AreaFillModel(RE_RegisterItemModel):
     
     @classmethod
     def get_exixting_by_id(cls, M_id):
+        print(cls.collection[0], M_id, "잇어???")
         if cls.collection is None:
             raise NotImplementedError("This model does not have a collection assigned.")
         return cls.collection.find_one({"_id": ObjectId(M_id)})
@@ -682,6 +685,8 @@ class AlertModel(RE_RegisterItemModel):
     
     @classmethod
     def get_list(cls, C_id):
+        print()
+        print("???????????????????????????????????")
         # MongoDB에서 concept_id로 Alert 항목들 가져오기
         result = cls.collection.find({"concept_id": ObjectId(C_id)})
 

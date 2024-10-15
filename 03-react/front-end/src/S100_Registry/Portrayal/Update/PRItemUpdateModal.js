@@ -42,7 +42,6 @@ const PRItemUpdateModal = ({IsOpened, onClose, data}) => {
         'AlertMessage': <AlertMessage data={data} onClose={onClose}/>, 
     };
 
-    console.log(itemSpecificFields[data.itemType]);
 
     if (!IsOpened) {
         return null;

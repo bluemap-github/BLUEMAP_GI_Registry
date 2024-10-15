@@ -17,7 +17,6 @@ function AttSearch({ onSearch }) {
             }
         })
         .then(response => {
-            console.log(response.data); 
             onSearch(response.data.search_result);
         })
         .catch(error => {

@@ -35,7 +35,9 @@ function ReferenceDetail({ itemList, handleUpdateButtonClick, handleFollowIdx, h
     };
 
     const toggleOpen = () => setToggleOpened(!toggleOpened);
-
+    if (!itemList || !itemList.references) {
+        return <div>No references available</div>;
+    }
     return (
         <div className='mt-1 mb-3 p-3' style={{ backgroundColor: '#F8F8F8' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

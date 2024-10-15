@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ChooseType = ({ initial,  getSelestedApi }) => {
+const ChooseType = ({ initial, getSelestedApi }) => {
     
     const handleChange = (event) => {
         getSelestedApi(event.target.value);

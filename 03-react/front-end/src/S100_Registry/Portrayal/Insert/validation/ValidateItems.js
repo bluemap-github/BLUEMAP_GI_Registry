@@ -54,7 +54,6 @@ const getValidationItem = (formType) => {
 };
 
 const performValidation = (formData, formType) => {
-    console.log('formData', formData);
     if (!formData) {
         alert(`[${formType}] The form data is missing or null.`);
         return false;

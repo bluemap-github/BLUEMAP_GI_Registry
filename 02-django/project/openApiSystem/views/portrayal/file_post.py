@@ -14,7 +14,7 @@ import os
 from django.conf import settings
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from openApiSystem.views.checkAccess import check_key_validation
+from openApiSystem.utils import check_key_validation
 
 # Visual Item Models
 from openApiSystem.models.registry.item import RE_Register

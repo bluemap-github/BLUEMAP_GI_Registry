@@ -21,7 +21,6 @@ const InsertPortrayalItem = () => {
   useEffect(() => {
     
     if (createViewType) { // createViewType이 존재하면 처리
-      console.log("createViewType detected:", createViewType);
       
       // API와 관련된 세팅을 업데이트
       getSelestedApi(createViewType, setSelectedApiUrl, setApiType, setPostType);
@@ -29,8 +28,6 @@ const InsertPortrayalItem = () => {
       
       // 쿠키 삭제
       Cookies.remove('createViewType');
-    } else {
-      console.log("createViewType not set");
     }
   }, [createViewType, navigate]);
 
@@ -62,7 +59,6 @@ const InsertPortrayalItem = () => {
   // Handler for DynamicItemForm submission
   const handleDynamicFormSubmit = (formData) => { 
     setDynamicFormData(formData); 
-    console.log("Form Data Submitted: ", formData);
   };
 
   // Handler for ItemInput submission
@@ -161,7 +157,6 @@ const InsertPortrayalItem = () => {
   };
 
   const handleSubmitItem = async (combinedData) => {
-      console.log('Combined Data:', combinedData);
 
       let dataToSend;
       let headers = {};
@@ -195,7 +190,6 @@ const InsertPortrayalItem = () => {
 
       try {
           // 첫 번째 POST 요청 (아이템 데이터 전송)
-          console.log('Sending POST request to:', combinedData);
           const itemResponse = await axios.post(
               selectedApiUrl,
               dataToSend,  // postType에 따라 formData 또는 json으로 전송
@@ -246,7 +240,6 @@ const InsertPortrayalItem = () => {
       } catch (error) {
           // 에러 핸들링
           console.error('Error posting data:', error);
-          console.log('Data sent:', dataToSend); // FormData 또는 JSON 확인용
       }
   };
 
@@ -258,53 +251,59 @@ const InsertPortrayalItem = () => {
   const MILog = () => { console.log(managementInfos); }
   const assAPILog = () => { console.log(associationAndAPI); }
   
-  const handleAssociation = (updatedData) => { 
-      const parsedData = Object.keys(updatedData).reduce((acc, key) => {
-          try {
-              acc[key] = JSON.parse(updatedData[key]); // JSON 형태면 파싱
-          } catch (e) {
-              acc[key] = updatedData[key]; // JSON이 아니면 그대로 유지
-          }
-          return acc;
-      }, {});
-  
-      setAssociationAndAPI(prevState => {
-          // 업데이트된 배열을 처리하기 위해 복사
-          let updatedState = [...prevState];
-  
-          Object.keys(parsedData).forEach(key => {
-              if (associationPostAPI[key]) {  
-                  const existingIndex = updatedState.findIndex(item => item.api === associationPostAPI[key]);
-  
-                  if (existingIndex !== -1) {
-                      // 이미 존재하면 해당 항목을 업데이트
-                      updatedState[existingIndex] = {
-                          api: associationPostAPI[key], 
-                          data: { "child_id": parsedData[key] }
-                      };
-                  } else {
-                      // 존재하지 않으면 새로운 항목을 추가
-                      updatedState.push({
-                          api: associationPostAPI[key], 
-                          data: { "child_id": parsedData[key] }
-                      });
-                  }
-              } else {
-                  console.log(`No API found for ${key}`);
-              }
-          });
-  
-          return updatedState; // 최종 업데이트된 배열 반환
-      });
-  };
+  const handleAssociation = (updatedData) => {
+    const parsedData = Object.keys(updatedData).reduce((acc, key) => {
+        try {
+            acc[key] = JSON.parse(updatedData[key]); // JSON 형태면 파싱
+        } catch (e) {
+            acc[key] = updatedData[key]; // JSON이 아니면 그대로 유지
+        }
+        return acc;
+    }, {});
+
+    setAssociationAndAPI(prevState => {
+        let updatedState = [...prevState];
+
+        Object.keys(parsedData).forEach(key => {
+            if (associationPostAPI[key]) {
+                const childIds = Array.isArray(parsedData[key])
+                    ? parsedData[key]
+                          .filter(entry => entry.encrypted_data && entry.iv)  // 유효한 데이터만 필터링
+                          .map(entry => ({ encrypted_data: entry.encrypted_data, iv: entry.iv }))
+                    : [{ encrypted_data: parsedData[key].encrypted_data, iv: parsedData[key].iv }];
+
+                // 중복된 child_id를 제거하는 로직
+                childIds.forEach(child => {
+                    const alreadyExists = updatedState.some(stateItem => 
+                        stateItem.api === associationPostAPI[key] && 
+                        stateItem.data.child_id.some(existingChild => 
+                            existingChild.encrypted_data === child.encrypted_data &&
+                            existingChild.iv === child.iv
+                        )
+                    );
+                    
+                    if (!alreadyExists) {
+                        updatedState.push({
+                            api: associationPostAPI[key], 
+                            data: { "child_id": [child] }  // 각 child_id에 대해 별도로 POST 요청 생성
+                        });
+                    }
+                });
+            } else {
+                console.log(`No API found for ${key}`);
+            }
+        });
+
+        return updatedState; // 최종 업데이트된 배열 반환
+    });
+};
+
+
+
+
   
   return (
     <>
-      <button onClick={log}>log</button>
-      <button onClick={apiLog}>api</button>
-      <button onClick={MILog}>MI</button>
-      <button onClick={dynamicLog}>dynamic</button>
-      <button onClick={assAPILog}>association</button>
       <div>
         <ChooseType initial={apiType} getSelestedApi={(type) => getSelestedApi(type, setSelectedApiUrl, setApiType, setPostType)} /> 
       </div>

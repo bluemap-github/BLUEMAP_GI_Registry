@@ -31,7 +31,6 @@ function ManagementInfoAdd({onClose}) {
       };
     const handleSubmitItem = async () => {
         try {
-            console.log('item_id:', managementInfo);
             await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
                 params: {
                     "item_id": item_id,

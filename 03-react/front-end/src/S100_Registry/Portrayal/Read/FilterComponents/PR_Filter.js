@@ -54,7 +54,7 @@ function PR_Filter({ clickHandler, viewType }) {
                 </select>
             </div>
             <div>
-                <button type="button" className="btn btn-outline-primary btn-sm" onClick={handleCreateClick}>
+                <button type="button" className="btn btn-outline-primary" onClick={handleCreateClick}>
                     + Create {viewType}
                 </button>
             </div>

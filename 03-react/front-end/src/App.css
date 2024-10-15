@@ -115,12 +115,6 @@ hr {
   width: 200px;
   min-width: 200px;
 }
-.sidebar-wide {
-  width: 200px;
-  min-width: 200px;
-  height: 100%;
-  border-right: 1px solid #cccccc8c;
-}
 .overview-line {
   display: flex;
 }
@@ -130,20 +124,10 @@ hr {
   margin-left: 250px; /* Navbar의 너비만큼 왼쪽 여백 추가 */
   padding: 20px;
 }
-.regi-menu {
-  height: 38px;
-  display: flex;
-  align-items: center; 
-  padding: 5px;
-}
 .active {
   background-color: #F7F7F7;
 }
 
-.regi-menu:hover{
-  background-color: #F7F7F7;
-  cursor: pointer;
-}
 
 .button-container {
   display: flex;
@@ -259,4 +243,74 @@ hr {
 .item-input-form-bg {
   background-color: #F8F8F8;
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+/* Navbar 스타일링 */
+.sidebar-wide {
+  min-width: 250px;
+  background-color: #f4f4f4;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.034);
+}
+
+.regi-menu {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  /* padding: 10px; */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  /* border-radius: 5px; */
+}
+
+.regi-menu.active {
+  background-color: #80bdff60;
+  color: white;
+}
+
+.regi-menu svg {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.regi-menu:hover {
+  background-color: #80bdff60;
+  color: white;
+}
+
+.regi-menu:hover svg {
+  transform: scale(1.1);
+}
+
+.toggle-arrow {
+  margin-left: auto;
+}
+
+.toggle-arrow svg {
+  width: 15px;
+  height: 15px;
+}
+
+.create-menu-item {
+  /* margin-left: 20px; */
+  background-color: #e9ecef;
+  padding: 8px;
+  /* border-radius: 5px; */
+}
+
+.create-menu-item:hover {
+  background-color: #80bdff60;
+  color: white;
+}
+
+.create-menu-item svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+.regi-menu-item-inner {
+  margin-left: 20px;
+  font-size: 15px;
 }

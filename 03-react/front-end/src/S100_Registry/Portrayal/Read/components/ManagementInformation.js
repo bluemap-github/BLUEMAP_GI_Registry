@@ -31,7 +31,6 @@ const ToggleButtonIcon = ({ isOpened }) => (
 );
 
 const ManagementInformation = ({ items, item_id, item_iv }) => {
-    console.log('items:', items);
     const [toggleOpened, setToggleOpened] = useState(true);
     const [updateItem, setUpdateItem] = useState({});
     const [isOpened, setIsOpened] = useState(false);
@@ -44,16 +43,11 @@ const ManagementInformation = ({ items, item_id, item_iv }) => {
     };
 
     const handleDeleteClick = async (item) => {
-        // Confirm deletion with an alert
         const confirmed = window.confirm("Are you sure you want to delete this item?");
         
         if (confirmed) {
             try {
-                // Log to see what you're sending
-                console.log('item:', item._id);
-                console.log('Encrypted data:', item._id.encrypted_data);
     
-                // Make the DELETE request with the body data
                 await axios({
                     method: 'delete',
                     url: DEL_MANAGEMENT_INFO,
@@ -64,7 +58,7 @@ const ManagementInformation = ({ items, item_id, item_iv }) => {
                 });
     
                 alert('Item deleted successfully');
-                window.location.reload(); // Refresh the page after deletion
+                window.location.reload();
             } catch (error) {
                 console.error('Deletion failed:', error);
                 alert('Failed to delete the item');
@@ -73,8 +67,6 @@ const ManagementInformation = ({ items, item_id, item_iv }) => {
             console.log("Deletion canceled");
         }
     };
-    
-    
 
     const onClose = () => {
         setIsOpened(false);
@@ -86,15 +78,12 @@ const ManagementInformation = ({ items, item_id, item_iv }) => {
     const toggleOpen = () => setToggleOpened(!toggleOpened);
 
     const handleAddClick = () => {
-        // 추가 로직은 여기에 넣기
-        console.log('Add button clicked');
         setIsAddOpened(true);
     };
 
-    if (!items || items.length === 0) {
-        return <div>Loading...</div>;
+    if (!tableFields || tableFields.length === 0) {
+        return <div>No fields to display.</div>;
     }
-
     return (
         <>
             <PRMngUpdateModal IsOpened={isOpened} onClose={onClose} data={updateItem} />
@@ -123,12 +112,20 @@ const ManagementInformation = ({ items, item_id, item_iv }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {tableFields.map(({ name, key }) => (
-                                    <tr key={key}>
-                                        <th className="text-center" style={{ width: '25%' }}>{name}</th>
-                                        <td>{item[key] || "--"}</td>
+                                {!items || items.length === 0 || items === null ? (
+                                    <tr>
+                                        <td colSpan={tableFields.length} className="text-center">No management information available.</td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    <>
+                                        {tableFields.map(({ name, key }) => (
+                                            <tr key={key}>
+                                                <th className="text-center" style={{ width: '25%' }}>{name}</th>
+                                                <td>{item[key] || "--"}</td>
+                                            </tr>
+                                        ))}
+                                    </>
+                                )}
                             </tbody>
                         </table>
                         {role === 'owner' && (

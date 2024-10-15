@@ -33,7 +33,6 @@ function AddAttributes({ isOpen, onClose, handleRelatedEnumList, relatedEnumList
         setItemTypes(e.target.value);
     }
     const runFilter = () => {
-        console.log(itemTypes, searchTerm);
         const filtered = searchResults.filter((item) => {
             if (itemTypes === 'All') {
                 return item.name.includes(searchTerm);

@@ -22,7 +22,7 @@ class PR_Association:
         print(Item_id, attribute)
         if Item_id is None or attribute is None:
             return {"status": "failed", "message": "Item_id or attribute is None"}
-        result = cls.collection.delete_one({attribute: ObjectId(Item_id)})
+        result = cls.collection.delete_many({attribute: ObjectId(Item_id)})
         return {"status": "success", "deleted_count": result.deleted_count}
 
     @classmethod
@@ -44,6 +44,8 @@ class PR_Association:
                 if res_docs:
                     result.append({"child_id": get_encrypted_id([child_id]), "item_type": res_docs["itemType"], "xmlID" : res_docs["xmlID"]})
         return result
+    
+
     
 from regiSystem.models.PR_Class import (
     SymbolModel,

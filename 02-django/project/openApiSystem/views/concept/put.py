@@ -1,7 +1,7 @@
 from bson.objectid import ObjectId
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from openApiSystem.views.checkAccess import check_key_validation
+from openApiSystem.utils import check_key_validation
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 

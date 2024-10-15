@@ -96,11 +96,11 @@ const DDR_FilterList = ({ viewType }) => {
 
   return (
     <div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='mb-3 mt-2'>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexGrow: 1 }}>
             {viewType === 'EnumeratedValue' && (
-              <div className='input-group' style={{width: "15%"}}>
+              <div className='input-group' style={{width: "25%"}}>
                 <label className='input-group-text'>Enum Type</label>
                 <select className='form-select' value={enumType} onChange={(e) => setEnumType(e.target.value)}>
                   <option value="">Choose</option>
@@ -110,7 +110,7 @@ const DDR_FilterList = ({ viewType }) => {
               </div>
             )}
             {viewType === 'SimpleAttribute' && (
-              <div className='input-group'  style={{width: "15%"}}>
+              <div className='input-group'  style={{width: "20%"}}>
                 <label className='input-group-text'>Value Type</label>
                 <select  className='form-select' value={valueType} onChange={(e) => setValueType(e.target.value)}>
                   <option value="">Choose</option>
@@ -130,7 +130,7 @@ const DDR_FilterList = ({ viewType }) => {
                 </select>
               </div>
             )}
-            <div className='input-group' style={{width: "12%"}}>
+            <div className='input-group' style={{width: "20%"}}>
               <label className='input-group-text'>Status</label>
               <select className='form-select' value={status} onChange={(e) => setStatus(e.target.value)}>
                 <option value="">All</option>
@@ -142,7 +142,7 @@ const DDR_FilterList = ({ viewType }) => {
                 <option value="clarified">Clarified</option>
               </select>
             </div>
-            <div className='input-group' style={{width: "15%"}}>
+            <div className='input-group' style={{width: "20%"}}>
               <label className='input-group-text'>Category</label>
               <select className='form-select' value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">Choose</option>
@@ -151,7 +151,7 @@ const DDR_FilterList = ({ viewType }) => {
                 <option value="definition">Definition</option>
               </select>
             </div>
-            <div className="input-group" style={{width: "20%"}}>
+            <div className="input-group" style={{width: "25%"}}>
                 <input
                   className="form-control"
                   type="text"

@@ -41,7 +41,9 @@ function ManagementInfoDetail({ itemList, handleUpdateButtonClick, handleFollowI
     };
 
     const toggleOpen = () => setToggleOpened(!toggleOpened);
-
+    if (!itemList || !itemList.management_infos) {
+        return <div>No management information available</div>;
+    }
     return (
         <div>
             <div className='mt-1 mb-3 p-3' style={{ backgroundColor: '#F8F8F8' }}>

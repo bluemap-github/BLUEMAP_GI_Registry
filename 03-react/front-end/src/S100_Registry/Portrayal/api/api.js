@@ -174,3 +174,15 @@ export const DELETE_ALERT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_delete/`;
 export const DELETE_ALERT_MESSAGE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_message_delete/`;
 export const DELETE_ALERT_HIGHLIGHT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight_delete/`;
 
+export const PUT_SYMBOL_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_association_put/`;
+export const PUT_ICON_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/icon_association_put/`;
+export const PUT_VIEWING_GROUP_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/viewing_group_association_put/`;
+export const PUT_ITEM_SCHEMA_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/item_schema_association_put/`;
+export const PUT_COLOUR_TOKEN_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/colour_token_association_put/`;
+export const PUT_PALETTE_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/palette_association_put/`;
+export const PUT_DISPLAY_MODE_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/display_mode_association_put/`;
+export const PUT_MESSAGE_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/message_association_put/`;
+export const PUT_HIGHLIGHT_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/highlight_association_put/`;
+export const PUT_VALUE_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/value_association_put/`;
+
+

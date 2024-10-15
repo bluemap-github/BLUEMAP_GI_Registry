@@ -10,7 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 # Visual Item Models
 from openApiSystem.models.registry.item import RE_Register
-from openApiSystem.views.checkAccess import check_key_validation
+from openApiSystem.utils import check_key_validation
 from openApiSystem.serializers.portrayal.item import (
     S100_PR_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
     S100_PR_VisualItemSerializer, S100_PR_ItemSchemaSerializer,

@@ -42,7 +42,9 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
     };
 
     const role = Cookies.get('role'); // 쿠키에서 role 정보를 가져옴
-
+    if (!itemList || !itemList.item) {
+        return <div>No item data available</div>;
+    }
     return (
         <div className='mb-3 p-3' style={{ backgroundColor: '#F8F8F8' }}>
             <div className="mt-3 mb-3 card p-3">

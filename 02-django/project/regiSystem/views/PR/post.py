@@ -117,7 +117,6 @@ def handle_file_data(request, model_class, file_fields, directory, file_extensio
 # 공통 파일데이터 삽입 함수
 def insert_file_item(model_class, request, data):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    print("여기 돼?", data)
     inserted_ = model_class.insert(data, ObjectId(C_id))
 
     if inserted_["status"] == "error":
@@ -132,7 +131,7 @@ def insert_association_item(model_class, request, data):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
     if data.get("child_id") is not None:
-        A_id = decrypt(data.get("child_id").get("encrypted_data"), data.get("child_id").get("iv"))
+        A_id = decrypt(data["child_id"][0]["encrypted_data"], data.get("child_id")[0].get("iv"))
         inserted_ = model_class.insert(ObjectId(I_id), ObjectId(A_id))
         if inserted_["status"] == "error":
             return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)

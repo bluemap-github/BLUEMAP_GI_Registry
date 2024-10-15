@@ -25,6 +25,9 @@ const ReferenceSourceDetail = ({ itemList, handleUpdateButtonClick, handleKeyIdx
         handleKeyIdx(idx);
     };
     const toggleOpen = () => setToggleOpened(!toggleOpened);
+    if (!itemList || !itemList.reference_sources) {
+        return <div>No reference sources available</div>;
+    }
 
     return (
         <div className='mt-1 mb-3 p-3' style={{ backgroundColor: '#F8F8F8' }}>

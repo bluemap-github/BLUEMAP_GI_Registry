@@ -98,7 +98,7 @@ function RegistrySection() {
         <GetUserInfo><RegiNavBar /></GetUserInfo>
       </div>
       <div className="container"> {/* Flexbox로 컨테이너 지정 */}
-        <SideBar className="sidebar" /> {/* 사이드바 스타일 적용 */}
+        <SideBar /> {/* 사이드바 스타일 적용 */}
         <div className="content"> {/* 메인 콘텐츠 스타일 적용 */}
           <InnerNav />
           <div className='p-5 pt-3' style={{maxWidth: '1800px', minWidth: '1200px'}}>
