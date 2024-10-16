@@ -42,7 +42,11 @@ def make_response_data(serializer):
 
 def offer_item_nameNtype(id):
     c_item = S100_Concept_Item.find_one({"_id": ObjectId(id)})
+    print("numericCode" in c_item, "이건 실화냐?")
+    if "numericCode" in c_item:  # numericCode가 존재하면 반환
+        return c_item["name"], c_item["itemType"], c_item["numericCode"]
     return c_item["name"], c_item["itemType"]
+
     
 from regiSystem.info_sec.getByURI import uri_to_serial
 @api_view(['GET'])
@@ -198,8 +202,14 @@ def ddr_item_one(request):
             
             related_values = GetRelatedValues(parent_id, data)
             data = related_values.call_function(item_type)
+            print(data, "어디서 붙을까?")
+            print()
             encryption_key = related_values.get_encryption_key(item_type)
+            
+            print(encryption_key)
+            print()
             data[encryption_key] = one_encrypt_process(data[encryption_key])
+            print(data)
             
             return Response(data)
         

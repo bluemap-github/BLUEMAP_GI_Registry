@@ -6,6 +6,7 @@ import base64
 import json
 
 def encrypt(data):
+    print(data, "어때?")
     data[0] = str(data[0])
     key = settings.ENCRYPTION_KEY
     iv = get_random_bytes(16)
@@ -19,6 +20,8 @@ def encrypt(data):
     else:
         encrypted_data = base64.b64encode(ciphertext).decode('utf-8')
         encoded_iv = base64.b64encode(iv).decode('utf-8')
+        if len(data) == 4:
+            return json.dumps({"encrypted_data": encrypted_data, "iv": encoded_iv, "name": data[1], "itemType": data[2], "numericCode": data[3]})
         return json.dumps({"encrypted_data": encrypted_data, "iv": encoded_iv, "name": data[1], "itemType": data[2]})
 
 def get_encrypted_id(data):

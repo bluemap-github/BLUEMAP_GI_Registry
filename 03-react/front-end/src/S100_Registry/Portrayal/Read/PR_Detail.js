@@ -270,6 +270,8 @@ const PR_Detail = () => {
   // 스키마 및 비주얼 아이템 타입에 따라 렌더링
   return (
     <div>
+      <h3 style={{fontWeight: "bold"}}>Portrayal Information</h3>
+      <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1', marginBottom: '15px' }}></div>
       {data ? <PortrayalDetails items={data} itemType={item_type} /> : <div>Loading...</div>}
       {associationKeys.includes(item_type) ? (
           <DynamicAssociations associationItems={associations} UpdateAssoType={item_type} itemID={item_id} itemIV={item_iv}/>

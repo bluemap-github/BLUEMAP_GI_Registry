@@ -3,7 +3,7 @@ import Base from '../../modals/Base';
 import AddAssociatedAttributes from '../../modals/AddAssociatedAttributes';
 
 function EnumeratedValue({ onFormSubmit, selectedApiUrl }) {
-    const mandatoryFields = ["name", "itemStatus", "enumType", "attributeId"];
+    const mandatoryFields = ["name", "itemStatus", "enumType", "attributeId", "numericCode"];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => {setIsModalOpen(true);};
@@ -191,8 +191,15 @@ function EnumeratedValue({ onFormSubmit, selectedApiUrl }) {
                     <div className='row'>
                         <div className='col'>
                             <div className='input-group input-group-sm mt-2'>
-                                <span className="input-group-text" id="basic-addon1" style={{width:"40%"}}>Numeric Code</span>
-                                <input type="number" className="form-control" placeholder="numericCode" name="numericCode" onChange={handleChange} />
+                                <span 
+                                    className={`input-group-text ${mandatoryFields.includes('numericCode') && formData.numericCode.trim() === '' ? 'tag-invalid' : ''}`}
+                                    id="basic-addon1" 
+                                    style={{width:"40%"}}>Numeric Code</span>
+                                <input 
+                                    type="number" 
+                                    className={`form-control ${mandatoryFields.includes('numericCode') && formData.numericCode.trim() === '' ? 'tag-invalid' : ''}`}
+                                    placeholder="numericCode" 
+                                    name="numericCode" onChange={handleChange} />
                             </div>
                         </div>
                         <div className='col'>

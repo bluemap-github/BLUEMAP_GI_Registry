@@ -37,6 +37,7 @@ class ListedValue:
     @staticmethod
     def get_listed_value(parent_id):
         c_item = S100_DD_associatedAttribute.find({"parent_id": ObjectId(parent_id)})
+        print("아니그니까 이게 왜 ", c_item)
         return c_item
 
     def get_parent_id(child_id):

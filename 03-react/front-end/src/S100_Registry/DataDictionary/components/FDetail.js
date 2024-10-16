@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 import TableContents from '../../Concept/Detail/components/tags/TableContens';
+import DDRUpdate from '../Update/DDRUpdate';
 
 const FDetail = ({ item }) => {
     const { setItemDetails } = useContext(ItemContext);
@@ -46,67 +47,84 @@ const FDetail = ({ item }) => {
         { name: 'Feature Use Type', key: 'featureUseType' },
     ];
 
+    const [IsOpened, setIsOpened] = useState(false);
+    const handleUpdateClick = () => {
+        setIsOpened(true);
+    };
+    const onClose = () => {
+        setIsOpened(false);
+    };
     return (
-        <div className="d-flex justify-content-between p-3" style={{ backgroundColor: '#F8F8F8' }}>
-            {/* Main Detail Table */}
-            <div className='p-3' style={{ flex: 7}}>
-                <div className="card p-3">
-                    <table className="table table-sm">
-                        <thead>
-                            <tr>
-                                <th colSpan="2" className='text-center table-primary' scope="col">
-                                    Feature Detail
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {fields.map(({ name, key }) => (
-                                <TableContents
-                                    key={key}
-                                    name={name}
-                                    itemValue={item[key]}
-                                />
-                            ))}
-                            <tr>
-                                <th className='text-center' style={{alignContent: 'center'}}>Move to Concept Page</th>
-                                <td style={{alignContent: "center"}} >
-                                    <button onClick={() => movetoConcept(item)} className='btn btn-outline-primary'>Concept Detail</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* Distinction Table */}
-            <div className='p-3' style={{ flex: 3}}>
-                <div className="card p-3" style={{height: "100%"}}>
-                    <table className="table table-sm">
-                        <thead>
-                            <tr>
-                                <th colSpan="2" className='text-center table-primary' scope="col">
-                                    Distinctions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {item.distinction && item.distinction.length > 0 ? (
-                                item.distinction.map((dist, idx) => (
-                                    <tr key={idx} onClick={() => movetoPage(dist)} className="clickable-item">
-                                        <td>{dist.name}</td>
-                                        <td>{dist.itemType}</td>
-                                    </tr>
-                                ))
-                            ) : (
+        <div>
+            <DDRUpdate IsOpened={IsOpened} onClose={onClose} data={item} />
+            <h3 style={{fontWeight: "bold"}}>Feature Type</h3>
+            <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1', marginBottom: '15px' }}></div>
+            <div style={{ backgroundColor: '#F8F8F8' }}>
+                <div className='p-3' style={{ flex: 7}}>
+                    <div className="card p-3">
+                        <table className="table table-sm">
+                            <thead>
                                 <tr>
-                                    <td colSpan="2">No Distinctions Available</td>
+                                    <th colSpan="2" className='text-center table-primary' scope="col">
+                                        Feature Detail
+                                    </th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {fields.map(({ name, key }) => (
+                                    <TableContents
+                                        key={key}
+                                        name={name}
+                                        itemValue={item[key]}
+                                    />
+                                ))}
+                                <tr>
+                                    <th className='text-center' style={{alignContent: 'center'}}>Move to Concept Page</th>
+                                    <td style={{alignContent: "center"}} >
+                                        <button onClick={() => movetoConcept(item)} className='btn btn-outline-primary'>Concept Detail</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div className="text-end">
+                            <button onClick={handleUpdateClick} className='btn btn-sm btn-secondary'>
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Distinction Table */}
+                <div className='p-3' style={{ flex: 3}}>
+                    <div className="card p-3" style={{height: "100%"}}>
+                        <table className="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th colSpan="2" className='text-center table-primary' scope="col">
+                                        Distinctions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {item.distinction && item.distinction.length > 0 ? (
+                                    item.distinction.map((dist, idx) => (
+                                        <tr key={idx} onClick={() => movetoPage(dist)} className="clickable-item">
+                                            <td>{dist.name}</td>
+                                            <td>{dist.itemType}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="2">No Distinctions Available</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+        
     );
 };
 

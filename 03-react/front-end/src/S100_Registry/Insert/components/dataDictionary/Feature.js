@@ -258,11 +258,11 @@ function Feature({ onFormSubmit, selectedApiUrl }) {
                 </div>
             </div>
             <div className="item-input-form-bg p-3 mt-4">
-                <h3>Disticted Features Form</h3>
                 <AddAttributes 
                     handleRelatedEnumList={handleRelatedEnumList}
                     relatedEnumList={relatedEnumList}
                     componentType='Feature'
+                    InputTitle={'Connect Disticted Features'}
                 />
             </div>
         </div>

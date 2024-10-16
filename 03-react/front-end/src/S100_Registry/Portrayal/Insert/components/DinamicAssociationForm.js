@@ -384,7 +384,8 @@ const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
                                 </div>
                                 {inputFields[item.associationName].length > 1 && (
                                     <button
-                                        className="btn btn-danger btn-sm m-2"
+                                        className="btn btn-outline-danger mt-2"
+                                        style={{marginLeft: '5px'}}
                                         onClick={() => handleRemoveField(item.associationName, index)}
                                     >
                                         Remove

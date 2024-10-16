@@ -5,6 +5,7 @@ import { ItemContext } from '../../../context/ItemContext';
 import { getAttributeConstraints } from '../../components/requestAPI.js';
 import Cookies from 'js-cookie';
 import TableContents from '../../Concept/Detail/components/tags/TableContens';
+import DDRUpdate from '../Update/DDRUpdate';
 
 // Constraints fields definition
 const constraintFields = [
@@ -47,16 +48,25 @@ const SADetail = ({ item }) => {
         fetchData();
     }, [item]);
 
+    const [IsOpened, setIsOpened] = useState(false);
+    const handleUpdateClick = () => {
+        setIsOpened(true);
+    };
+    const onClose = () => {
+        setIsOpened(false);
+    };
     return (
-        <div className="d-flex justify-content-between">
-            {/* Simple Attribute Table */}
+        <div>
+            <DDRUpdate IsOpened={IsOpened} onClose={onClose} data={item} />
+            <h3 style={{fontWeight: "bold"}}>Simple Attribute</h3>
+            <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1', marginBottom: '15px' }}></div>
             <div className='p-3' style={{ flex: 7, backgroundColor: '#F8F8F8' }}>
                 <div className="card p-3">
                     <table className="table table-sm">
                         <thead>
                             <tr>
                                 <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
-                                    Simple Attribute
+                                    Simple Attribute Information
                                 </th>
                             </tr>
                         </thead>
@@ -79,6 +89,18 @@ const SADetail = ({ item }) => {
                             </tr>
                             
                         </tbody>
+                    </table>
+                    <div className="text-end mt-3">
+                        <button onClick={handleUpdateClick} className='btn btn-sm btn-secondary'>
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="mt-4 p-3" style={{ flex: 7, backgroundColor: '#F8F8F8' }}>
+                <div className="card p-3">
+                    <table className="table table-sm">
                         <thead>
                             <tr>
                                 <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
@@ -104,18 +126,28 @@ const SADetail = ({ item }) => {
                             )}
                         </tbody>
                     </table>
+                    <div className="text-end mt-3">
+                        <button className='btn btn-sm btn-secondary'>
+                            Update
+                        </button>
+                    </div>
                 </div>
+                
             </div>
 
             {/* Listed Value Table */}
             {item.valueType === 'enumeration' || item.valueType === 'S100_CodeList' ? (
-                <div className='p-3' style={{ flex: 3, backgroundColor: '#F8F8F8', height: 'auto' }}>
+                <div className='p-3 mt-4' style={{ flex: 3, backgroundColor: '#F8F8F8', height: 'auto' }}>
+                    <h3>Listed Value : update 로직 없음</h3>
                     <div className="card p-3" style={{ height: "100%" }}>
                         <table className="table table-sm">
                             <thead>
                                 <tr>
-                                    <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
-                                        Listed Value
+                                    <th className='text-center table-primary' scope="col" style={{ width: '25%' }}>
+                                        Numeric Code
+                                    </th>
+                                    <th className='text-center table-primary' scope="col">
+                                        Value Name
                                     </th>
                                 </tr>
                             </thead>
@@ -127,6 +159,7 @@ const SADetail = ({ item }) => {
                                 ) : (
                                     item.listedValue.map((value, idx) => (
                                         <tr key={idx}>
+                                            <th className='text-center' style={{alignContent: 'center', width: '25%'}}>{value.numericCode}</th>
                                             <td colSpan="2" onClick={() => movetoPage(value)} className="clickable-item text-center">
                                                 {value.name}
                                             </td>

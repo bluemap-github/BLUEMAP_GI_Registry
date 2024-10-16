@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 import Cookies from 'js-cookie';
 import TableContents from '../../Concept/Detail/components/tags/TableContens';
+import DDRUpdate from '../Update/DDRUpdate';
 
 // Listed Value와 Associated Attribute의 필드 정의
 const listedValueFields = [
@@ -45,18 +46,26 @@ const EVDetail = ({ item }) => {
         navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);
     };
 
-
+    const [IsOpened, setIsOpened] = useState(false);
+    const handleUpdateClick = () => {
+        setIsOpened(true);
+    };
+    const onClose = () => {
+        setIsOpened(false);
+    };
 
     return (
-        <div className="d-flex justify-content-between">
-            {/* Listed Value Table */}
-            <div className='p-3' style={{ flex: 7, backgroundColor: '#F8F8F8'}}>
+        <div>
+            <DDRUpdate IsOpened={IsOpened} onClose={onClose} data={item} />
+            <h3 style={{fontWeight: "bold"}}>Enumerated Value</h3>
+            <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1', marginBottom: '15px' }}></div>
+            <div className='p-3' style={{ flex: 6, backgroundColor: '#F8F8F8'}}>
                 <div className=" card p-3">
                     <table className="table table-sm">
                         <thead>
                             <tr>
-                                <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
-                                    Listed Value
+                                <th colSpan="2" className='text-center table-primary' scope="col">
+                                    Listed Value Information
                                 </th>
                             </tr>
                         </thead>
@@ -71,18 +80,21 @@ const EVDetail = ({ item }) => {
                             <tr>
                                 <th className='text-center' style={{alignContent: 'center'}}>Move to Concept Page</th>
                                 <td style={{alignContent: "center"}} >
-                                    <button onClick={() => movetoConcept(item)} className='btn btn-outline-primary'>Concept Detail</button>
+                                    <button onClick={() => movetoConcept(item)} className='btn btn-sm btn-outline-primary'>Concept Detail</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div className="text-end">
+                        <button onClick={handleUpdateClick} className='btn btn-sm btn-secondary'>
+                            Update
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            {/* Associated Attribute Table */}
-            <div className=' p-3' style={{ flex: 3, backgroundColor: '#F8F8F8', height: '150px'}}>
-                <div className=" card p-3" style={{height: "100%"}}>
-                    <table className="table table-sm">
+            <div className='mt-4 p-3' style={{ flex: 4, backgroundColor: '#F8F8F8'}}>
+                <div className=" card p-3">
+                    <table className="table table-sm" style={{ width: '100%'}}>
                         <thead>
                             <tr>
                                 <th colSpan="2" className='text-center table-primary' scope="col" style={{ width: '25%' }}>
@@ -94,9 +106,22 @@ const EVDetail = ({ item }) => {
                             {associatedAttributeFields.map(({ name, key, isAttribute }) => (
                                 isAttribute && item[key] && item[key].length > 0 ? (
                                     item[key].map((value, idx) => (
-                                        <tr key={idx}>
-                                            <td colSpan="2" onClick={() => movetoPage(value)} className="clickable-item text-center">{value.name}</td>
-                                        </tr>
+                                        <>
+                                            <tr key={idx}>
+                                                <th className='text-center' style={{alignContent: 'center', width: '25%'}}>Attribute Name</th>
+                                                <td>{value.name}</td>
+                                            </tr>
+                                            <tr>
+                                                <th className='text-center' scope="row" style={{ width: '25%' }}>Attribute Type</th>
+                                                <td>{value.itemType}</td>
+                                            </tr>
+                                            <tr>
+                                                <th className='text-center' style={{alignContent: 'center'}}>Move to Attribute Info Page</th>
+                                                <td style={{alignContent: "center"}}>
+                                                    <button onClick={() => movetoPage(value)} className='btn btn-sm btn-outline-primary'>Attribute Detail</button>
+                                                </td>
+                                            </tr>
+                                        </>
                                     ))
                                 ) : (
                                     <tr key={key}>
@@ -106,6 +131,11 @@ const EVDetail = ({ item }) => {
                             ))}
                         </tbody>
                     </table>
+                    <div className="text-end">
+                        <button className='btn btn-sm btn-secondary'>
+                            Update
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
