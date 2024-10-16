@@ -1,37 +1,73 @@
 import React, { useState, useEffect } from 'react';
-import Item from './search/Item';
+import axios from 'axios';
+import { SEARCH_RELATED_ITEM } from '../../DataDictionary/api';
+import Cookies from 'js-cookie'; 
 
-function AddAttributes({ isOpen, onClose, handleRelatedEnumList, relatedEnumList, componentType }) {
+function AddAttributes({ handleRelatedEnumList, relatedEnumList, componentType }) {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedValues, setSelectedValues] = useState(relatedEnumList);
+    const [selectBoxes, setSelectBoxes] = useState([{}]); // 처음에 하나의 셀렉트 박스
     const [filteredList, setFilteredList] = useState([]);
-    
-
-    const getSearchResult = (results) => {
-        setSearchResults(results);
-        setFilteredList(results);
-    };
-
-    const handleCheckboxChange = (result) => {
-        setSelectedValues((prevSelectedValues) => {
-            if (prevSelectedValues.includes(result)) {
-                return prevSelectedValues.filter((value) => value !== result);
-            } else {
-                return [...prevSelectedValues, result];
-            }
-        });
-    };
-
-    const handleSubmit = () => {
-        handleRelatedEnumList(selectedValues);
-        onClose();
-    };
-    
+    const regi_uri = Cookies.get('REGISTRY_URI');
     const [searchTerm, setSearchTerm] = useState('');
     const [itemTypes, setItemTypes] = useState('All');
-    const handleItemTypes = (e) => {    
-        setItemTypes(e.target.value);
-    }
+
+    // 검색 결과를 가져오는 useEffect
+    useEffect(() => {
+        axios.get(SEARCH_RELATED_ITEM, {
+            params: {
+                regi_uri: regi_uri,
+                item_type: callAPIItemTypes
+            }
+        })
+        .then(response => {
+            setSearchResults(response.data.search_result);
+            setFilteredList(response.data.search_result);
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+
+    }, []);
+
+    // 선택된 값 상태를 업데이트하는 함수 (중복 검사 추가)
+    const handleSelectChange = (index, e) => {
+        const selectedId = e.target.value;
+        const selectedItem = searchResults.find(item => item._id === selectedId);
+
+        // 이미 선택된 값이 있는지 확인 (중복 검사)
+        const isDuplicate = selectedValues.some(value => value?._id === selectedItem?._id);
+
+        if (isDuplicate) {
+            alert('This value has already been selected.');
+        } else {
+            // 각 셀렉트 박스의 선택 값을 저장하는 로직
+            const updatedSelectedValues = [...selectedValues];
+            updatedSelectedValues[index] = selectedItem;
+            setSelectedValues(updatedSelectedValues);
+            handleRelatedEnumList(updatedSelectedValues);
+        }
+    };
+
+    // 셀렉트 박스를 추가하는 함수
+    const addSelectBox = () => {
+        setSelectBoxes([...selectBoxes, {}]);
+    };
+
+    // 셀렉트 박스를 삭제하는 함수
+    const removeSelectBox = (index) => {
+        // 선택된 값을 업데이트하여 해당 인덱스의 값을 제거
+        const updatedSelectedValues = [...selectedValues];
+        updatedSelectedValues.splice(index, 1);
+        setSelectedValues(updatedSelectedValues);
+
+        // 셀렉트 박스 리스트에서 해당 인덱스의 셀렉트 박스 제거
+        const updatedSelectBoxes = [...selectBoxes];
+        updatedSelectBoxes.splice(index, 1);
+        setSelectBoxes(updatedSelectBoxes);
+    };
+
+    // 필터링 로직
     const runFilter = () => {
         const filtered = searchResults.filter((item) => {
             if (itemTypes === 'All') {
@@ -40,136 +76,82 @@ function AddAttributes({ isOpen, onClose, handleRelatedEnumList, relatedEnumList
             return item.name.includes(searchTerm) && item.itemType === itemTypes;
         });
         setFilteredList(filtered);
-    }
-
-    const checkIsIncluded = (selectedValues, result) => {
-        return selectedValues.some((value) => value._id === result._id);
     };
-    if (!isOpen) {
-        return null;
+
+    let callAPIItemTypes;
+    switch (componentType) {
+        case 'ComplexAttribute':
+            callAPIItemTypes = 'SimpleAttribute,ComplexAttribute';
+            break;
+        case 'Feature':
+            callAPIItemTypes = 'FeatureType';
+            break;
+        case 'Information':
+            callAPIItemTypes = 'InformationType';
+            break;
+        default:
+            break;
     }
 
     return (
         <div>
-            <div
-                className="modal"
-                style={{
-                    position: 'fixed',
-                    top: '0',
-                    left: '0',
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    zIndex: '9999',
-                }}
-            >
-                <div
-                    className="modal-content"
-                    style={{
-                        maxWidth: '50rem',
-                        height: '40rem',
-                        backgroundColor: 'white',
-                        padding: '20px',
-                        borderRadius: '5px',
-                    }}
-                >
-                    <div className="text-end" >
-                        <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
-                    </div>
+            <div>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <h3>Submit Related Values</h3>
-                    <div style={{ display: 'flex' }}>
-                        <Item onSearch={getSearchResult} componentType={componentType} />
-                        <div style={{display: 'flex'}}>
-                            {(componentType === 'ComplexAttribute') ? (
-                                <div className='input-group'  style={{marginRight: '10px'}}>
-                                    <label className='input-group-text' htmlFor="typeSelect">Related Value Type</label>
-                                    <select className='form-select' id="typeSelect" onChange={handleItemTypes}>
-                                        <option value="All">All</option>
-                                        <option value="SimpleAttribute">Simple Attribute</option>
-                                        <option value="ComplexAttribute">Complex Attribute</option>
-                                    </select>
-                                </div>
-                            ) : (<></>)}
-                            <div className="input-group">
-                                <input 
-                                    className="form-control"
-                                    type="text" 
-                                    value={searchTerm} 
-                                    onChange={(e) => setSearchTerm(e.target.value)} 
-                                    placeholder="Search term" 
-                                />
-                                <button className="btn btn-outline-secondary" onClick={runFilter}>Search</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', height: '70%', marginTop: '15px' }}>
-                        {/* Search Results Section */}
-                        <div style={{ border: '1px solid gray', width: '50%', padding: '15px', borderRadius: '5px', marginRight: '10px'}}>
-                            <div>
-                                <h4 style={{ borderBottom: '2px solid #757575', paddingBottom: '10px', marginBottom: '15px', color: '#757575' }}>
-                                    Search Results
-                                </h4>
-                                <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                                    {filteredList.length === 0 ? (
-                                        <p>No results found</p>
-                                    ) : (
-                                        <ul style={{ listStyleType: 'none', paddingLeft: '0', margin: '0' }}>
-                                            {filteredList.map((result) => (
-                                                <li key={result.id} style={{ marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}>
-                                                    <label style={{ display: 'flex', alignItems: 'center' }}>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={checkIsIncluded(selectedValues, result)}
-                                                            onChange={() => handleCheckboxChange(result)}
-                                                            style={{ marginRight: '10px' }}
-                                                        />
-                                                        {result.name}
-                                                    </label>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                    {/* 버튼을 눌러 새로운 Select 박스를 추가 */}
+                    <button 
+                        className="btn btn-primary" 
+                        onClick={addSelectBox}
+                    >
+                        Add Related Values
+                    </button>
+                </div>
 
-                        {/* Selected Values Section */}
-                        <div style={{ border: '1px solid gray', width: '50%', padding: '15px', borderRadius: '5px'}}>
-                            <div>
-                                <h4 style={{ borderBottom: '2px solid #757575', paddingBottom: '10px', marginBottom: '15px', color: '#757575' }}>
-                                    Selected Values
-                                </h4>
-                                <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                                    <ul style={{ listStyleType: 'none', paddingLeft: '0', margin: '0' }}>
-                                        {selectedValues.map((value) => (
-                                            <li key={value.id} style={{ marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}>
-                                                <label style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={selectedValues.includes(value)}
-                                                        onChange={() => handleCheckboxChange(value)}
-                                                        style={{ marginRight: '10px' }}
-                                                    />
-                                                    {value.name}
-                                                </label>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                {/* Select 박스 리스트 */}
+                <div className='mt-3'>
+                    {selectBoxes.map((_, index) => (
+                        <div style={{diaplay: 'flex'}}>
+                            <div className="input-group input-group mb-2" key={index} >
+                                <label 
+                                    className='input-group-text'
+                                    style={{
+                                        width:"40%",
+                                        fontWeight: "bold" 
+                                    }}
+                                >    
+                                    * Associated Attribute ID
+                                </label>
+                                <select
+                                    className="form-select"
+                                    value={selectedValues[index]?._id || ''} // 선택된 값을 반영
+                                    onChange={(e) => handleSelectChange(index, e)}
+                                    style={{ marginRight: '10px', flex: 1 }} // 셀렉트박스 넓이 조정
+                                >
+                                    <option value="">Select a value</option>
+                                    {filteredList.length === 0 ? (
+                                        <option value="" disabled>No data available</option>
+                                    ) : (
+                                        filteredList.map((item) => (
+                                            <option key={item._id} value={item._id}>
+                                                {item.name}
+                                            </option>
+                                        ))
+                                    )}
+                                </select>
                             </div>
+                            <button 
+                                className="btn btn-danger"
+                                onClick={() => removeSelectBox(index)}
+                            >
+                                Remove
+                            </button>
                         </div>
-                    </div>
-                    <div className="text-end">
-                        <button className="btn btn-sm btn-primary" onClick={handleSubmit}>
-                            Submit
-                        </button>
-                    </div>
+                        
+                    ))}
                 </div>
             </div>
         </div>
+        
     );
 }
 

@@ -4,16 +4,16 @@ import { SEARCH_RELATED_ITEM } from '../../../DataDictionary/api.js';
 import Cookies from 'js-cookie'; 
 
 function Item({ onSearch, componentType}) {
-    let itemTypes;
+    let callAPIItemTypes;
     switch (componentType) {
         case 'ComplexAttribute':
-            itemTypes = 'SimpleAttribute,ComplexAttribute';
+            callAPIItemTypes = 'SimpleAttribute,ComplexAttribute';
             break;
         case 'Feature':
-            itemTypes = 'FeatureType';
+            callAPIItemTypes = 'FeatureType';
             break;
         case 'Information':
-            itemTypes = 'InformationType';
+            callAPIItemTypes = 'InformationType';
             break;
         default:
             break;
@@ -24,7 +24,7 @@ function Item({ onSearch, componentType}) {
         axios.get(SEARCH_RELATED_ITEM, {
             params: {
                 regi_uri: regi_uri,
-                item_type: itemTypes
+                item_type: callAPIItemTypes
             }
         })
         .then(response => {

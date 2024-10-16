@@ -1,93 +1,80 @@
-import React, { useState } from 'react';
-import AttSearch from './search/AttSearch';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie'; 
+import { SEARCH_RELATED_ITEM } from '../../DataDictionary/api.js';
 
-const AddAssociatedAttributes = ({isOpen, onClose, handleRelatedValueList}) => {
+const mandatoryFields = ["attributeId"];
+
+const AddAssociatedAttributes = ({ handleRelatedValueList }) => {
+    const regi_uri = Cookies.get('REGISTRY_URI');
     const [data, setData] = useState([]);
-    const [selectedObj, setSelectedObj] = useState();
-    const [selectedID, setSelectedID] = useState();
+    const [selectedObj, setSelectedObj] = useState(null);
+    const [selectedID, setSelectedID] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isInvalid, setIsInvalid] = useState(true); // 선택이 안 됐을 때 관리하는 상태
 
-    
+    const handleChange = (e) => {
+        const selectedId = e.target.value;
+        const selectedItem = data.find(item => item._id === selectedId);
 
-    const handleSetData = (data) => {
-        setData(data);
-    };
-
-    const handleChange = (e, item) => {
-        if (e.target.checked) {
-            setSelectedObj(item);
-            setSelectedID(item._id);
+        if (selectedItem) {
+            setSelectedObj(selectedItem);
+            setSelectedID(selectedItem._id);
+            handleRelatedValueList(selectedItem, selectedItem._id);
+            setIsInvalid(false); // 선택된 경우 에러 상태 해제
         } else {
-            // 필요한 필드만 초기화하고 나머지는 빈 상태 유지
-            setSelectedObj([]);
+            setSelectedObj(null);
             setSelectedID('');
+            setIsInvalid(true); // 선택이 취소된 경우 에러 상태 설정
         }
     };
 
-    const handleSubmit = () => {
-        handleRelatedValueList(selectedObj, selectedID);
-        onClose();
-    };
-
-    if (!isOpen) {
-        return null;
-    }
+    useEffect(() => {
+        axios.get(SEARCH_RELATED_ITEM, {
+            params: {
+                regi_uri: regi_uri,
+                search_term: searchTerm,
+                item_type: 'SimpleAttribute'
+            }
+        })
+        .then(response => {
+            setData(response.data.search_result);
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+    }, []);
 
     return (
-        <div className="modal-style">
-            <div className="modal-content-style">
-                <div className='text-end' style={{height: "10%"}}>
-                    <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
-                </div>
-            <div>
-            <AttSearch onSearch={handleSetData} />
-            <div
-                className="mt-2"
+        <div className="input-group mt-3">
+            <label 
+                className={`input-group-text ${isInvalid ? 'tag-invalid' : ''}`} // 기본 클래스 유지, 에러일 때만 추가 클래스
+                htmlFor="attributeId" 
                 style={{
-                    maxHeight: '300px', // 원하는 높이로 설정
-                    overflowY: 'auto',  // 내용이 넘칠 경우 스크롤 가능
-                    padding: '10px',   // 패딩 추가
-                    border: '1px solid #ccc',  // 테두리 추가
-                    borderRadius: '5px',  // 둥근 테두리 추가
-                    marginBottom: '10px' // 하단 여백 추가
+                    width:"40%",
+                    fontWeight: "bold" 
                 }}
+            >    
+                * Associated Attribute ID
+            </label>
+            <select
+                className={`form-select ${isInvalid ? 'tag-invalid' : ''}`} // 선택 안됐을 때 'tag-invalid' 클래스 추가
+                value={selectedID} // 현재 선택된 ID 반영
+                onChange={handleChange}
+                id="attributeId" // label과 연동되는 id
             >
+                <option value="">Select an attribute</option>
                 {data.length === 0 ? (
-                    <p style={{ color: '#888' }}>No data available</p>
+                    <option value="" disabled>No data available</option>
                 ) : (
-                    <>
-                        {data.map((item, index) => (
-                            <div
-                                key={index}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    padding: '10px',
-                                    borderBottom: '1px solid #ddd',
-                                    marginBottom: '5px',
-                                }}
-                            >
-                                <input
-                                    type="checkbox"
-                                    value={item._id}
-                                    checked={selectedID === item._id}
-                                    onChange={(e) => handleChange(e, item)}
-                                    style={{ marginRight: '10px' }}
-                                />
-                                <label style={{ fontSize: '16px', color: '#333' }}>
-                                    {item.name}
-                                </label>
-                            </div>
-                        ))}
-                    </>
+                    data.map((item) => (
+                        <option key={item._id} value={item._id}>
+                            {item.name}
+                        </option>
+                    ))
                 )}
-            </div>
-
-            <div className='text-end'>
-                <button className='btn btn-outline-primary' onClick={handleSubmit}>Submit</button>
-            </div>
+            </select>
         </div>
-      </div>
-    </div>
     );
 };
 

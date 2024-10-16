@@ -232,6 +232,11 @@ function Information({ onFormSubmit, selectedApiUrl }) {
             </div>
             <div className="item-input-form-bg p-3 mt-4">
                 <h3>Disticted Informations Form</h3>
+                <AddAttributes 
+                    handleRelatedEnumList={handleRelatedEnumList}
+                    relatedEnumList={relatedEnumList}
+                    componentType='Information'
+                />
             </div>
         </div>
     );

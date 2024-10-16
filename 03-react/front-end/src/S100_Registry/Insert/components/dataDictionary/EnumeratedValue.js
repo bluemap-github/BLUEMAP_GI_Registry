@@ -248,8 +248,8 @@ function EnumeratedValue({ onFormSubmit, selectedApiUrl }) {
                                 </div>  
                             </div>
                         </div>
-                    </div> */}
-                    {/* <AddAssociatedAttributes
+                    </div>
+                    <AddAssociatedAttributes
                         isOpen={isRelModalOpen}
                         onClose={closeRelModal}
                         handleRelatedValueList={handleRelatedEnumList}
@@ -257,7 +257,8 @@ function EnumeratedValue({ onFormSubmit, selectedApiUrl }) {
                 </div>
             </div>
             <div className="item-input-form-bg p-3 mt-4">
-                <h3>Listed Values Form</h3>
+                <h3>Connect Associated Attribute</h3>
+                <AddAssociatedAttributes handleRelatedValueList={handleRelatedEnumList} />
             </div>
         </div>
     );

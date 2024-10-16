@@ -61,10 +61,6 @@ function ComplexAttribute({ onFormSubmit, selectedApiUrl }) {
             alias: newAliasList
         }));
     };
-
-    const [isRelModalOpen, setIsRelModalOpen] = useState(false);
-    const openRelModal = () => {setIsRelModalOpen(true);};
-    const closeRelModal = () => {setIsRelModalOpen(false);};
     const [relatedEnumList, setRelatedEnumList] = useState([]);
     const handleRelatedEnumList = (selectedValues) => {
         // Extracting _id values from selectedValues
@@ -237,6 +233,11 @@ function ComplexAttribute({ onFormSubmit, selectedApiUrl }) {
         </div>
         <div className="item-input-form-bg p-3 mt-4">
             <h3>Related Attribute Form</h3>
+            <AddAttributes 
+                handleRelatedEnumList={handleRelatedEnumList}
+                relatedEnumList={relatedEnumList}
+                componentType='ComplexAttribute'
+            />
         </div>
     </div>
     );
