@@ -43,9 +43,11 @@ urlpatterns = [
 
     # EnumeratedValue
     path('enumerated_value/post/', CD.post.enumerated_value), 
+    path('enumerated_value/put/', CD.put.enumerated_value),
 
     # SimpleAttrbute
     path('simple_attribute/post/', CD.post.simple_attribute), 
+    path('simple_attribute/put/', CD.put.simple_attribute),
 
     # AttributeConstraints
     path('attribute_constraints/post/', CD.post.attribute_constraints),
@@ -53,16 +55,25 @@ urlpatterns = [
     
     # ComplexAttribute 
     path('complex_attribute/post/', CD.post.complex_attribute), 
+    path('complex_attribute/put/', CD.put.complex_attribute),
 
     # Feature
     path('feature/post/', CD.post.feature), 
+    path('feature/put/', CD.put.feature),
 
     # Information
     path('information/post/', CD.post.information), 
+    path('information/put/', CD.put.information),
 
     # RelatedValue
     path('related_item/search/', SEARCH.search.related_item),
     # path('browsing_registries/get/', SEARCH.search.browsing_registries),
+
+    # DDR Associations
+    path('associated_attribute/put/', CD.put.associated_attribute),
+    path('sub_attribute/put/', CD.put.sub_attribute),
+    path('distinction/put/', CD.put.distinction),
+
 
 
 

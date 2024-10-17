@@ -28,3 +28,16 @@ export const SUB_ATT_LIST_SEARCH = `${DEPLOY_URL}/api/v1/sub_att_list_search/get
 
 export const POST_CONCEPT_ITEM = `${DEPLOY_URL}/api/v1/concept_item/item/post/`;
 
+
+// DataDictionary/Update/DDRUpdate.js
+export const PUT_ENUMERATED_VALUE = `${DEPLOY_URL}/api/v1/enumerated_value/put/`;
+export const PUT_SIMPLE_ATTRIBUTE = `${DEPLOY_URL}/api/v1/simple_attribute/put/`;
+export const PUT_COMPLEX_ATTRIBUTE = `${DEPLOY_URL}/api/v1/complex_attribute/put/`;
+export const PUT_FEATURE = `${DEPLOY_URL}/api/v1/feature/put/`;
+export const PUT_INFORMATION = `${DEPLOY_URL}/api/v1/information/put/`;
+
+// DataDictionary/Update/AssoUpdate.js
+export const PUT_ASSOCIATED_ATTRIBUTE = `${DEPLOY_URL}/api/v1/associated_attribute/put/`;
+export const PUT_SUB_ATTRIBUTE = `${DEPLOY_URL}/api/v1/sub_attribute/put/`;
+export const PUT_DISTINCTION = `${DEPLOY_URL}/api/v1/distinction/put/`;
+

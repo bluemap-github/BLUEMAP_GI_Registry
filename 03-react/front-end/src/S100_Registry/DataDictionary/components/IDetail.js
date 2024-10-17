@@ -5,6 +5,7 @@ import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 import TableContents from '../../Concept/Detail/components/tags/TableContens';
 import DDRUpdate from '../Update/DDRUpdate';
+import AssoUpdate from '../Update/AssoUpdate';
 
 const FDetail = ({ item }) => {
     const { setItemDetails } = useContext(ItemContext);
@@ -53,6 +54,14 @@ const FDetail = ({ item }) => {
     const onClose = () => {
         setIsOpened(false);
     };
+
+    const [IsAssoOpened, setIsAssoOpened] = useState(false);
+    const handleAssoUpdateClick = () => {
+        setIsAssoOpened(true);
+    };
+    const onAssoClose = () => {
+        setIsAssoOpened(false);
+    };
     return (
         <div>
             <DDRUpdate IsOpened={IsOpened} onClose={onClose} data={item} />
@@ -92,6 +101,7 @@ const FDetail = ({ item }) => {
                 </div>
 
                 {/* Distinction Table */}
+                <AssoUpdate IsOpened={IsAssoOpened} onClose={onAssoClose} data={item} />
                 <div className='mt-3' style={{ backgroundColor: '#FFFFFF' }}>
                     <div className="card p-3" style={{ height: "100%" }}>
                         <table className="table table-sm">
@@ -115,6 +125,11 @@ const FDetail = ({ item }) => {
                                 )}
                             </tbody>
                         </table>
+                        <div className="text-end">
+                            <button onClick={handleAssoUpdateClick} className='btn btn-sm btn-secondary'>
+                                Update
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

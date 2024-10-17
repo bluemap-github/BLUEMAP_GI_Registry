@@ -6,7 +6,6 @@ import base64
 import json
 
 def encrypt(data):
-    print(data, "어때?")
     data[0] = str(data[0])
     key = settings.ENCRYPTION_KEY
     iv = get_random_bytes(16)

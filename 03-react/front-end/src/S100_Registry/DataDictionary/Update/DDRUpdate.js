@@ -21,7 +21,7 @@ const PRItemUpdateModal = ({IsOpened, onClose, data}) => {
     }
     return (
         <div className="modal-style">
-            <div className="modal-content-style" style={{width: '1000px'}}>
+            <div className="modal-content-style" style={{width: '700px'}}>
                 <div className='text-end'>
                     <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
                 </div>

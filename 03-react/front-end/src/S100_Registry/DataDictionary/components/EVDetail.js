@@ -5,6 +5,7 @@ import { ItemContext } from '../../../context/ItemContext';
 import Cookies from 'js-cookie';
 import TableContents from '../../Concept/Detail/components/tags/TableContens';
 import DDRUpdate from '../Update/DDRUpdate';
+import AssoUpdate from '../Update/AssoUpdate';
 
 // Listed Value와 Associated Attribute의 필드 정의
 const listedValueFields = [
@@ -54,6 +55,15 @@ const EVDetail = ({ item }) => {
         setIsOpened(false);
     };
 
+    const [IsAssoOpened, setIsAssoOpened] = useState(false);
+    const handleAssoUpdateClick = () => {
+        setIsAssoOpened(true);
+    };
+    const onAssoClose = () => {
+        setIsAssoOpened(false);
+    };
+
+
     return (
         <div>
             <DDRUpdate IsOpened={IsOpened} onClose={onClose} data={item} />
@@ -92,6 +102,7 @@ const EVDetail = ({ item }) => {
                     </div>
                 </div>
             </div>
+            <AssoUpdate IsOpened={IsAssoOpened} onClose={onAssoClose} data={item} />
             <div className='mt-4 p-3' style={{ flex: 4, backgroundColor: '#F8F8F8'}}>
                 <div className=" card p-3">
                     <table className="table table-sm" style={{ width: '100%'}}>
@@ -124,7 +135,7 @@ const EVDetail = ({ item }) => {
                                         </>
                                     ))
                                 ) : (
-                                    <tr key={key}>
+                                    <tr>
                                         <td colSpan="2">No Associated Attribute</td>
                                     </tr>
                                 )
@@ -132,7 +143,10 @@ const EVDetail = ({ item }) => {
                         </tbody>
                     </table>
                     <div className="text-end">
-                        <button className='btn btn-sm btn-secondary'>
+                        <button 
+                            className='btn btn-sm btn-secondary'
+                            onClick={handleAssoUpdateClick}
+                            >
                             Update
                         </button>
                     </div>

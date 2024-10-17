@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
-import { DDR_DETAIL } from '../../../Common/PageLinks';
+import AssoUpdate from '../Update/AssoUpdate';
 import DDRUpdate from '../Update/DDRUpdate';
 import Cookies from 'js-cookie'; 
 
@@ -24,6 +24,14 @@ const CADetail = ({item}) => {
     };
     const onClose = () => {
         setIsOpened(false);
+    };
+
+    const [IsAssoOpened, setIsAssoOpened] = useState(false);
+    const handleAssoUpdateClick = () => {
+        setIsAssoOpened(true);
+    };
+    const onAssoClose = () => {
+        setIsAssoOpened(false);
     };
     return (
         <div>
@@ -75,6 +83,7 @@ const CADetail = ({item}) => {
                 </div>
 
                 {/* Sub Attributes Table */}
+                <AssoUpdate IsOpened={IsAssoOpened} onClose={onAssoClose} data={item} />
                 <div className='p-3' style={{ flex: 3 }}>
                     <div className="card p-3" style={{ height: "100%" }}>
                         <table className="table table-sm">
@@ -99,6 +108,11 @@ const CADetail = ({item}) => {
                                 )}
                             </tbody>
                         </table>
+                        <div className="text-end">
+                            <button onClick={handleAssoUpdateClick} className='btn btn-sm btn-secondary'>
+                                Update
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
