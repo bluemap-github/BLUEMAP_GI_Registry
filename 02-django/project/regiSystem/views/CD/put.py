@@ -112,25 +112,48 @@ def information(request):
         return Response({"status": "error", "message": info_serializer.errors}, status=400)
 
 
+from regiSystem.models.Concept import ListedValue, AttributeUsage, Distinction
 @api_view(['PUT'])
 def associated_attribute(request):
-    is_row_id = request.data.get('is_row_id')
-    parent_id = ""
-    if is_row_id:
-        parent_id = request.data.get('updated_id')
-    else:
-        parent_id = decrypt(request.data.get('updated_id').get('parent_id'), request.data.get('updated_id').get('parent_iv'))
+    parent_id = request.data.get('updated_id')
     child_id = decrypt(request.data.get('child_id').get('encrypted_data'), request.data.get('child_id').get('iv'))
-    print(parent_id, child_id)
     
-    return Response({"status": "success", "message": "Not implemented yet"}, status=201)
+    ListedValue.delete(child_id)
+    ListedValue.insert_listed_value(parent_id, child_id)
+    
+    return Response({"status": "success", "message": "update successful"}, status=201)
 
 
 @api_view(['PUT'])
 def sub_attribute(request):
-    return Response({"status": "success", "message": "Not implemented yet"}, status=201)
+    item_iv = request.GET.get('item_iv')
+    parent_id = decrypt(request.GET.get('item_id'), item_iv)
+    associations = request.data.get('associations')
+    for association in associations:
+        if association == {}: continue
+        if association.get('is_changed'):
+            if "encrypted_data" in association:
+                origin_child_id = decrypt(association.get('encrypted_data'), association.get('iv'))
+                AttributeUsage.update_child_id(parent_id, origin_child_id, association.get('changed_id'))
+            else:
+                AttributeUsage.make_attribute_usage(parent_id, association.get('changed_id'))
+        
+    return Response({"status": "success", "message": "update successful"}, status=201)
 
 
 @api_view(['PUT'])
 def distinction(request):
+    item_iv = request.GET.get('item_iv')
+    parent_id = decrypt(request.GET.get('item_id'), item_iv)
+    associations = request.data.get('associations')
+    Distinction.delete(parent_id)
+    for association in associations:
+        if association == {}: continue
+        if association.get('is_changed'):
+            Distinction.insert_distinction(parent_id, association.get('changed_id'))
+        else:
+            if "encrypted_data" in association:
+                origin_child_id = decrypt(association.get('encrypted_data'), association.get('iv'))
+                Distinction.insert_distinction(parent_id, origin_child_id)               
+
     return Response({"status": "success", "message": "Not implemented yet"}, status=201)

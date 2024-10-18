@@ -63,25 +63,42 @@ const EnumAssoUpdate = ({ IsOpened, onClose, formData }) => {
     }, [regi_uri]);
 
     const handleUpdate = async () => {
-        if (selectedObj) {
-            const data = {
-                'regi_uri': regi_uri,
-                'is_row_id' : isDifferent,
-                'updated_id': selectedObj._id,
-                'child_id': formData._id
-            };
-            console.log(data);
-            try {
-                const response = await axios.put(PUT_ASSOCIATED_ATTRIBUTE, data);
-                console.log('handleUpdate', response);
-            } catch (error) {
-                console.error('There was an error!', error);
+        // isDifferent가 false인 경우, API 요청을 보내지 않고 알림만 표시
+        if (!isDifferent) {
+            alert('No changes were made.');
+            return;
+        }
+    
+        const userConfirmed = window.confirm('Update Associated Attribute?');
+        
+        if (userConfirmed) {
+            if (selectedObj) {
+                const data = {
+                    'regi_uri': regi_uri,
+                    'updated_id': selectedObj._id,
+                    'child_id': formData._id
+                };
+                console.log(data);
+                try {
+                    const response = await axios.put(PUT_ASSOCIATED_ATTRIBUTE, data);
+                    
+                    // API 요청이 성공했을 때 알림
+                    alert('Update was successful!');
+                    onClose(); // 창 닫기
+                    window.location.reload(); // 새로고침
+                } catch (error) {
+                    console.error('There was an error!', error);
+                }
+            } else {
+                setIsInvalid(true); // 선택이 안된 경우 에러 상태 설정
             }
+        } else {
+            // "취소"를 누른 경우 추가로 처리할 일이 있다면 여기에 작성
+            console.log('Update was cancelled by the user.');
         }
-        else {
-            setIsInvalid(true); // 선택이 안된 경우 에러 상태 설정
-        }
-    }
+    };
+    
+    
 
     return (
         <div>

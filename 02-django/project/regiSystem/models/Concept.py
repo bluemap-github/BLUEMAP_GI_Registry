@@ -37,7 +37,6 @@ class ListedValue:
     @staticmethod
     def get_listed_value(parent_id):
         c_item = S100_DD_associatedAttribute.find({"parent_id": ObjectId(parent_id)})
-        print("아니그니까 이게 왜 ", c_item)
         return c_item
 
     def get_parent_id(child_id):
@@ -46,6 +45,11 @@ class ListedValue:
     
     def insert_listed_value(parent_id, child_id):
         S100_DD_associatedAttribute.insert_one({"parent_id": ObjectId(parent_id), "child_id": ObjectId(child_id)})
+        
+    @classmethod
+    def delete(cls, child_id):
+        result = S100_DD_associatedAttribute.delete_many({"child_id": ObjectId(child_id)})
+        return {"status": "success", "deleted_count": result.deleted_count}
 
 class AttributeUsage:
     @staticmethod
@@ -73,6 +77,15 @@ class AttributeUsage:
             validated_data['child_id'] = ObjectId(target)
             S100_CD_AttributeUsage.insert_one(validated_data)
 
+    def delete(parent_id):
+        S100_CD_AttributeUsage.delete_many({"parent_id": ObjectId(parent_id)})
+    
+    def update_child_id(parent_id, origin_child_id ,new_child_id):
+        S100_CD_AttributeUsage.update_one(
+            {"parent_id": ObjectId(parent_id), "child_id" : ObjectId(origin_child_id)},  # parent_id로 찾음
+            {"$set": {"child_id": ObjectId(new_child_id)}}  # child_id만 업데이트
+        )
+
 class Distinction:
     @staticmethod
     def get_distincted_item(parent_id):
@@ -85,6 +98,10 @@ class Distinction:
     
     def insert_distinction(parent_id, child_id):
         S100_DD_distinction.insert_one({"parent_id": ObjectId(parent_id), "child_id": ObjectId(child_id)})
+    
+    def delete(parent_id):
+        result = S100_DD_distinction.delete_many({"parent_id": ObjectId(parent_id)})
+        return {"status": "success", "deleted_count": result.deleted_count}
 
 
 class ManagementInfoModel:
