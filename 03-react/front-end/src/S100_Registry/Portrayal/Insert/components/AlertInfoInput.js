@@ -109,7 +109,6 @@ const AlertInfoInput = ({ tagName, onFormSubmit }) => {
     };
 
     const handleAssociation = (setIndex, updatedData) => {
-        console.log(updatedData, setIndex);
     
         // updatedData를 JSON으로 파싱
         const parsedData = Object.keys(updatedData).reduce((acc, key) => {

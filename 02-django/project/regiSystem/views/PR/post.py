@@ -322,6 +322,6 @@ def insert_alert_info(request):
 
     # 삽입 결과 확인
     if result.get("status") == "success":
-        return Response({"status": "success", "inserted_id": get_encrypted_id([result["inserted_id"]])}, status=HTTP_201_CREATED)
+        return Response({"status": "success", "inserted_id": result["inserted_id"]}, status=HTTP_201_CREATED)
     else:
         return Response({"status": "error", "errors": result.get("errors") or result.get("message")}, status=HTTP_400_BAD_REQUEST)

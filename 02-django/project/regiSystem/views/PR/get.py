@@ -89,7 +89,6 @@ def process_items(_ids, convert_name, items_cursor):
 
 
 def get_list_items(Model, C_id, serializer_class, request):
-    print(C_id, Model, "이거??")
     try:
         # 기본 파라미터 설정
         search_term = request.GET.get('search_term', '')

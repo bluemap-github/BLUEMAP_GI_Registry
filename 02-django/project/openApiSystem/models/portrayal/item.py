@@ -392,7 +392,6 @@ class PR_Alert(PR_RegisterItem):
     def get_item_detail(cls, I_id):
         # MongoDB에서 _id로 해당 데이터를 찾음
         result = cls.collection[0].find_one({"_id": ObjectId(I_id)})
-        print(result, "이거는 되니?")
 
         if not result:
             return {"status": "error", "message": "Alert item not found"}
