@@ -38,11 +38,11 @@ from openApiSystem.serializers.portrayal.item import (
     S100_PR_ViewingGroupLayerSerializer, S100_PR_ViewingGroupSerializer,
     S100_PR_FontSerializer, S100_PR_ContextParameterSerializer,
     S100_PR_DrawingPrioritySerializer, S100_PR_AlertHighlightSerializer,
-    S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer,
+    S100_PR_AlertSerializer, S100_OPEN_PR_AlertInfoSerializer,
     S100_PR_AlertMessageSerializer,
     S100_PR_CIEValueSerializer, S100_PR_SRGBValueSerializer,
     S100_PR_PaletteItemSerializer, 
-    S100_PR_AlertPrioritySerializer
+    S100_OPEN_PR_AlertPrioritySerializer
 )
 
 class RegisterItemModel:
@@ -324,7 +324,7 @@ class PR_ColourProfileSchema(PR_ItemSchema):
 class PR_AlertPriority(PR_RegisterItem):
     @staticmethod
     def process_priority(priority_data):
-        priority_serializer = S100_PR_AlertPrioritySerializer(data=priority_data)
+        priority_serializer = S100_OPEN_PR_AlertPrioritySerializer(data=priority_data)
         if priority_serializer.is_valid():
             result = S100_Portrayal_AlertPriority.insert_one(priority_serializer.validated_data)
             return str(result.inserted_id)
@@ -334,7 +334,7 @@ class PR_AlertPriority(PR_RegisterItem):
 class PR_AlertInfo(PR_RegisterItem):
     @staticmethod
     def process_info(info_data):
-        info_serializer = S100_PR_AlertInfoSerializer(data=info_data)
+        info_serializer = S100_OPEN_PR_AlertInfoSerializer(data=info_data)
         if info_serializer.is_valid():
             priority_data = info_serializer.validated_data.get('priority', [])
             priority_ids = []

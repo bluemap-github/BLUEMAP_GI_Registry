@@ -26,7 +26,6 @@ const buttonTypes = [
     { type: 'AlertHighlight', label: 'Alert Highlight' },
     { type: 'AlertMessage', label: 'Alert Message' },
 
-
 ];
 
 function PR_Filter({ clickHandler, viewType }) {

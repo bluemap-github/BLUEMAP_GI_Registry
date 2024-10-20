@@ -82,6 +82,7 @@ urlpatterns = [
     path('post/alert/', post.insert_alert),
     path('post/alert_highlight/', post.insert_alert_highlight),
     path('post/alert_message/', post.insert_alert_message),
+    path('post/alert_info/', post.insert_alert_info),
 
     # path('put/symbol/', put.symbol),
     # path('put/line_style/', put.line_style),
@@ -106,6 +107,7 @@ urlpatterns = [
     path('put/alert/', put.alert),
     path('put/alert_highlight/', put.alert_highlight),
     path('put/alert_message/', put.alert_message),
+    path('put/alert_info/', put.alert_info),
 
 
     path('delete/symbol/', delete.symbol),
@@ -130,6 +132,7 @@ urlpatterns = [
     path('delete/alert/', delete.alert),
     path('delete/alert_highlight/', delete.alert_highlight),
     path('delete/alert_message/', delete.alert_message),
+    path('delete/alert_info/', delete.alert_info),
 
 
     ### 연관관계 url
@@ -197,5 +200,51 @@ urlpatterns = [
     path('put/colour_profile_schema/', file_put.colour_profile_schema),
     
     path('put/font/', file_put.font),
+
+
+    # association
+    path('post/symbol_association/', post.symbol_association),
+    path('post/item_schema_association/', post.item_schema_association),
+    path('post/colour_token_association/', post.colour_token_association),
+    path('post/palette_association/', post.palette_association),
+    path('post/display_mode_association/', post.display_mode_association),
+    path('post/viewing_group_association/', post.viewing_group_association),
+    path('post/highlight_association/', post.highlight_association),
+    path('post/icon_association/', post.icon_association),
+    path('post/value_association/', post.value_association),
+    path('post/msg_association/', post.msg_association),
+
+    path('delete/symbol_association/', delete.symbol_association),
+    path('delete/item_schema_association/', delete.item_schema_association),
+    path('delete/colour_token_association/', delete.colour_token_association),
+    path('delete/palette_association/', delete.palette_association),
+    path('delete/display_mode_association/', delete.display_mode_association),
+    path('delete/viewing_group_association/', delete.viewing_group_association),
+    path('delete/highlight_association/', delete.highlight_association),
+    path('delete/icon_association/', delete.icon_association),
+    path('delete/value_association/', delete.value_association),
+    path('delete/msg_association/', delete.msg_association),
+
+    path('put/symbol_association/', put.symbol_association),
+    path('put/item_schema_association/', put.item_schema_association),
+    path('put/colour_token_association/', put.colour_token_association),
+    path('put/palette_association/', put.palette_association),
+    path('put/display_mode_association/', put.display_mode_association),
+    path('put/viewing_group_association/', put.viewing_group_association),
+    path('put/highlight_association/', put.highlight_association),
+    path('put/icon_association/', put.icon_association),
+    path('put/value_association/', put.value_association),
+    path('put/msg_association/', put.msg_association),
+
+    path('get/symbol_association/', get.symbol_association),
+    path('get/item_schema_association/', get.item_schema_association),
+    path('get/colour_token_association/', get.colour_token_association),
+    path('get/palette_association/', get.palette_association),
+    path('get/display_mode_association/', get.display_mode_association),
+    path('get/viewing_group_association/', get.viewing_group_association),
+    path('get/highlight_association/', get.highlight_association),
+    path('get/icon_association/', get.icon_association),
+    path('get/value_association/', get.value_association),
+    path('get/msg_association/', get.msg_association),
 
 ]

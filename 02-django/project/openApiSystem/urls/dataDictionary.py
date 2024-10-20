@@ -28,9 +28,19 @@ urlpatterns = [
     path('put/feature/', put.feature),
     path('put/information/', put.information),
 
-    # path('delete/enumerated_value/', delete.enumerated_value),
-    # path('delete/simple_attribute/', delete.simple_attribute),
-    # path('delete/complex_attribute/', delete.complex_attribute),
-    # path('delete/feature/', delete.feature),
-    # path('delete/information/', delete.information),
+    path('post/associated_attribute/', post.associated_attribute),
+    path('post/sub_attribute/', post.sub_attribute),
+    path('post/distinction/', post.distinction),
+
+    path('put/associated_attribute/', put.associated_attribute),
+    path('put/sub_attribute/', put.sub_attribute),
+    path('put/distinction/', put.distinction),
+
+    path('delete/associated_attribute/', delete.associated_attribute),
+    path('delete/sub_attribute/', delete.sub_attribute),
+    path('delete/distinction/', delete.distinction),
+
+    path('get/associated_attribute_list/', get.associated_attribute_list),
+    path('get/sub_attribute_list/', get.sub_attribute_list),
+    path('get/distinction_list/', get.distinction_list),
 ]

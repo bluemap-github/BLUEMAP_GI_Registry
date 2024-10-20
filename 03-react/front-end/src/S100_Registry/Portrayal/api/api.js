@@ -24,6 +24,7 @@ export const POST_DRAWING_PRIORITY = `${DEPLOY_URL}/api/v1/portrayal_item/drawin
 export const POST_ALERT = `${DEPLOY_URL}/api/v1/portrayal_item/alert/post/`;
 export const POST_ALERT_MESSAGE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_message/post/`;
 export const POST_ALERT_HIGHLIGHT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight/post/`;
+export const POST_ALERT_INFO = `${DEPLOY_URL}/api/v1/portrayal_item/alert_info/post/`;
 
 
 export const GET_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/get/`;
@@ -93,6 +94,8 @@ export const GET_ALERT_MESSAGE_ONE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_
 export const GET_ALERT_HIGHLIGHT_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight_list/get/`;
 export const GET_ALERT_HIGHLIGHT_ONE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight/get/`;
 
+export const GET_ALERT_INFO_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/alert_info_list/get/`;
+export const GET_ALERT_INFO_ONE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_info/get/`;
 
 export const GET_ITEM_SCHEMA_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/item_schema_list/get/`;
 

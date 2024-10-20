@@ -19,7 +19,7 @@ from openApiSystem.serializers.portrayal.item import (
     S100_PR_ViewingGroupLayerSerializer, S100_PR_ViewingGroupSerializer,
     S100_PR_FontSerializer, S100_PR_ContextParameterSerializer,
     S100_PR_DrawingPrioritySerializer, S100_PR_AlertHighlightSerializer,
-    S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer,
+    S100_PR_AlertSerializer, S100_OPEN_PR_AlertInfoSerializer,
     S100_PR_PaletteItemSerializer,
     S100_PR_AlertMessageSerializer
 )
@@ -200,3 +200,149 @@ def alert_message(request):
 def alert(request):
     I_id = request.GET.get('itemID')
     return update_item(PR_Alert, request, I_id, S100_PR_AlertSerializer)
+
+
+from openApiSystem.models.portrayal.association import (
+    SymbolAssociation,
+    IconAssociation,
+    ItemSchemaAssociation,
+    ColourTokenAssociation,
+    ValueAssociation,
+    PaletteAssociation,
+    DisplayModeAssociation,
+    ViewingGroupAssociation,
+    HighlightAssociation,
+    MessageAssociation
+)
+
+from openApiSystem.serializers.portrayal.association import PR_PUT_Association
+
+def common_update_association(model_class, request):
+    association_id = request.data.get('association_id')
+    new_child_id = request.data.get('new_child_id')
+    result = model_class.update(association_id, new_child_id)
+    if result.get("status") == "error":
+        return Response(result["message"], status=HTTP_400_BAD_REQUEST)
+    return Response("Association updated", status=HTTP_200_OK)
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def symbol_association(request):
+    return common_update_association(SymbolAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def item_schema_association(request):
+    return common_update_association(ItemSchemaAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def colour_token_association(request):
+    return common_update_association(ColourTokenAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def palette_association(request):
+    return common_update_association(PaletteAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def display_mode_association(request):
+    return common_update_association(DisplayModeAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def viewing_group_association(request):
+    return common_update_association(ViewingGroupAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def highlight_association(request):
+    return common_update_association(HighlightAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def icon_association(request):
+    return common_update_association(IconAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def value_association(request):
+    return common_update_association(ValueAssociation, request)
+
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey],
+    request_body=PR_PUT_Association
+)
+@api_view(['PUT'])
+def msg_association(request):
+    return common_update_association(MessageAssociation, request)
+
+
+from regiSystem.serializers.PR import S100_PR_AlertInfoSerializer
+from regiSystem.models.PR_Class import AlertInfoModel
+from regiSystem.info_sec.getByURI import uri_to_serial
+
+@swagger_auto_schema(
+    method='put', 
+    manual_parameters=[regiURI, serviceKey, itemID],
+    request_body=S100_PR_AlertInfoSerializer
+)
+@api_view(['PUT'])
+def alert_info(request):
+    I_id = request.GET.get('itemID')
+    if not regiURI:
+        return Response({"status": "error", "message": "Missing regiURI"}, status=HTTP_400_BAD_REQUEST)
+    data = request.data
+    C_id = uri_to_serial(regiURI)
+    result = AlertInfoModel.update(I_id, data, C_id)
+    if result.get("status") == "error":
+        return Response(result["message"], status=HTTP_400_BAD_REQUEST)
+    return Response("AlertInfo updated", status=HTTP_200_OK)
+

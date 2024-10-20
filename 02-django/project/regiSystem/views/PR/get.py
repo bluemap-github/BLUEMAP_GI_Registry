@@ -23,7 +23,8 @@ from regiSystem.models.PR_Class import (
     DrawingPriorityModel,
     AlertHighlightModel,
     AlertModel,
-    AlertMessageModel
+    AlertMessageModel,
+    RegisterItemModel
 )
 
 from regiSystem.serializers.PR import (
@@ -44,7 +45,7 @@ from regiSystem.serializers.PR import (
     S100_PR_AlertMessageSerializer
 )
 
-from regiSystem.info_sec.encryption import decrypt
+from regiSystem.info_sec.encryption import decrypt, get_encrypted_id
 from regiSystem.info_sec.getByURI import uri_to_serial
 
 
@@ -63,16 +64,89 @@ def get_one_item(Model, item_id, serializer_class=None):
         return Response({"status": "error", "message": str(e)}, status=400)
 
 
-def get_list_items(Model, C_id, serializer_class):
-    try:
-        items = Model.get_list(C_id)
-        if 'status' in items and items['status'] == 'error':
-            return Response({"status": "error", "message": items.get("message", "Unknown error")}, status=400)
+def process_items(_ids, convert_name, items_cursor):
+    """
+    MongoDB에서 조회한 데이터 항목을 변환하고 필요한 처리를 하는 함수
+    """
+    items = []
+    for item in items_cursor:
+        # item['_id']가 이미 'encrypted_data'와 'iv' 필드를 가진 경우 처리하지 않음
+        if not isinstance(item['_id'], dict) or 'encrypted_data' not in item['_id'] or 'iv' not in item['_id']:
+            item['_id'] = get_encrypted_id([item['_id']])
 
-        serializer = serializer_class(items['data'], many=True)
-        return Response({"status": "success", "data": serializer.data}, status=200)
+        # _ids 필드가 있을 경우 convert_name으로 변환
+        if _ids in item:
+            item[convert_name] = [
+                RegisterItemModel.get_national_language_string(desc_id)
+                for desc_id in item[_ids]
+            ]
+            del item[_ids]
+        
+        items.append(item)
+    
+    return items
+
+
+
+def get_list_items(Model, C_id, serializer_class, request):
+    print(C_id, Model, "이거??")
+    try:
+        # 기본 파라미터 설정
+        search_term = request.GET.get('search_term', '')
+        status = request.GET.get('status', '')
+        category = request.GET.get('category', '')
+        sort_key = request.GET.get('sort_key', '_id')  # 기본값 '_id'
+        sort_direction = request.GET.get('sort_direction', 'ascending')  # 기본값 'ascending'
+        page = int(request.GET.get('page', 1))  # 기본값 1
+        page_size = int(request.GET.get('page_size', 1000))  # 기본값 1000
+
+        # 기본 MongoDB 쿼리 작성
+        query = {"concept_id": ObjectId(C_id)}
+
+        # status 필터링
+        if status:
+            query["itemStatus"] = status
+
+        # 검색어 필터링
+        if search_term:
+            if category == "name":
+                query["name"] = {"$regex": search_term, "$options": "i"}
+            elif category == "camelCase":
+                query["camelCase"] = {"$regex": search_term, "$options": "i"}
+            elif category == "definition":
+                query["definition"] = {"$regex": search_term, "$options": "i"}
+
+        # 전체 항목 수 계산
+        total_items = Model.collection.count_documents(query)
+
+        # 정렬 및 페이지네이션 적용
+        sort_order = 1 if sort_direction == 'ascending' else -1
+        items_cursor = Model.collection.find(query).sort(sort_key, sort_order).skip((page - 1) * page_size).limit(page_size)
+        print
+
+        # 데이터 변환 및 직렬화 (개별 함수로 분리)
+        items = process_items('description_ids', 'description', items_cursor)
+        if 'text_ids' in items[0]:
+            items = process_items('text_ids', 'text', items)
+
+        # 직렬화
+        serializer = serializer_class(items, many=True)
+
+        # 응답 데이터 구성
+        response_data = {
+            'status': 'success',
+            'data': serializer.data,
+            'total_items': total_items,
+            'total_pages': (total_items + page_size - 1) // page_size,
+            'current_page': page,
+            'page_size': page_size
+        }
+
+        return Response(response_data, status=200)
+
     except Exception as e:
         return Response({"status": "error", "message": str(e)}, status=400)
+
 
 
 # 각 API 핸들러들
@@ -92,17 +166,17 @@ def get_item_schema_list(request):
 @api_view(['GET'])
 def get_symbol_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer)
+    return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer, request)
 
 
-import os
-from django.conf import settings
-from rest_framework.decorators import api_view
+# import os
+# from django.conf import settings
+# from rest_framework.decorators import api_view
 
-@api_view(['GET'])
-def get_symbol_list(request):
-    C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer)
+# @api_view(['GET'])
+# def get_symbol_list(request):
+#     C_id = uri_to_serial(request.GET.get('regi_uri'))
+#     return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer)
 
 
 
@@ -184,7 +258,7 @@ def get_symbol(request):
 @api_view(['GET'])
 def get_line_style_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(LineStyleModel, C_id, S100_PR_VisualItemSerializer)
+    return get_list_items(LineStyleModel, C_id, S100_PR_VisualItemSerializer, request)
 
 
 @api_view(['GET'])
@@ -198,7 +272,7 @@ def get_line_style(request):
 @api_view(['GET'])
 def get_area_fill_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(AreaFillModel, C_id, S100_PR_VisualItemSerializer)
+    return get_list_items(AreaFillModel, C_id, S100_PR_VisualItemSerializer, request)
 
 
 @api_view(['GET'])
@@ -212,7 +286,7 @@ def get_area_fill(request):
 @api_view(['GET'])
 def get_pixmap_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(PixmapModel, C_id, S100_PR_VisualItemSerializer)
+    return get_list_items(PixmapModel, C_id, S100_PR_VisualItemSerializer, request)
 
 
 @api_view(['GET'])
@@ -226,7 +300,7 @@ def get_pixmap(request):
 @api_view(['GET'])
 def get_symbol_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(SymbolSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
+    return get_list_items(SymbolSchemaModel, C_id, S100_PR_ItemSchemaSerializer, request)
 
 
 @api_view(['GET'])
@@ -240,7 +314,7 @@ def get_symbol_schema(request):
 @api_view(['GET'])
 def get_line_style_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(LineStyleSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
+    return get_list_items(LineStyleSchemaModel, C_id, S100_PR_ItemSchemaSerializer, request)
 
 
 @api_view(['GET'])
@@ -254,7 +328,7 @@ def get_line_style_schema(request):
 @api_view(['GET'])
 def get_area_fill_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(AreaFillSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
+    return get_list_items(AreaFillSchemaModel, C_id, S100_PR_ItemSchemaSerializer, request)
 
 
 @api_view(['GET'])
@@ -268,7 +342,7 @@ def get_area_fill_schema(request):
 @api_view(['GET'])
 def get_pixmap_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(PixmapSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
+    return get_list_items(PixmapSchemaModel, C_id, S100_PR_ItemSchemaSerializer, request)
 
 
 @api_view(['GET'])
@@ -282,7 +356,7 @@ def get_pixmap_schema(request):
 @api_view(['GET'])
 def get_colour_profile_schema_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(ColourProfileSchemaModel, C_id, S100_PR_ItemSchemaSerializer)
+    return get_list_items(ColourProfileSchemaModel, C_id, S100_PR_ItemSchemaSerializer, request)
 
 
 @api_view(['GET'])
@@ -296,7 +370,7 @@ def get_colour_profile_schema(request):
 @api_view(['GET'])
 def get_colour_token_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(ColourTokenModel, C_id, S100_PR_ColourTokenSerializer)
+    return get_list_items(ColourTokenModel, C_id, S100_PR_ColourTokenSerializer, request)
 
 
 @api_view(['GET'])
@@ -310,7 +384,7 @@ def get_colour_token(request):
 @api_view(['GET'])
 def palette_item_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(PaletteItemModel, C_id, S100_PR_PaletteItemSerializer)
+    return get_list_items(PaletteItemModel, C_id, S100_PR_PaletteItemSerializer, request)
 
 
 @api_view(['GET'])
@@ -322,7 +396,7 @@ def palette_item(request):
 @api_view(['GET'])
 def alert_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(AlertModel, C_id, S100_PR_AlertSerializer)
+    return get_list_items(AlertModel, C_id, S100_PR_AlertSerializer, request)
 
 @api_view(['GET'])
 def alert(request):
@@ -333,7 +407,7 @@ def alert(request):
 @api_view(['GET'])
 def alert_message_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(AlertMessageModel, C_id, S100_PR_AlertMessageSerializer)
+    return get_list_items(AlertMessageModel, C_id, S100_PR_AlertMessageSerializer,  request)
 
 @api_view(['GET'])
 def alert_message(request):
@@ -345,7 +419,7 @@ def alert_message(request):
 @api_view(['GET'])
 def colour_palette_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(ColourPaletteModel, C_id, S100_PR_ColourPalletteSerializer)
+    return get_list_items(ColourPaletteModel, C_id, S100_PR_ColourPalletteSerializer, request)
 
 
 @api_view(['GET'])
@@ -359,7 +433,7 @@ def colour_palette(request):
 @api_view(['GET'])
 def display_plane_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(DisplayPlaneModel, C_id, S100_PR_DisplayPlaneSerializer)
+    return get_list_items(DisplayPlaneModel, C_id, S100_PR_DisplayPlaneSerializer, request)
 
 
 @api_view(['GET'])
@@ -373,7 +447,7 @@ def display_plane(request):
 @api_view(['GET'])
 def display_mode_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(DisplayModeModel, C_id, S100_PR_DisplayModeSerializer)
+    return get_list_items(DisplayModeModel, C_id, S100_PR_DisplayModeSerializer, request)
 
 
 @api_view(['GET'])
@@ -387,7 +461,7 @@ def display_mode(request):
 @api_view(['GET'])
 def viewing_group_layer_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(ViewingGroupLayerModel, C_id, S100_PR_ViewingGroupLayerSerializer)
+    return get_list_items(ViewingGroupLayerModel, C_id, S100_PR_ViewingGroupLayerSerializer, request)
 
 
 @api_view(['GET'])
@@ -401,7 +475,7 @@ def viewing_group_layer(request):
 @api_view(['GET'])
 def viewing_group_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(ViewingGroupModel, C_id, S100_PR_ViewingGroupSerializer)
+    return get_list_items(ViewingGroupModel, C_id, S100_PR_ViewingGroupSerializer, request)
 
 
 @api_view(['GET'])
@@ -415,7 +489,7 @@ def viewing_group(request):
 @api_view(['GET'])
 def font_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(FontModel, C_id, S100_PR_FontSerializer)
+    return get_list_items(FontModel, C_id, S100_PR_FontSerializer,  request)
 
 
 @api_view(['GET'])
@@ -429,7 +503,7 @@ def font(request):
 @api_view(['GET'])
 def context_parameter_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(ContextParameterModel, C_id, S100_PR_ContextParameterSerializer)
+    return get_list_items(ContextParameterModel, C_id, S100_PR_ContextParameterSerializer, request)
 
 
 @api_view(['GET'])
@@ -443,7 +517,7 @@ def context_parameter(request):
 @api_view(['GET'])
 def drawing_priority_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(DrawingPriorityModel, C_id, S100_PR_DrawingPrioritySerializer)
+    return get_list_items(DrawingPriorityModel, C_id, S100_PR_DrawingPrioritySerializer, request)
 
 
 @api_view(['GET'])
@@ -457,7 +531,7 @@ def drawing_priority(request):
 @api_view(['GET'])
 def alert_highlight_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(AlertHighlightModel, C_id, S100_PR_AlertHighlightSerializer)
+    return get_list_items(AlertHighlightModel, C_id, S100_PR_AlertHighlightSerializer, request)
 
 
 @api_view(['GET'])
@@ -555,3 +629,100 @@ def item_schema_association_list(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
     return get_list_associations(ItemSchemaAssociation, I_id)
+
+from regiSystem.models.PR_Class import AlertInfoModel, AlertPriorityModel
+from regiSystem.serializers.PR import S100_PR_AlertInfoSerializer
+@api_view(['GET'])
+def alert_info_list(request):
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
+    try:
+        # 기본 파라미터 설정
+        search_term = request.GET.get('search_term', '')
+        status = request.GET.get('status', '')
+        category = request.GET.get('category', '')
+        sort_key = request.GET.get('sort_key', '_id')  # 기본값 '_id'
+        sort_direction = request.GET.get('sort_direction', 'ascending')  # 기본값 'ascending'
+        page = int(request.GET.get('page', 1))  # 기본값 1
+        page_size = int(request.GET.get('page_size', 1000))  # 기본값 1000
+
+        # 기본 MongoDB 쿼리 작성
+        query = {"concept_id": ObjectId(C_id)}
+
+        # status 필터링
+        if status:
+            query["itemStatus"] = status
+
+        # 검색어 필터링
+        if search_term:
+            if category == "name":
+                query["name"] = {"$regex": search_term, "$options": "i"}
+            elif category == "camelCase":
+                query["camelCase"] = {"$regex": search_term, "$options": "i"}
+            elif category == "definition":
+                query["definition"] = {"$regex": search_term, "$options": "i"}
+
+        # 전체 항목 수 계산
+        total_items = AlertInfoModel.collection.count_documents(query)
+        # 정렬 및 페이지네이션 적용
+        sort_order = 1 if sort_direction == 'ascending' else -1
+        items_cursor = AlertInfoModel.collection.find(query).sort(sort_key, sort_order).skip((page - 1) * page_size).limit(page_size)
+        items = []
+        for item in items_cursor:
+            # _id를 문자열로 변환
+            item['_id'] = get_encrypted_id([item['_id']])
+            # item['_id'] = str(item['_id'])
+            # priority_ids가 있으면 우선순위 데이터를 처리
+            if 'priority_ids' in item:
+                item['priority'] = []
+                for priority_id in item['priority_ids']:
+                    # 각 priority_id를 통해 우선순위 정보를 가져옴
+                    priority = AlertPriorityModel.get_priority_by_id(priority_id)
+                    if priority:
+                        item['priority'].append(priority)
+
+            items.append(item)
+
+        # 직렬화
+        serializer = S100_PR_AlertInfoSerializer(items, many=True)
+
+        # 응답 데이터 구성
+        response_data = {
+            'status': 'success',
+            'data': serializer.data,
+            'total_items': total_items,
+            'total_pages': (total_items + page_size - 1) // page_size,
+            'current_page': page,
+            'page_size': page_size
+        }
+
+        return Response(response_data, status=200)
+
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=400)
+
+@api_view(['GET'])
+def alert_info(request):
+    item_iv = request.GET.get('item_iv')
+    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    # I_id = request.GET.get('item_id')
+
+    # MongoDB에서 단일 문서 조회
+    item = AlertInfoModel.collection.find_one({"_id": ObjectId(I_id)})
+    
+    if not item:
+        return Response({"status": "error", "message": "Item not found"}, status=404)
+
+    # priority_ids가 있을 경우 처리
+    if 'priority_ids' in item:
+        item['priority'] = []
+        for priority_id in item['priority_ids']:
+            priority = AlertPriorityModel.get_priority_by_id(priority_id)
+            if priority:
+                item['priority'].append(priority)
+
+    # 데이터 직렬화
+    serializer = S100_PR_AlertInfoSerializer(item)
+    
+    return Response({"status": "success", "data": serializer.data}, status=200)
+
+

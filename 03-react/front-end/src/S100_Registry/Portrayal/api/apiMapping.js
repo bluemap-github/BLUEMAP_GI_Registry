@@ -20,7 +20,8 @@ import {
   POST_DRAWING_PRIORITY,
   POST_ALERT,
   POST_ALERT_HIGHLIGHT,
-  POST_ALERT_MESSAGE
+  POST_ALERT_MESSAGE,
+  POST_ALERT_INFO
 } from './api';
 
 
@@ -47,6 +48,7 @@ export const apiMapping = {
   Alert: { url: POST_ALERT, type: 'Alert', postType: 'json' },
   AlertHighlight: { url: POST_ALERT_HIGHLIGHT, type: 'AlertHighlight', postType: 'json' },
   AlertMessage: { url: POST_ALERT_MESSAGE, type: 'AlertMessage', postType: 'json' },
+  AlertInfo: { url: POST_ALERT_INFO, type: 'AlertInfo', postType: 'json' }
 };
 
 export const getSelestedApi = (type, setSelectedApiUrl, setApiType, setPostType) => {

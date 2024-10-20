@@ -46,7 +46,7 @@ const viewingGroup = { ...commonFields, 'foundationMode' : ''};
 const font = { ...commonFields, 'fontFile' : '', fontType: 'ttf'};
 const ContextParameter = { ...commonFields, 'parameterType' : '', 'defaultValue' : ''};
 const drawingPriority = { ...commonFields, 'priority' : ''};
-const alert = { ...commonFields, 'routeMonitor': [alertInfoTemplate], 'routePlan': [alertInfoTemplate]};
+const alert = { ...commonFields, 'routeMonitor': [{}], 'routePlan': [{}]};
 const alertHighlight = { ...commonFields, 'optional': '', 'style' : ''};
 const alertMessage = { ...commonFields, 'text': []};
 

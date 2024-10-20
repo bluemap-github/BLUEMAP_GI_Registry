@@ -44,6 +44,17 @@ class PR_Association:
                 if res_docs:
                     result.append({"child_id": get_encrypted_id([child_id]), "item_type": res_docs["itemType"], "xmlID" : res_docs["xmlID"]})
         return result
+
+    @classmethod
+    def get_association(cls, parent_id):
+        result = []
+        for item in list(cls.collection.find({"parent_id": ObjectId(parent_id)})):
+            child_id = item["child_id"]
+            for coll in cls.target_collection:
+                res_docs = coll.collection.find_one({"_id": ObjectId(child_id)})
+                if res_docs:
+                    result.append({"child_id": get_encrypted_id([child_id]), "item_type": res_docs["itemType"], "xmlID" : res_docs["xmlID"]})
+        return result
     
 
     

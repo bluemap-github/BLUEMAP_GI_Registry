@@ -553,6 +553,7 @@ class PaletteItemModel(RE_RegisterItemModel):
 
 from regiSystem.serializers.PR import S100_PR_AlertPrioritySerializer, S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer
 class AlertPriorityModel(RE_RegisterItemModel):
+    collection = db['S100_Portrayal_AlertPriority']
     @staticmethod
     def process_priority(priority_data):
         priority_serializer = S100_PR_AlertPrioritySerializer(data=priority_data)
@@ -561,8 +562,19 @@ class AlertPriorityModel(RE_RegisterItemModel):
             return str(result.inserted_id)
         else:
             return {"status": "error", "errors": priority_serializer.errors}
+    
+    @classmethod
+    def get_priority_by_id(cls, M_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        return cls.collection.find_one({"_id": ObjectId(M_id)})
 
-class AlertInfoModel(RE_RegisterItemModel):
+
+
+
+class AlertInfoModel:
+    collection = db['S100_Portrayal_AlertInfo']
+
     @staticmethod
     def process_info(info_data):
         info_serializer = S100_PR_AlertInfoSerializer(data=info_data)
@@ -580,6 +592,93 @@ class AlertInfoModel(RE_RegisterItemModel):
             return str(result.inserted_id)
         else:
             return {"status": "error", "errors": info_serializer.errors}
+
+    @classmethod
+    def insert(cls, data, C_id):
+        # concept_id (C_id)가 문자열인 경우 ObjectId로 변환
+        if isinstance(C_id, str):
+            try:
+                C_id = ObjectId(C_id)
+            except Exception as e:
+                return {"status": "error", "message": "Invalid concept_id format"}
+
+        # 데이터 직렬화
+        serializer = S100_PR_AlertInfoSerializer(data=data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            priority_data = validated_data.get('priority', [])
+            priority_ids = []
+
+            # priority 처리
+            for priority in priority_data:
+                priority_result = AlertPriorityModel.process_priority(priority)
+                if isinstance(priority_result, dict) and "errors" in priority_result:
+                    return priority_result
+                priority_ids.append(priority_result)
+
+            # priority_ids를 추가하고 priority 필드를 제거
+            validated_data['priority_ids'] = priority_ids
+            del validated_data['priority']
+
+            # concept_id 추가
+            validated_data['concept_id'] = C_id
+
+            try:
+                # 데이터베이스에 삽입
+                result = cls.collection.insert_one(validated_data)
+                return {"status": "success", "inserted_id": str(result.inserted_id)}
+            except Exception as e:
+                # 삽입 실패 시 에러 처리
+                return {"status": "error", "message": str(e)}
+        else:
+            # 직렬화 유효성 검사 실패 시 에러 반환
+            return {"status": "error", "errors": serializer.errors}
+
+    @classmethod
+    def update(cls, M_id, data, C_id):
+        # MongoDB 컬렉션이 설정되어 있는지 확인
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        
+        # 업데이트할 기존 데이터를 먼저 찾음
+        existing_item = cls.collection.find_one({"_id": ObjectId(M_id)})
+
+        if not existing_item:
+            return {"status": "error", "errors": "Item not found"}
+
+        # 시리얼라이저로 데이터 검증
+        serializer = S100_PR_AlertInfoSerializer(data=data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            priority_data = validated_data.get('priority', [])
+            priority_ids = []
+
+            # priority 처리
+            for priority in priority_data:
+                priority_result = AlertPriorityModel.process_priority(priority)
+                if isinstance(priority_result, dict) and "errors" in priority_result:
+                    return priority_result
+                priority_ids.append(priority_result)
+
+            # priority_ids를 추가하고 priority 필드를 제거
+            validated_data['priority_ids'] = priority_ids
+            del validated_data['priority']
+
+            validated_data['concept_id'] = ObjectId(C_id)
+
+            # MongoDB update
+            result = cls.collection.update_one(
+                {'_id': ObjectId(M_id)}, 
+                {'$set': validated_data}
+            )
+
+            if result.matched_count == 1:
+                return {"status": "success", "updated_id": str(M_id)}
+            else:
+                return {"status": "error", "errors": "No matching record found"}
+
+        else:
+            return {"status": "error", "errors": serializer.errors}
 
 
 class AlertModel(RE_RegisterItemModel):

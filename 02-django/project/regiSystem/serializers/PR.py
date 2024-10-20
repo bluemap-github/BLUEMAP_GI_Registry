@@ -84,13 +84,22 @@ class S100_PR_PaletteItemSerializer(S100_PR_RegisterItemSerializer):
 
 
 # alert comlex
+
+# class S100_PR_PUT_AlertInfoSerializer(serializers.Serializer):
+#     _id = ObjectIdField(read_only=True)
+#     concept_id = ObjectIdField(read_only=True)
+#     priority = serializers.ListField( child=S100_PR_AlertPrioritySerializer() )
+
 class S100_PR_AlertPrioritySerializer(serializers.Serializer):
     priority = serializers.CharField()
     default = serializers.BooleanField(allow_null=True, required=False)
     optional = serializers.BooleanField(allow_null=True, required=False)
 
 class S100_PR_AlertInfoSerializer(serializers.Serializer):
+    _id = ObjectIdField(read_only=True)
+    concept_id = ObjectIdField(read_only=True)
     priority = serializers.ListField( child=S100_PR_AlertPrioritySerializer() )
+
 
 class S100_PR_AlertSerializer(S100_PR_RegisterItemSerializer):
     routeMonitor = serializers.ListField(

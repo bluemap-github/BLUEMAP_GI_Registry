@@ -42,35 +42,54 @@ const PR_List = ({ viewType }) => {
   const [schemaList, setSchemaList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [status, setStatus] = useState('');
+  const [category, setCategory] = useState('');
+  const [sortKey, setSortKey] = useState('name');
+  const [sortDirection, setSortDirection] = useState('ascending');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const [totalPages, setTotalPages] = useState(1);
   const regi_uri = Cookies.get('REGISTRY_URI'); 
   const { setItemDetails } = useContext(ItemContext);
 
   // viewType에 따라 API 엔드포인트를 결정
   const apiEndpoint = schemaApiTypes[viewType];
 
-  useEffect(() => {
-    if (!apiEndpoint) return; // apiEndpoint가 없는 경우 바로 리턴
+  const fetchSchemas = async (updatedPage = page) => {
+    if (!apiEndpoint) return;
 
-    setLoading(true);  // 로딩 상태 시작
-    setError(null);    // 에러 상태 초기화
+    setLoading(true);
+    setError(null);
 
-    axios.get(apiEndpoint, { params: { regi_uri } })
-      .then((res) => {
-        if (res.data && res.data.data) {
-          setSchemaList(res.data.data);  // 데이터 응답 형식에 따라 처리
-        } else {
-          setSchemaList([]);
-        }
-      })
-      .catch((err) => {
-        setError('Failed to load data');
-        setSchemaList([]); // 에러 발생 시에도 빈 배열로 설정
-      })
-      .finally(() => {
-        setLoading(false);  // 로딩 상태 종료
+    try {
+      const response = await axios.get(apiEndpoint, {
+        params: {
+          regi_uri,
+          search_term: searchTerm,
+          status,
+          category,
+          sort_key: sortKey,
+          sort_direction: sortDirection,
+          page: updatedPage,
+          page_size: pageSize,
+        },
       });
 
-  }, [regi_uri, apiEndpoint, viewType]); // viewType도 의존성 배열에 추가
+      setSchemaList(response.data.data || []);
+      setTotalPages(response.data.total_pages || 1);
+    } catch (error) {
+      setError('Failed to load data');
+      setSchemaList([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // viewType이 바뀔 때마다 fetchSchemas 호출
+    fetchSchemas();
+  }, [viewType, searchTerm, status, category, sortKey, sortDirection, pageSize, page]); // viewType 추가
 
   const handleDetailClick = (item) => {
     setItemDetails({
@@ -81,17 +100,90 @@ const PR_List = ({ viewType }) => {
     navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
   };
 
+  const handleSearch = () => {
+    setPage(1);
+    fetchSchemas(1);
+  };
+
+  const handleSortChange = (key) => {
+    const newDirection = sortKey === key && sortDirection === 'ascending' ? 'descending' : 'ascending';
+    setSortKey(key);
+    setSortDirection(newDirection);
+    fetchSchemas();
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+      fetchSchemas(newPage);
+    }
+  };
+
+  const handlePageSizeChange = (e) => {
+    const newSize = parseInt(e.target.value);
+    setPageSize(newSize);
+    setPage(1);
+    fetchSchemas(1);
+  };
+
+  const renderSortArrow = (key) => {
+    if (sortKey === key) {
+      return sortDirection === 'ascending' ? '↑' : '↓';
+    }
+    return '↕';
+  };
+
   return (
     <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <div className='input-group' style={{width: "25%"}}>
+            <label className='input-group-text'>Status</label>
+            <select className='form-select' value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="">All</option>
+              <option value="processing">Processing</option>
+              <option value="valid">Valid</option>
+              <option value="superseded">Superseded</option>
+              <option value="notValid">Not Valid</option>
+              <option value="retired">Retired</option>
+              <option value="clarified">Clarified</option>
+            </select>
+          </div>
+          <div className='input-group' style={{width: "30%"}}>
+            <label className='input-group-text'>Category</label>
+            <select className='form-select' value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="">Choose</option>
+              <option value="name">Name</option>
+              <option value="camelCase">Camel Case</option>
+              <option value="definition">Definition</option>
+            </select>
+          </div>
+          <div className="input-group" style={{ width: '30%' }}>
+            <input
+              className="form-control"
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search..."
+            />
+            <button className="btn btn-outline-secondary" onClick={handleSearch}>
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
         <div className="text-danger">{error}</div>
       ) : (
-        <table className="table table-hover table-bordered">
+        <table className="table table-hover table-bordered" style={{ marginTop: '20px' }}>
           <thead>
             <tr className="table-primary">
-              <th style={{ width: '15%' }}>Name</th>
+              <th style={{ width: '15%', cursor: 'pointer' }} onClick={() => handleSortChange('name')}>
+                Name {renderSortArrow('name')}
+              </th>
               <th style={{ width: '15%' }}>Item Type</th>
               <th style={{ width: '40%' }}>Definition</th>
               <th style={{ width: '10%' }}>Status</th>
@@ -119,6 +211,41 @@ const PR_List = ({ viewType }) => {
           </tbody>
         </table>
       )}
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignContent: 'center' }}>
+            <select className="form-select form-select-sm" value={pageSize} onChange={handlePageSizeChange}>
+              <option value="15">15</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+          <label style={{ marginLeft: '10px' }}>rows per page</label>
+        </div>
+
+        <nav aria-label="Page navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+          <ul className="pagination">
+            <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(page - 1)} disabled={page <= 1}>
+                Previous
+              </button>
+            </li>
+            {[...Array(totalPages)].map((_, i) => (
+              <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => handlePageChange(i + 1)} disabled={page === i + 1}>
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+            <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page >= totalPages}>
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 };

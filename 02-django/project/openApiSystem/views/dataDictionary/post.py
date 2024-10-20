@@ -154,3 +154,55 @@ def information(request):
         # Serializer 유효성 검사 실패 시 에러 반환
         return Response({"status": "error", "message": info_serializer.errors}, status=400)
 
+
+from openApiSystem.models.dataDictionary.association import (
+    CD_AttributeUsage,
+    DD_associatedAttribute,
+    DD_distinction
+)
+from openApiSystem.serializers.dataDictionary.association import (
+    DDR_Association
+)
+
+def common_association_insert(model, request):
+    regi_uri, service_key = get_params(request)
+    validation_response = check_key_validation(service_key, regi_uri)
+    if isinstance(validation_response, Response):
+        return validation_response
+    parent_id = request.data.get("parent_id")
+    child_id = request.data.get("child_id")
+    res = model.insert_association(parent_id, child_id)
+    if res.get("status") == "error":
+        return Response({"status": "error", "message": res.get("message")}, status=404)
+    else:
+        return Response({"status": "success", "data": res.get("inserted_id")}, status=201)
+
+@swagger_auto_schema(
+    method='post', 
+    manual_parameters=[regiURI, serviceKey], 
+    request_body=DDR_Association
+)
+@api_view(['POST'])
+def associated_attribute(request):
+    return common_association_insert(DD_associatedAttribute, request)
+
+
+@swagger_auto_schema(
+    method='post', 
+    manual_parameters=[regiURI, serviceKey], 
+    request_body=DDR_Association
+)
+@api_view(['POST'])
+def sub_attribute(request):
+    return common_association_insert(CD_AttributeUsage, request)
+
+
+@swagger_auto_schema(
+    method='post', 
+    manual_parameters=[regiURI, serviceKey], 
+    request_body=DDR_Association
+)
+@api_view(['POST'])
+def distinction(request):
+    return common_association_insert(DD_distinction, request)
+

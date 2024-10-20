@@ -83,20 +83,20 @@ class S100_PR_PaletteItemSerializer(S100_PR_RegisterItemSerializer):
 
 
 # alert comlex
-class S100_PR_AlertPrioritySerializer(serializers.Serializer):
+class S100_OPEN_PR_AlertPrioritySerializer(serializers.Serializer):
     priority = serializers.CharField()
     default = serializers.BooleanField(allow_null=True, required=False)
     optional = serializers.BooleanField(allow_null=True, required=False)
 
-class S100_PR_AlertInfoSerializer(serializers.Serializer):
-    priority = serializers.ListField( child=S100_PR_AlertPrioritySerializer() )
+class S100_OPEN_PR_AlertInfoSerializer(serializers.Serializer):
+    priority = serializers.ListField( child=S100_OPEN_PR_AlertPrioritySerializer() )
 
 class S100_PR_AlertSerializer(S100_PR_RegisterItemSerializer):
     routeMonitor = serializers.ListField(
-        child=S100_PR_AlertInfoSerializer(allow_null=True, required=False)
+        child=S100_OPEN_PR_AlertInfoSerializer(allow_null=True, required=False)
     )
     routePlan = serializers.ListField(
-        child=S100_PR_AlertInfoSerializer(allow_null=True, required=False)
+        child=S100_OPEN_PR_AlertInfoSerializer(allow_null=True, required=False)
     )
 
 # alert message complex

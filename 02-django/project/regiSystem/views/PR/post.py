@@ -300,3 +300,28 @@ def insert_symbol_association(request):
 @api_view(['POST'])
 def insert_item_schema_association(request):
     return insert_association_item(ItemSchemaAssociation, request, request.data)
+
+from regiSystem.serializers.PR import S100_PR_AlertInfoSerializer
+from regiSystem.models.PR_Class import AlertInfoModel
+
+@api_view(['POST'])
+def insert_alert_info(request):
+    # regi_uri에서 C_id 추출
+    regi_uri = request.GET.get('regi_uri')
+    if not regi_uri:
+        return Response({"status": "error", "message": "Missing regi_uri"}, status=HTTP_400_BAD_REQUEST)
+    
+    C_id = uri_to_serial(regi_uri)  # C_id 변환
+    if not C_id:
+        return Response({"status": "error", "message": "Invalid regi_uri"}, status=HTTP_400_BAD_REQUEST)
+
+    data = request.data
+
+    # 모델의 insert 메서드 호출
+    result = AlertInfoModel.insert(data, C_id)
+
+    # 삽입 결과 확인
+    if result.get("status") == "success":
+        return Response({"status": "success", "inserted_id": get_encrypted_id([result["inserted_id"]])}, status=HTTP_201_CREATED)
+    else:
+        return Response({"status": "error", "errors": result.get("errors") or result.get("message")}, status=HTTP_400_BAD_REQUEST)

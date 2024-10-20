@@ -10,7 +10,8 @@ import {
     GET_VIEWING_GROUP_LAYER_LIST,
     GET_VIEWING_GROUP_LIST,
     GET_ALERT_MESSAGE_LIST,
-    GET_ITEM_SCHEMA_LIST
+    GET_ITEM_SCHEMA_LIST,
+    GET_ALERT_HIGHLIGHT_LIST
 } from '../../api/api';  // Import the API URLs here
 
 const callAPI = {
@@ -145,7 +146,7 @@ const callAPI = {
     ],
     'AlertHighlight': [
         { 
-            name: 'Alert Message List', 
+            name: 'Connect With Alert Message', 
             associationName: 'msg',
             required: false,
             apiCall: GET_ALERT_MESSAGE_LIST, 
@@ -170,10 +171,29 @@ const callAPI = {
             defaultData: { parent_id: "", child_id: "" },
             isPlural : false 
         }
+    ],
+    'AlertInfo': [
+        { 
+            name: 'Alert Message List', 
+            associationName: 'msg',
+            required: true,
+            apiCall: GET_ALERT_MESSAGE_LIST, 
+            defaultData: { parent_id: "", child_id: "" },
+            isPlural : false 
+        },
+        { 
+            name: 'Connect With Alert Highlight', 
+            associationName: 'highlight',
+            required: false,
+            apiCall: GET_ALERT_HIGHLIGHT_LIST,
+            defaultData: { parent_id: "", child_id: "" },
+            isPlural : false
+        }
     ]
+
 };
 
-const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
+const DynamicAssociationForm = ({ itemType, onFormSubmit }) => {
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
     const [inputFields, setInputFields] = useState({}); // 각 어소시에이션별 입력 필드를 관리하기 위한 객체
@@ -188,7 +208,16 @@ const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
                 try {
                     // callAPI[itemType] 배열의 모든 apiCall을 실행
                     const apiPromises = callAPI[itemType].map((item) => {
-                        return axios.get(item.apiCall, { params: { regi_uri } });
+                        return axios.get(item.apiCall, { params: {
+                            regi_uri,
+                            search_term: "",
+                            status : "",
+                            category : "",
+                            sort_key: "name",
+                            sort_direction: "ascending",
+                            page: 1,
+                            page_size: 1000,
+                          }, });
                     });
 
                     // 모든 API 요청이 완료될 때까지 대기
@@ -293,7 +322,7 @@ const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
 
     if (!callAPI[itemType]) {
         return (
-            <div className="item-input-form-bg p-3 mt-4">
+            <div className="item-input-form-bg mt-4">
                 <h3>{itemType} Association Form</h3>
                 <div className="size-block-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <strong>No Association here</strong>
@@ -309,12 +338,18 @@ const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
     }
 
     return (
-        <div className="item-input-form-bg p-3 mt-4">
-            <h3>{itemType} Association Form</h3>
+        <div>
+            {itemType === 'AlertInfo' ? (<></>): (
+            <h3>{itemType} Association Form</h3>)}
             {(callAPI[itemType] || []).map((item, idx) => (
-                <div  className='p-2 mt-3 pb-3' key={idx} style={{backgroundColor: 'white'}}>
+                <div
+                    key={idx}
+                    className={itemType === 'AlertInfo' ? 'mt-3' : 'p-2 mt-3 pb-3'}
+                    style={itemType === 'AlertInfo' ? {} : { backgroundColor: 'white' }}
+                >
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                        <h5>{item.name}</h5>
+                    {itemType === 'AlertInfo' ? (<></>): (
+                        <h5>{item.name}</h5>)}
                         {item.isPlural && (
                             <button className="btn btn-outline-secondary btn-sm mt-2" onClick={() => handleAddField(item.associationName)}>
                                 + Add Another {item.name}
@@ -323,7 +358,7 @@ const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
                     </div>
                     {/* 단일 선택 */}
                     {!item.isPlural && (
-                        <div className='p-2'>
+                        <div className={itemType === 'AlertInfo' ? '' : 'p-2'}>
                             <div className="input-group input-group" style={{ width: '100%' }}>
                                 <label
                                     className="input-group-text"
@@ -402,4 +437,4 @@ const DinamicAssociationForm = ({ itemType, onFormSubmit }) => {
     );
 };
 
-export default DinamicAssociationForm;
+export default DynamicAssociationForm;

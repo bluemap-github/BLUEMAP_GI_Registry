@@ -7,6 +7,8 @@ import AlertInfoTags from './AlertInfoTags';
 import RGBandCIE from './RGBandCIE';
 import ImageInput from './ImageInput';
 
+import AlertInfoInput from './AlertInfoInput';
+
 const DynamicItemForm = ({ itemType, onFormSubmit }) => {
   const baseInformationFields = {
     description: [{ text: '', language: '' }],
@@ -14,8 +16,8 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
     text: [{ text: '', language: '' }],
     alertPriority: { priority: '', default: '', optional: '' }, 
     alertInfo: { priority: { priority: '', default: '', optional: '' } }, // alertPriority를 직접 설정
-    routeMonitor: { priority: { priority: '', default: '', optional: '' } }, // alertInfo를 직접 설정
-    routePlan: { priority: { priority: '', default: '', optional: '' } }, // alertInfo를 직접 설정
+    routeMonitor: {}, // alertInfo를 직접 설정
+    routePlan: {}, // alertInfo를 직접 설정
     style: ''
   };
 
@@ -166,6 +168,11 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
     onFormSubmit(updatedFormData);
   }
 
+  const onAlertFormSubmit = (alertInfo, alertType) => {
+    formData[alertType] = alertInfo;
+    onFormSubmit(formData);
+  }
+
   
 
   return (
@@ -214,9 +221,10 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
       }
       {
         itemType === 'Alert' ? (
-          <div className='mb-2'>
-            <AlertInfoTags tagName={"Route Modnitor"} onFormSubmit={(addMonitor) => onAlertinfoChange("routeMonitor", addMonitor)}/>
-            <AlertInfoTags tagName={"Route Plan"} onFormSubmit={(addPlan) => onAlertinfoChange("routePlan", addPlan)}/>
+          <div className=''>
+            {/* onFormSubmit에서 화살표 함수로 함수를 전달 */}
+            <AlertInfoInput tagName={"Route Monitor"} onFormSubmit={(alertInfo) => onAlertFormSubmit(alertInfo, "routeMonitor")} />
+            <AlertInfoInput tagName={"Route Plan"} onFormSubmit={(alertInfo) => onAlertFormSubmit(alertInfo, "routePlan")} />
           </div>
         ) : null
       }

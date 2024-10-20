@@ -395,3 +395,152 @@ def alert(request):
     main_model = RE_RegisterItemModel
     main_model.delete(M_Id)
     return Response(f"Alert with ID {M_Id} deleted", status=200)
+
+from regiSystem.models.PR_Association import (
+    SymbolAssociation,
+    IconAssociation,
+    ItemSchemaAssociation,
+    ColourTokenAssociation,
+    ValueAssociation,
+    PaletteAssociation,
+    DisplayModeAssociation,
+    ViewingGroupAssociation,
+    HighlightAssociation,
+    MessageAssociation,
+    PR_Association
+)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def symbol_association(request):
+    I_id = decrypt_item_id(request)
+    SymbolAssociation.delete(I_id, "_id")
+    return Response("Symbol association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def item_schema_association(request):
+    I_id = decrypt_item_id(request)
+    ItemSchemaAssociation.delete(I_id, "_id")
+    return Response("Item schema association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def colour_token_association(request):
+    I_id = decrypt_item_id(request)
+    ColourTokenAssociation.delete(I_id, "_id")
+    return Response("Colour token association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def palette_association(request):
+    I_id = decrypt_item_id(request)
+    PaletteAssociation.delete(I_id, "_id")
+    return Response("Palette association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def display_mode_association(request):
+    I_id = decrypt_item_id(request)
+    DisplayModeAssociation.delete(I_id, "_id")
+    return Response("Display mode association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def viewing_group_association(request):
+    I_id = decrypt_item_id(request)
+    ViewingGroupAssociation.delete(I_id, "_id")
+    return Response("Viewing group association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def highlight_association(request):
+    I_id = decrypt_item_id(request)
+    HighlightAssociation.delete(I_id, "_id")
+    return Response("Highlight association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def icon_association(request):
+    I_id = decrypt_item_id(request)
+    IconAssociation.delete(I_id, "_id")
+    return Response("Icon association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def value_association(request):
+    I_id = decrypt_item_id(request)
+    ValueAssociation.delete(I_id, "_id")
+    return Response("Value association deleted", status=200)
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def msg_association(request):
+    I_id = decrypt_item_id(request)
+    MessageAssociation.delete(I_id, "_id")
+    return Response("Message association deleted", status=200)
+
+
+from regiSystem.serializers.PR import S100_PR_AlertInfoSerializer
+from regiSystem.models.PR_Class import AlertInfoModel, AlertPriorityModel
+from regiSystem.info_sec.getByURI import uri_to_serial
+from bson import ObjectId
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],
+)
+@api_view(['DELETE'])
+def alert_info(request):
+    try:
+        # Decrypt the item_id
+        I_id = decrypt_item_id(request)
+
+        # Fetch the AlertInfo document using item_id
+        alert_info = AlertInfoModel.collection.find_one({"_id": ObjectId(I_id)})
+        
+        if not alert_info:
+            return Response({"status": "error", "message": "AlertInfo not found"}, status=404)
+
+        # Delete the associated priorities
+        priority_ids = alert_info.get('priority_ids', [])
+        for priority_id in priority_ids:
+            AlertPriorityModel.collection.delete_one({"_id": ObjectId(priority_id)})
+
+        # Delete the AlertInfo document
+        AlertInfoModel.collection.delete_one({"_id": ObjectId(I_id)})
+
+        return Response({"status": "success", "message": "AlertInfo and associated priorities deleted successfully"}, status=200)
+
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=500)

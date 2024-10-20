@@ -12,7 +12,21 @@ import Cookies from 'js-cookie';
 import {basicJSONs} from './components/basicJSONs';
 import { ItemContext } from '../../../context/ItemContext';
 import DynamicItemForm from './components/DynamicItemForm'; // Import the DynamicItemForm component
-import DinamicAssociationForm from './components/DinamicAssociationForm'; // Import the DynamicItemForm component
+import DynamicAssociationForm from './components/DynamicAssociationForm'; // Import the DynamicItemForm component
+import AlertInfoInput from './components/AlertInfoInput'; // Import the DynamicItemForm component
+
+const associationPostAPI = {
+  'symbol': POST_SYMBOL_ASSOCIATION,
+  'icon': POST_ICON_ASSOCIATION,
+  'viewingGroup': POST_VIEWING_GROUP_ASSOCIATION,
+  'itemSchema': POST_ITEM_SCHEMA_ASSOCIATION,
+  'colourToken': POST_COLOUR_TOKEN_ASSOCIATION,
+  'palette': POST_PALETTE_ASSOCIATION,
+  'displayMode': POST_DISPLAY_MODE_ASSOCIATION,
+  'msg': POST_MESSAGE_ASSOCIATION,
+  'highlight': POST_HIGHLIGHT_ASSOCIATION,
+  'value': POST_VALUE_ASSOCIATION,
+}
 
 const InsertPortrayalItem = () => {
   const navigate = useNavigate();
@@ -43,21 +57,11 @@ const InsertPortrayalItem = () => {
   
   const [associationAndAPI, setAssociationAndAPI] = useState([]);
 
-  const associationPostAPI = {
-    'symbol': POST_SYMBOL_ASSOCIATION,
-    'icon': POST_ICON_ASSOCIATION,
-    'viewingGroup': POST_VIEWING_GROUP_ASSOCIATION,
-    'itemSchema': POST_ITEM_SCHEMA_ASSOCIATION,
-    'colourToken': POST_COLOUR_TOKEN_ASSOCIATION,
-    'palette': POST_PALETTE_ASSOCIATION,
-    'displayMode': POST_DISPLAY_MODE_ASSOCIATION,
-    'msg': POST_MESSAGE_ASSOCIATION,
-    'highlight': POST_HIGHLIGHT_ASSOCIATION,
-    'value': POST_VALUE_ASSOCIATION,
-  }
+
 
   // Handler for DynamicItemForm submission
   const handleDynamicFormSubmit = (formData) => { 
+    console.log(formData);
     setDynamicFormData(formData); 
   };
 
@@ -142,7 +146,9 @@ const InsertPortrayalItem = () => {
       return; // Validation failed for the specific type
     }
 
+    
     combiningData(validateType);
+
   };
 
   const combiningData = (validateType) => {
@@ -153,7 +159,11 @@ const InsertPortrayalItem = () => {
       ...mainData,         // main 데이터를 병합
     };
 
+    if (validateType === 'Alert') {
+      console.log('Alert data:', combinedData);
+    } else {
     handleSubmitItem(combinedData);
+    }
   };
 
   const handleSubmitItem = async (combinedData) => {
@@ -296,38 +306,40 @@ const InsertPortrayalItem = () => {
 
         return updatedState; // 최종 업데이트된 배열 반환
     });
-};
+  };
 
 
-
-
-  
   return (
     <>
-      <div>
+      <div> 
         <ChooseType initial={apiType} getSelestedApi={(type) => getSelestedApi(type, setSelectedApiUrl, setApiType, setPostType)} /> 
       </div>
-      
-      <div>
-        {/* Render the dynamic form based on the selected apiType */} 
-        <DynamicItemForm itemType={apiType} onFormSubmit={handleDynamicFormSubmit} />
-      </div>
-      <div>
-        <DinamicAssociationForm itemType={apiType}  onFormSubmit={handleAssociation}/>
-      </div>
-      <div>
-        {/* Render ItemInput separately */} 
-        <ItemInput onFormSubmit={handleItemInputSubmit} apiType={apiType} />
-      </div>
+    {apiType === 'AlertInfo' ? (
+      <div><AlertInfoInput /></div>
+    ) : (
+      <>
+        <div>
+          <button onClick={dynamicLog}>dynamicLog</button>
+          {/* Render the dynamic form based on the selected apiType */} 
+          <DynamicItemForm itemType={apiType} onFormSubmit={handleDynamicFormSubmit} />
+        </div>
+        <div className="item-input-form-bg p-3 mt-4">
+          <DynamicAssociationForm itemType={apiType}  onFormSubmit={handleAssociation}/>
+        </div>
+        <div>
+          {/* Render ItemInput separately */} 
+          <ItemInput onFormSubmit={handleItemInputSubmit} apiType={apiType} />
+        </div>
 
-      <div>
-        <ManagementInfoInput onFormSubmit={handleManagementInfoSubmit} apiType={apiType} />
-      </div>
+        <div>
+          <ManagementInfoInput onFormSubmit={handleManagementInfoSubmit} apiType={apiType} />
+        </div>
 
-      <div className='text-end'>
-          <button className='mt-3 btn btn-sm btn-primary' onClick={() => validationTest(apiType)}>Submit</button>
-      </div>
-      <div style={{ height: '200px' }}></div>
+        <div className='text-end'>
+            <button className='mt-3 btn btn-sm btn-primary' onClick={() => validationTest(apiType)}>Submit</button>
+        </div>
+        <div style={{ height: '200px' }}></div>
+      </>) }
     </>
   )
 }
