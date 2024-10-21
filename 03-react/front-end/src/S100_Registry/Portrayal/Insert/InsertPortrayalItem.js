@@ -159,72 +159,62 @@ const InsertPortrayalItem = () => {
     };
 
     if (validateType === 'Alert') {
-      alertMadeItem(combinedData);
+      alertMadeInsertItem(combinedData);
     } else {
       handleSubmitItem(combinedData);
     }
   };
-  const alertMadeItem = async (data) => {
-    // 1. routeMonitor와 routePlan 데이터를 추출
+  
+  const alertMadeInsertItem = async (data) => {
     const AlertInfoIds = {
       routeMonitor: [],
       routePlan: [],
     };
-    const routeMonitorData = [...data.routeMonitor];  // routeMonitor 데이터를 복사
-    const routePlanData = [...data.routePlan];        // routePlan 데이터를 복사
+    const routeMonitorData = [...data.routeMonitor];
+    const routePlanData = [...data.routePlan];
     
-    // 2. 추출 후 routeMonitor와 routePlan을 빈 배열로 설정
     data.routeMonitor = [];
     data.routePlan = [];
-  
-    // 3. 콘솔에 데이터 출력 (실제 API 요청 전에 확인)
-    console.log('Original Data without routeMonitor and routePlan:', data);
-    console.log('Extracted routeMonitor Data:', routeMonitorData);
-    console.log('Extracted routePlan Data:', routePlanData);
-  
-    // 4. routeMonitorData 배열을 순회하며 alertInfoList를 API로 전송
-    for (let i = 0; i < routeMonitorData.length; i++) {
-      if (routeMonitorData[i].alertInfoList) {
-        for (let j = 0; j < routeMonitorData[i].alertInfoList.length; j++) {
-          const alertInfo = routeMonitorData[i].alertInfoList[j];
-          try {
-            const response = await axios.post(POST_ALERT_INFO, alertInfo, {params: { regi_uri: regi_uri }});
+    
+    // 병렬 처리를 위한 Promise 배열 생성
+    const monitorPromises = routeMonitorData.flatMap((monitorItem, i) =>
+      monitorItem.alertInfoList?.map((alertInfo, j) =>
+        axios.post(POST_ALERT_INFO, alertInfo, { params: { regi_uri } })
+          .then(response => {
             console.log(`Route Monitor AlertInfoList [${i}][${j}] API Response:`, response.data.inserted_id);
-            
-            // inserted_id를 AlertInfoIds.routeMonitor에 추가
             AlertInfoIds.routeMonitor.push(response.data.inserted_id);
-          } catch (error) {
+          })
+          .catch(error => {
             console.error(`Error posting Route Monitor AlertInfoList [${i}][${j}]:`, error);
-          }
-        }
-      }
-    }
-  
-    // 5. routePlanData 배열을 순회하며 alertInfoList를 API로 전송
-    for (let i = 0; i < routePlanData.length; i++) {
-      if (routePlanData[i].alertInfoList) {
-        for (let j = 0; j < routePlanData[i].alertInfoList.length; j++) {
-          const alertInfo = routePlanData[i].alertInfoList[j];
-          try {
-            const response = await axios.post(POST_ALERT_INFO, alertInfo, {params: { regi_uri: regi_uri }});
+          })
+      ) || []
+    );
+    
+    const planPromises = routePlanData.flatMap((planItem, i) =>
+      planItem.alertInfoList?.map((alertInfo, j) =>
+        axios.post(POST_ALERT_INFO, alertInfo, { params: { regi_uri } })
+          .then(response => {
             console.log(`Route Plan AlertInfoList [${i}][${j}] API Response:`, response.data.inserted_id);
-            
-            // inserted_id를 AlertInfoIds.routePlan에 추가
             AlertInfoIds.routePlan.push(response.data.inserted_id);
-          } catch (error) {
+          })
+          .catch(error => {
             console.error(`Error posting Route Plan AlertInfoList [${i}][${j}]:`, error);
-          }
-        }
-      }
-    }
+          })
+      ) || []
+    );
   
-    // 6. 최종적으로 AlertInfoIds 콘솔에 출력
-    console.log('Final AlertInfoIds:', AlertInfoIds);
+    // 모든 요청 병렬로 처리
+    await Promise.all([...monitorPromises, ...planPromises]);
   
-    // 7. 이후 routeMonitorData, routePlanData에 대해 추가적인 API 요청이 필요하면 여기에 작성
-    // 예: axios.post('/api/monitor', routeMonitorData);
-    // 예: axios.post('/api/plan', routePlanData);
+    // console.log('Final AlertInfoIds:', AlertInfoIds);
+
+    data.routeMonitor = AlertInfoIds.routeMonitor;
+    data.routePlan = AlertInfoIds.routePlan;
+
+    console.log('Final Data:', data);
+
   };
+  
   
   
   
