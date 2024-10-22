@@ -704,36 +704,27 @@ class AlertModel(RE_RegisterItemModel):
         else:
             return {"status": "error", "errors": serializer.errors}
     
+    from bson import ObjectId
+
     @classmethod
     def put(cls, M_id, data, C_id):
         
+        # M_id 유효성 검사
         if not ObjectId.is_valid(M_id):
             return {"status": "error", "errors": "Invalid ID"}
 
-        serializer = S100_PR_AlertSerializer(data=data)
+        # 데이터 유효성 검사
+        serializer = S100_PR_Alert_POST_Serializer(data=data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
 
-            routeMonitor_data = validated_data.get('routeMonitor', [])
-            routeMonitor_ids = []
-            for info in routeMonitor_data:
-                info_result = AlertInfoModel.process_info(info)
-                if isinstance(info_result, dict) and "errors" in info_result:
-                    return info_result
-                routeMonitor_ids.append(info_result)
-            validated_data['routeMonitor_ids'] = routeMonitor_ids
-            del validated_data['routeMonitor']
+            # routeMonitor 및 routePlan은 이미 ObjectId이므로 변환할 필요가 없음
+            routeMonitor_ids = validated_data.get('routeMonitor', [])
+            validated_data['routeMonitor'] = [ObjectId(monitor) for monitor in routeMonitor_ids if ObjectId.is_valid(monitor)]
+            routePlan_ids = validated_data.get('routePlan', [])
+            validated_data['routePlan'] = [ObjectId(plan) for plan in routePlan_ids if ObjectId.is_valid(plan)]
 
-            routePlan_data = validated_data.get('routePlan', [])
-            routePlan_ids = []
-            for info in routePlan_data:
-                info_result = AlertInfoModel.process_info(info)
-                if isinstance(info_result, dict) and "errors" in info_result:
-                    return info_result
-                routePlan_ids.append(info_result)
-            validated_data['routePlan_ids'] = routePlan_ids
-            del validated_data['routePlan']
-
+            # description은 동일하게 처리 (예: 여기서는 그대로 사용 가능)
             description_data = validated_data.get('description', [])
             description_ids = RegisterItemModel.process_description(description_data)
             if isinstance(description_ids, dict) and "errors" in description_ids:
@@ -741,9 +732,10 @@ class AlertModel(RE_RegisterItemModel):
             validated_data['description_ids'] = description_ids
             del validated_data['description']
 
+            # concept_id를 ObjectId로 변환
             validated_data['concept_id'] = ObjectId(validated_data['concept_id'])
 
-            # MongoDB update
+            # MongoDB 업데이트
             result = cls.collection.update_one(
                 {'_id': ObjectId(M_id)}, 
                 {'$set': validated_data}
@@ -756,7 +748,9 @@ class AlertModel(RE_RegisterItemModel):
 
         else:
             return {"status": "error", "errors": serializer.errors}
-    
+
+
+
     @classmethod
     def get_list(cls, C_id):
         # MongoDB에서 concept_id로 Alert 항목들 가져오기

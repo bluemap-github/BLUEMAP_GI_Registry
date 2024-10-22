@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';  // Axios 라이브러리 사용
 import { GET_MESSAGE_ASSOCIATION_LIST, GET_HIGHLIGHT_ASSOCIATION_LIST } from '../../api/api';
 import UpdateModal from '../../Update/PRAlertUpdate/UpdateModal';
+import AddAlertInfoModal from '../../Update/PRAlertUpdate/AddAlertInfoModal';
 
 const tableFields = [
     { name: 'XML ID', key: 'xmlID' },
@@ -13,6 +14,10 @@ const AlertDetails = ({ items }) => {
     const [updateType, setUpdateType] = useState('');
     const [updatePage, setUpdatePage] = useState(0);
     const [isOpened, setIsOpened] = useState(false);
+    const [addModalIsOpened, setAddModalIsOpened] = useState(false);
+    const [modalContent, setModalContent] = useState(items);
+    const [priorityID, setPriorityID] = useState('');
+    const [routeType, setRouteType] = useState('');
 
     // Priority _id당 GET 요청 보내기
     const fetchAssociations = async (id) => {
@@ -64,13 +69,32 @@ const AlertDetails = ({ items }) => {
     };
 
     const handleUpdateClick = (type, page) => {
+        setModalContent(items);
         setUpdateType(type);  // UpdateType을 설정
         setUpdatePage(page);  // 페이지 설정
         setIsOpened(true);    // 모달 열기
     };
 
+    const handleAssoUpdateClick = (type, page, priorityID) => {
+        setModalContent(associations);
+        setUpdateType(type);  // UpdateType을 설정
+        setUpdatePage(page);  // 페이지 설정
+        setIsOpened(true);    // 모달 열기
+        setPriorityID(priorityID);
+    };
+
+    const handleAddAlertInfo = (itsRouteType) => {
+        setModalContent(items);
+        setAddModalIsOpened(true);
+        setRouteType(itsRouteType);
+    };
+
     const onClose = () => {
         setIsOpened(false);
+    };
+
+    const onCloseAddModal = () => {
+        setAddModalIsOpened(false);
     };
 
     if (!items) {
@@ -80,7 +104,8 @@ const AlertDetails = ({ items }) => {
     return (
         <div>
             {/* Portrayal Information */}
-            <UpdateModal IsOpened={isOpened} onClose={onClose} data={items} UpdateType={updateType} page={updatePage}/>
+            <UpdateModal IsOpened={isOpened} onClose={onClose} data={modalContent} UpdateType={updateType} page={updatePage} priorityID={priorityID}/>
+            <AddAlertInfoModal IsOpened={addModalIsOpened} onClose={onCloseAddModal} data={modalContent} routeType={routeType}/>
             <div className="mb-3 p-3" style={{ backgroundColor: '#F8F8F8' }}>
                 <div className="mt-3 mb-3 card p-3">
                     <table className="table table-sm">
@@ -120,6 +145,12 @@ const AlertDetails = ({ items }) => {
 
             {/* Route Monitor Information */}
             <div className="mb-3 p-3" style={{ backgroundColor: '#F8F8F8' }}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <h3>Route Monitor</h3>
+                    <div className='text-end'>
+                        <button className='btn btn-outline-secondary' onClick={() => handleAddAlertInfo('routeMonitor')}>+ Add Alert Info</button>
+                    </div>
+                </div>
                 <div className="mt-3 mb-3 card p-3">
                     <table className="table table-sm">
                         <thead>
@@ -149,7 +180,7 @@ const AlertDetails = ({ items }) => {
                                         <p><strong>Message Association:</strong> {renderAssociationData(associations[monitor._id]?.message?.data || [])}</p>
                                         <p><strong>Highlight Association:</strong> {renderAssociationData(associations[monitor._id]?.highlight?.data || [])}</p>
                                         <div className='text-end'>
-                                            <button className='btn btn-sm btn-outline-primary' onClick={() => handleUpdateClick('AlertAssociation', 0)}>Update Route Monitor Association</button>
+                                            <button className='btn btn-sm btn-outline-primary' onClick={() => handleAssoUpdateClick('AlertAssociation', 0, monitor._id)}>Update Route Monitor Association</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -161,6 +192,12 @@ const AlertDetails = ({ items }) => {
 
             {/* Route Plan Information */}
             <div className="mb-3 p-3" style={{ backgroundColor: '#F8F8F8' }}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <h3>Route Plan</h3>
+                    <div className='text-end'>
+                        <button className='btn btn-outline-secondary'onClick={() => handleAddAlertInfo('routePlan')}>+ Add Alert Info</button>
+                    </div>
+                </div>
                 <div className="mt-3 mb-3 card p-3">
                     <table className="table table-sm">
                         <thead>
@@ -191,7 +228,7 @@ const AlertDetails = ({ items }) => {
                                         <p><strong>Message Association:</strong> {renderAssociationData(associations[plan._id]?.message?.data || [])}</p>
                                         <p><strong>Highlight Association:</strong> {renderAssociationData(associations[plan._id]?.highlight?.data || [])}</p>
                                         <div className='text-end'>
-                                            <button className='btn btn-sm btn-outline-primary' onClick={() => handleUpdateClick('AlertAssociation', 0)}>Update Route Plan Association</button>
+                                            <button className='btn btn-sm btn-outline-primary' onClick={() => handleAssoUpdateClick('AlertAssociation', 0, plan._id)}>Update Route Plan Association</button>
                                         </div>
                                     </td>
                                 </tr>

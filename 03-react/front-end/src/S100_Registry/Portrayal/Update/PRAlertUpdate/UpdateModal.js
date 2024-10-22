@@ -6,15 +6,15 @@ import UpdateAlertAssociation from './UpdateAlertAssociation';
 import UpdatePRAlertItem from './UpdatePRAlertItem'; 
 
 
-const PRItemUpdateModal = ({ IsOpened, onClose, data, UpdateType, page}) => {
+const PRItemUpdateModal = ({ IsOpened, onClose, data, UpdateType, page, priorityID}) => {
     const routeMonitor = data.routeMonitor;
     const routePlan = data.routePlan;
 
     const itemSpecificFields = {
-        'AlertItem': <UpdatePRAlertItem data={data} />,
-        'RouteMonitor': <UpdateAlertInfoUpdate data={routeMonitor} page={page}/>,
-        'RoutePlan': <UpdateAlertInfoUpdate data={routePlan} page={page}/>,
-        'AlertAssociation': <UpdateAlertAssociation data={data} />,
+        'AlertItem': <UpdatePRAlertItem data={data} onClose={onClose}/>,
+        'RouteMonitor': <UpdateAlertInfoUpdate data={routeMonitor} page={page} onClose={onClose}/>,
+        'RoutePlan': <UpdateAlertInfoUpdate data={routePlan} page={page} onClose={onClose}/>,
+        'AlertAssociation': <UpdateAlertAssociation style={{width: "700px"}} data={data} priorityID={priorityID} onClose={onClose}/>,
     }
     if (!IsOpened) {
         return null;
@@ -22,7 +22,11 @@ const PRItemUpdateModal = ({ IsOpened, onClose, data, UpdateType, page}) => {
 
     return (
         <div className="modal-style">
-            <div className="modal-content-style" style={{ width: '1000px' }}>
+            <div className="modal-content-style" style={(UpdateType === 'AlertAssociation' ? {width: '700px', maxHeight: '700px', overflowY: 'auto'} : {
+                width: '1000px',
+                maxHeight: '700px',
+                overflowY: 'auto'
+            })}>
                 <div className='text-end'>
                     <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
                 </div>

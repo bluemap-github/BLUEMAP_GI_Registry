@@ -20,6 +20,13 @@ def update_item(request, model):
 
     # 모델의 put 메서드를 호출
     result = model.put(M_id, request.data, C_id=uri_to_serial(request.GET.get('regi_uri')))
+    print("sadkfjhalskdhflaksjdhf??????????????????")
+    print("sadkfjhalskdhflaksjdhf??????????????????")
+    print("sadkfjhalskdhflaksjdhf??????????????????")
+    print(result)
+    print("sadkfjhalskdhflaksjdhf??????????????????")
+    print("sadkfjhalskdhflaksjdhf??????????????????")
+    print("sadkfjhalskdhflaksjdhf??????????????????")
 
     if result["status"] == "error":
         return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
@@ -308,12 +315,45 @@ def update_display_mode_association(request):
 
 @api_view(['PUT'])
 def update_message_association(request):
-    return update_association(request, MessageAssociation)
+    item_type = request.GET.get('item_type')
+    if item_type != 'AlertInfo':
+        return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
+    data = request.data
+    parent_id = data.get('parent_id')
+    child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
+    data['child_id'] = child_id
+    result = MessageAssociation.update(parent_id, child_id)
+    if result["status"] == "error":
+        return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
+    return Response(result, status=HTTP_201_CREATED)
+
+
 
 @api_view(['PUT'])
 def update_highlight_association(request):
-    return update_association(request, HighlightAssociation)
+    item_type = request.GET.get('item_type')
+    if item_type != 'AlertInfo':
+        return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
+    data = request.data
+    parent_id = data.get('parent_id')
+    child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
+    data['child_id'] = child_id
+    result = HighlightAssociation.update(parent_id, child_id)
+    if result["status"] == "error":
+        return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
+    return Response(result, status=HTTP_201_CREATED)
+    
 
 @api_view(['PUT'])
 def update_value_association(request):
     return update_association(request, PR_Association)
+
+from regiSystem.models.PR_Class import AlertInfoModel
+@api_view(['PUT'])
+def update_alert_info(request):
+    item_id = request.GET.get('item_id')
+    C_id = request.data.get('concept_id')
+    result = AlertInfoModel.update(item_id, request.data, C_id)
+    if result["status"] == "error":
+        return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
+    return Response(result, status=HTTP_201_CREATED)

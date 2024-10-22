@@ -36,7 +36,8 @@ const preProcessingData = (data) => {
     return { data, extractedId };  // 가공된 data와 추출된 _id 반환
 }
 
-const UpdatePRAlertItem = ({ data }) => {
+
+const UpdatePRAlertItem = ({ data, onClose }) => {
     const { data: preProcessedData, extractedId } = preProcessingData(data);
 
     console.log("Extracted _id:", extractedId);  // 추출된 _id를 확인 (PUT 요청에서 사용 가능)

@@ -56,6 +56,15 @@ class PR_Association:
                     result.append({"child_id": get_encrypted_id([child_id]), "item_type": res_docs["itemType"], "xmlID" : res_docs["xmlID"]})
         return result
     
+    @classmethod
+    def update(cls, parent_id, child_id):
+        if parent_id is None or child_id is None:
+            return {"status": "error", "error": "parent_id or child_id is None"}
+        if cls.collection.find_one({"parent_id": ObjectId(parent_id), "child_id": ObjectId(child_id)}):
+            result = cls.collection.update_one({"parent_id": ObjectId(parent_id)}, {"$set": {"child_id": ObjectId(child_id)}})
+        else:
+            result = cls.collection.insert_one({"parent_id": ObjectId(parent_id), "child_id": ObjectId(child_id)})
+        return {"status": "success", "modified_count": result}
 
     
 from regiSystem.models.PR_Class import (
