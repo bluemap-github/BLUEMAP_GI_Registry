@@ -279,11 +279,33 @@ def insert_viewing_group_association(request):
 
 @api_view(['POST'])
 def insert_message_association(request):
+    item_iv = request.GET.get('item_iv')
+    if not item_iv:
+        data = request.data
+        I_id = data.get('parent_id')
+        if data.get("child_id") is not None:
+            A_id = decrypt(data["child_id"]["encrypted_data"], data.get("child_id").get("iv"))
+            inserted_ = MessageAssociation.insert(ObjectId(I_id), ObjectId(A_id))
+            if inserted_["status"] == "error":
+                return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+            return Response("successfully inserted.", status=HTTP_201_CREATED)
+        else:
+            return Response("child_id is required.", status=HTTP_400_BAD_REQUEST)
     return insert_association_item(MessageAssociation, request, request.data)
 
 @api_view(['POST'])
 def insert_highlight_association(request):
-    return insert_association_item(HighlightAssociation, request, request.data)
+    data = request.data
+    I_id = data.get('parent_id')
+    if data.get("child_id") is not None:
+        A_id = decrypt(data["child_id"]["encrypted_data"], data.get("child_id").get("iv"))
+        inserted_ = HighlightAssociation.insert(ObjectId(I_id), ObjectId(A_id))
+        if inserted_["status"] == "error":
+            return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)
+        return Response("successfully inserted.", status=HTTP_201_CREATED)
+    else:
+        return Response("child_id is required.", status=HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 def insert_value_association(request):

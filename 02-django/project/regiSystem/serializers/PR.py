@@ -109,6 +109,15 @@ class S100_PR_AlertSerializer(S100_PR_RegisterItemSerializer):
         child=S100_PR_AlertInfoSerializer(allow_null=True, required=False)
     )
 
+class S100_PR_Alert_POST_Serializer(S100_PR_RegisterItemSerializer):
+    routeMonitor = serializers.ListField(
+        child=ObjectIdField()  # Alert Info의 _id 값만 받음
+    )
+    routePlan = serializers.ListField(
+        child=ObjectIdField()  # Alert Info의 _id 값만 받음
+    )
+
+
 # alert message complex
 class S100_PR_AlertMessageSerializer(S100_PR_RegisterItemSerializer):
     text = serializers.ListField(

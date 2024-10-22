@@ -76,8 +76,8 @@ const specificFields = {
         { name: 'Priority', key: 'priority' }
     ],
     'Alert': [
-        { name: 'Route Monitor', key: 'routeMonitor', isAlert: true },
-        { name: 'Route Plan', key: 'routePlan', isAlert: true }
+        // { name: 'Route Monitor', key: 'routeMonitor', isAlert: true },
+        // { name: 'Route Plan', key: 'routePlan', isAlert: true }
     ],
     'AlertHighlight': [
         { name: 'Optional', key: 'optional' },

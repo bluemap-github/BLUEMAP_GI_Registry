@@ -4,7 +4,7 @@ import ItemInput from './components/ItemInput';
 import ManagementInfoInput from './components/ManagementInfoInput';
 import ChooseType from './ChooseType';
 import { getSelestedApi } from '../api/apiMapping';  // Import the function here
-import { POST_SYMBOL, POST_MANAGEMENT_INFO, POST_ALERT_INFO} from '../api/api';  // Import the API URL here
+import { POST_SYMBOL, POST_MANAGEMENT_INFO, POST_ALERT_INFO, POST_ALERT} from '../api/api';  // Import the API URL here
 import { POST_SYMBOL_ASSOCIATION, POST_ICON_ASSOCIATION, POST_VIEWING_GROUP_ASSOCIATION, POST_ITEM_SCHEMA_ASSOCIATION, POST_COLOUR_TOKEN_ASSOCIATION, POST_PALETTE_ASSOCIATION, POST_DISPLAY_MODE_ASSOCIATION, POST_MESSAGE_ASSOCIATION, POST_HIGHLIGHT_ASSOCIATION, POST_VALUE_ASSOCIATION } from '../api/api';  // Import the API URL here
 import { performValidation } from './validation/ValidateItems';
 import axios from 'axios';
@@ -173,6 +173,9 @@ const InsertPortrayalItem = () => {
     const routeMonitorData = [...data.routeMonitor];
     const routePlanData = [...data.routePlan];
     
+    console.log('Route Monitor Data:', routeMonitorData);
+    console.log('Route Plan Data:', routePlanData);
+    
     data.routeMonitor = [];
     data.routePlan = [];
     
@@ -189,7 +192,7 @@ const InsertPortrayalItem = () => {
           })
       ) || []
     );
-    
+  
     const planPromises = routePlanData.flatMap((planItem, i) =>
       planItem.alertInfoList?.map((alertInfo, j) =>
         axios.post(POST_ALERT_INFO, alertInfo, { params: { regi_uri } })
@@ -206,14 +209,99 @@ const InsertPortrayalItem = () => {
     // 모든 요청 병렬로 처리
     await Promise.all([...monitorPromises, ...planPromises]);
   
-    // console.log('Final AlertInfoIds:', AlertInfoIds);
-
     data.routeMonitor = AlertInfoIds.routeMonitor;
     data.routePlan = AlertInfoIds.routePlan;
-
+  
     console.log('Final Data:', data);
-
+  
+    try {
+      const itemResponse = await axios.post(
+        POST_ALERT,
+        data,
+        {
+          params: { regi_uri },
+        }
+      );
+      const itemId = itemResponse.data.encrypted_data;
+      const item_iv = itemResponse.data.iv;
+  
+      // 관리 정보에 대한 별도의 POST 요청들 (for-of로 순차 처리)
+      for (const managementInfo of managementInfos) {
+        await axios.post(POST_MANAGEMENT_INFO, managementInfo, {
+          params: { item_id: itemId, item_iv: item_iv }
+        });
+      }
+  
+      console.log("Route Monitor Data:", routeMonitorData);
+      console.log("Route Plan Data:", routePlanData);
+  
+      // routeMonitorData의 associationAndAPI 부분을 처리
+      for (let i = 0; i < AlertInfoIds.routeMonitor.length; i++) {
+        const parentId = AlertInfoIds.routeMonitor[i];
+        const associationAndAPI = routeMonitorData[i].associationAndAPI || [];
+        
+        for (let j = 0; j < associationAndAPI.length; j++) {
+          const association = associationAndAPI[j];
+      
+          if (Array.isArray(association.value) && association.value.length === 1 && Object.keys(association.value[0]).length === 0) {
+            continue;
+          } else {
+            const associationData = {
+              parent_id: parentId,
+              child_id: association.value,
+            };
+  
+            try {
+              const associationResponse = await axios.post(association.key, associationData);
+              console.log(`Association POST [${i}][${j}] Response:`, associationResponse.data);
+            } catch (error) {
+              console.error(`Error posting association [${i}][${j}]:`, error);
+            }
+          }
+        }
+      }
+  
+      // routePlanData의 associationAndAPI 부분도 처리
+      for (let i = 0; i < AlertInfoIds.routePlan.length; i++) {
+        const parentId = AlertInfoIds.routePlan[i];
+        const associationAndAPI = routePlanData[i].associationAndAPI || [];
+        
+        for (let j = 0; j < associationAndAPI.length; j++) {
+          const association = associationAndAPI[j];
+  
+          if (Array.isArray(association.value) && association.value.length === 1 && Object.keys(association.value[0]).length === 0) {
+            continue;
+          } else {
+            const associationData = {
+              parent_id: parentId,
+              child_id: association.value,
+            };
+  
+            try {
+              const associationResponse = await axios.post(association.key, associationData);
+              console.log(`Association POST [${i}][${j}] Response:`, associationResponse.data);
+            } catch (error) {
+              console.error(`Error posting association [${i}][${j}]:`, error);
+            }
+          }
+        }
+      }
+  
+      // 모든 POST 요청 완료 후 아이템 정보 설정 및 페이지 이동
+      setItemDetails({ item_id: itemId, item_iv: item_iv, item_type: "Alert" });
+      console.log("itemId", itemId);
+      console.log("item_iv", item_iv);
+  
+      // 페이지 이동
+      navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+  
+    } catch (error) {
+      // 에러 핸들링
+      console.error('Error posting data:', error);
+    }
   };
+  
+
   
   
   

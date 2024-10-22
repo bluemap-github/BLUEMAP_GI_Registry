@@ -42,6 +42,7 @@ from regiSystem.serializers.PR import (
     S100_PR_AlertHighlightSerializer,
     S100_PR_ColourTokenSerializer,
     S100_PR_AlertSerializer,
+    S100_PR_Alert_POST_Serializer,
     S100_PR_AlertMessageSerializer
 )
 
@@ -121,7 +122,6 @@ def get_list_items(Model, C_id, serializer_class, request):
         # 정렬 및 페이지네이션 적용
         sort_order = 1 if sort_direction == 'ascending' else -1
         items_cursor = Model.collection.find(query).sort(sort_key, sort_order).skip((page - 1) * page_size).limit(page_size)
-        print
 
         # 데이터 변환 및 직렬화 (개별 함수로 분리)
         items = process_items('description_ids', 'description', items_cursor)
@@ -392,10 +392,69 @@ def palette_item(request):
     I_id = decrypt(request.GET.get('item_id'), item_iv)
     return get_one_item(PaletteItemModel, I_id, S100_PR_PaletteItemSerializer)
 
+
 @api_view(['GET'])
 def alert_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
-    return get_list_items(AlertModel, C_id, S100_PR_AlertSerializer, request)
+    
+    try:
+        search_term = request.GET.get('search_term', '')
+        status = request.GET.get('status', '')
+        category = request.GET.get('category', '')
+        sort_key = request.GET.get('sort_key', '_id')  # 기본값 '_id'
+        sort_direction = request.GET.get('sort_direction', 'ascending')  # 기본값 'ascending'
+        page = int(request.GET.get('page', 1))  # 기본값 1
+        page_size = int(request.GET.get('page_size', 1000))  # 기본값 1000
+
+        # 기본적으로 concept_id로 목록을 가져옴
+        result = AlertModel.get_list(C_id)  
+        if result.get('status') == 'error':
+            return Response({"status": "error", "message": result.get('message')}, status=400)
+
+        items = result['data']
+
+        # status 필터링
+        if status:
+            items = [item for item in items if item.get('itemStatus') == status]
+
+        # 검색어 필터링
+        if search_term:
+            if category == "name":
+                items = [item for item in items if search_term.lower() in item.get('name', '').lower()]
+            elif category == "camelCase":
+                items = [item for item in items if search_term.lower() in item.get('camelCase', '').lower()]
+            elif category == "definition":
+                items = [item for item in items if search_term.lower() in item.get('definition', '').lower()]
+
+        # 전체 항목 수 계산
+        total_items = len(items)
+
+        # 정렬 및 페이지네이션 적용
+        sort_order = 1 if sort_direction == 'ascending' else -1
+        items = sorted(items, key=lambda x: x.get(sort_key, ''), reverse=sort_order == -1)
+
+        start = (page - 1) * page_size
+        end = start + page_size
+        paginated_items = items[start:end]
+
+        # 직렬화
+        serializer = S100_PR_Alert_POST_Serializer(paginated_items, many=True)
+
+        # 응답 데이터 구성
+        response_data = {
+            'status': 'success',
+            'data': serializer.data,
+            'total_items': total_items,
+            'total_pages': (total_items + page_size - 1) // page_size,
+            'current_page': page,
+            'page_size': page_size
+        }
+
+        return Response(response_data, status=200)
+
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=400)
+
 
 @api_view(['GET'])
 def alert(request):
@@ -596,13 +655,19 @@ def viewing_group_layer_association_list(request):
 @api_view(['GET'])
 def message_association_list(request):
     item_iv = request.GET.get('item_iv')
-    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    if not item_iv:
+        I_id = request.GET.get('item_id')
+    else:
+        I_id = decrypt(request.GET.get('item_id'), item_iv)
     return get_list_associations(MessageAssociation, I_id)
 
 @api_view(['GET'])
 def highlight_association_list(request):
     item_iv = request.GET.get('item_iv')
-    I_id = decrypt(request.GET.get('item_id'), item_iv)
+    if not item_iv:
+        I_id = request.GET.get('item_id')
+    else:
+        I_id = decrypt(request.GET.get('item_id'), item_iv)
     return get_list_associations(HighlightAssociation, I_id)
 
 @api_view(['GET'])

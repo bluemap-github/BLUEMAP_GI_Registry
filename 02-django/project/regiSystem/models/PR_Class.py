@@ -551,7 +551,7 @@ class PaletteItemModel(RE_RegisterItemModel):
 
 
 
-from regiSystem.serializers.PR import S100_PR_AlertPrioritySerializer, S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer
+from regiSystem.serializers.PR import S100_PR_AlertPrioritySerializer, S100_PR_AlertSerializer, S100_PR_AlertInfoSerializer, S100_PR_Alert_POST_Serializer
 class AlertPriorityModel(RE_RegisterItemModel):
     collection = db['S100_Portrayal_AlertPriority']
     @staticmethod
@@ -686,29 +686,10 @@ class AlertModel(RE_RegisterItemModel):
 
     @classmethod
     def insert(cls, data, C_id):
-        serializer = S100_PR_AlertSerializer(data=data)
+        serializer = S100_PR_Alert_POST_Serializer(data=data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
 
-            routeMonitor_data = validated_data.get('routeMonitor', [])
-            routeMonitor_ids = []
-            for info in routeMonitor_data:
-                info_result = AlertInfoModel.process_info(info)
-                if isinstance(info_result, dict) and "errors" in info_result:
-                    return info_result
-                routeMonitor_ids.append(info_result)
-            validated_data['routeMonitor_ids'] = routeMonitor_ids
-            del validated_data['routeMonitor']
-
-            routePlan_data = validated_data.get('routePlan', [])
-            routePlan_ids = []
-            for info in routePlan_data:
-                info_result = AlertInfoModel.process_info(info)
-                if isinstance(info_result, dict) and "errors" in info_result:
-                    return info_result
-                routePlan_ids.append(info_result)
-            validated_data['routePlan_ids'] = routePlan_ids
-            del validated_data['routePlan']
 
             description_data = validated_data.get('description', [])
             description_ids = RegisterItemModel.process_description(description_data)
@@ -798,28 +779,6 @@ class AlertModel(RE_RegisterItemModel):
                 item['description'] = descriptions
                 del item['description_ids']
 
-            # routeMonitor 처리
-            if 'routeMonitor_ids' in item:
-                routeMonitor_data = []
-                for monitor_id in item['routeMonitor_ids']:
-                    monitor_data = cls.get_alert_info(monitor_id)
-                    if isinstance(monitor_data, dict) and "errors" in monitor_data:
-                        return monitor_data
-                    routeMonitor_data.append(monitor_data)
-                item['routeMonitor'] = routeMonitor_data
-                del item['routeMonitor_ids']
-
-            # routePlan 처리
-            if 'routePlan_ids' in item:
-                routePlan_data = []
-                for plan_id in item['routePlan_ids']:
-                    plan_data = cls.get_alert_info(plan_id)
-                    if isinstance(plan_data, dict) and "errors" in plan_data:
-                        return plan_data
-                    routePlan_data.append(plan_data)
-                item['routePlan'] = routePlan_data
-                del item['routePlan_ids']
-
             # 리스트에 추가
             data.append(item)
 
@@ -839,12 +798,13 @@ class AlertModel(RE_RegisterItemModel):
     @staticmethod
     def get_alert_info(info_id):
         # AlertInfo에서 priority_ids 조회
-        info_data = db['S100_Portrayal_AlertInfo'].find_one({"_id": ObjectId(info_id)})
+        info_data = db['S100_Portrayal_AlertInfo'].find_one({"_id": info_id})
 
         if not info_data:
             return {"status": "error", "message": f"AlertInfo with id {info_id} not found"}
 
         info_data['_id'] = str(info_data['_id'])
+        info_data['concept_id'] = str(info_data['concept_id'])
 
         # priority_ids 처리
         priority_data = []
@@ -885,9 +845,9 @@ class AlertModel(RE_RegisterItemModel):
             del result['description_ids']
 
         # routeMonitor 처리
-        if 'routeMonitor_ids' in result:
+        if 'routeMonitor' in result:
             routeMonitor_data = []
-            for monitor_id in result['routeMonitor_ids']:
+            for monitor_id in result['routeMonitor']:
                 monitor_data = cls.get_alert_info(monitor_id)
                 if isinstance(monitor_data, dict) and "errors" in monitor_data:
                     return monitor_data
@@ -897,12 +857,11 @@ class AlertModel(RE_RegisterItemModel):
                         priority.pop('_id')
                 routeMonitor_data.append(monitor_data)
             result['routeMonitor'] = routeMonitor_data
-            del result['routeMonitor_ids']
 
         # routePlan 처리
-        if 'routePlan_ids' in result:
+        if 'routePlan' in result:
             routePlan_data = []
-            for plan_id in result['routePlan_ids']:
+            for plan_id in result['routePlan']:
                 plan_data = cls.get_alert_info(plan_id)
                 if isinstance(plan_data, dict) and "errors" in plan_data:
                     return plan_data
@@ -912,10 +871,8 @@ class AlertModel(RE_RegisterItemModel):
                         priority.pop('_id')
                 routePlan_data.append(plan_data)
             result['routePlan'] = routePlan_data
-            del result['routePlan_ids']
         if 'concept_id' in result:
             result['concept_id'] = str(result['concept_id'])
-        
         return result
     
                 

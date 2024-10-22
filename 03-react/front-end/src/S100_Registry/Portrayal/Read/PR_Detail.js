@@ -4,6 +4,7 @@ import ConceptInformation from './components/ConceptInformation'; // 개념 정�
 import PortrayalDetails from './components/PortrayalDetails'; // 기타 컴포넌트
 import ManagementInformation from './components/ManagementInformation';
 import DynamicAssociations from './components/DynamicAssociations';
+import AlertDetails from './components/AlertDetails';
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -272,7 +273,16 @@ const PR_Detail = () => {
     <div>
       <h3 style={{fontWeight: "bold"}}>Portrayal Information</h3>
       <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1', marginBottom: '15px' }}></div>
-      {data ? <PortrayalDetails items={data} itemType={item_type} /> : <div>Loading...</div>}
+      {data ? (
+        item_type === 'Alert' ? (
+          <AlertDetails items={data} />
+        ) : (
+          <PortrayalDetails items={data} itemType={item_type} />
+        )
+      ) : (
+        <div>Loading...</div>
+      )}
+
       {associationKeys.includes(item_type) ? (
           <DynamicAssociations associationItems={associations} UpdateAssoType={item_type} itemID={item_id} itemIV={item_iv}/>
         ) : null}

@@ -136,9 +136,10 @@ export const PUT_VIEWING_GROUP = `${DEPLOY_URL}/api/v1/portrayal_item/viewing_gr
 export const PUT_FONT = `${DEPLOY_URL}/api/v1/portrayal_item/font_put/`;
 export const PUT_CONTEXT_PARAMETER = `${DEPLOY_URL}/api/v1/portrayal_item/context_parameter_put/`;
 export const PUT_DRAWING_PRIORITY = `${DEPLOY_URL}/api/v1/portrayal_item/drawing_priority_put/`;
-export const PUT_ALERT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_put/`;
 export const PUT_ALERT_MESSAGE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_message_put/`;
 export const PUT_ALERT_HIGHLIGHT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight_put/`;
+export const PUT_ALERT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_put/`;
+export const PUT_ALERT_INFO = `${DEPLOY_URL}/api/v1/portrayal_item/alert_info_put/`;
 
 export const PUT_SYMBOL_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_schema_put/`;
 export const PUT_LINE_STYLE_SCHEMA = `${DEPLOY_URL}/api/v1/portrayal_item/line_style_schema_put/`;
