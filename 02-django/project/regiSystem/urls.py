@@ -242,6 +242,7 @@ urlpatterns = [
     path('portrayal_item/alert_info_list/get/', PR.get.alert_info_list),
     path('portrayal_item/alert_info/get/', PR.get.alert_info),
     path('portrayal_item/alert_info_put/', PR.put.update_alert_info),
+    path('portrayal_item/alert_info_delete/', PR.delete.delete_alert_info),
 
     ## Associations
     path('portrayal_item/colour_token_association/post/', PR.post.insert_colour_token_association),

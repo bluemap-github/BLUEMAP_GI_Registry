@@ -177,6 +177,7 @@ export const DELETE_DRAWING_PRIORITY = `${DEPLOY_URL}/api/v1/portrayal_item/draw
 export const DELETE_ALERT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_delete/`;
 export const DELETE_ALERT_MESSAGE = `${DEPLOY_URL}/api/v1/portrayal_item/alert_message_delete/`;
 export const DELETE_ALERT_HIGHLIGHT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_highlight_delete/`;
+export const DELETE_ALERT_INFO = `${DEPLOY_URL}/api/v1/portrayal_item/alert_info_delete/`;
 
 export const PUT_SYMBOL_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_association_put/`;
 export const PUT_ICON_ASSOCIATION = `${DEPLOY_URL}/api/v1/portrayal_item/icon_association_put/`;

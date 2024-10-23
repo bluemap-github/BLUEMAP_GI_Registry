@@ -40,6 +40,8 @@ const NLSUpdate = ({itemType, tagName, onFormSubmit, initialData = [] }) => {
     };
 
     return (
+        <>
+        {/* <pre>{JSON.stringify(initialData, null, 2)}</pre> */}
         <div style={{ backgroundColor: 'white', padding: '0px', paddingTop: '5px', maxHeight: '200px', overflowY: 'auto'}} className='mb-4'>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', marginTop: '8px'}}>
                 <h5>{tagName}</h5>
@@ -82,6 +84,8 @@ const NLSUpdate = ({itemType, tagName, onFormSubmit, initialData = [] }) => {
                 ))}
             </div>
         </div>
+        </>
+        
     );
 };
 

@@ -680,7 +680,27 @@ class AlertInfoModel:
         else:
             return {"status": "error", "errors": serializer.errors}
 
+    @classmethod
+    def delete(cls, M_id, P_id):
+        if cls.collection is None:
+            raise NotImplementedError("This model does not have a collection assigned.")
+        
+        parentObj = AlertModel.collection.find_one({"_id": ObjectId(P_id)})
+        if parentObj:
+            for priority in ['routeMonitor', 'routePlan']:
+                if ObjectId(M_id) in parentObj[priority]:
+                    del parentObj[priority][parentObj[priority].index(ObjectId(M_id))]
+                    AlertModel.collection.update_one({"_id": ObjectId(P_id)}, {'$set': parentObj})
+                    break
+        # MongoDB에서 해당 데이터를 삭제
+        result = cls.collection.delete_one({"_id": ObjectId(M_id)})
+        if result.deleted_count == 1:
+            return {"status": "success", "deleted_id": str(M_id)}
+        else:
+            return {"status": "error", "errors": "Failed to delete the item"}
+        
 
+from bson import ObjectId
 class AlertModel(RE_RegisterItemModel):
     collection = db['S100_Portrayal_Alert']
 
@@ -704,7 +724,6 @@ class AlertModel(RE_RegisterItemModel):
         else:
             return {"status": "error", "errors": serializer.errors}
     
-    from bson import ObjectId
 
     @classmethod
     def put(cls, M_id, data, C_id):

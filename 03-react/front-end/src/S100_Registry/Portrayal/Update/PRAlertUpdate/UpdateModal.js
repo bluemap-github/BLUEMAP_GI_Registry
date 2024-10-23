@@ -23,8 +23,8 @@ const PRItemUpdateModal = ({ IsOpened, onClose, data, UpdateType, page, priority
     return (
         <div className="modal-style">
             <div className="modal-content-style" style={(UpdateType === 'AlertAssociation' ? {width: '700px', maxHeight: '700px', overflowY: 'auto'} : {
-                width: '1000px',
-                maxHeight: '700px',
+                width: '700px',
+                maxHeight: '800px',
                 overflowY: 'auto'
             })}>
                 <div className='text-end'>

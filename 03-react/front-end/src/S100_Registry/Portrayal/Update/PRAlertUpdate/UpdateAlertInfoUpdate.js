@@ -65,7 +65,7 @@ const UpdateAlertInfoUpdate = ({ data, page, onClose }) => {
     
     return (
         <div>
-            <pre>{JSON.stringify(alertData, null, 2)}</pre>
+            {/* <pre>{JSON.stringify(alertData, null, 2)}</pre> */}
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <h3>Update AlertInfo</h3>
                 <button type="button" className="btn btn-outline-secondary" onClick={handleAddPriority}>

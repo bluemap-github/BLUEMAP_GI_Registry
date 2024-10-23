@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';  // Axios 라이브러리 사용
 import { GET_MESSAGE_ASSOCIATION_LIST, GET_HIGHLIGHT_ASSOCIATION_LIST } from '../../api/api';
 import UpdateModal from '../../Update/PRAlertUpdate/UpdateModal';
 import AddAlertInfoModal from '../../Update/PRAlertUpdate/AddAlertInfoModal';
+import {DELETE_ALERT_INFO, DELETE_ALERT} from '../../api/api';
+import Cookies from 'js-cookie';
 
 const tableFields = [
     { name: 'XML ID', key: 'xmlID' },
@@ -18,7 +21,7 @@ const AlertDetails = ({ items }) => {
     const [modalContent, setModalContent] = useState(items);
     const [priorityID, setPriorityID] = useState('');
     const [routeType, setRouteType] = useState('');
-
+    const navigate = useNavigate();
     // Priority _id당 GET 요청 보내기
     const fetchAssociations = async (id) => {
         try {
@@ -101,6 +104,39 @@ const AlertDetails = ({ items }) => {
         return <div>Loading...</div>;
     }
 
+    const deletePriority = (priorityID) => {
+        const deleteconfirm = window.confirm('Are you sure you want to delete this priority?') 
+        if (deleteconfirm) {
+            try {
+                axios.delete(DELETE_ALERT_INFO, { params: { 
+                    item_id: items._id.encrypted_data,
+                    item_iv: items._id.iv,
+                    priority_id: priorityID
+                } });
+                alert('Priority deleted successfully');
+                window.location.reload();
+            } catch (error) {
+                console.error('Error deleting priority:', error);
+            }
+        }
+    }
+
+    const deleteAlert = () => {
+        const deleteconfirm = window.confirm('Are you sure you want to delete this alert?') 
+        if (deleteconfirm) {
+            try {
+                console.log('Deleting alert:', items._id);
+                axios.delete(DELETE_ALERT, { params: { 
+                    item_id: items._id.encrypted_data,
+                    item_iv: items._id.iv
+                } });
+                alert('Alert deleted successfully');
+                navigate(`${Cookies.get('REGISTRY_URI')}/portrayal/list`);
+            } catch (error) {
+                console.error('Error deleting alert:', error);
+            }
+        }
+    }
     return (
         <div>
             {/* Portrayal Information */}
@@ -139,6 +175,7 @@ const AlertDetails = ({ items }) => {
                     </table>
                     <div className='text-end'>
                         <button className='btn btn-sm btn-outline-primary' onClick={() => handleUpdateClick('AlertItem', 0)}>Update Alert</button>
+                        <button className='btn btn-sm btn-outline-danger' onClick={deleteAlert}>Delete Alert</button>
                     </div>
                 </div>
             </div>
@@ -163,7 +200,10 @@ const AlertDetails = ({ items }) => {
                         <tbody>
                             {items.routeMonitor?.map((monitor, index) => (
                                 <tr key={index}>
-                                    <th className="text-center" style={{ width: '25%' }}>Priority, {monitor._id}</th>
+                                    <th className="text-center" style={{ width: '25%' }}>
+                                        <p>Priority, {monitor._id}</p>
+                                        <button className='btn btn-sm btn-outline-danger' onClick={() => deletePriority(monitor._id)}>Delete priority</button>
+                                    </th>
                                     <td>
                                         <ul>
                                             {monitor.priority.map((priority, pIndex) => (
@@ -210,7 +250,10 @@ const AlertDetails = ({ items }) => {
                         <tbody>
                             {items.routePlan?.map((plan, index) => (
                                 <tr key={index}>
-                                    <th className="text-center" style={{ width: '25%' }}>Priority, {plan._id}</th>
+                                    <th className="text-center" style={{ width: '25%' }}>
+                                        <p>Priority, {plan._id}</p>                                        
+                                        <button className='btn btn-sm btn-outline-danger' onClick={() => deletePriority(plan._id)}>Delete priority</button>
+                                    </th>
                                     <td>
                                         <ul>
                                             {index}

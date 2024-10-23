@@ -7,7 +7,7 @@ import os
 from regiSystem.models.PR_Class import (
     SymbolModel, SymbolSchemaModel, LineStyleSchemaModel, AreaFillSchemaModel, PixmapSchemaModel, ColourProfileSchemaModel,
     ColourTokenModel, ColourPaletteModel, PaletteItemModel, DisplayModeModel, ViewingGroupModel, ViewingGroupLayerModel,
-    AlertHighlightModel, AlertMessageModel, RE_RegisterItemModel,
+    AlertHighlightModel, AlertMessageModel, RE_RegisterItemModel,AlertInfoModel, AlertModel,
     AreaFillModel, LineStyleModel, PixmapModel
 )
 from regiSystem.models.PR_Association import (
@@ -36,7 +36,7 @@ model_with_text = {
 from regiSystem.models.PR_Class import (
     SymbolModel, SymbolSchemaModel, LineStyleSchemaModel, AreaFillSchemaModel, PixmapSchemaModel, ColourProfileSchemaModel,
     ColourTokenModel, ColourPaletteModel, PaletteItemModel, DisplayModeModel, ViewingGroupModel, ViewingGroupLayerModel,
-    AlertHighlightModel, AlertMessageModel, RE_RegisterItemModel
+    AlertHighlightModel, AlertMessageModel, RE_RegisterItemModel, AlertInfoModel
 )
 association_list = {
     "Symbol": {"parent_id": ["token", "schema"], "child_id": ["icon", "symbol"], "main": SymbolModel},
@@ -55,7 +55,8 @@ association_list = {
     "ViewingGroup": {"parent_id": ["viewingGroupLayer"], "child_id": [], "main": ViewingGroupModel},
     "ViewingGroupLayer": {"parent_id": ["displayMode"], "child_id": ["viewingGroupLayer"], "main": ViewingGroupLayerModel},
     "AlertHighlight": {"parent_id": ["alertMessage", "viewingGroup"], "child_id": [], "main": AlertHighlightModel},
-    "AlertMessage": {"parent_id": ["symbol"], "child_id": ["alertMessage"], "main": AlertMessageModel}
+    "AlertMessage": {"parent_id": ["symbol"], "child_id": ["alertMessage"], "main": AlertMessageModel},
+    "AlertInfo": {"parent_id": ["highlight", "alertMessage"], "child_id": [], "main": AlertInfoModel}
 }
 
 
@@ -362,10 +363,31 @@ def delete_drawing_priority(request):
     main_model.delete(M_Id)
     return Response(f"DrawingPriority with ID {M_Id} deleted", status=200)
 
+
 @api_view(['DELETE'])
 def delete_alert(request):
-    M_Id = decrypt_item_id(request)
+    item_iv = request.GET.get('item_iv')
+    if not item_iv:
+        M_Id = request.GET.get('item_id')
+    else:
+        M_Id = decrypt(request.GET.get('item_id'), item_iv)
     delete_MI(request, "Alert")
-    main_model = RE_RegisterItemModel
+    main_model = AlertModel
     main_model.delete(M_Id)
     return Response(f"Alert with ID {M_Id} deleted", status=200)
+
+from regiSystem.models.PR_Class import AlertInfoModel
+
+@api_view(['DELETE'])
+def delete_alert_info(request):
+    item_iv = request.GET.get('item_iv')
+    if not item_iv:
+        item_id = request.GET.get('item_id')
+    else:
+        item_id = decrypt(request.GET.get('item_id'), item_iv)
+        
+    # delete_association(request, "AlertInfo")
+    M_id = request.GET.get('priority_id')
+    main_model = AlertInfoModel
+    main_model.delete(M_id, item_id)
+    return Response(f"AlertInfo with ID {M_id} deleted", status=200)

@@ -173,7 +173,7 @@ const AddAlertInfoModal = ({ IsOpened, onClose, data, routeType }) => {
             <div className="modal-content-style" style={{ width: '1000px', maxHeight: '700px', overflowY: 'auto' }}>
                 {/* <pre>{JSON.stringify(alertInfo, null, 2)}</pre>
                 <pre>{JSON.stringify(associationData, null, 2)}</pre> */}
-                <pre>{JSON.stringify(preProcessedData, null, 2)}</pre>
+                {/* <pre>{JSON.stringify(preProcessedData, null, 2)}</pre> */}
                 <div className='text-end'>
                     <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
                 </div>
