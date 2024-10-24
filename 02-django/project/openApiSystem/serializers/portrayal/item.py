@@ -4,7 +4,7 @@ from openApiSystem.serializers.dataDictionary.item import (
     ConceptSerializer,
 )
 
-class S100_PR_NationalLanguageStringSerializer(serializers.Serializer):
+class S100_PR_OPEN_NationalLanguageStringSerializer(serializers.Serializer):
     text = serializers.CharField(allow_blank=True, allow_null=True)
     language = serializers.CharField(allow_blank=True, allow_null=True)
 
@@ -12,7 +12,7 @@ class S100_PR_RegisterItemSerializer(ConceptSerializer):
     xmlID = serializers.CharField()
     # description을 ListField로 변경하여 여러 NationalLanguageString을 받을 수 있도록 수정
     description = serializers.ListField(
-        child=S100_PR_NationalLanguageStringSerializer()
+        child=S100_PR_OPEN_NationalLanguageStringSerializer()
     )
 
 class S100_PR_VisualItemSerializer(S100_PR_RegisterItemSerializer):
@@ -102,5 +102,5 @@ class S100_PR_AlertSerializer(S100_PR_RegisterItemSerializer):
 # alert message complex
 class S100_PR_AlertMessageSerializer(S100_PR_RegisterItemSerializer):
     text = serializers.ListField(
-        child=S100_PR_NationalLanguageStringSerializer()
+        child=S100_PR_OPEN_NationalLanguageStringSerializer()
     )

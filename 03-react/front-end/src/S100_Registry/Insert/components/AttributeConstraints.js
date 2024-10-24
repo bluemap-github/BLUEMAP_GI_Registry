@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function AttributeConstraints({ onFormSubmit }) {
-    const [toggleOpened, setToggleOpened] = useState(false);
+    const [toggleOpened, setToggleOpened] = useState(true);
     const [referenceSource, setReferenceSource] = useState(null);
 
     const handleChange = (event) => {

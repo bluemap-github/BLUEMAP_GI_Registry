@@ -164,6 +164,7 @@ const PortrayalDetails = ({ items, itemType }) => {
     const fields = getTableFields(itemType);
 
     
+    
     return (
         <>
         <PRItemUpdateModal IsOpened={IsOpened} onClose={onClose} data={items}/>

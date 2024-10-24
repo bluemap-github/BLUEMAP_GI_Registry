@@ -11,7 +11,7 @@ item_id = openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', 
 from openApiSystem.models.registry.item import RE_Register
 from openApiSystem.utils import check_key_validation
 from openApiSystem.serializers.portrayal.item import (
-    S100_PR_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
+    S100_PR_OPEN_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
     S100_PR_VisualItemSerializer, S100_PR_ItemSchemaSerializer,
     S100_PR_ColourTokenSerializer, S100_PR_ColourPalletteSerializer,
     S100_PR_PaletteItemSerializer,
@@ -371,10 +371,6 @@ def drawing_priority_list(request):
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
 
-@api_view(['GET'])
-def alert_list(request):
-    pass
-    
 
 @swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
@@ -839,6 +835,7 @@ def alert_detail(request):
     serialized_item = S100_PR_AlertSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
+from regiSystem.serializers.PR import S100_PR_Alert_POST_Serializer
 @swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
 @api_view(['GET'])
 def alert_list(request):
@@ -852,7 +849,7 @@ def alert_list(request):
     get_item_list = PR_Alert.get_list_by_id(C_id)
     if get_item_list is None:
         return Response({"status": "error", "message": "No item found"}, status=404)
-    serialized_items = S100_PR_AlertSerializer(get_item_list, many=True)
+    serialized_items = S100_PR_Alert_POST_Serializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
 # from openApiSystem.serializers.portrayal.association import (

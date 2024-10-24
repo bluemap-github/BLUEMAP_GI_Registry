@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {PUT_SIMPLE_ATTRIBUTE} from '../../api';
 
-
 const conceptTableFields = [
     { name: 'Name', key: 'name' },
     { name: 'Item Type', key: 'itemType' },
@@ -83,6 +82,7 @@ const SimpUpdate = ({ TagItemType, data, onClose }) => {
             console.log('Update canceled by user.');
         }
     };
+
 
     return (
         <div>

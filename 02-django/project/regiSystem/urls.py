@@ -52,6 +52,8 @@ urlpatterns = [
     # AttributeConstraints
     path('attribute_constraints/post/', CD.post.attribute_constraints),
     path('attribute_constraints/get/', CD.get.attribute_constraints),
+    path('attribute_constraints/put/', CD.put.attribute_constraints),
+    path('attribute_constraints/delete/', CD.delete.attribute_constraints),
     
     # ComplexAttribute 
     path('complex_attribute/post/', CD.post.complex_attribute), 

@@ -135,7 +135,11 @@ def symbol(request):
 
     return Response(f"Symbol with ID {M_Id} deleted", status=200)
 
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def line_style(request):
     M_Id = decrypt_item_id(request)
@@ -154,7 +158,11 @@ def line_style(request):
 
     main_model.delete(M_Id)
     return Response(f"LineStyle with ID {M_Id} deleted", status=200)
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def area_fill(request):
     M_Id = decrypt_item_id(request)
@@ -170,7 +178,11 @@ def area_fill(request):
 
     main_model.delete(M_Id)
     return Response(f"AreaFill with ID {M_Id} deleted", status=200)
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def pixmap(request):
     M_Id = decrypt_item_id(request)
@@ -187,7 +199,11 @@ def pixmap(request):
     main_model.delete(M_Id)
     return Response(f"Pixmap with ID {M_Id} deleted", status=200)
 
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def symbol_schema(request):
     M_Id = decrypt_item_id(request)
@@ -203,7 +219,11 @@ def symbol_schema(request):
     return Response(f"SymbolSchema with ID {M_Id} deleted", status=200)
 
 
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def line_style_schema(request):
     M_Id = decrypt_item_id(request)
@@ -218,7 +238,11 @@ def line_style_schema(request):
     main_model.delete(M_Id)
     return Response(f"LineStyleSchema with ID {M_Id} deleted", status=200)
 
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def area_fill_schema(request):
     M_Id = decrypt_item_id(request)
@@ -233,6 +257,11 @@ def area_fill_schema(request):
     main_model.delete(M_Id)
     return Response(f"AreaFillSchema with ID {M_Id} deleted", status=200)
 
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def colour_profile_schema(request):
     M_Id = decrypt_item_id(request)
@@ -247,7 +276,11 @@ def colour_profile_schema(request):
     main_model.delete(M_Id)
     return Response(f"ColourProfileSchema with ID {M_Id} deleted", status=200)
 
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def pixmap_schema(request):
     M_Id = decrypt_item_id(request)
@@ -262,7 +295,11 @@ def pixmap_schema(request):
     main_model.delete(M_Id)
     return Response(f"PixmapSchema with ID {M_Id} deleted", status=200)
 
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def colour_token(request):
     M_Id = decrypt_item_id(request)
@@ -274,6 +311,11 @@ def colour_token(request):
     main_model.delete(M_Id)
     return Response(f"ColourToken with ID {M_Id} deleted", status=200)
 
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def colour_palette(request):
     M_Id = decrypt_item_id(request)
@@ -285,6 +327,11 @@ def colour_palette(request):
     main_model.delete(M_Id)
     return Response(f"ColourPalette with ID {M_Id} deleted", status=200)
 
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def palette_item(request):
     M_Id = decrypt_item_id(request)
@@ -296,6 +343,12 @@ def palette_item(request):
     main_model.delete(M_Id)
     return Response(f"PaletteItem with ID {M_Id} deleted", status=200)
 
+
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def display_mode(request):
     M_Id = decrypt_item_id(request)
@@ -307,6 +360,11 @@ def display_mode(request):
     main_model.delete(M_Id)
     return Response(f"DisplayMode with ID {M_Id} deleted", status=200)
 
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def viewing_group(request):
     M_Id = decrypt_item_id(request)
@@ -318,6 +376,11 @@ def viewing_group(request):
     main_model.delete(M_Id)
     return Response(f"ViewingGroup with ID {M_Id} deleted", status=200)
 
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def viewing_group_layer(request):
     M_Id = decrypt_item_id(request)
@@ -329,6 +392,11 @@ def viewing_group_layer(request):
     main_model.delete(M_Id)
     return Response(f"ViewingGroupLayer with ID {M_Id} deleted", status=200)
 
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def alert_highlight(request):
     M_Id = decrypt_item_id(request)
@@ -340,6 +408,11 @@ def alert_highlight(request):
     main_model.delete(M_Id)
     return Response(f"AlertHighlight with ID {M_Id} deleted", status=200)
 
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def alert_message(request):
     M_Id = decrypt_item_id(request)
@@ -351,7 +424,11 @@ def alert_message(request):
     main_model.delete(M_Id)
     return Response(f"AlertMessage with ID {M_Id} deleted", status=200)
 
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def display_plane(request):
     M_Id = decrypt_item_id(request)
@@ -359,7 +436,11 @@ def display_plane(request):
     main_model = RE_RegisterItemModel
     main_model.delete(M_Id)
     return Response(f"DisplayPlane with ID {M_Id} deleted", status=200)
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def font(request):
     M_Id = decrypt_item_id(request)
@@ -370,7 +451,11 @@ def font(request):
     delete_files([font_file_path])
     main_model.delete(M_Id)
     return Response(f"Font with ID {M_Id} deleted", status=200)
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def context_parameter(request):
     M_Id = decrypt_item_id(request)
@@ -379,7 +464,11 @@ def context_parameter(request):
     main_model.delete(M_Id)
     return Response(f"ContextParameter with ID {M_Id} deleted", status=200)
     
-
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def drawing_priority(request):
     M_Id = decrypt_item_id(request)
@@ -388,11 +477,18 @@ def drawing_priority(request):
     main_model.delete(M_Id)
     return Response(f"DrawingPriority with ID {M_Id} deleted", status=200)
 
+
+from regiSystem.models.PR_Class import AlertModel
+@swagger_auto_schema(
+    method='delete',
+    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
+)
 @api_view(['DELETE'])
 def alert(request):
     M_Id = decrypt_item_id(request)
     delete_MI(request, "Alert")
-    main_model = RE_RegisterItemModel
+    main_model = AlertModel
     main_model.delete(M_Id)
     return Response(f"Alert with ID {M_Id} deleted", status=200)
 

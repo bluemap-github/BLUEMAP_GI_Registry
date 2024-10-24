@@ -28,7 +28,7 @@ def insert_item(model_class, request):
 from openApiSystem.models.registry.item import RE_Register 
 from openApiSystem.utils import check_key_validation
 from openApiSystem.serializers.portrayal.item import (
-    S100_PR_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
+    S100_PR_OPEN_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
     S100_PR_VisualItemSerializer, S100_PR_ItemSchemaSerializer,
     S100_PR_ColourTokenSerializer, S100_PR_ColourPalletteSerializer,
     S100_PR_DisplayPlaneSerializer, S100_PR_DisplayModeSerializer,
@@ -104,10 +104,11 @@ def insert_colour_token(request):
 def insert_palette_item(request):
     return insert_item(PR_PaletteItem, request)
 
+from regiSystem.serializers.PR import S100_PR_Alert_POST_Serializer
 @swagger_auto_schema(
     method='post', 
     manual_parameters=[regiURI, serviceKey],
-    request_body=S100_PR_AlertSerializer  # 여기에 요청 body 시리얼라이저를 추가
+    request_body=S100_PR_Alert_POST_Serializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
 def insert_alert(request):

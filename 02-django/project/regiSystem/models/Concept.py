@@ -114,3 +114,24 @@ class ManagementInfoModel:
         result = cls.collection.delete_many({"concept_item_id": ObjectId(Item_id)})
         
         return {"status": "success", "deleted_count": result.deleted_count}
+
+
+class ConstraintsModel:
+    collection = S100_CD_AttributeConstraints
+
+    @classmethod
+    def update(cls, Item_id, simple_id, data):
+        if Item_id is None:
+            return {"status": "failed", "message": "Item_id is None"}
+        data["simpleAttribute"] = ObjectId(simple_id)
+        result = cls.collection.update_one({"_id": ObjectId(Item_id)}, {"$set": data})
+        
+        return {"status": "success", "updated_id": result.upserted_id}
+
+    @classmethod
+    def delete(cls, Item_id):
+        if Item_id is None:
+            return {"status": "failed", "message": "Item_id is None"}
+        result = cls.collection.delete_one({"_id": ObjectId(Item_id)})
+        
+        return {"status": "success", "deleted_count": result.deleted_count}

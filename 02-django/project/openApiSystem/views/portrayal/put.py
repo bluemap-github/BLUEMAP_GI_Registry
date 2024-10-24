@@ -12,7 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 from openApiSystem.models.registry.item import RE_Register
 from openApiSystem.utils import check_key_validation
 from openApiSystem.serializers.portrayal.item import (
-    S100_PR_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
+    S100_PR_OPEN_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
     S100_PR_VisualItemSerializer, S100_PR_ItemSchemaSerializer,
     S100_PR_ColourTokenSerializer, S100_PR_ColourPalletteSerializer,
     S100_PR_DisplayPlaneSerializer, S100_PR_DisplayModeSerializer,
@@ -189,17 +189,19 @@ def palette_item(request):
     I_id = request.GET.get('itemID')
     return update_item(PR_PaletteItem, request, I_id, S100_PR_PaletteItemSerializer)
 
+
 @swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_AlertMessageSerializer)
 @api_view(['PUT'])
 def alert_message(request):
     I_id = request.GET.get('itemID')
     return update_item(PR_AlertMessage, request, I_id, S100_PR_AlertMessageSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_AlertSerializer)
+from regiSystem.serializers.PR import S100_PR_Alert_POST_Serializer
+@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_Alert_POST_Serializer)
 @api_view(['PUT'])
 def alert(request):
     I_id = request.GET.get('itemID')
-    return update_item(PR_Alert, request, I_id, S100_PR_AlertSerializer)
+    return update_item(PR_Alert, request, I_id, S100_PR_Alert_POST_Serializer)
 
 
 from openApiSystem.models.portrayal.association import (

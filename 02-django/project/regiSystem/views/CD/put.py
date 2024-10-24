@@ -157,3 +157,20 @@ def distinction(request):
                 Distinction.insert_distinction(parent_id, origin_child_id)               
 
     return Response({"status": "success", "message": "Not implemented yet"}, status=201)
+
+
+
+from regiSystem.info_sec.getByURI import uri_to_serial
+from regiSystem.models.Concept import ConstraintsModel
+@api_view(['PUT'])
+def attribute_constraints(request):
+    item_iv = request.GET.get('item_iv')
+    item_id = decrypt(request.GET.get('item_id'), item_iv)
+    simple_id = request.data.get('simpleAttribute')
+    data = request.data
+    result = ConstraintsModel.update(item_id, simple_id, data)
+    if result.get("status") == "error":
+        return Response({"status": "error", "message": result.get("message")}, status=404)
+    else:
+        return Response({"status": "success", "message": "update successful"}, status=201)
+    

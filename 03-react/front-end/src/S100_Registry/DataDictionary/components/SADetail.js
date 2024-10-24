@@ -6,6 +6,10 @@ import { getAttributeConstraints } from '../../components/requestAPI.js';
 import Cookies from 'js-cookie';
 import TableContents from '../../Concept/Detail/components/tags/TableContens';
 import DDRUpdate from '../Update/DDRUpdate';
+import ConstraintModal from '../Update/component/Constaint.js';
+import AddConstraint from '../Update/component/AddConstraint.js';
+import {DELETE_CONSTRAINT} from '../api.js';
+import axios from 'axios';
 
 // Constraints fields definition
 const constraintFields = [
@@ -55,8 +59,53 @@ const SADetail = ({ item }) => {
     const onClose = () => {
         setIsOpened(false);
     };
+    
+    const [IsConstOpened, setIsConstOpened] = useState(false);
+    const onConstClose = () => {
+        setIsConstOpened(false);
+    };
+    const handleConstraintClick = () => {
+        setIsConstOpened(true);
+    }
+
+    const deleteConstraint = async (constraint) => {
+        const item_id = constraint._id.encrypted_data;
+        const item_iv = constraint._id.iv;
+
+        const userConfirmed = window.confirm('Are you sure you want to delete this item?');
+        if (userConfirmed) {
+            try {
+                const response = await axios.delete(DELETE_CONSTRAINT, {
+                    params: {
+                        item_id,
+                        item_iv,
+                    }
+                });
+                alert('Delete successful');
+                window.location.reload();
+            } catch (error) {
+                console.error('Error deleting:', error);
+            }
+        } else {
+            console.log('Delete canceled by user.');
+        }
+    }
+
+    const [IsAddConstOpened, setIsAddConstOpened] = useState(false);
+    const onAddConstClose = () => {
+        setIsAddConstOpened(false);
+    }
+    const addConstraint = () => {
+        console.log('add constraint');
+        setIsAddConstOpened(true);
+    }
+
+
+
     return (
         <div>
+            <ConstraintModal IsOpened={IsConstOpened} onClose={onConstClose} items={constraints}/>
+            <AddConstraint IsOpened={IsAddConstOpened} onClose={onAddConstClose} parentId={item}/>
             <DDRUpdate IsOpened={IsOpened} onClose={onClose} data={item} />
             <h3 style={{fontWeight: "bold"}}>Simple Attribute</h3>
             <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1', marginBottom: '15px' }}></div>
@@ -123,9 +172,20 @@ const SADetail = ({ item }) => {
                         </tbody>
                     </table>
                     <div className="text-end">
-                        <button className='btn btn-sm btn-secondary'>
-                            Update
+                        {constraints.length === 0 ? (<>
+                        <button className='btn btn-sm btn-outline-secondary' onClick={addConstraint}>
+                            + Add Constaint
                         </button>
+                        </>) : (
+                            <>
+                                <button className='btn btn-sm btn-secondary' onClick={handleConstraintClick}>
+                                    Update
+                                </button>
+                                <button className='btn btn-sm btn-danger' onClick={() => deleteConstraint(constraints[0])}>
+                                    Update
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
                 

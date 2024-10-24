@@ -38,6 +38,7 @@ class AttributeConstraintsSerializer(serializers.Serializer):
     textPattern = serializers.CharField(allow_blank=True)
     ACRange = serializers.CharField(allow_blank=True)
     precision = serializers.CharField(allow_blank=True)
+    simpleAttribute = ObjectIdField(read_only=True)
 
 class MultiplicitySerializer(serializers.Serializer):
     lower = serializers.IntegerField()

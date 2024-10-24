@@ -31,7 +31,7 @@ from openApiSystem.models.dbs import (
 
 )
 from openApiSystem.serializers.portrayal.item import (
-    S100_PR_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
+    S100_PR_OPEN_NationalLanguageStringSerializer, S100_PR_RegisterItemSerializer,
     S100_PR_VisualItemSerializer, S100_PR_ItemSchemaSerializer,
     S100_PR_ColourTokenSerializer, S100_PR_ColourPalletteSerializer,
     S100_PR_DisplayPlaneSerializer, S100_PR_DisplayModeSerializer,
@@ -50,7 +50,7 @@ class RegisterItemModel:
     def process_description(description_data):
         description_ids = []
         for desc in description_data:
-            desc_serializer = S100_PR_NationalLanguageStringSerializer(data=desc)
+            desc_serializer = S100_PR_OPEN_NationalLanguageStringSerializer(data=desc)
             if desc_serializer.is_valid():
                 result = S100_Portrayal_NationalLanguageString.insert_one(desc_serializer.validated_data)
                 description_ids.append(str(result.inserted_id))
@@ -350,6 +350,8 @@ class PR_AlertInfo(PR_RegisterItem):
         else:
             return {"status": "error", "errors": info_serializer.errors}
 
+
+from regiSystem.serializers.PR import S100_PR_Alert_POST_Serializer
 class PR_Alert(PR_RegisterItem):
     collection = [S100_Portrayal_Alert]
 
@@ -413,9 +415,9 @@ class PR_Alert(PR_RegisterItem):
             del result['description_ids']
 
         # routeMonitor 처리
-        if 'routeMonitor_ids' in result:
+        if 'routeMonitor' in result:
             routeMonitor_data = []
-            for monitor_id in result['routeMonitor_ids']:
+            for monitor_id in result['routeMonitor']:
                 monitor_data = cls.get_alert_info(monitor_id)
                 if isinstance(monitor_data, dict) and "errors" in monitor_data:
                     return monitor_data
@@ -425,12 +427,11 @@ class PR_Alert(PR_RegisterItem):
                         priority.pop('_id')
                 routeMonitor_data.append(monitor_data)
             result['routeMonitor'] = routeMonitor_data
-            del result['routeMonitor_ids']
 
         # routePlan 처리
-        if 'routePlan_ids' in result:
+        if 'routePlan' in result:
             routePlan_data = []
-            for plan_id in result['routePlan_ids']:
+            for plan_id in result['routePlan']:
                 plan_data = cls.get_alert_info(plan_id)
                 if isinstance(plan_data, dict) and "errors" in plan_data:
                     return plan_data
@@ -440,7 +441,6 @@ class PR_Alert(PR_RegisterItem):
                         priority.pop('_id')
                 routePlan_data.append(plan_data)
             result['routePlan'] = routePlan_data
-            del result['routePlan_ids']
         if 'concept_id' in result:
             result['concept_id'] = str(result['concept_id'])
         
@@ -468,34 +468,6 @@ class PR_Alert(PR_RegisterItem):
                 for desc in item['description']:
                     desc.pop('_id', None)  # '_id' 키 제거
 
-            # routeMonitor_ids 처리 
-            if 'routeMonitor_ids' in item:
-                item['routeMonitor'] = []
-                for monitor_id in item['routeMonitor_ids']:
-                    monitor_data = cls.get_alert_info(monitor_id)
-                    if isinstance(monitor_data, dict) and "errors" in monitor_data:
-                        return monitor_data
-                    # routeMonitor 내부의 priority에서 _id 제거
-                    for priority in monitor_data.get('priority', []):
-                        if '_id' in priority:
-                            priority.pop('_id')
-                    item['routeMonitor'].append(monitor_data)
-                del item['routeMonitor_ids']
-
-            # routePlan_ids 처리
-            if 'routePlan_ids' in item:
-                item['routePlan'] = []
-                for plan_id in item['routePlan_ids']:
-                    plan_data = cls.get_alert_info(plan_id)
-                    if isinstance(plan_data, dict) and "errors" in plan_data:
-                        return plan_data
-                    # routePlan 내부의 priority에서 _id 제거
-                    for priority in plan_data.get('priority', []):
-                        if '_id' in priority:
-                            priority.pop('_id')
-                    item['routePlan'].append(plan_data)
-                del item['routePlan_ids']
-
             # concept_id 문자열로 변환
             if 'concept_id' in item:
                 item['concept_id'] = str(item['concept_id'])
@@ -506,7 +478,7 @@ class PR_Alert(PR_RegisterItem):
 
     @classmethod
     def insert(cls, data, C_id):
-        serializer = S100_PR_AlertSerializer(data=data)
+        serializer = S100_PR_Alert_POST_Serializer(data=data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
 
@@ -516,26 +488,6 @@ class PR_Alert(PR_RegisterItem):
                 return description_ids
             validated_data['description_ids'] = description_ids
             del validated_data['description']
-
-            routeMonitor_data = validated_data.get('routeMonitor', [])
-            routeMonitor_ids = []
-            for monitor in routeMonitor_data:
-                monitor_id = PR_AlertInfo.process_info(monitor)
-                if isinstance(monitor_id, dict) and "errors" in monitor_id:
-                    return monitor_id
-                routeMonitor_ids.append(monitor_id)
-            validated_data['routeMonitor_ids'] = routeMonitor_ids
-            del validated_data['routeMonitor']
-
-            routePlan_data = validated_data.get('routePlan', [])
-            routePlan_ids = []
-            for plan in routePlan_data:
-                plan_id = PR_AlertInfo.process_info(plan)
-                if isinstance(plan_id, dict) and "errors" in plan_id:
-                    return plan_id
-                routePlan_ids.append(plan_id)
-            validated_data['routePlan_ids'] = routePlan_ids
-            del validated_data['routePlan']
 
             validated_data['concept_id'] = C_id
             result = cls.collection[0].insert_one(validated_data)
@@ -564,33 +516,9 @@ class PR_Alert(PR_RegisterItem):
                 validated_data['description_ids'] = description_ids
                 del validated_data['description']
 
-            # routeMonitor 처리
-            if 'routeMonitor' in validated_data:
-                routeMonitor_data = validated_data.get('routeMonitor', [])
-                routeMonitor_ids = []
-                for monitor in routeMonitor_data:
-                    monitor_id = PR_AlertInfo.process_info(monitor)
-                    if isinstance(monitor_id, dict) and "errors" in monitor_id:
-                        return monitor_id
-                    routeMonitor_ids.append(monitor_id)
-                validated_data['routeMonitor_ids'] = routeMonitor_ids
-                del validated_data['routeMonitor']
-
-            # routePlan 처리
-            if 'routePlan' in validated_data:
-                routePlan_data = validated_data.get('routePlan', [])
-                routePlan_ids = []
-                for plan in routePlan_data:
-                    plan_id = PR_AlertInfo.process_info(plan)
-                    if isinstance(plan_id, dict) and "errors" in plan_id:
-                        return plan_id
-                    routePlan_ids.append(plan_id)
-                validated_data['routePlan_ids'] = routePlan_ids
-                del validated_data['routePlan']
-
-            # concept_id는 그대로 유지
-            if 'concept_id' not in validated_data:
-                validated_data['concept_id'] = str(existing_item.get('concept_id'))
+            # # concept_id는 그대로 유지
+            # if 'concept_id' not in validated_data:
+            validated_data['concept_id'] = C_id
 
             # _id 필드는 변경되지 않음
             validated_data['_id'] = ObjectId(I_id)
@@ -601,6 +529,15 @@ class PR_Alert(PR_RegisterItem):
             # ObjectId를 문자열로 변환 후 반환
             return {"status": "success", "updated_id": str(I_id)}
 
+    @classmethod
+    def delete(cls, I_id):
+        # MongoDB에서 _id로 해당 데이터를 찾음
+        result = cls.collection[0].delete_one({"_id": ObjectId(I_id)})
+
+        if result.deleted_count == 1:
+            return {"status": "success", "deleted_id": str(I_id)}
+        else:
+            return {"status": "error", "message": "Item not found"}
 class PR_AlertMessage(PR_RegisterItem):
     collection = [S100_Portrayal_AlertMessage]
 
