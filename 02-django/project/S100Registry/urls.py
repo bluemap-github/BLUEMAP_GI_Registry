@@ -4,6 +4,7 @@ from django.urls import re_path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.conf import settings
 
 allow_patterns = [
     re_path('concept/', include('openApiSystem.urls.concept')),
@@ -22,7 +23,8 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
-    patterns=allow_patterns
+    patterns=allow_patterns,
+    url=settings.API_BASE_URL
 )
 
 urlpatterns = [

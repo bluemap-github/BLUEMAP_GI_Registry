@@ -13,12 +13,13 @@ import os
 from pathlib import Path
 from decouple import config
 import base64
+API_BASE_URL = "http://bluemap.kr:21803"
+#API_BASE_URL = "http://localhost:21803"
 
 # import KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 # 파일 저장 경로 설정
 FILES_DIR = os.path.join(BASE_DIR, 'files')
 
@@ -36,7 +37,6 @@ os.makedirs(XML_DIR, exist_ok=True)
 os.makedirs(FONT_DIR, exist_ok=True)
 os.makedirs(SVG_DIR, exist_ok=True)
 
-
 # 파일을 저장할 기본 경로 설정
 MEDIA_ROOT = FILES_DIR  # 'files' 폴더 안에 저장
 MEDIA_URL = '/media/'   # 파일에 접근할 때 사용할 URL
@@ -51,15 +51,15 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = '/usr/src/app/files/static/'
 
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.AllowAny',
-#     ],
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.SessionAuthentication',
-#         'rest_framework.authentication.BasicAuthentication',
-#     ],
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -68,8 +68,8 @@ STATIC_URL = '/static/'
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG', default=False, cast=bool)
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = True
 
 
 ALLOWED_HOSTS = ['bluemap.kr', 'localhost', '127.0.0.1']
@@ -95,7 +95,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', 
-    'django.middleware.common.CommonMiddleware', 
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -125,19 +124,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'S100Registry.wsgi.application'
-SWAGGER_SETTINGS = {
-    # 'DEFAULT_API_URL': 'http://bluemap.kr:21803',
-}
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+
 
 
 # Password validation
@@ -177,13 +166,12 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://bluemap.kr:21803",
-]
-
-##CORS
-CORS_ORIGIN_ALLOW_ALL=True # 모든 호스트 허용
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:8000",
+#     "http://bluemap.kr:21804", 
+#     "http://bluemap.kr:21803",
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True # 쿠키가 cross-site HTTP 요청에 포함될 수 있다
 
 CORS_ALLOW_METHODS = [  # 실제 요청에 허용되는 HTTP 동사 리스트
@@ -211,3 +199,6 @@ APPEND_SLASH = False # / 관련 에러 제거
 
 ENCRYPTION_KEY_BASE64 = config('ENCRYPTION_KEY')
 ENCRYPTION_KEY = base64.b64decode(ENCRYPTION_KEY_BASE64)
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 6291456  # 6MB
+

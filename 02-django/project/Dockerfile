@@ -1,10 +1,12 @@
-FROM python:latest
+FROM python:3.13-slim
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY req.txt .
 
-RUN pip install -r req.txt
+RUN pip install --no-cache-dir -r req.txt
+
+COPY . .
 
 RUN python manage.py collectstatic --noinput
 

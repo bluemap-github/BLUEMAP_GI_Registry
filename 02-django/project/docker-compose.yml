@@ -4,8 +4,8 @@ services:
       context: .
     command: gunicorn --bind 0.0.0.0:8000 S100Registry.wsgi:application  
     volumes:
-      - C:/Users/HJ/Desktop/media:/usr/src/app/files  
-      - C:/Users/HJ/Desktop/static:/usr/src/app/_static 
+      - /home/bluemap/media:/usr/src/app/files
+      - /home/bluemap/static:/usr/src/app/_static
     expose:
       - "8000"
     restart: always
@@ -17,8 +17,8 @@ services:
       - "21803:80"  
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf  
-      - C:/Users/HJ/Desktop/media:/usr/src/app/files  
-      - C:/Users/HJ/Desktop/static:/usr/src/app/_static 
+      - /home/bluemap/media:/usr/src/app/files
+      - /home/bluemap/static:/usr/src/app/_static
     depends_on:
       - web
-    restart: always
+    restart: always 

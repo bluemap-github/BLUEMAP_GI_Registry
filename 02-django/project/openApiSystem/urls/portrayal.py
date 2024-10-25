@@ -1,6 +1,6 @@
 from django.urls import path
 
-from openApiSystem.views.portrayal import (get, post, put, delete, file_post, file_put)
+from openApiSystem.views.portrayal import (get, post, put, delete, svg_file, ttf_file, xml_file, img_file)
 
 app_name = 'openApiSystem'
 urlpatterns = [
@@ -59,16 +59,16 @@ urlpatterns = [
     path('get/alert_message_detail/', get.alert_message_detail),
     
 
-    # path('post/symbol/', post.insert_symbol_item),
-    # path('post/line_style/', post.insert_line_style_item),
-    # path('post/area_fill/', post.insert_area_fill_item),
-    # path('post/pixmap/', post.insert_pixmap_item),
+    path('post/symbol/', post.insert_symbol_item),
+    path('post/line_style/', post.insert_line_style_item),
+    path('post/area_fill/', post.insert_area_fill_item),
+    path('post/pixmap/', post.insert_pixmap_item),
 
-    # path('post/symbol_schema/', post.insert_symbol_schema),
-    # path('post/line_style_schema/', post.insert_line_style_schema),
-    # path('post/area_fill_schema/', post.insert_area_fill_schema),
-    # path('post/pixmap_schema/', post.insert_pixmap_schema),
-    # path('post/colour_profile_schema/', post.insert_colour_profile_schema),
+    path('post/symbol_schema/', post.insert_symbol_schema),
+    path('post/line_style_schema/', post.insert_line_style_schema),
+    path('post/area_fill_schema/', post.insert_area_fill_schema),
+    path('post/pixmap_schema/', post.insert_pixmap_schema),
+    path('post/colour_profile_schema/', post.insert_colour_profile_schema),
     path('post/colour_token/', post.insert_colour_token),
     path('post/palette_item/', post.insert_palette_item),
     path('post/colour_palette/', post.insert_colour_palette),
@@ -76,7 +76,7 @@ urlpatterns = [
     path('post/display_mode/', post.insert_display_mode),
     path('post/viewing_group_layer/', post.insert_viewing_group_layer),
     path('post/viewing_group/', post.insert_viewing_group),
-    # path('post/font/', post.insert_font),
+    path('post/font/', post.insert_font),
     path('post/context_parameter/', post.insert_context_parameter),
     path('post/drawing_priority/', post.insert_drawing_priority),
     path('post/alert/', post.insert_alert),
@@ -84,16 +84,16 @@ urlpatterns = [
     path('post/alert_message/', post.insert_alert_message),
     path('post/alert_info/', post.insert_alert_info),
 
-    # path('put/symbol/', put.symbol),
-    # path('put/line_style/', put.line_style),
-    # path('put/area_fill/', put.area_fill),
-    # path('put/pixmap/', put.pixmap),
+    path('put/symbol/', put.symbol),
+    path('put/line_style/', put.line_style),
+    path('put/area_fill/', put.area_fill),
+    path('put/pixmap/', put.pixmap),
 
-    # path('put/symbol_schema/', put.symbol_schema),
-    # path('put/line_style_schema/', put.line_style_schema),
-    # path('put/area_fill_schema/', put.area_fill_schema),
-    # path('put/pixmap_schema/', put.pixmap_schema),
-    # path('put/colour_profile_schema/', put.colour_profile_schema),
+    path('put/symbol_schema/', put.symbol_schema),
+    path('put/line_style_schema/', put.line_style_schema),
+    path('put/area_fill_schema/', put.area_fill_schema),
+    path('put/pixmap_schema/', put.pixmap_schema),
+    path('put/colour_profile_schema/', put.colour_profile_schema),
     path('put/colour_token/', put.colour_token),
     path('put/palette_item/', put.palette_item),
     path('put/colour_palette/', put.colour_palette),
@@ -101,7 +101,7 @@ urlpatterns = [
     path('put/display_mode/', put.display_mode),
     path('put/viewing_group_layer/', put.viewing_group_layer),
     path('put/viewing_group/', put.viewing_group),
-    # path('put/font/', put.font),
+    path('put/font/', put.font),
     path('put/context_parameter/', put.context_parameter),
     path('put/drawing_priority/', put.drawing_priority),
     path('put/alert/', put.alert),
@@ -172,34 +172,49 @@ urlpatterns = [
 
 
     # '''
-    # 파일 업로드 url
+    # 파일 url
     # '''
+    path('post/upload_svg_file/', svg_file.upload_svg_file),
+    path ('get/svg_file/', svg_file.download_svg_file),
+    path('delete/svg_file/', svg_file.delete_svg_file),
 
-    path('post/symbol/', file_post.insert_symbol_item),
-    path('post/line_style/', file_post.insert_line_style_item),
-    path('post/area_fill/', file_post.insert_area_fill_item),
-    path('post/pixmap/', file_post.insert_pixmap_item),
+    path('post/upload_font_file/', ttf_file.upload_font_file),
+    path('get/font_file/', ttf_file.download_font_file),
+    path('delete/font_file/', ttf_file.delete_font_file),
 
-    path('post/symbol_schema/', file_post.insert_symbol_schema),
-    path('post/line_style_schema/', file_post.insert_line_style_schema),
-    path('post/area_fill_schema/', file_post.insert_area_fill_schema),
-    path('post/pixmap_schema/', file_post.insert_pixmap_schema),
-    path('post/colour_profile_schema/', file_post.insert_colour_profile_schema),
+    path('post/upload_schema_file/', xml_file.upload_xml_file),
+    path('get/schema_file/', xml_file.download_xml_file),
+    path('delete/schema_file/', xml_file.delete_xml_file),
 
-    path('post/font/', file_post.insert_font),
+    path('post/upload_img_file/', img_file.upload_img_file),
+    path('get/img_file/', img_file.download_image_file),
+    path('delete/img_file/', img_file.delete_image_file),
 
-    path('put/symbol/', file_put.symbol),
-    path('put/line_style/', file_put.line_style),
-    path('put/area_fill/', file_put.area_fill),
-    path('put/pixmap/', file_put.pixmap),
+    # path('post/symbol/', file_post.insert_symbol_item),
+    # path('post/line_style/', file_post.insert_line_style_item),
+    # path('post/area_fill/', file_post.insert_area_fill_item),
+    # path('post/pixmap/', file_post.insert_pixmap_item),
 
-    path('put/symbol_schema/', file_put.symbol_schema),
-    path('put/line_style_schema/', file_put.line_style_schema),
-    path('put/area_fill_schema/', file_put.area_fill_schema),
-    path('put/pixmap_schema/', file_put.pixmap_schema),
-    path('put/colour_profile_schema/', file_put.colour_profile_schema),
+    # path('post/symbol_schema/', file_post.insert_symbol_schema),
+    # path('post/line_style_schema/', file_post.insert_line_style_schema),
+    # path('post/area_fill_schema/', file_post.insert_area_fill_schema),
+    # path('post/pixmap_schema/', file_post.insert_pixmap_schema),
+    # path('post/colour_profile_schema/', file_post.insert_colour_profile_schema),
+
+    # path('post/font/', file_post.insert_font),
+
+    # path('put/symbol/', file_put.symbol),
+    # path('put/line_style/', file_put.line_style),
+    # path('put/area_fill/', file_put.area_fill),
+    # path('put/pixmap/', file_put.pixmap),
+
+    # path('put/symbol_schema/', file_put.symbol_schema),
+    # path('put/line_style_schema/', file_put.line_style_schema),
+    # path('put/area_fill_schema/', file_put.area_fill_schema),
+    # path('put/pixmap_schema/', file_put.pixmap_schema),
+    # path('put/colour_profile_schema/', file_put.colour_profile_schema),
     
-    path('put/font/', file_put.font),
+    # path('put/font/', file_put.font),
 
 
     # association

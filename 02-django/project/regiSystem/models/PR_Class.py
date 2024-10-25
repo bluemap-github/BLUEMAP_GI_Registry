@@ -82,6 +82,8 @@ class RE_RegisterItemModel:
 
     @classmethod
     def update(cls, M_id, data, C_id, serializer_class):
+        
+        print("????sd,mjfalskdhlkjash")
         if cls.collection is None:
             raise NotImplementedError("This model does not have a collection assigned.")
 
@@ -94,11 +96,16 @@ class RE_RegisterItemModel:
         # 시리얼라이저로 데이터 검증
         serializer = serializer_class(data=data, partial=True)
         if serializer.is_valid():
+            print("들ㅇ러갓어 ")
+            print("들ㅇ러갓어 ")
+            print("들ㅇ러갓어 ")
+            print("들ㅇ러갓어 ")
             validated_data = serializer.validated_data
             description_data = validated_data.get('description', [])
 
             # description 처리
             if 'description' in validated_data:
+                print("description in validated_data", description_data, "웅웅")
                 description_ids = RegisterItemModel.process_description(description_data)
                 if isinstance(description_ids, dict) and "errors" in description_ids:
                     return description_ids  # 에러 반환
@@ -110,6 +117,7 @@ class RE_RegisterItemModel:
 
             # 기존 데이터를 업데이트
             result = cls.collection.update_one({"_id": ObjectId(M_id)}, {"$set": validated_data})
+            print("result", result, "이거이거이거")
             if result.modified_count == 1:
                 return {"status": "success", "updated_id": str(M_id)}
             else:
@@ -319,9 +327,9 @@ class SymbolSchemaModel(ItemSchemaModel):
 class LineStyleSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_LineStyleSchema']
 
-    @classmethod
-    def update(cls, M_id, data, C_id):
-        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+    # @classmethod
+    # def update(cls, M_id, data, C_id):
+    #     return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
 
     @ classmethod
     def get_exixting_by_id(cls, M_id):
@@ -333,9 +341,9 @@ class LineStyleSchemaModel(ItemSchemaModel):
 class AreaFillSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_AreaFillSchema']
 
-    @classmethod
-    def update(cls, M_id, data, C_id):
-        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+    # @classmethod
+    # def update(cls, M_id, data, C_id):
+    #     return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
     
     @ classmethod
     def get_exixting_by_id(cls, M_id):
@@ -347,9 +355,9 @@ class AreaFillSchemaModel(ItemSchemaModel):
 class PixmapSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_PixmapSchema']
 
-    @classmethod
-    def update(cls, M_id, data, C_id):
-        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+    # @classmethod
+    # def update(cls, M_id, data, C_id):
+    #     return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
     
     @ classmethod
     def get_exixting_by_id(cls, M_id):
@@ -361,9 +369,9 @@ class PixmapSchemaModel(ItemSchemaModel):
 class ColourProfileSchemaModel(ItemSchemaModel):
     collection = db['S100_Portrayal_ColourProfileSchema']
 
-    @classmethod
-    def update(cls, M_id, data, C_id):
-        return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
+    # @classmethod
+    # def update(cls, M_id, data, C_id):
+    #     return super().update(M_id, data, C_id, S100_PR_ItemSchemaSerializer)
     
     @ classmethod
     def get_exixting_by_id(cls, M_id):
@@ -1254,9 +1262,9 @@ class FontModel(RE_RegisterItemModel):
     def insert(cls, data, C_id):
         return super().insert(data, C_id, S100_PR_FontSerializer)
     
-    @classmethod
-    def update(cls, M_id, data, C_id):
-        return super().update(M_id, data, C_id, S100_PR_FontSerializer)
+    # @classmethod
+    # def update(cls, M_id, data, C_id):
+    #     return super().update(M_id, data, C_id, S100_PR_FontSerializer)
     
     @ classmethod
     def get_exixting_by_id(cls, M_id):

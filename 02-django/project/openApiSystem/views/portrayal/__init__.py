@@ -4,3 +4,7 @@ from .post import *
 from .file_put import *
 from .put import *
 from .delete import *
+from .svg_file import *
+from .ttf_file import *
+from .xml_file import *
+from .img_file import *

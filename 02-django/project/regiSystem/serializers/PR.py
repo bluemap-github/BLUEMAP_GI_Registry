@@ -25,7 +25,7 @@ class S100_PR_VisualItemSerializer(S100_PR_RegisterItemSerializer):
 
 
 class S100_PR_ItemSchemaSerializer(S100_PR_RegisterItemSerializer):
-    xmlSchema = serializers.CharField()
+    xmlSchema = serializers.CharField(allow_blank=True, allow_null=True)
 
 class S100_PR_ColourTokenSerializer(S100_PR_RegisterItemSerializer):
     token = serializers.CharField()
@@ -46,7 +46,7 @@ class S100_PR_ViewingGroupSerializer(S100_PR_RegisterItemSerializer):
     foundationMode = serializers.BooleanField(allow_null=True, required=False)
 
 class S100_PR_FontSerializer(S100_PR_RegisterItemSerializer):
-    fontFile = serializers.CharField()
+    fontFile = serializers.CharField(allow_blank=True, allow_null=True)
     fontType = serializers.CharField()
 
 class S100_PR_ContextParameterSerializer(S100_PR_RegisterItemSerializer):

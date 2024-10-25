@@ -178,7 +178,8 @@ def get_symbol_list(request):
 #     return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer)
 
 
-
+import os
+from django.conf import settings
 def get_visual_file_one(Model, item_id, serializer_class=None):
     try:
         # Model에서 항목 가져오기
@@ -214,33 +215,61 @@ def get_visual_file_one(Model, item_id, serializer_class=None):
     except Exception as e:
         return Response({"status": "error", "message": str(e)}, status=400)
 
-# def get_schema_file_one(Model, item_id, serializer_class=None):
-#     try:
-#         # Model에서 항목 가져오기
-#         item = Model.get_one(item_id)
+def get_schema_file_one(Model, item_id, serializer_class=None):
+    try:
+        # Model에서 항목 가져오기
+        item = Model.get_one(item_id)
         
-#         # 오류가 있는 경우 처리
-#         if 'status' in item and item['status'] == 'error':
-#             return Response({"status": "error", "errors": item}, status=400)
+        # 오류가 있는 경우 처리
+        if 'status' in item and item['status'] == 'error':
+            return Response({"status": "error", "errors": item}, status=400)
 
-#         # ID 복호화
-#         encrypted_data, item_iv = item["_id"].get("encrypted_data"), item.get("_id").get("iv")
-#         item_id = decrypt(encrypted_data, item_iv)
+        # ID 복호화
+        encrypted_data, item_iv = item["_id"].get("encrypted_data"), item.get("_id").get("iv")
+        item_id = decrypt(encrypted_data, item_iv)
 
-#         # 이미지 경로 조합 후 item에 직접 할당
-#         if item['xmlSchema']:
-#             item['xmlSchema'] = os.path.join(settings.MEDIA_URL,'xml', item_id + ".svg")
+        # 이미지 경로 조합 후 item에 직접 할당
+        if item['xmlSchema']:
+            item['xmlSchema'] = os.path.join(settings.MEDIA_URL,'xml', item_id + ".xml")
 
-#         # 직렬화 클래스가 제공된 경우 처리
-#         if serializer_class:
-#             serializer = serializer_class(item)
-#             return Response({"status": "success", "data": serializer.data}, status=200)
+        # 직렬화 클래스가 제공된 경우 처리
+        if serializer_class:
+            serializer = serializer_class(item)
+            return Response({"status": "success", "data": serializer.data}, status=200)
 
-#         # JSON 응답으로 반환
-#         return Response({"status": "success", "data": item}, status=200)
+        # JSON 응답으로 반환
+        return Response({"status": "success", "data": item}, status=200)
 
-#     except Exception as e:
-#         return Response({"status": "error", "message": str(e)}, status=400)
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=400)
+    
+def get_font_file_one(Model, item_id, serializer_class=None):
+    try:
+        # Model에서 항목 가져오기
+        item = Model.get_one(item_id)
+        
+        # 오류가 있는 경우 처리
+        if 'status' in item and item['status'] == 'error':
+            return Response({"status": "error", "errors": item}, status=400)
+
+        # ID 복호화
+        encrypted_data, item_iv = item["_id"].get("encrypted_data"), item.get("_id").get("iv")
+        item_id = decrypt(encrypted_data, item_iv)
+
+        # 이미지 경로 조합 후 item에 직접 할당
+        if item['fontFile']:
+            item['fontFile'] = os.path.join(settings.MEDIA_URL,'font', item_id + ".ttf")
+
+        # 직렬화 클래스가 제공된 경우 처리
+        if serializer_class:
+            serializer = serializer_class(item)
+            return Response({"status": "success", "data": serializer.data}, status=200)
+
+        # JSON 응답으로 반환
+        return Response({"status": "success", "data": item}, status=200)
+
+    except Exception as e:
+        return Response({"status": "error", "message": str(e)}, status=400)
         
 
 
@@ -306,7 +335,8 @@ def get_symbol_schema_list(request):
 def get_symbol_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(SymbolSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    return get_schema_file_one(SymbolSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    # return get_one_item(SymbolSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
 
 # LineStyleSchema
@@ -320,7 +350,8 @@ def get_line_style_schema_list(request):
 def get_line_style_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(LineStyleSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    return get_schema_file_one(LineStyleSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    # return get_one_item(LineStyleSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
 
 # AreaFillSchema
@@ -334,7 +365,8 @@ def get_area_fill_schema_list(request):
 def get_area_fill_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(AreaFillSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    return get_schema_file_one(AreaFillSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    # return get_one_item(AreaFillSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
 
 # PixmapSchema
@@ -348,7 +380,8 @@ def get_pixmap_schema_list(request):
 def get_pixmap_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(PixmapSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    return get_schema_file_one(PixmapSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    # return get_one_item(PixmapSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
 
 # ColourProfileSchema
@@ -362,7 +395,8 @@ def get_colour_profile_schema_list(request):
 def get_colour_profile_schema(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(ColourProfileSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    return get_schema_file_one(ColourProfileSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
+    # return get_one_item(ColourProfileSchemaModel, I_id, S100_PR_ItemSchemaSerializer)
 
 
 # ColourToken
@@ -554,7 +588,7 @@ def font_list(request):
 def font(request):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-    return get_one_item(FontModel, I_id, S100_PR_FontSerializer)
+    return get_font_file_one(FontModel, I_id, S100_PR_FontSerializer)
 
 
 # ContextParameter
