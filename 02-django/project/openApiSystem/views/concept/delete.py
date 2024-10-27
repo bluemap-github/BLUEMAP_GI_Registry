@@ -13,15 +13,15 @@ from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND, HTTP_204_NO_C
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
 item_id = openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 
 # Register 삭제 API
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def register(request, C_id):
@@ -38,7 +38,7 @@ def register(request, C_id):
 # Item 삭제 API
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def item(request):
@@ -62,7 +62,7 @@ def item(request):
 # Management Info 삭제 API
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def management_info(request):
@@ -79,7 +79,7 @@ def management_info(request):
 # Reference Source 삭제 API
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def reference_source(request):
@@ -96,7 +96,7 @@ def reference_source(request):
 # Reference 삭제 API
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def reference(request):

@@ -124,9 +124,13 @@ def get_list_items(Model, C_id, serializer_class, request):
         items_cursor = Model.collection.find(query).sort(sort_key, sort_order).skip((page - 1) * page_size).limit(page_size)
 
         # 데이터 변환 및 직렬화 (개별 함수로 분리)
+        # 데이터 변환 및 직렬화 (개별 함수로 분리)
         items = process_items('description_ids', 'description', items_cursor)
-        if 'text_ids' in items[0]:
+
+        # items가 비어있지 않은 경우에만 'text_ids'를 처리
+        if items and 'text_ids' in items[0]:
             items = process_items('text_ids', 'text', items)
+
 
         # 직렬화
         serializer = serializer_class(items, many=True)
@@ -167,15 +171,6 @@ def get_symbol_list(request):
     C_id = uri_to_serial(request.GET.get('regi_uri'))
     return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer, request)
 
-
-# import os
-# from django.conf import settings
-# from rest_framework.decorators import api_view
-
-# @api_view(['GET'])
-# def get_symbol_list(request):
-#     C_id = uri_to_serial(request.GET.get('regi_uri'))
-#     return get_list_items(SymbolModel, C_id, S100_PR_VisualItemSerializer)
 
 
 import os

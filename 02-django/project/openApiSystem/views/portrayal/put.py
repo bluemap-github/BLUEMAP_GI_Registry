@@ -34,14 +34,14 @@ from openApiSystem.models.portrayal.item import (
     PR_Alert, PR_AlertInfo, PR_AlertMessage
 )
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING)
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING)
-itemID = openapi.Parameter('itemID', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING)
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING)
+item_id =openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 
 # 공통 함수 정의
 def update_item(model_class, request, item_id, serializer_class):
-    C_id = uri_to_serial(request.GET.get('regiURI'))
+    C_id = uri_to_serial(request.GET.get('regi_uri'))
     data = request.data
 
     # 기존 데이터 조회
@@ -63,144 +63,144 @@ def update_item(model_class, request, item_id, serializer_class):
 # API 엔드포인트
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey, itemID],
+    manual_parameters=[regi_uri, service_key, item_id],
     request_body=S100_PR_VisualItemSerializer  # 요청 body 시리얼라이저 추가
 )
 @api_view(['PUT'])
 def symbol(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_Symbol, request, I_id, S100_PR_VisualItemSerializer)
 
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_VisualItemSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_VisualItemSerializer)
 @api_view(['PUT'])
 def line_style(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_LineStyle, request, I_id, S100_PR_VisualItemSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_VisualItemSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_VisualItemSerializer)
 @api_view(['PUT'])
 def area_fill(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_AreaFill, request, I_id, S100_PR_VisualItemSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_VisualItemSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_VisualItemSerializer)
 @api_view(['PUT'])
 def pixmap(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_Pixmap, request, I_id, S100_PR_VisualItemSerializer)
 
 
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ItemSchemaSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ItemSchemaSerializer)
 @api_view(['PUT'])
 def symbol_schema(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_SymbolSchema, request, I_id, S100_PR_ItemSchemaSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ItemSchemaSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ItemSchemaSerializer)
 @api_view(['PUT'])
 def line_style_schema(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_LineStyleSchema, request, I_id, S100_PR_ItemSchemaSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ItemSchemaSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ItemSchemaSerializer)
 @api_view(['PUT'])
 def area_fill_schema(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_AreaFillSchema, request, I_id, S100_PR_ItemSchemaSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ItemSchemaSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ItemSchemaSerializer)
 @api_view(['PUT'])
 def pixmap_schema(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_PixmapSchema, request, I_id, S100_PR_ItemSchemaSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ItemSchemaSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ItemSchemaSerializer)
 @api_view(['PUT'])
 def colour_profile_schema(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_ColourProfileSchema, request, I_id, S100_PR_ItemSchemaSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ColourTokenSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ColourTokenSerializer)
 @api_view(['PUT'])
 def colour_token(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_ColourToken, request, I_id, S100_PR_ColourTokenSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ColourPalletteSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ColourPalletteSerializer)
 @api_view(['PUT'])
 def colour_palette(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_ColourPalette, request, I_id, S100_PR_ColourPalletteSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_DisplayPlaneSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_DisplayPlaneSerializer)
 @api_view(['PUT'])
 def display_plane(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_DisplayPlane, request, I_id, S100_PR_DisplayPlaneSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_DisplayModeSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_DisplayModeSerializer)
 @api_view(['PUT'])
 def display_mode(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_DisplayMode, request, I_id, S100_PR_DisplayModeSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ViewingGroupLayerSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ViewingGroupLayerSerializer)
 @api_view(['PUT'])
 def viewing_group_layer(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_ViewingGroupLayer, request, I_id, S100_PR_ViewingGroupLayerSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ViewingGroupSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ViewingGroupSerializer)
 @api_view(['PUT'])
 def viewing_group(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_ViewingGroup, request, I_id, S100_PR_ViewingGroupSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_FontSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_FontSerializer)
 @api_view(['PUT'])
 def font(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_Font, request, I_id, S100_PR_FontSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_ContextParameterSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_ContextParameterSerializer)
 @api_view(['PUT'])
 def context_parameter(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_ContextParameter, request, I_id, S100_PR_ContextParameterSerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_DrawingPrioritySerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_DrawingPrioritySerializer)
 @api_view(['PUT'])
 def drawing_priority(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_DrawingPriority, request, I_id, S100_PR_DrawingPrioritySerializer)
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_AlertHighlightSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_AlertHighlightSerializer)
 @api_view(['PUT'])
 def alert_highlight(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_AlertHighlight, request, I_id, S100_PR_AlertHighlightSerializer)
 
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_PaletteItemSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_PaletteItemSerializer)
 @api_view(['PUT'])
 def palette_item(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_PaletteItem, request, I_id, S100_PR_PaletteItemSerializer)
 
 
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_AlertMessageSerializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_AlertMessageSerializer)
 @api_view(['PUT'])
 def alert_message(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_AlertMessage, request, I_id, S100_PR_AlertMessageSerializer)
 
 from regiSystem.serializers.PR import S100_PR_Alert_POST_Serializer
-@swagger_auto_schema(method='put', manual_parameters=[regiURI, serviceKey, itemID], request_body=S100_PR_Alert_POST_Serializer)
+@swagger_auto_schema(method='put', manual_parameters=[regi_uri, service_key, item_id], request_body=S100_PR_Alert_POST_Serializer)
 @api_view(['PUT'])
 def alert(request):
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     return update_item(PR_Alert, request, I_id, S100_PR_Alert_POST_Serializer)
 
 
@@ -229,7 +229,7 @@ def common_update_association(model_class, request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -239,7 +239,7 @@ def symbol_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -249,7 +249,7 @@ def item_schema_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -259,7 +259,7 @@ def colour_token_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -269,7 +269,7 @@ def palette_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -279,7 +279,7 @@ def display_mode_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -289,7 +289,7 @@ def viewing_group_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -299,7 +299,7 @@ def highlight_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -309,7 +309,7 @@ def icon_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -319,7 +319,7 @@ def value_association(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_PUT_Association
 )
 @api_view(['PUT'])
@@ -333,16 +333,16 @@ from regiSystem.info_sec.getByURI import uri_to_serial
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey, itemID],
+    manual_parameters=[regi_uri, service_key, item_id],
     request_body=S100_PR_AlertInfoSerializer
 )
 @api_view(['PUT'])
 def alert_info(request):
-    I_id = request.GET.get('itemID')
-    if not regiURI:
-        return Response({"status": "error", "message": "Missing regiURI"}, status=HTTP_400_BAD_REQUEST)
+    I_id = request.GET.get('item_id')
+    if not regi_uri:
+        return Response({"status": "error", "message": "Missing regi_uri"}, status=HTTP_400_BAD_REQUEST)
     data = request.data
-    C_id = uri_to_serial(regiURI)
+    C_id = uri_to_serial(regi_uri)
     result = AlertInfoModel.update(I_id, data, C_id)
     if result.get("status") == "error":
         return Response(result["message"], status=HTTP_400_BAD_REQUEST)

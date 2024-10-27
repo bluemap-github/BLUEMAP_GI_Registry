@@ -10,6 +10,8 @@ const conceptTableFields = [
 ];
 
 const AddConstraint = ({ parentId, IsOpened, onClose }) => {
+    const item_id = parentId._id.encrypted_data;
+    const item_iv = parentId._id.iv;
     // State to track form data
     const [formData, setFormData] = useState({
         stringLength: '',
@@ -30,10 +32,15 @@ const AddConstraint = ({ parentId, IsOpened, onClose }) => {
 
     // Function to handle form submission
     const addConst = async () => {
+        console.log('Adding constraint:', formData, parentId);
         try {
             const response = await axios.post(POST_ATTRIBUTE_CONSTRAINTS, {
-                parentId,
                 ...formData, // Send the form data in the request
+            }, {
+                params: {
+                    item_id: item_id,
+                    item_iv: item_iv
+                }
             });
             alert('Constraint added successfully');
             onClose();
@@ -54,7 +61,6 @@ const AddConstraint = ({ parentId, IsOpened, onClose }) => {
                 <div className='text-end'>
                     <button onClick={onClose} type="button" className="btn-close" aria-label="Close"></button>
                 </div>
-                <pre>{JSON.stringify(formData, null, 2)}</pre> {/* Display current state */}
                 <h4>Add Constraint</h4>
                 {conceptTableFields.map(({ name, key, inputType = 'text' }) => (
                     <div className="input-group input-group-sm mb-1" key={key}>

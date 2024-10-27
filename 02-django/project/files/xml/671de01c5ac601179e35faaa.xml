@@ -1,0 +1,3344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<S100FC:S100_FC_FeatureCatalogue xmlns:S100FC="http://www.iho.int/S100FC/5.2" xmlns:S100Base="http://www.iho.int/S100Base/5.0" xmlns:S100CI="http://www.iho.int/S100CI/5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:S100CD="http://www.iho.int/S100CD/5.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.iho.int/S100FC/5.2 https://staging.s100dev.net/schemas/S100/5.2.0/S100FC/20231214/S100FC.xsd">
+	<S100FC:name>MPA</S100FC:name>
+	<S100FC:scope/>
+	<S100FC:versionNumber>0.0.1</S100FC:versionNumber>
+	<S100FC:versionDate>2024-05-14</S100FC:versionDate>
+	<S100FC:productId>S-122</S100FC:productId>
+	<S100FC:producer>
+		<S100CI:role>pointOfContact</S100CI:role>
+		<S100CI:party>
+			<S100CI:CI_Organisation>
+				<S100CI:name>International Hydrographic Organization</S100CI:name>
+				<S100CI:contactInfo>
+					<S100CI:address>
+						<S100CI:administrativeArea>4b quai Antonie 1er</S100CI:administrativeArea>
+						<S100CI:country>Monaco</S100CI:country>
+						<S100CI:electronicMailAddress>info@iho.int</S100CI:electronicMailAddress>
+					</S100CI:address>
+					<S100CI:onlineResource>
+						<S100CI:linkage>https://iho.int/</S100CI:linkage>
+					</S100CI:onlineResource>
+				</S100CI:contactInfo>
+			</S100CI:CI_Organisation>
+		</S100CI:party>
+	</S100FC:producer>
+	<S100FC:S100_FC_DefinitionSources>
+		<S100FC:FC_DefinitionSource id="IHOREG">
+			<S100FC:source>
+				<S100CI:title>IHO GI Registry</S100CI:title>
+				<S100CI:onlineResource>
+					<S100CI:linkage>http://registry.iho.int</S100CI:linkage>
+				</S100CI:onlineResource>
+			</S100FC:source>
+		</S100FC:FC_DefinitionSource>
+	</S100FC:S100_FC_DefinitionSources>
+	<S100FC:S100_FC_SimpleAttributes>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Transmission Time</S100FC:name>
+			<S100FC:definition>The time in the day when scheduled transmissions start.</S100FC:definition>
+			<S100FC:code>transmissionTime</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>685</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>time</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Minute Past Every Hour</S100FC:name>
+			<S100FC:definition>The minute past every hour when a routine transmission starts.</S100FC:definition>
+			<S100FC:code>minutePastEveryHour</S100FC:code>
+			<S100FC:remarks>Minute (time) is a closed interval going from 0 to 59 seconds (time) and indicated the duration of a period of time.</S100FC:remarks>
+			<S100FC:alias>MNTALL</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>946</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Minute Past Odd Hours</S100FC:name>
+			<S100FC:definition>The minute past odd hours when a routine transmission starts.</S100FC:definition>
+			<S100FC:code>minutePastOddHours</S100FC:code>
+			<S100FC:remarks>Minute (time) is a closed interval going from 0 to 59 seconds (time) and indicated the duration of a period of time.</S100FC:remarks>
+			<S100FC:alias>MNTODD</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>947</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Interoperability Identifier</S100FC:name>
+			<S100FC:definition>A common unique identifier for entities which describe a single real-world feature, and which is used to identify instances of the feature in end-user systems where the feature may be included in multiple data product types.</S100FC:definition>
+			<S100FC:code>interoperabilityIdentifier</S100FC:code>
+			<S100FC:valueType>URN</S100FC:valueType>
+			<S100FC:constraints>
+				<S100CD:textPattern>urn:mrn:[Organisational ID]:...:...</S100CD:textPattern>
+			</S100FC:constraints>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Minute Past Even Hours</S100FC:name>
+			<S100FC:definition>The minute past even hours when a routine transmission starts.</S100FC:definition>
+			<S100FC:code>minutePastEvenHours</S100FC:code>
+			<S100FC:remarks>Minute (time) is a closed interval going from 0 to 59 seconds (time) and indicated the duration of a period of time.</S100FC:remarks>
+			<S100FC:alias>MNTEVN</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>945</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Time of Day Start</S100FC:name>
+			<S100FC:definition>The time corresponding to the start of an active period.</S100FC:definition>
+			<S100FC:code>timeOfDayStart</S100FC:code>
+			<S100FC:remarks>The time of day start must be encoded using 2 digits for the hour (hh), 2 digits for the minutes(mm) and 2 digits for the seconds (ss). This conforms to ISO 8601:2004.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>181</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>time</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Time of Day End</S100FC:name>
+			<S100FC:definition>The time corresponding to the end of an active period.</S100FC:definition>
+			<S100FC:code>timeOfDayEnd</S100FC:code>
+			<S100FC:remarks>The time of day end must be encoded using 2 digits for the hour (hh), 2 digits for the minutes(mm) and 2 digits for the seconds (ss). This conforms to ISO 8601:2004.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>180</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>time</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Day of Week is Range</S100FC:name>
+			<S100FC:definition>A statement expressing if the days of the week identified define a range or not.</S100FC:definition>
+			<S100FC:code>dayOfWeekIsRange</S100FC:code>
+			<S100FC:remarks>A True value is an indication that the identified days of the week define a range between and inclusive of those days.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>84</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>boolean</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Day of Week</S100FC:name>
+			<S100FC:definition>Any one of seven days in a week.</S100FC:definition>
+			<S100FC:code>dayOfWeek</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>83</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>Sunday</S100FC:label>
+					<S100FC:definition>The first day of the week.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>813</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>월요일</S100FC:label>
+					<S100FC:definition>The second day of the week.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>814</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>화요일</S100FC:label>
+					<S100FC:definition>The third day of the week.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>815</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>수요일</S100FC:label>
+					<S100FC:definition>The fourth day of the week.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>816</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>목요일</S100FC:label>
+					<S100FC:definition>The fifth day of the week.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>817</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>금요일</S100FC:label>
+					<S100FC:definition>The sixth day of the week.</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>818</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>토요일</S100FC:label>
+					<S100FC:definition>The seventh day of the week.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>819</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Category of Text</S100FC:name>
+			<S100FC:definition>Classification of completeness of textual information in relation to the source material from which it is derived.</S100FC:definition>
+			<S100FC:code>categoryOfText</S100FC:code>
+			<S100FC:alias>CATTXT</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>429</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>요약</S100FC:label>
+					<S100FC:definition>A statement summarizing the important points of a text.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1996</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>추출</S100FC:label>
+					<S100FC:definition>An excerpt or excerpts from a text.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1997</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>전체 텍스트</S100FC:label>
+					<S100FC:definition>The whole text.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1998</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Telecommunication Service</S100FC:name>
+			<S100FC:definition>Classification of methods of communication over a distance by electrical, electronic, or electromagnetic means.</S100FC:definition>
+			<S100FC:code>telecommunicationService</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>175</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>음성</S100FC:label>
+					<S100FC:definition>The transfer or exchange of information by using sounds that are being made by mouth and throat when speaking.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1085</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>팩시밀리</S100FC:label>
+					<S100FC:definition>A system of transmitting and reproducing graphic matter (as printing or still pictures) by means of signals sent over telephone lines.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1086</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>SMS</S100FC:label>
+					<S100FC:definition>Short Message Service is a form of text messaging communication on phones and mobile phones.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1087</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>데이터</S100FC:label>
+					<S100FC:definition>A representation of facts, concepts or instructions in a formalised manner suitable for communication, interpretation or processing.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1088</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>스트리밍된 데이터</S100FC:label>
+					<S100FC:definition>Data that is constantly received by and presented to an end-user while being delivered by a provider.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1089</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>텔렉스</S100FC:label>
+					<S100FC:definition>A system of communication in which messages are sent over long distances by using a telephone system and are printed by using a special machine (called a teletypewriter).</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1090</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>전보</S100FC:label>
+					<S100FC:definition>An apparatus, system or process for communication at a distance by electric transmission over wire.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>62</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>이메일</S100FC:label>
+					<S100FC:definition>Messages and other data exchanged between individuals using computers in a network.</S100FC:definition>
+					<S100FC:code>8</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1091</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Telecommunication Identifier</S100FC:name>
+			<S100FC:definition>An identifier, such as words, numbers, letters, symbols, or any combination of those used to establish a contact to a particular person, organisation or service.</S100FC:definition>
+			<S100FC:code>telecommunicationIdentifier</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>174</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Transmission Regularity</S100FC:name>
+			<S100FC:definition>Classification of regularity or conditions for transmission.</S100FC:definition>
+			<S100FC:code>transmissionRegularity</S100FC:code>
+			<S100FC:alias>TRMREG</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>684</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>연속</S100FC:label>
+					<S100FC:definition>Transmission is made continuously.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2593</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>정기적인</S100FC:label>
+					<S100FC:definition>Transmission is made regularly according to a schedule.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2594</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>수신시</S100FC:label>
+					<S100FC:definition>Transmission is made when warning or information is received from another authority.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2595</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>필요에 따라</S100FC:label>
+					<S100FC:definition>Transmission is made under specified conditions or when needed.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2596</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>요청시</S100FC:label>
+					<S100FC:definition>When you ask for it.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2597</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Transmission Content</S100FC:name>
+			<S100FC:definition>Content of transmission.</S100FC:definition>
+			<S100FC:code>transmissionContent</S100FC:code>
+			<S100FC:remarks>Other than MSI.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>681</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Observation Time</S100FC:name>
+			<S100FC:definition>The time on each day when observations are made.</S100FC:definition>
+			<S100FC:code>observationTime</S100FC:code>
+			<S100FC:alias>OBSTIM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>576</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>time</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Signal Frequency</S100FC:name>
+			<S100FC:definition>The frequency of a signal.</S100FC:definition>
+			<S100FC:code>signalFrequency</S100FC:code>
+			<S100FC:alias>SIGFRQ</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>1105</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Selective Call Number</S100FC:name>
+			<S100FC:definition>When stations of the maritime mobile service (direct printing telegraphy) use selective calling devices, their Selective Call numbers (SELCAL) are formed of four digits (coast stations).</S100FC:definition>
+			<S100FC:code>selectiveCallNumber</S100FC:code>
+			<S100FC:alias>SELCAL</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>961</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Contact Instructions</S100FC:name>
+			<S100FC:definition>Instructions provided on how to contact a particular person, organisation or service.</S100FC:definition>
+			<S100FC:code>contactInstructions</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>76</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Communication Channel</S100FC:name>
+			<S100FC:definition>A channel number assigned to a specific radio frequency, frequencies or frequency band.</S100FC:definition>
+			<S100FC:code>communicationChannel</S100FC:code>
+			<S100FC:remarks>The expected input is the specific VHF-Channel. The attribute &apos;communication channel&apos; encodes the various VHF-channels used for communication.</S100FC:remarks>
+			<S100FC:alias>COMCHA</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>74</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Category of Radio Methods</S100FC:name>
+			<S100FC:definition>Categories of radiocommunications based on frequency band and radio traffic method.</S100FC:definition>
+			<S100FC:code>categoryOfRadioMethods</S100FC:code>
+			<S100FC:alias>CATRMT</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>419</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>저주파수 음성 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 30 and 300 kHz used for voice traffic.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1924</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>중간주파수 음성 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 300 and 3000 kHz used for voice traffic.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1925</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>고주파 (HF) 음성 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 3 and 30 MHz used for voice traffic.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1926</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>초고주파 (VHF) 음성 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 30 and 300 MHz used for voice traffic.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1927</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>고주파 좁은 대역 직접 인쇄</S100FC:label>
+					<S100FC:definition>An automated direct printing service,in the high frequency range, similar to NAVTEX, but does not offer all of the same functionality such as avoiding repeated messages.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1928</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>NAVTEX</S100FC:label>
+					<S100FC:definition>The system for the broadcast and automatic reception of Maritime Safety Information by means of narrow-band direct-printing telegraphy.</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1929</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>SafetyNET</S100FC:label>
+					<S100FC:definition>SafetyNET is an international automatic direct-printing satellite-based service for the promulgation of navigational and meteorological warnings, meteorological forecasts and other urgent safety-related messages - maritime safety information (MSI) - to ships.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1930</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>NBDP 전신 (고주파 좁은 대역 직접 인쇄 전신)</S100FC:label>
+					<S100FC:definition>A communications system consisting of teletypewriters connected to a telephonic network to send and receive Narrow Band Direct Printing.</S100FC:definition>
+					<S100FC:code>8</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1931</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>팩시밀리</S100FC:label>
+					<S100FC:definition>A system of transmitting and reproducing graphic matter (as printing or still pictures) by means of signals sent over telephone lines.</S100FC:definition>
+					<S100FC:code>9</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1086</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>NAVIP</S100FC:label>
+					<S100FC:definition>A Russian system transmitting navigational information, sent by radio and containing information relevant to coastal waters of foreign countries and high seas.</S100FC:definition>
+					<S100FC:code>10</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1932</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>저주파수 디지털 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 30 and 300 kHz used for digital traffic.</S100FC:definition>
+					<S100FC:code>11</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1933</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>중간주파수 디지털 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 300 and 3000 kHz used for digital traffic.</S100FC:definition>
+					<S100FC:code>12</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1934</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>고주파 (HF) 디지털 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 3 and 30 MHz used for digital traffic.</S100FC:definition>
+					<S100FC:code>13</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1935</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>초고주파 (VHF) 디지털 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 30 and 300 MHz used for digital traffic.</S100FC:definition>
+					<S100FC:code>14</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1936</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>저주파수 전보 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 30 and 300 kHz used for telegraph traffic.</S100FC:definition>
+					<S100FC:code>15</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1937</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>중간주파수 전보 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 300 and 3000 kHz used for telegraph traffic.</S100FC:definition>
+					<S100FC:code>16</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1938</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>고주파 (HF) 전보 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 3 and 30 MHz used for telegraph traffic.</S100FC:definition>
+					<S100FC:code>17</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1939</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>중간주파수 디지털 선택 호출 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 300 and 3000 kHz used for Digital Selective Call traffic.</S100FC:definition>
+					<S100FC:code>18</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1940</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>고주파 (HF) 디지털 선택 호출 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 3 and 30 MHz used for Digital Selective Call traffic.</S100FC:definition>
+					<S100FC:code>19</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1941</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>초고주파 (VHF) 디지털 선택 호출 트래픽</S100FC:label>
+					<S100FC:definition>Frequency in a frequency range between 30 and 300 MHz used for Digital Selective Call traffic.</S100FC:definition>
+					<S100FC:code>20</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1942</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Category of Maritime Broadcast</S100FC:name>
+			<S100FC:definition>Classification of maritime broadcast based on the nature of information conveyed.</S100FC:definition>
+			<S100FC:code>categoryOfMaritimeBroadcast</S100FC:code>
+			<S100FC:alias>CATMAB</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>411</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>항해 경보</S100FC:label>
+					<S100FC:definition>A message containing urgent information relevant to safe navigation broadcast to ships in accordance with the provisions of the International Convention for the Safety of Life at Sea, 1974, as amended.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1874</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>기상 경보</S100FC:label>
+					<S100FC:definition>Warning of adverse weather conditions.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1875</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>얼음 보고</S100FC:label>
+					<S100FC:definition>Report of the ice situation and restrictions to shipping.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1876</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>SAR 정보</S100FC:label>
+					<S100FC:definition>Broadcast message with information about an ongoing Search and Rescue operation.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1877</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>해적 공격 경보</S100FC:label>
+					<S100FC:definition>Warning of possible attack by pirates.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1878</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>기상 예보</S100FC:label>
+					<S100FC:definition>Broadcast message containing meteorological forecast.</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1879</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>파일럿 서비스 메시지</S100FC:label>
+					<S100FC:definition>Broadcast message about a pilot service.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1880</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>AIS 정보</S100FC:label>
+					<S100FC:definition>Broadcast message about AIS information.</S100FC:definition>
+					<S100FC:code>8</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1881</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>LORAN 메시지</S100FC:label>
+					<S100FC:definition>Broadcast message about the LORAN service.</S100FC:definition>
+					<S100FC:code>9</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1882</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>SATNAV 메시지</S100FC:label>
+					<S100FC:definition>Broadcast message about Satellite Navigation service.</S100FC:definition>
+					<S100FC:code>10</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1883</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>돌풍 경보</S100FC:label>
+					<S100FC:definition>Wind speeds between 34 and 47 knots (Beaufort scale wind force 8 and 9) are forecast or occurring.</S100FC:definition>
+					<S100FC:code>11</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1884</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>폭풍 경보</S100FC:label>
+					<S100FC:definition>Wind speeds between 48 and 63 knots (Beaufort scale wind force 10 or 11) are forecast or occurring.</S100FC:definition>
+					<S100FC:code>12</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1885</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>열대 저기압 경보</S100FC:label>
+					<S100FC:definition>Warning of hurricanes in the North Atlantic and eastern North Pacific, typhoons in the Western Pacific, cyclones in the Indian Ocean and cyclones of similar nature in other regions.</S100FC:definition>
+					<S100FC:code>13</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1886</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>NAVAREA 경보</S100FC:label>
+					<S100FC:definition>Navigational warning or in-force bulletin promulgated as part of a numbered series by a NAVAREA coordinator.</S100FC:definition>
+					<S100FC:code>14</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1887</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>해안 경보</S100FC:label>
+					<S100FC:definition>A navigational warning, or in-force bulletin, promulgated as part of a numbered series by a National Coordinator.</S100FC:definition>
+					<S100FC:code>15</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1888</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>지역 경보</S100FC:label>
+					<S100FC:definition>Warning which covers inshore waters, often within the limits of jurisdiction of a harbour or port authority.</S100FC:definition>
+					<S100FC:code>16</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1889</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>저수위 경고/음수리류</S100FC:label>
+					<S100FC:definition>Warning of actual or expected low water level.</S100FC:definition>
+					<S100FC:code>17</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1890</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>얼음 경고</S100FC:label>
+					<S100FC:definition>Warning of accretion of ice on ships.</S100FC:definition>
+					<S100FC:code>18</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1891</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>쓰나미 방송</S100FC:label>
+					<S100FC:definition>Broadcasts about tsunamis, including watches, advisories, and other types of messages relating to tsunamis or potential tsunamis.</S100FC:definition>
+					<S100FC:code>19</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1892</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Restriction</S100FC:name>
+			<S100FC:definition>The official legal statute of each kind of restricted area.</S100FC:definition>
+			<S100FC:code>restriction</S100FC:code>
+			<S100FC:remarks>Defines the kind of restriction(s), for example, the restriction for &apos;a game preserve&apos; may be &apos;entry prohibited&apos;, the restriction for an &apos;anchoring prohibition&apos; is &apos;anchoring prohibited&apos;. The complete information about the restriction(s), actually held in handbooks or other publications, may be encoded using an Information type.</S100FC:remarks>
+			<S100FC:alias>RESTRN</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>155</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>닻을 내릴 수 없음</S100FC:label>
+					<S100FC:definition>An area within which anchoring is not permitted.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1016</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>닻을 내릴 수 있는 지역 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which anchoring is restricted in accordance with certain specified conditions.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1017</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>어로 금지</S100FC:label>
+					<S100FC:definition>An area within which fishing is not permitted.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1018</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>어로 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which fishing is restricted in accordance with certain specified conditions.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1019</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>얽매기 금지</S100FC:label>
+					<S100FC:definition>An area within which trawling is not permitted.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1020</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>얽매기 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which trawling is restricted in accordance with certain specified conditions.</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1021</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>진입 금지</S100FC:label>
+					<S100FC:definition>An area within which navigation and/or anchoring is prohibited.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1022</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>진입 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which navigation is restricted in accordance with certain specified conditions.</S100FC:definition>
+					<S100FC:code>8</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1023</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>마모 금지</S100FC:label>
+					<S100FC:definition>An area within which dredging is not permitted.</S100FC:definition>
+					<S100FC:code>9</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1024</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>마모 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which dredging is restricted in accordance with certain specified conditions.</S100FC:definition>
+					<S100FC:code>10</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1025</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>다이빙 금지</S100FC:label>
+					<S100FC:definition>An area within which diving is not permitted.</S100FC:definition>
+					<S100FC:code>11</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1026</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>다이빙 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which diving is restricted in accordance with certain specified conditions.</S100FC:definition>
+					<S100FC:code>12</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1027</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>웨이크 금지</S100FC:label>
+					<S100FC:definition>Mariners must adjust the speed of their vessels to reduce the wave or wash which may cause erosion or disturb moored vessels.</S100FC:definition>
+					<S100FC:code>13</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1028</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>피해야 할 지역</S100FC:label>
+					<S100FC:definition>An IMO declared routeing measure comprising an area within defined limits in which either navigation is particularly hazardous or it is exceptionally important to avoid casualties and which should be avoided by all ships, or certain classes of ships.</S100FC:definition>
+					<S100FC:code>14</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1029</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>건설 금지</S100FC:label>
+					<S100FC:definition>The erection of permanent or temporary fixed structures or artificial islands is prohibited.</S100FC:definition>
+					<S100FC:code>15</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1030</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>방류 금지</S100FC:label>
+					<S100FC:definition>An area within which discharging or dumping is prohibited.</S100FC:definition>
+					<S100FC:code>16</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1031</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>방류 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by an appropriate authority, within which discharging or dumping is restricted in accordance with specified conditions.</S100FC:definition>
+					<S100FC:code>17</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1032</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>산업 또는 광업 탐사/개발 금지</S100FC:label>
+					<S100FC:definition>An area within which industrial or mineral exploration and development are prohibited.</S100FC:definition>
+					<S100FC:code>18</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1033</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>산업 또는 광업 탐사/개발 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by an appropriate authority, within which industrial or mineral exploration and development is restricted in accordance with certain specified conditions.</S100FC:definition>
+					<S100FC:code>19</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1034</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>드릴링 금지</S100FC:label>
+					<S100FC:definition>An area within which excavating a hole on the seabed with a drill is prohibited.</S100FC:definition>
+					<S100FC:code>20</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1035</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>드릴링 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by an appropriate authority, within which excavating a hole on the seabed with a drill is restricted in accordance with certain specified conditions.</S100FC:definition>
+					<S100FC:code>21</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1036</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>역사적 유물 제거 금지</S100FC:label>
+					<S100FC:definition>An area within which the removal of historical artefacts is prohibited.</S100FC:definition>
+					<S100FC:code>22</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1037</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>화물 이송 (경감) 금지</S100FC:label>
+					<S100FC:definition>An area in which cargo transhipment (lightening) is prohibited.</S100FC:definition>
+					<S100FC:code>23</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1038</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>끌기 금지</S100FC:label>
+					<S100FC:definition>An area in which the dragging of anything along the bottom, for example bottom trawling, is prohibited.</S100FC:definition>
+					<S100FC:code>24</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1039</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>정지 금지</S100FC:label>
+					<S100FC:definition>An area in which a vessel is prohibited from stopping.</S100FC:definition>
+					<S100FC:code>25</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1040</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>상륙 금지</S100FC:label>
+					<S100FC:definition>An area in which landing is prohibited.</S100FC:definition>
+					<S100FC:code>26</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1041</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>속도 제한</S100FC:label>
+					<S100FC:definition>An area within which speed is restricted.</S100FC:definition>
+					<S100FC:code>27</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1042</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>추월 금지</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which overtaking is generally prohibited.</S100FC:definition>
+					<S100FC:code>28</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1676</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>대열 간 추월 금지</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which overtaking between convoys is prohibited.</S100FC:definition>
+					<S100FC:code>29</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1677</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>통과 또는 추월 금지</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which passing or overtaking is generally prohibited.</S100FC:definition>
+					<S100FC:code>30</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1678</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>적선 금지</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which vessels, assemblies of floating material or floating establishments may not berth.</S100FC:definition>
+					<S100FC:code>31</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1679</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>적선 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which berthing is restricted.</S100FC:definition>
+					<S100FC:code>32</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1680</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>부두에 결박 금지</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which vessels, assemblies of floating material or floating establishments may not make fast to the bank.</S100FC:definition>
+					<S100FC:code>33</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1681</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>매달기 제한</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which making fast to the bank is restricted.</S100FC:definition>
+					<S100FC:code>34</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1682</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>회전 금지</S100FC:label>
+					<S100FC:definition>A specified area designated by appropriate authority, within which all turning is generally prohibited.</S100FC:definition>
+					<S100FC:code>35</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1683</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>제한된 선로 깊이</S100FC:label>
+					<S100FC:definition>An area within which the fairway depth is restricted.</S100FC:definition>
+					<S100FC:code>36</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1684</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>제한된 선로 폭</S100FC:label>
+					<S100FC:definition>An area within which the fairway width is restricted.</S100FC:definition>
+					<S100FC:code>37</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1685</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>스퍼드 사용 금지</S100FC:label>
+					<S100FC:definition>The use of anchoring spuds (telescopic piles) is prohibited.</S100FC:definition>
+					<S100FC:code>38</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1318</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>수영 금지</S100FC:label>
+					<S100FC:definition>An area in which swimming is prohibited.</S100FC:definition>
+					<S100FC:code>39</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1043</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>SOx 배출 제한</S100FC:label>
+					<S100FC:definition>An area within which the emission of SOx is restricted.</S100FC:definition>
+					<S100FC:code>40</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1686</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>NOx 배출 제한</S100FC:label>
+					<S100FC:definition>An area within which the emission of NOx is restricted.</S100FC:definition>
+					<S100FC:code>41</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1687</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>동력 선박 금지</S100FC:label>
+					<S100FC:definition>An area within which any vessel propelled by machinery is prohibited.</S100FC:definition>
+					<S100FC:code>42</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>3462</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Status</S100FC:name>
+			<S100FC:definition>The condition of an object at a given instant in time.</S100FC:definition>
+			<S100FC:code>status</S100FC:code>
+			<S100FC:alias>STATUS</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>725</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>영구적</S100FC:label>
+					<S100FC:definition>Intended to last or function indefinitely.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1052</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>때때로</S100FC:label>
+					<S100FC:definition>Acting on special occasions; happening irregularly.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1053</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>권장됨</S100FC:label>
+					<S100FC:definition>Presented as worthy of confidence, acceptance, use, etc.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1054</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>사용 안 함</S100FC:label>
+					<S100FC:definition>Use has ceased, but the facility still exists intact; disused.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1055</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>주기적/간헐적</S100FC:label>
+					<S100FC:definition>Recurring at intervals.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1056</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>예약됨</S100FC:label>
+					<S100FC:definition>Set apart for some specific use.</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1057</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>임시</S100FC:label>
+					<S100FC:definition>Meant to last only for a time.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1058</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>개인적</S100FC:label>
+					<S100FC:definition>Administered by an individual or corporation, rather than a State or a public body.</S100FC:definition>
+					<S100FC:code>8</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1059</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>의무적</S100FC:label>
+					<S100FC:definition>Compulsory; enforced.</S100FC:definition>
+					<S100FC:code>9</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1060</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>소멸함</S100FC:label>
+					<S100FC:definition>No longer lit.</S100FC:definition>
+					<S100FC:code>11</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1061</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>발광함</S100FC:label>
+					<S100FC:definition>Lit by flood lights, strip lights, etc.</S100FC:definition>
+					<S100FC:code>12</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1062</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>역사적</S100FC:label>
+					<S100FC:definition>Famous in history; of historical interest.</S100FC:definition>
+					<S100FC:code>13</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1063</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>공공적</S100FC:label>
+					<S100FC:definition>Belonging to, available to, used or shared by, the community as a whole and not restricted to private use.</S100FC:definition>
+					<S100FC:code>14</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1064</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>동기화됨</S100FC:label>
+					<S100FC:definition>Occur at a time, coincide in point of time, be contemporary or simultaneous.</S100FC:definition>
+					<S100FC:code>15</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1065</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>감시됨</S100FC:label>
+					<S100FC:definition>Looked at or observed over a period of time especially so as to be aware of any movement or change.</S100FC:definition>
+					<S100FC:code>16</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1066</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>감시되지 않음</S100FC:label>
+					<S100FC:definition>Usually automatic in operation, without any permanently-stationed personnel to superintend it.</S100FC:definition>
+					<S100FC:code>17</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1067</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>존재 의심</S100FC:label>
+					<S100FC:definition>A feature that has been reported but has not been definitely determined to exist.</S100FC:definition>
+					<S100FC:code>18</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1068</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>요청시</S100FC:label>
+					<S100FC:definition>When you ask for it.</S100FC:definition>
+					<S100FC:code>19</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2597</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>하강함</S100FC:label>
+					<S100FC:definition>To become lower in level.</S100FC:definition>
+					<S100FC:code>20</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2678</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>상승함</S100FC:label>
+					<S100FC:definition>To become higher in level.</S100FC:definition>
+					<S100FC:code>21</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2712</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>증가함</S100FC:label>
+					<S100FC:definition>Becoming larger in magnitude.</S100FC:definition>
+					<S100FC:code>22</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1388</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>감소함</S100FC:label>
+					<S100FC:definition>Becoming smaller in magnitude.</S100FC:definition>
+					<S100FC:code>23</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1387</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>강함</S100FC:label>
+					<S100FC:definition>Not easily broken or destroyed.</S100FC:definition>
+					<S100FC:code>24</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2716</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>양호함</S100FC:label>
+					<S100FC:definition>In a satisfactory condition to use.</S100FC:definition>
+					<S100FC:code>25</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2683</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>보통</S100FC:label>
+					<S100FC:definition>Fairly but not very.</S100FC:definition>
+					<S100FC:code>26</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2699</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>나쁨</S100FC:label>
+					<S100FC:definition>Not as good as it could be or should.</S100FC:definition>
+					<S100FC:code>27</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2707</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>부표가 달림</S100FC:label>
+					<S100FC:definition>Marked by buoys.</S100FC:definition>
+					<S100FC:code>28</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1069</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>완전히 운영 중</S100FC:label>
+					<S100FC:definition>Entire observation platform is operating in accordance with, or exceeding, manufacturer specifications.</S100FC:definition>
+					<S100FC:code>29</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2681</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>부분적으로 운영 중</S100FC:label>
+					<S100FC:definition>At least one instrument that is part of an observation platform is not operating to manufacturer specification.</S100FC:definition>
+					<S100FC:code>30</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2704</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>드리프트 중</S100FC:label>
+					<S100FC:definition>Floating platform at the mercy of environmental elements, whether intentional or not.</S100FC:definition>
+					<S100FC:code>31</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2677</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>파손됨</S100FC:label>
+					<S100FC:definition>Fractured or in pieces.</S100FC:definition>
+					<S100FC:code>32</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>967</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>오프라인</S100FC:label>
+					<S100FC:definition>Observation platform is intentionally not reporting an environmental observation.</S100FC:definition>
+					<S100FC:code>33</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2702</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>중단됨</S100FC:label>
+					<S100FC:definition>Observation station, suite of instruments, or an individual instrument, for a particular location, has been removed and is no longer at the particular location.</S100FC:definition>
+					<S100FC:code>34</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2676</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>수동 관측</S100FC:label>
+					<S100FC:definition>Observations made by a human observer.</S100FC:definition>
+					<S100FC:code>35</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2697</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>알려지지 않은 상태</S100FC:label>
+					<S100FC:definition>Status of an observation platform, suite of instruments, or individual instrument is not known or unspecified.</S100FC:definition>
+					<S100FC:code>36</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2722</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>확인됨</S100FC:label>
+					<S100FC:definition>Made certain as to truth, accuracy, validity, availability, etc.</S100FC:definition>
+					<S100FC:code>37</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2576</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>후보</S100FC:label>
+					<S100FC:definition>Item selected for an action.</S100FC:definition>
+					<S100FC:code>38</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2668</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>수정 중</S100FC:label>
+					<S100FC:definition>Item that is in the process of being modified.</S100FC:definition>
+					<S100FC:code>39</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2720</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>제거/삭제 중</S100FC:label>
+					<S100FC:definition>Item in the process of being removed or deleted.</S100FC:definition>
+					<S100FC:code>41</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2721</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>제거됨/삭제됨</S100FC:label>
+					<S100FC:definition>Item that has been removed or deleted.</S100FC:definition>
+					<S100FC:code>42</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2709</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>수정 후보</S100FC:label>
+					<S100FC:definition>Item selected for modification.</S100FC:definition>
+					<S100FC:code>43</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2669</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Category of Communication Preference</S100FC:name>
+			<S100FC:definition>Classification of frequencies, VHF channels, telephone numbers, or other means of communication based on preference.</S100FC:definition>
+			<S100FC:code>categoryOfCommunicationPreference</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>402</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>우선 호출</S100FC:label>
+					<S100FC:definition>The first choice channel or frequency to be used when calling a radio station.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1815</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>대체 호출</S100FC:label>
+					<S100FC:definition>A channel or frequency to be used for calling a radio station when the preferred channel or frequency is busy or is suffering from interference.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1816</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>우선 작업</S100FC:label>
+					<S100FC:definition>The first choice channel or frequency to be used when working with a radio station.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1817</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>대체 작업</S100FC:label>
+					<S100FC:definition>A channel or frequency to be used for working with a radio station when the preferred working channel or frequency is busy or is suffering from interference.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1818</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Jurisdiction</S100FC:name>
+			<S100FC:definition>The jurisdiction applicable to an administrative area.</S100FC:definition>
+			<S100FC:code>jurisdiction</S100FC:code>
+			<S100FC:alias>JRSDTN</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>119</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>국제적</S100FC:label>
+					<S100FC:definition>Involving more than one country; covering more than one national area.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>903</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>국내적</S100FC:label>
+					<S100FC:definition>An area administered or controlled by a single nation.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>904</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>국가 하위 구분</S100FC:label>
+					<S100FC:definition>An area smaller than the nation in which it lies.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>905</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Category of Restricted Area</S100FC:name>
+			<S100FC:definition>The official legal status of each kind of restricted area defines the kind of restriction(s), for example the restriction for a &apos;game reserve&apos; may be &apos;entering prohibited&apos;.</S100FC:definition>
+			<S100FC:code>categoryOfRestrictedArea</S100FC:code>
+			<S100FC:alias>CATREA</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>90</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>해상 안전 구역</S100FC:label>
+					<S100FC:definition>The area around an offshore installation within which vessels are prohibited from entering without permission. Special regulations protect installations within a safety zone and vessels of all nationalities are required to respect the zone.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>397</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>자연 보호구역</S100FC:label>
+					<S100FC:definition>A tract of land or water managed so as to preserve its flora, fauna, physical features, etc.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>398</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>새 보호구역</S100FC:label>
+					<S100FC:definition>A place where birds are bred and protected.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>399</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>사냥 보호구역</S100FC:label>
+					<S100FC:definition>A place where wild animals or birds hunted for sport or food are kept undisturbed for private use.</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>400</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>물개 보호구역</S100FC:label>
+					<S100FC:definition>A place where seals are protected.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>401</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>자석 해제 범위</S100FC:label>
+					<S100FC:definition>An area, usually about two cables diameter, within which ships&apos; magnetic fields may be measured; sensing instruments and cables are installed on the seabed in the range and there are cables leading from the range to a control position ashore.</S100FC:definition>
+					<S100FC:code>8</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>402</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>군사 구역</S100FC:label>
+					<S100FC:definition>An area controlled by the military in which restrictions may apply.</S100FC:definition>
+					<S100FC:code>9</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>403</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>역사적 잔해 구역</S100FC:label>
+					<S100FC:definition>An area around certain wrecks of historical importance to protect the wrecks from unauthorized interference by diving, salvage or deposition (including anchoring).</S100FC:definition>
+					<S100FC:code>10</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>404</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>항로 보조 구역</S100FC:label>
+					<S100FC:definition>An area around a navigational aid which vessels are prohibited from entering.</S100FC:definition>
+					<S100FC:code>12</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>405</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>지뢰 구역</S100FC:label>
+					<S100FC:definition>An area laid and maintained with explosive mines for defence or practice purposes.</S100FC:definition>
+					<S100FC:code>14</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>406</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>수영 구역</S100FC:label>
+					<S100FC:definition>An area in which people may swim and therefore vessel movement may be restricted.</S100FC:definition>
+					<S100FC:code>18</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>407</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>대기 구역</S100FC:label>
+					<S100FC:definition>An area reserved for vessels waiting to enter a harbour.</S100FC:definition>
+					<S100FC:code>19</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>408</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>연구 구역</S100FC:label>
+					<S100FC:definition>An area where marine research takes place.</S100FC:definition>
+					<S100FC:code>20</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>409</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>파국 구역</S100FC:label>
+					<S100FC:definition>An area where dredging is taking place.</S100FC:definition>
+					<S100FC:code>21</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>410</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>어류 보호구역</S100FC:label>
+					<S100FC:definition>A place where fish (including shellfish and crustaceans) are protected.</S100FC:definition>
+					<S100FC:code>22</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>411</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>생태 보호구역</S100FC:label>
+					<S100FC:definition>A tract of land or water managed so as to preserve the relation of plants and living creatures to each other and to their surroundings.</S100FC:definition>
+					<S100FC:code>23</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>412</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>노 웨이크 구역</S100FC:label>
+					<S100FC:definition>An area in which a vessels&apos; speed must be reduced in order to reduce the size of the wake it produces.</S100FC:definition>
+					<S100FC:code>24</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>413</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>회전 구역</S100FC:label>
+					<S100FC:definition>An area where vessels turn.</S100FC:definition>
+					<S100FC:code>25</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>414</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>워터 스키 구역</S100FC:label>
+					<S100FC:definition>An area within which people may water ski and therefore vessel movement may be restricted.</S100FC:definition>
+					<S100FC:code>26</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1298</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>환경적으로 민감한 해양 구역</S100FC:label>
+					<S100FC:definition>A generic term which may be used to describe a wide range of areas, considered sensitive for a variety of environmental reasons.</S100FC:definition>
+					<S100FC:code>27</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>415</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>특히 민감한 해양 구역</S100FC:label>
+					<S100FC:definition>An area that needs special protection through action by IMO because of its significance for regional ecological, socio-economic or scientific reasons and because it may be vulnerable to damage by international shipping activities.</S100FC:definition>
+					<S100FC:code>28</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>416</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>분리 구역</S100FC:label>
+					<S100FC:definition>An area near a fairway where vessels can go to clear the way or make an about turn and possibly return to a waiting area when nautical conditions impose it.</S100FC:definition>
+					<S100FC:code>29</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>417</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>항구 보안 구역</S100FC:label>
+					<S100FC:definition>An area in which defence, law and treaty enforcement, and counter-terrorism activities that fall within the port and maritime domain apply.</S100FC:definition>
+					<S100FC:code>30</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>418</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>산호 보호구역</S100FC:label>
+					<S100FC:definition>A place where coral is protected.</S100FC:definition>
+					<S100FC:code>31</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>419</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>레크리에이션 구역</S100FC:label>
+					<S100FC:definition>An area within which recreational activities regularly take place and therefore vessel movement may be restricted.</S100FC:definition>
+					<S100FC:code>32</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>420</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>선박 오염 배출 통제</S100FC:label>
+					<S100FC:definition>An area within which the ship pollution emission is controlled.</S100FC:definition>
+					<S100FC:code>33</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1299</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Date Start</S100FC:name>
+			<S100FC:definition>The earliest date on which an object (for example a buoy) will be present.</S100FC:definition>
+			<S100FC:code>dateStart</S100FC:code>
+			<S100FC:remarks>The Date Start should be encoded using 4 digits for the calendar year (YYYY), 2 digits for the month (MM) (for example April = 04) and 2 digits for the day (DD). When no specific month and/or day is required/known, indication of the month and/or day is omitted, and replaced with dashes (-). When no specific year is required (that is, the event or date range ends at the same time each year) the following two cases may be considered:- same day each year: ----MMDD- same month each year: ----MM--This conforms to ISO 8601: 2004. Date Start indicates the earliest date of an event or the start of a date range. It is used to indicate the start of a fixed date range, the start of a periodic date range, or the deployment or implementation of a feature at a specific date in the future.</S100FC:remarks>
+			<S100FC:alias>DATSTA</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>792</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>S100_TruncatedDate</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Frequency Shore Station Receives</S100FC:name>
+			<S100FC:definition>The shore station receiver frequency.</S100FC:definition>
+			<S100FC:code>frequencyShoreStationReceives</S100FC:code>
+			<S100FC:remarks>Examples:  4379.1 kHz becomes 043791; 13162.8 kHz becomes 131628.</S100FC:remarks>
+			<S100FC:alias>FRQRXV</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>924</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Date End</S100FC:name>
+			<S100FC:definition>The latest date on which an object (for example a buoy) will be present.</S100FC:definition>
+			<S100FC:code>dateEnd</S100FC:code>
+			<S100FC:remarks>The Date End should be encoded using 4 digits for the calendar year (YYYY), 2 digits for the month (MM) (for example April = 04) and 2 digits for the day (DD). When no specific month and/or day is required/known, indication of the month and/or day is omitted, and replaced with dashes (-). When no specific year is required (that is, the event or date range ends at the same time each year) the following two cases may be considered:- same day each year: ----MMDD- same month each year: ----MM--This conforms to ISO 8601: 2004. Date End indicates the latest date of an event or the end of a date range. It is used to indicate the end of a fixed date range, the end of a periodic date range, or the removal or cancellation of a feature at a specific date in the future.</S100FC:remarks>
+			<S100FC:alias>DATEND</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>790</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>S100_TruncatedDate</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Name</S100FC:name>
+			<S100FC:definition>The individual name of a feature.</S100FC:definition>
+			<S100FC:code>name</S100FC:code>
+			<S100FC:alias>OBJNAM</S100FC:alias>
+			<S100FC:alias>NOBJNM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>134</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Index of Cooperation</S100FC:name>
+			<S100FC:definition>A factor governing the image resolution of radiofax transmissions.</S100FC:definition>
+			<S100FC:code>indexOfCooperation</S100FC:code>
+			<S100FC:remarks>(i) The Index of Cooperation must be known to decode the transmission;  (ii) The Index of Cooperation is generally 576, although 288 with alternate line scanning is sometimes used.</S100FC:remarks>
+			<S100FC:alias>INDCOP</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>932</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Drum Speed</S100FC:name>
+			<S100FC:definition>The drum speed in revolutions per minute.</S100FC:definition>
+			<S100FC:code>drumSpeed</S100FC:code>
+			<S100FC:remarks>The drum speed should be encoded using three digits for the speed including a leading zero if necessary.</S100FC:remarks>
+			<S100FC:alias>DRMSPD</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>921</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Delivery Point</S100FC:name>
+			<S100FC:definition>Details of where post can be delivered such as the apartment, name and/or number of a street, building or PO Box.</S100FC:definition>
+			<S100FC:code>deliveryPoint</S100FC:code>
+			<S100FC:alias>DELPNT</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>460</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Display Name</S100FC:name>
+			<S100FC:definition>A statement expressing if a feature name is to be displayed in certain system display settings or not.</S100FC:definition>
+			<S100FC:code>displayName</S100FC:code>
+			<S100FC:remarks>Where it is allowable to encode multiple instances of feature name for a single feature instance, only one feature name instance can indicate that the name is to be displayed (display name set to True).</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>94</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>boolean</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>City Name</S100FC:name>
+			<S100FC:definition>The name of a town or city.</S100FC:definition>
+			<S100FC:code>cityName</S100FC:code>
+			<S100FC:alias>CITYNM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>434</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Language</S100FC:name>
+			<S100FC:definition>The method of human communication, either spoken or written, consisting of the use of words in a structured and conventional way.</S100FC:definition>
+			<S100FC:code>language</S100FC:code>
+			<S100FC:remarks>The language is encoded by a 3 character code following ISO 639-2/T.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>120</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Source Indication</S100FC:name>
+			<S100FC:definition>Information about the source document, publication, or reference from which object data or textual material included or referenced in a dataset are derived.</S100FC:definition>
+			<S100FC:code>sourceIndication</S100FC:code>
+			<S100FC:remarks>Content of featureName is source authority name.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>289</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Postal Code</S100FC:name>
+			<S100FC:definition>Known in various countries as a postcode, or ZIP code, the postal code is a series of letters and/or digits that identifies each postal delivery area.</S100FC:definition>
+			<S100FC:code>postalCode</S100FC:code>
+			<S100FC:alias>POSCOD</S100FC:alias>
+			<S100FC:alias>Postcode</S100FC:alias>
+			<S100FC:alias>ZIP Code</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>602</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Country Name</S100FC:name>
+			<S100FC:definition>The name of a nation.</S100FC:definition>
+			<S100FC:code>countryName</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>449</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Administrative Division</S100FC:name>
+			<S100FC:definition>A generic term for an administrative region within a country at a level below that of the sovereign state.</S100FC:definition>
+			<S100FC:code>administrativeDivision</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>384</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Frequency Shore Station Transmits</S100FC:name>
+			<S100FC:definition>The shore station transmitter frequency.</S100FC:definition>
+			<S100FC:code>frequencyShoreStationTransmits</S100FC:code>
+			<S100FC:remarks>Examples:  4379.1 kHz becomes 043791; 13162.8 kHz becomes 131628.</S100FC:remarks>
+			<S100FC:alias>SIGFRQ</S100FC:alias>
+			<S100FC:alias>FRQTXM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>925</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>File Locator</S100FC:name>
+			<S100FC:definition>The location of a fragment of text or other information in a support file.</S100FC:definition>
+			<S100FC:code>fileLocator</S100FC:code>
+			<S100FC:remarks>Application schemas must describe how the associated file is identified. The associated file will commonly be named in a file reference co-attribute of the same complex attribute. Each DCEG must specify requirements for the format of the associated file and the semantics of file locator. For example, the value of file locator may be an HTML ID in an HTML file, line number in a text file) or a bookmark in a PDF file.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>101</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>File Reference</S100FC:name>
+			<S100FC:definition>The file name of an externally referenced text file.</S100FC:definition>
+			<S100FC:code>fileReference</S100FC:code>
+			<S100FC:alias>TXTDSC</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>102</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Headline</S100FC:name>
+			<S100FC:definition>Words set at the head of a passage or page to introduce or categorize.</S100FC:definition>
+			<S100FC:code>headline</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>108</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Text</S100FC:name>
+			<S100FC:definition>A non-formatted digital text string.</S100FC:definition>
+			<S100FC:code>text</S100FC:code>
+			<S100FC:remarks>Should be used, for example, to hold the information that is for short cautionary or explanatory notes. Therefore, text populated in text must not exceed 300 characters. Text may be in English, or in a national language. No formatting of text is possible within text. If formatted text, or text strings exceeding 300 characters, is required, then an alternate concept should be used.</S100FC:remarks>
+			<S100FC:alias>INFORM</S100FC:alias>
+			<S100FC:alias>NINFOM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>176</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Linkage</S100FC:name>
+			<S100FC:definition>Location (address) for online access using a URL/URI address or similar addressing scheme.</S100FC:definition>
+			<S100FC:code>linkage</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>124</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Name of Resource</S100FC:name>
+			<S100FC:definition>Name of the online resource.</S100FC:definition>
+			<S100FC:code>nameOfResource</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>135</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Category of Vessel Traffic Service</S100FC:name>
+			<S100FC:definition>Classification of vessel traffic services based on the nature of the control or services provided.</S100FC:definition>
+			<S100FC:code>categoryOfVesselTrafficService</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>431</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>정보 서비스</S100FC:label>
+					<S100FC:definition>A service to ensure that essential information becomes available in time for on-board navigational decision-making.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2001</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>교통 조직 서비스</S100FC:label>
+					<S100FC:definition>A service to assist on-board navigational decision-making and to monitor its effects.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2002</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>항로 지원 서비스</S100FC:label>
+					<S100FC:definition>A service to prevent the development of dangerous maritime traffic situations and to provide for the safe and efficient movement of vessel traffic within the VTS area.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2003</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>선박 보고 서비스</S100FC:label>
+					<S100FC:definition>A service established by a relevant authority consisting of one or more reporting points or lines at which ships are required to report their identity, course, speed and other data to the monitoring authority.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2004</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>지역 항구 서비스</S100FC:label>
+					<S100FC:definition>A service established to provide port information without interaction between the customer and the service provider. This information could be inter-alia berthing information, availability of port services, shipping schedules, meteorological and hydrological data.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2005</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Category of Marine Protected Area</S100FC:name>
+			<S100FC:definition>Classification of marine protected areas based on IUCN (International Union for Conservation of Nature and Natural Resources) categories.</S100FC:definition>
+			<S100FC:code>categoryOfMarineProtectedArea</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>977</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:valueType>S100_CodeList</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>IUCN 1a 유형</S100FC:label>
+					<S100FC:definition>Strict Nature Reserve: Protected area managed mainly for science.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2748</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>IUCN 1b 유형</S100FC:label>
+					<S100FC:definition>Wilderness Area: Protected area managed mainly for wilderness protection.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2749</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>IUCN 2 유형</S100FC:label>
+					<S100FC:definition>National Park: Protected area managed mainly for ecosystem protection and recreation.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2750</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>IUCN 3 유형</S100FC:label>
+					<S100FC:definition>Natural Monument: Protected area managed mainly for conservation of specific natural features.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2751</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>IUCN 4 유형</S100FC:label>
+					<S100FC:definition>Habitat/Species Management Area: Protected area managed mainly for conservation through management intervention.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2752</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>IUCN 5 유형</S100FC:label>
+					<S100FC:definition>Protected Landscape/Seascape: Protected area managed mainly for landscape/seascape conservation and recreation.</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2753</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>IUCN 6 유형</S100FC:label>
+					<S100FC:definition>Managed Resource Protected Area: Protected area managed mainly for the sustainable use of natural ecosystems.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2754</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG"/>
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+	</S100FC:S100_FC_SimpleAttributes>
+	<S100FC:S100_FC_ComplexAttributes>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Contact Address</S100FC:name>
+			<S100FC:definition>Direction or superscription of a letter, package, etc., specifying the name of the place to which it is directed, and optionally a contact person or organisation who should receive it.</S100FC:definition>
+			<S100FC:code>contactAddress</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>735</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="deliveryPoint"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="cityName"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="administrativeDivision"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="countryName"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="postalCode"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Facsimile Drum Speed</S100FC:name>
+			<S100FC:definition>Facsimile drum speed.</S100FC:definition>
+			<S100FC:code>facsimileDrumSpeed</S100FC:code>
+			<S100FC:alias>FAXSSP</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>742</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="drumSpeed"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="indexOfCooperation"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Feature Name</S100FC:name>
+			<S100FC:definition>Provides the name of an entity, defines the national language of the name, and provides the option to display the name at various system display settings.</S100FC:definition>
+			<S100FC:code>featureName</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>1129</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="displayName"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="language"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="name"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Fixed Date Range</S100FC:name>
+			<S100FC:definition>An active period of a single fixed event or occurrence, as the date range between discrete start and end dates.</S100FC:definition>
+			<S100FC:code>fixedDateRange</S100FC:code>
+			<S100FC:remarks>Dates must be encoded in the format YYYYMMDD; using 4 digits for the calendar year (YYYY) and, optionally, 2 digits for the month (MM) (for example April = 04) and 2 digits for the day (DD). When no specific month and/or day is required/known, the values are replaced with dashes (-). The date range of a recurring event or occurrence must be encoded using periodicDateRange.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>798</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateEnd"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateStart"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Frequency Pair</S100FC:name>
+			<S100FC:definition>A pair of frequencies for transmitting and receiving radio signals. The shore station transmits and receives on the frequencies indicated.</S100FC:definition>
+			<S100FC:code>frequencyPair</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>230</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="frequencyShoreStationReceives"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="frequencyShoreStationTransmits"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Information</S100FC:name>
+			<S100FC:definition>Textual information about the feature. The information may be provided as a string of text or as a file name of a single external text file that contains the text.</S100FC:definition>
+			<S100FC:code>information</S100FC:code>
+			<S100FC:remarks>At least one of the sub-attributes file reference or text must be populated.The sub-attribute file reference is generally used for long text strings or those that require formatting, however, there is no restriction on the type of text (except for lexical level) that can be held in files referenced by sub-attribute file reference.</S100FC:remarks>
+			<S100FC:alias>INFORM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>1130</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="fileLocator"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="fileReference"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="headline"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="language"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="text"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Online Resource</S100FC:name>
+			<S100FC:definition>Information about online sources from which a resource or data can be obtained.</S100FC:definition>
+			<S100FC:code>onlineResource</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>243</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="headline"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="linkage"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="nameOfResource"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Periodic Date Range</S100FC:name>
+			<S100FC:definition>The active period of a recurring event or occurrence.</S100FC:definition>
+			<S100FC:code>periodicDateRange</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>794</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateEnd"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateStart"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Radiocommunications</S100FC:name>
+			<S100FC:definition>Detailed radiocommunications description with channels, frequencies, preferences and time schedules.</S100FC:definition>
+			<S100FC:code>radiocommunications</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>762</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="categoryOfCommunicationPreference"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>6</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+					<S100FC:value>9</S100FC:value>
+					<S100FC:value>10</S100FC:value>
+					<S100FC:value>11</S100FC:value>
+					<S100FC:value>12</S100FC:value>
+					<S100FC:value>13</S100FC:value>
+					<S100FC:value>14</S100FC:value>
+					<S100FC:value>15</S100FC:value>
+					<S100FC:value>16</S100FC:value>
+					<S100FC:value>17</S100FC:value>
+					<S100FC:value>18</S100FC:value>
+					<S100FC:value>19</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="categoryOfMaritimeBroadcast"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>6</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+					<S100FC:value>9</S100FC:value>
+					<S100FC:value>10</S100FC:value>
+					<S100FC:value>11</S100FC:value>
+					<S100FC:value>12</S100FC:value>
+					<S100FC:value>13</S100FC:value>
+					<S100FC:value>14</S100FC:value>
+					<S100FC:value>15</S100FC:value>
+					<S100FC:value>16</S100FC:value>
+					<S100FC:value>17</S100FC:value>
+					<S100FC:value>18</S100FC:value>
+					<S100FC:value>19</S100FC:value>
+					<S100FC:value>20</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="categoryOfRadioMethods"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="communicationChannel"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="contactInstructions"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="facsimileDrumSpeed"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="frequencyPair"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="selectiveCallNumber"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="signalFrequency"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="observationTime"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="timesOfTransmission"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="timeIntervalsByDayOfWeek"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="transmissionContent"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="transmissionRegularity"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Telecommunications</S100FC:name>
+			<S100FC:definition>A means or channel of communicating at a distance by electrical or electromagnetic means such as telegraphy, telephony, or broadcasting.</S100FC:definition>
+			<S100FC:code>telecommunications</S100FC:code>
+			<S100FC:remarks>If no value is populated for the sub-attribute telecommunication service, this means the service is by voice communication. If no value is populated for the sub-attribute telecommunication carrier, this means the service is by land line communication.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>255</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="contactInstructions"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="telecommunicationIdentifier"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>6</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="telecommunicationService"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Text Content</S100FC:name>
+			<S100FC:definition>Textual material, or a pointer to a resource providing textual material. May be accompanied by basic information about its source and relationship to the source.</S100FC:definition>
+			<S100FC:code>textContent</S100FC:code>
+			<S100FC:remarks>Exactly one of sub-attributes onlineResource or information must be completed in one instance of textContent. Product specifications may restrict the use or content of onlineResource for security. For example, a product specification may forbid populating onlineResource. Product specification authors must consider whether applications using the data product may be prevented from accessing off-system resources by security policies.</S100FC:remarks>
+			<S100FC:alias>TXTCON</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>768</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="categoryOfText"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="information"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="onlineResource"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="sourceIndication"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Time Intervals by Day of Week</S100FC:name>
+			<S100FC:definition>The regular weekly operation times of a service or schedule.</S100FC:definition>
+			<S100FC:code>timeIntervalsByDayOfWeek</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>248</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">7</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>6</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="dayOfWeek"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dayOfWeekIsRange"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="timeOfDayEnd"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="timeOfDayStart"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Times of Transmission</S100FC:name>
+			<S100FC:definition>One or more times in the day when the radio station starts a routine transmission, normally expressed in UTC or local time.</S100FC:definition>
+			<S100FC:code>timesOfTransmission</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>761</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="minutePastEvenHours"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="minutePastOddHours"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="minutePastEveryHour"/>
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">99</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="transmissionTime"/>
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+	</S100FC:S100_FC_ComplexAttributes>
+	<S100FC:S100_FC_Roles>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>Authority</S100FC:name>
+			<S100FC:definition>A pointer to an Authority object</S100FC:definition>
+			<S100FC:code>theAuthority</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>20</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+		</S100FC:S100_FC_Role>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>Contact details</S100FC:name>
+			<S100FC:definition>A pointer to an Contact Details object</S100FC:definition>
+			<S100FC:code>theContactDetails</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>22</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+		</S100FC:S100_FC_Role>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>The marine protected area</S100FC:name>
+			<S100FC:definition>The marine protected area for which the authority is responsible</S100FC:definition>
+			<S100FC:code>theMarineProtectedArea</S100FC:code>
+		</S100FC:S100_FC_Role>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>Responsible authority</S100FC:name>
+			<S100FC:definition>The responsible authority</S100FC:definition>
+			<S100FC:code>responsibleAuthority</S100FC:code>
+		</S100FC:S100_FC_Role>
+	</S100FC:S100_FC_Roles>
+	<S100FC:S100_FC_InformationAssociations>
+		<S100FC:S100_FC_InformationAssociation isAbstract="false">
+			<S100FC:name>Authority contact</S100FC:name>
+			<S100FC:definition>Contact information for an authority</S100FC:definition>
+			<S100FC:code>AuthorityContact</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>8000003</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:role ref="theContactDetails"/>
+			<S100FC:role ref="theAuthority"/>
+		</S100FC:S100_FC_InformationAssociation>
+		<S100FC:S100_FC_InformationAssociation>
+			<S100FC:name>Protected area authority</S100FC:name>
+			<S100FC:definition>Authority responsible for a protected area.</S100FC:definition>
+			<S100FC:code>protectedAreaAuthority</S100FC:code>
+			<S100FC:remarks>There may be more than one such authority depending on how responsibilities are divided.</S100FC:remarks>
+			<S100FC:role ref="theMarineProtectedArea"/>
+			<S100FC:role ref="responsibleAuthority"/>
+		</S100FC:S100_FC_InformationAssociation>
+	</S100FC:S100_FC_InformationAssociations>
+	<S100FC:S100_FC_InformationTypes>
+		<S100FC:S100_FC_InformationType isAbstract="false">
+			<S100FC:name>Information Type</S100FC:name>
+			<S100FC:definition>Generalized information type which carries all the common attributes.</S100FC:definition>
+			<S100FC:code>InformationType</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>42</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="fixedDateRange"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="periodicDateRange"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="featureName"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="sourceIndication"/>
+			</S100FC:attributeBinding>
+		</S100FC:S100_FC_InformationType>
+		<S100FC:S100_FC_InformationType isAbstract="false">
+			<S100FC:name>Authority</S100FC:name>
+			<S100FC:definition>A person or organisation having political or administrative power and control.</S100FC:definition>
+			<S100FC:code>Authority</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>36</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="textContent"/>
+			</S100FC:attributeBinding>
+			<S100FC:informationBinding roleType="association">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:association ref="AuthorityContact"/>
+				<S100FC:role ref="theContactDetails"/>
+				<S100FC:informationType ref="ContactDetails"/>
+			</S100FC:informationBinding>
+			<S100FC:superType>InformationType</S100FC:superType>
+		</S100FC:S100_FC_InformationType>
+		<S100FC:S100_FC_InformationType isAbstract="false">
+			<S100FC:name>Contact Details</S100FC:name>
+			<S100FC:definition>Information on how to reach a person or organisation by postal, internet, telephone, telex and radio systems.</S100FC:definition>
+			<S100FC:code>ContactDetails</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>27</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="communicationChannel"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="contactInstructions"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="contactAddress"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="frequencyPair"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="information"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="onlineResource"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="telecommunications"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="radiocommunications"/>
+			</S100FC:attributeBinding>
+			<S100FC:informationBinding roleType="association">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:association ref="AuthorityContact"/>
+				<S100FC:role ref="theAuthority"/>
+				<S100FC:informationType ref="Authority"/>
+			</S100FC:informationBinding>
+		</S100FC:S100_FC_InformationType>
+	</S100FC:S100_FC_InformationTypes>
+	<S100FC:S100_FC_FeatureTypes>
+		<S100FC:S100_FC_FeatureType isAbstract="false">
+			<S100FC:name>Marine Protected Area</S100FC:name>
+			<S100FC:definition>Any area of the intertidal or sub-tidal terrain, together with its overlying water and associated flora, fauna, historical and cultural features, which has been reserved by law or other effective means to protect part or all of the enclosed environment.</S100FC:definition>
+			<S100FC:code>MarineProtectedArea</S100FC:code>
+			<S100FC:alias>MPAARE</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>586</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="categoryOfMarineProtectedArea"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>6</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+					<S100FC:value>9</S100FC:value>
+					<S100FC:value>10</S100FC:value>
+					<S100FC:value>12</S100FC:value>
+					<S100FC:value>14</S100FC:value>
+					<S100FC:value>18</S100FC:value>
+					<S100FC:value>19</S100FC:value>
+					<S100FC:value>20</S100FC:value>
+					<S100FC:value>21</S100FC:value>
+					<S100FC:value>22</S100FC:value>
+					<S100FC:value>23</S100FC:value>
+					<S100FC:value>24</S100FC:value>
+					<S100FC:value>25</S100FC:value>
+					<S100FC:value>26</S100FC:value>
+					<S100FC:value>27</S100FC:value>
+					<S100FC:value>28</S100FC:value>
+					<S100FC:value>29</S100FC:value>
+					<S100FC:value>30</S100FC:value>
+					<S100FC:value>31</S100FC:value>
+					<S100FC:value>32</S100FC:value>
+					<S100FC:value>33</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="categoryOfRestrictedArea"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="jurisdiction"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>6</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+					<S100FC:value>9</S100FC:value>
+					<S100FC:value>11</S100FC:value>
+					<S100FC:value>12</S100FC:value>
+					<S100FC:value>13</S100FC:value>
+					<S100FC:value>14</S100FC:value>
+					<S100FC:value>15</S100FC:value>
+					<S100FC:value>16</S100FC:value>
+					<S100FC:value>17</S100FC:value>
+					<S100FC:value>18</S100FC:value>
+					<S100FC:value>19</S100FC:value>
+					<S100FC:value>20</S100FC:value>
+					<S100FC:value>21</S100FC:value>
+					<S100FC:value>22</S100FC:value>
+					<S100FC:value>23</S100FC:value>
+					<S100FC:value>24</S100FC:value>
+					<S100FC:value>25</S100FC:value>
+					<S100FC:value>26</S100FC:value>
+					<S100FC:value>27</S100FC:value>
+					<S100FC:value>28</S100FC:value>
+					<S100FC:value>29</S100FC:value>
+					<S100FC:value>30</S100FC:value>
+					<S100FC:value>31</S100FC:value>
+					<S100FC:value>32</S100FC:value>
+					<S100FC:value>33</S100FC:value>
+					<S100FC:value>34</S100FC:value>
+					<S100FC:value>35</S100FC:value>
+					<S100FC:value>36</S100FC:value>
+					<S100FC:value>37</S100FC:value>
+					<S100FC:value>38</S100FC:value>
+					<S100FC:value>39</S100FC:value>
+					<S100FC:value>41</S100FC:value>
+					<S100FC:value>42</S100FC:value>
+					<S100FC:value>43</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="status"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>6</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+					<S100FC:value>9</S100FC:value>
+					<S100FC:value>10</S100FC:value>
+					<S100FC:value>11</S100FC:value>
+					<S100FC:value>12</S100FC:value>
+					<S100FC:value>13</S100FC:value>
+					<S100FC:value>14</S100FC:value>
+					<S100FC:value>15</S100FC:value>
+					<S100FC:value>16</S100FC:value>
+					<S100FC:value>17</S100FC:value>
+					<S100FC:value>18</S100FC:value>
+					<S100FC:value>19</S100FC:value>
+					<S100FC:value>20</S100FC:value>
+					<S100FC:value>21</S100FC:value>
+					<S100FC:value>22</S100FC:value>
+					<S100FC:value>23</S100FC:value>
+					<S100FC:value>24</S100FC:value>
+					<S100FC:value>25</S100FC:value>
+					<S100FC:value>26</S100FC:value>
+					<S100FC:value>27</S100FC:value>
+					<S100FC:value>28</S100FC:value>
+					<S100FC:value>29</S100FC:value>
+					<S100FC:value>30</S100FC:value>
+					<S100FC:value>31</S100FC:value>
+					<S100FC:value>32</S100FC:value>
+					<S100FC:value>33</S100FC:value>
+					<S100FC:value>34</S100FC:value>
+					<S100FC:value>35</S100FC:value>
+					<S100FC:value>36</S100FC:value>
+					<S100FC:value>37</S100FC:value>
+					<S100FC:value>38</S100FC:value>
+					<S100FC:value>39</S100FC:value>
+					<S100FC:value>40</S100FC:value>
+					<S100FC:value>41</S100FC:value>
+					<S100FC:value>42</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="restriction"/>
+			</S100FC:attributeBinding>
+			<S100FC:superType>FeatureType</S100FC:superType>
+			<S100FC:featureUseType>geographic</S100FC:featureUseType>
+			<S100FC:permittedPrimitives>curve</S100FC:permittedPrimitives>
+			<S100FC:permittedPrimitives>surface</S100FC:permittedPrimitives>
+		</S100FC:S100_FC_FeatureType>
+		<S100FC:S100_FC_FeatureType isAbstract="true">
+			<S100FC:name>Vessel Traffic Service Area</S100FC:name>
+			<S100FC:definition>The area of any service implemented by a relevant authority primarily designed to improve safety and efficiency of traffic flow and the protection of the environment. It may range from simple information messages, to extensive organisation of the traffic involving national or regional schemes.</S100FC:definition>
+			<S100FC:code>VesselTrafficServiceArea</S100FC:code>
+			<S100FC:alias>ADMARE</S100FC:alias>
+			<S100FC:alias>VTS Area</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>362</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="categoryOfVesselTrafficService"/>
+			</S100FC:attributeBinding>
+			<S100FC:superType>FeatureType</S100FC:superType>
+			<S100FC:featureUseType>geographic</S100FC:featureUseType>
+			<S100FC:permittedPrimitives>surface</S100FC:permittedPrimitives>
+		</S100FC:S100_FC_FeatureType>
+		<S100FC:S100_FC_FeatureType isAbstract="true">
+			<S100FC:name>Feature Type</S100FC:name>
+			<S100FC:definition>Generalized feature type which carries all the common attributes.</S100FC:definition>
+			<S100FC:code>FeatureType</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>422</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG"/>
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="fixedDateRange"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="periodicDateRange"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="featureName"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="sourceIndication"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true"/>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="textContent"/>
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding>
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper>1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attributeVisibility>privateVisibility</S100FC:attributeVisibility>
+				<S100FC:attribute ref="interoperabilityIdentifier"/>
+			</S100FC:attributeBinding>
+			<S100FC:informationBinding roleType="association">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:association ref="protectedAreaAuthority" />
+				<S100FC:role ref="responsibleAuthority" />
+				<S100FC:informationType ref="Authority" />
+			</S100FC:informationBinding>
+			<S100FC:featureUseType>geographic</S100FC:featureUseType>
+			<S100FC:permittedPrimitives>noGeometry</S100FC:permittedPrimitives>
+		</S100FC:S100_FC_FeatureType>
+	</S100FC:S100_FC_FeatureTypes>
+</S100FC:S100_FC_FeatureCatalogue>

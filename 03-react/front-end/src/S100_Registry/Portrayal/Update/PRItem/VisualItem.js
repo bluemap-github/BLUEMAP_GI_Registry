@@ -3,6 +3,7 @@ import axios from 'axios';
 import NLSUpdate from './NLSUpdate';
 import ImageUpdate from './ImageUpdate';
 import FileUpdate from './FileUpdate';
+import Cookies from 'js-cookie';
 
 
 import {
@@ -94,6 +95,7 @@ const VisualItem = ({ TagItemType, data, onClose }) => {
                     params: {
                         item_id: _id.encrypted_data,
                         item_iv: _id.iv,
+                        regi_uri: Cookies.get('REGISTRY_URI'),  // 쿠키에서 REGISTRY_URI 가져오기
                     },
                     headers: {
                         'Content-Type': 'multipart/form-data',  // 헤더 설정

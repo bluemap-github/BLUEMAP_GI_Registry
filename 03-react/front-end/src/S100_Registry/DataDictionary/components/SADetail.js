@@ -181,8 +181,8 @@ const SADetail = ({ item }) => {
                                 <button className='btn btn-sm btn-secondary' onClick={handleConstraintClick}>
                                     Update
                                 </button>
-                                <button className='btn btn-sm btn-danger' onClick={() => deleteConstraint(constraints[0])}>
-                                    Update
+                                <button style={{marginLeft : "5px"}} className='btn btn-sm btn-danger' onClick={() => deleteConstraint(constraints[0])}>
+                                    Delete
                                 </button>
                             </>
                         )}
@@ -194,7 +194,7 @@ const SADetail = ({ item }) => {
             {/* Listed Value Table */}
             {item.valueType === 'enumeration' || item.valueType === 'S100_CodeList' ? (
                 <div className='p-3 mt-4' style={{ flex: 3, backgroundColor: '#F8F8F8', height: 'auto' }}>
-                    <h3>Listed Value : update 로직 없음</h3>
+                    <h3>Listed Value</h3>
                     <div className="card p-3" style={{ height: "100%" }}>
                         <table className="table table-sm">
                             <thead>
@@ -209,8 +209,8 @@ const SADetail = ({ item }) => {
                             </thead>
                             <tbody>
                                 {item.listedValue.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="2">No Listed Value</td>
+                                    <tr >
+                                        <td  className='text-center' colSpan="2">No Listed Value</td>
                                     </tr>
                                 ) : (
                                     item.listedValue.map((value, idx) => (

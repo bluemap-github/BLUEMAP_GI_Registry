@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NLSUpdate from './NLSUpdate';
 import FileUpdate from './FileUpdate';
+import Cookies from 'js-cookie';
 import { PUT_FONT } from '../../api/api';
 
 
@@ -76,6 +77,7 @@ const Font = ({ data, onClose }) => {
                     params: {
                         item_id: _id.encrypted_data,
                         item_iv: _id.iv,
+                        regi_uri: Cookies.get('REGISTRY_URI'),  // 쿠키에서 REGISTRY_URI 가져오기
                     },
                     headers: {
                         'Content-Type': 'multipart/form-data',  // 헤더 설정

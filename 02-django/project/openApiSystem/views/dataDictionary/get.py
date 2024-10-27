@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
-itemID = openapi.Parameter('itemID', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+item_id = openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 from openApiSystem.models.registry.item import RE_Register
 from openApiSystem.utils import check_key_validation
@@ -27,11 +27,11 @@ from openApiSystem.serializers.dataDictionary.item import (
     CD_InformationSerializer,
 )
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def enumerated_value_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -43,27 +43,27 @@ def enumerated_value_list(request):
     serialized_items = CD_EnumeratedValueSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def enumerated_value_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_item_detail = CD_EnumeratedValue.get_item_detail(I_id)
     if get_item_detail is None:
         return Response({"status": "error", "message": "No item found"}, status=404)
     serialized_item = CD_EnumeratedValueSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def attribute_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -75,11 +75,11 @@ def attribute_list(request):
     serialized_items = CD_AttributeSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def simple_attribute_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -91,27 +91,27 @@ def simple_attribute_list(request):
     serialized_items = CD_SimpleAttributeSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def simple_attribute_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_item_detail = CD_SimpleAttribute.get_item_detail(I_id)
     if get_item_detail is None:
         return Response({"status": "error", "message": "No item found"}, status=404)
     serialized_item = CD_SimpleAttributeSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def complex_attribute_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -123,27 +123,27 @@ def complex_attribute_list(request):
     serialized_items = CD_ComplexAttributeSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def complex_attribute_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_item_detail = CD_ComplexAttribute.get_item_detail(I_id)
     if get_item_detail is None:
         return Response({"status": "error", "message": "No item found"}, status=404)
     serialized_item = CD_ComplexAttributeSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def feature_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -155,27 +155,27 @@ def feature_list(request):
     serialized_items = CD_FeatureSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def feature_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_item_detail = CD_Feature.get_item_detail(I_id)
     if get_item_detail is None:
         return Response({"status": "error", "message": "No item found"}, status=404)
     serialized_item = CD_FeatureSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def information_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -187,16 +187,16 @@ def information_list(request):
     serialized_items = CD_InformationSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def information_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_item_detail = CD_Information.get_item_detail(I_id)
     if get_item_detail is None:
         return Response({"status": "error", "message": "No item found"}, status=404)
@@ -234,18 +234,37 @@ def common_get_association(request, model, serializer):
 
 
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def associated_attribute_list(request):
     return common_get_association(request, DD_associatedAttribute, DDR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def sub_attribute_list(request):
     return common_get_association(request, CD_AttributeUsage, DDR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def distinction_list(request):
     return common_get_association(request, DD_distinction, DDR_Association_List)
 
+
+
+from regiSystem.models.Concept import S100_CD_AttributeConstraints
+from regiSystem.serializers.CD import AttributeConstraintsSerializer
+from regiSystem.models.Concept import ConstraintsModel
+simple_attribute_id = openapi.Parameter('simple_attribute_id', openapi.IN_QUERY, description='simple_attribute_id', required=True, type=openapi.TYPE_STRING)
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, simple_attribute_id])
+@api_view(['GET'])
+def attribute_constraints_detail(request):
+    simple_attribute_id = request.GET.get('simple_attribute_id')
+    if request.method == 'GET':
+        try:
+            c_item = S100_CD_AttributeConstraints.find({'simpleAttribute': ObjectId(simple_attribute_id)})
+            if not c_item:
+                Response({"attribute_constraint" : []})
+            serializer = AttributeConstraintsSerializer(c_item, many=True)
+            return Response({"attribute_constraint" : serializer.data})
+        except Exception as e:
+            return Response({"status": "error", "message": str(e)}, status=404)

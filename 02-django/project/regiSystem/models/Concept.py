@@ -121,6 +121,7 @@ class ConstraintsModel:
 
     @classmethod
     def update(cls, Item_id, simple_id, data):
+        print(data)
         if Item_id is None:
             return {"status": "failed", "message": "Item_id is None"}
         data["simpleAttribute"] = ObjectId(simple_id)

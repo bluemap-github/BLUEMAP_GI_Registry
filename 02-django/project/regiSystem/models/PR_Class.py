@@ -19,6 +19,8 @@ S100_Portrayal_ColourValue = db['S100_Portrayal_ColourValue']
 S100_Portrayal_CIEValue = db['S100_Portrayal_CIEValue']
 S100_Portrayal_SRGBValue = db['S100_Portrayal_SRGBValue']
 S100_Portrayal_NationalLanguageString = db['S100_Portrayal_NationalLanguageString']
+S100_Portrayal_Alert = db['S100_Portrayal_Alert']
+S100_Portrayal_AlertPriority = db['S100_Portrayal_AlertPriority']
 
 
 class RegisterItemModel:
@@ -96,10 +98,6 @@ class RE_RegisterItemModel:
         # 시리얼라이저로 데이터 검증
         serializer = serializer_class(data=data, partial=True)
         if serializer.is_valid():
-            print("들ㅇ러갓어 ")
-            print("들ㅇ러갓어 ")
-            print("들ㅇ러갓어 ")
-            print("들ㅇ러갓어 ")
             validated_data = serializer.validated_data
             description_data = validated_data.get('description', [])
 
@@ -202,6 +200,7 @@ class SymbolModel(RE_RegisterItemModel):
     
     @classmethod
     def update(cls, M_id, data, C_id, serializer_class=S100_PR_VisualItemSerializer):
+        print(C_id, "C_id")
         return super().update(M_id, data, C_id, serializer_class)
 
     @classmethod

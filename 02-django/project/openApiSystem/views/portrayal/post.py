@@ -7,13 +7,13 @@ from regiSystem.models.Concept import RegiModel
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
 
 
 # 공통 함수 정의
 def insert_item(model_class, request):
-    C_id = RE_Register.get_register_by_url(request.GET.get('regiURI'))
+    C_id = RE_Register.get_register_by_url(request.GET.get('regi_uri'))
     data = request.data
     inserted_ = model_class.insert(data, ObjectId(C_id))
 
@@ -51,7 +51,7 @@ from openApiSystem.models.portrayal.item import (
 # API 엔드포인트
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_VisualItemSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -60,7 +60,7 @@ def insert_symbol_item(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_VisualItemSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -69,7 +69,7 @@ def insert_line_style_item(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_VisualItemSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -78,7 +78,7 @@ def insert_area_fill_item(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_VisualItemSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -88,7 +88,7 @@ def insert_pixmap_item(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ColourTokenSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -97,7 +97,7 @@ def insert_colour_token(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_PaletteItemSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -107,7 +107,7 @@ def insert_palette_item(request):
 from regiSystem.serializers.PR import S100_PR_Alert_POST_Serializer
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_Alert_POST_Serializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -116,7 +116,7 @@ def insert_alert(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_AlertMessageSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -125,7 +125,7 @@ def insert_alert_message(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ColourPalletteSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -134,7 +134,7 @@ def insert_colour_palette(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ItemSchemaSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -143,7 +143,7 @@ def insert_symbol_schema(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ItemSchemaSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -152,7 +152,7 @@ def insert_line_style_schema(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ItemSchemaSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -161,7 +161,7 @@ def insert_area_fill_schema(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ItemSchemaSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -170,7 +170,7 @@ def insert_pixmap_schema(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ItemSchemaSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -179,7 +179,7 @@ def insert_colour_profile_schema(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_DisplayModeSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -189,7 +189,7 @@ def insert_display_mode(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_DisplayPlaneSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -199,7 +199,7 @@ def insert_display_plane(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ViewingGroupLayerSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -209,7 +209,7 @@ def insert_viewing_group_layer(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ViewingGroupSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -219,7 +219,7 @@ def insert_viewing_group(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_FontSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -229,7 +229,7 @@ def insert_font(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_ContextParameterSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -239,7 +239,7 @@ def insert_context_parameter(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_DrawingPrioritySerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -248,7 +248,7 @@ def insert_drawing_priority(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_AlertHighlightSerializer  # 여기에 요청 body 시리얼라이저를 추가
 )
 @api_view(['POST'])
@@ -290,7 +290,7 @@ def common_insert_association(model_class, request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -299,7 +299,7 @@ def symbol_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -308,7 +308,7 @@ def item_schema_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -317,7 +317,7 @@ def colour_token_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -326,7 +326,7 @@ def palette_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -335,7 +335,7 @@ def display_mode_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -344,7 +344,7 @@ def viewing_group_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -353,7 +353,7 @@ def highlight_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -362,7 +362,7 @@ def icon_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -371,7 +371,7 @@ def value_association(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=PR_Association
 )
 @api_view(['POST'])
@@ -385,19 +385,19 @@ from regiSystem.info_sec.getByURI import uri_to_serial
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=S100_PR_AlertInfoSerializer
 )
 @api_view(['POST'])
 def insert_alert_info(request):
-    # regiURI에서 C_id 추출
-    regiURI = request.GET.get('regiURI')
-    if not regiURI:
-        return Response({"status": "error", "message": "Missing regiURI"}, status=HTTP_400_BAD_REQUEST)
+    # regi_uri에서 C_id 추출
+    regi_uri = request.GET.get('regi_uri')
+    if not regi_uri:
+        return Response({"status": "error", "message": "Missing regi_uri"}, status=HTTP_400_BAD_REQUEST)
     
-    C_id = uri_to_serial(regiURI)  # C_id 변환
+    C_id = uri_to_serial(regi_uri)  # C_id 변환
     if not C_id:
-        return Response({"status": "error", "message": "Invalid regiURI"}, status=HTTP_400_BAD_REQUEST)
+        return Response({"status": "error", "message": "Invalid regi_uri"}, status=HTTP_400_BAD_REQUEST)
 
     data = request.data
 

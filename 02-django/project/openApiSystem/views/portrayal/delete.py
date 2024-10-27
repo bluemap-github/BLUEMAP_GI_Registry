@@ -104,13 +104,13 @@ from rest_framework.response import Response
 
 
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
 item_id = openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -137,7 +137,7 @@ def symbol(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -160,7 +160,7 @@ def line_style(request):
     return Response(f"LineStyle with ID {M_Id} deleted", status=200)
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -180,7 +180,7 @@ def area_fill(request):
     return Response(f"AreaFill with ID {M_Id} deleted", status=200)
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -201,7 +201,7 @@ def pixmap(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -221,7 +221,7 @@ def symbol_schema(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -240,7 +240,7 @@ def line_style_schema(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -259,7 +259,7 @@ def area_fill_schema(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -278,7 +278,7 @@ def colour_profile_schema(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -297,7 +297,7 @@ def pixmap_schema(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -313,7 +313,7 @@ def colour_token(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -329,7 +329,7 @@ def colour_palette(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -346,7 +346,7 @@ def palette_item(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -362,7 +362,7 @@ def display_mode(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -378,7 +378,7 @@ def viewing_group(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -394,7 +394,7 @@ def viewing_group_layer(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -410,7 +410,7 @@ def alert_highlight(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -426,7 +426,7 @@ def alert_message(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -438,7 +438,7 @@ def display_plane(request):
     return Response(f"DisplayPlane with ID {M_Id} deleted", status=200)
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -453,7 +453,7 @@ def font(request):
     return Response(f"Font with ID {M_Id} deleted", status=200)
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -466,7 +466,7 @@ def context_parameter(request):
     
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -481,7 +481,7 @@ def drawing_priority(request):
 from regiSystem.models.PR_Class import AlertModel
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],  # Swagger에 표시할 쿼리 파라미터
+    manual_parameters=[regi_uri, service_key, item_id],  # Swagger에 표시할 쿼리 파라미터
     responses={200: 'Success', 404: 'Not Found'},  # 응답 상태와 설명
 )
 @api_view(['DELETE'])
@@ -508,7 +508,7 @@ from regiSystem.models.PR_Association import (
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def symbol_association(request):
@@ -518,7 +518,7 @@ def symbol_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def item_schema_association(request):
@@ -528,7 +528,7 @@ def item_schema_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def colour_token_association(request):
@@ -538,7 +538,7 @@ def colour_token_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def palette_association(request):
@@ -548,7 +548,7 @@ def palette_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def display_mode_association(request):
@@ -558,7 +558,7 @@ def display_mode_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def viewing_group_association(request):
@@ -568,7 +568,7 @@ def viewing_group_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def highlight_association(request):
@@ -578,7 +578,7 @@ def highlight_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def icon_association(request):
@@ -588,7 +588,7 @@ def icon_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def value_association(request):
@@ -598,7 +598,7 @@ def value_association(request):
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def msg_association(request):
@@ -614,7 +614,7 @@ from bson import ObjectId
 
 @swagger_auto_schema(
     method='delete',
-    manual_parameters=[regiURI, serviceKey, item_id],
+    manual_parameters=[regi_uri, service_key, item_id],
 )
 @api_view(['DELETE'])
 def alert_info(request):

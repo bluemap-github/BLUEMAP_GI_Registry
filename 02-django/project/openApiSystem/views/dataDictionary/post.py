@@ -5,8 +5,8 @@ from openApiSystem.utils import check_key_validation
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+regi_uri= openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
 item_id = openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 from openApiSystem.models.registry.item import RE_Register
@@ -26,8 +26,8 @@ from openApiSystem.serializers.dataDictionary.item import (
 )
 ### 공통함수
 def get_params(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     item_id = request.GET.get('item_id')
     if not item_id:
         return regi_uri, service_key
@@ -35,7 +35,7 @@ def get_params(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey], 
+    manual_parameters=[regi_uri, service_key], 
     request_body=CD_EnumeratedValueSerializer
 )
 @api_view(['POST'])
@@ -59,7 +59,7 @@ def enumerated_value(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey], 
+    manual_parameters=[regi_uri, service_key], 
     request_body=CD_SimpleAttributeSerializer
 )
 @api_view(['POST'])
@@ -81,9 +81,44 @@ def simple_attribute(request):
         # Serializer 유효성 검사 실패 시 에러 반환
         return Response({"status": "error", "message": simple_serializer.errors}, status=400)
 
+
+from mongo_driver import db
+S100_CD_AttributeConstraints = db['S100_CD_AttributeConstraints']
+from regiSystem.serializers.CD import AttributeConstraintsSerializer
+
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey], 
+    manual_parameters=[regi_uri, service_key, item_id], 
+    request_body=AttributeConstraintsSerializer
+)
+@api_view(['POST'])
+def attribute_constraints(request):
+    print(request.GET)
+    regi_uri, service_key, item_id = get_params(request)
+    validation_response = check_key_validation(service_key, regi_uri)
+    if isinstance(validation_response, Response):
+        return validation_response
+    
+    if S100_CD_AttributeConstraints.find_one({"simpleAttribute": ObjectId(item_id)}):
+        return Response({"status": "error", "message": "Attribute constraints already exist"}, status=404)
+    serializer = AttributeConstraintsSerializer(data=request.data)
+    if serializer.is_valid():
+        validated_data = serializer.validated_data
+        validated_data['simpleAttribute'] = ObjectId(item_id)
+        
+        res = S100_CD_AttributeConstraints.insert_one(validated_data)
+        if res:
+            return Response({"status": "success", "data": str(res.inserted_id)}, status=201)
+        else:
+            return Response({"status": "error", "message": "Insertion failed"}, status=404)
+    else:
+        # Serializer 유효성 검사 실패 시 에러 반환
+        return Response({"status": "error", "message": serializer.errors}, status=400)
+    
+
+@swagger_auto_schema(
+    method='post', 
+    manual_parameters=[regi_uri, service_key], 
     request_body=CD_ComplexAttributeSerializer
 )
 @api_view(['POST'])
@@ -107,7 +142,7 @@ def complex_attribute(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey], 
+    manual_parameters=[regi_uri, service_key], 
     request_body=CD_FeatureSerializer
 )
 @api_view(['POST'])
@@ -132,7 +167,7 @@ def feature(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey], 
+    manual_parameters=[regi_uri, service_key], 
     request_body=CD_InformationSerializer
 )
 @api_view(['POST'])
@@ -179,7 +214,7 @@ def common_association_insert(model, request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey], 
+    manual_parameters=[regi_uri, service_key], 
     request_body=DDR_Association
 )
 @api_view(['POST'])
@@ -189,7 +224,7 @@ def associated_attribute(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey], 
+    manual_parameters=[regi_uri, service_key], 
     request_body=DDR_Association
 )
 @api_view(['POST'])
@@ -199,7 +234,7 @@ def sub_attribute(request):
 
 @swagger_auto_schema(
     method='post', 
-    manual_parameters=[regiURI, serviceKey], 
+    manual_parameters=[regi_uri, service_key], 
     request_body=DDR_Association
 )
 @api_view(['POST'])

@@ -5,9 +5,9 @@ from openApiSystem.utils import check_key_validation
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
-itemID = openapi.Parameter('itemID', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+item_id =openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 from openApiSystem.models.registry.item import RE_Register
 from openApiSystem.models.dataDictionary.item import (
@@ -26,16 +26,16 @@ from openApiSystem.serializers.dataDictionary.item import (
 )
 ### 공통함수
 def get_params(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
-    item_id = request.GET.get('itemID')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
+    item_id = request.GET.get('item_id')
     if not item_id:
         return regi_uri, service_key
     return regi_uri, service_key, item_id
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey, itemID],
+    manual_parameters=[regi_uri, service_key, item_id],
     request_body=CD_EnumeratedValueSerializer
 )
 @api_view(['PUT'])
@@ -59,7 +59,7 @@ def enumerated_value(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey, itemID],
+    manual_parameters=[regi_uri, service_key, item_id],
     request_body=CD_SimpleAttributeSerializer
 )
 @api_view(['PUT'])
@@ -81,9 +81,33 @@ def simple_attribute(request):
         # Serializer 유효성 검사 실패 시 에러 반환
         return Response({"status": "error", "message": simple_serializer.errors}, status=400)
 
+
+
+from regiSystem.models.Concept import S100_CD_AttributeConstraints
+from regiSystem.serializers.CD import AttributeConstraintsSerializer
+from regiSystem.models.Concept import ConstraintsModel
+
+simple_attribute_id =openapi.Parameter('simple_attribute_id', openapi.IN_QUERY, description='simple_attribute_id', required=True, type=openapi.TYPE_STRING)
+@swagger_auto_schema(
+    method='put',
+    manual_parameters=[regi_uri, service_key, item_id, simple_attribute_id],
+    request_body=AttributeConstraintsSerializer
+)
+@api_view(['PUT'])
+def attribute_constraints(request):
+    item_id = request.GET.get('item_id')
+    simple_attribute_id = request.GET.get('simple_attribute_id')
+    data = request.data
+    data['simpleAttribute'] = ObjectId(simple_attribute_id)
+    result = ConstraintsModel.update(item_id, simple_attribute_id, data)
+    if result.get("status") == "error":
+        return Response(result["message"], status=404)
+    return Response({"status": "success", "data": item_id}, status=201)
+
+
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey, itemID],
+    manual_parameters=[regi_uri, service_key, item_id],
     request_body=CD_ComplexAttributeSerializer
 )
 @api_view(['PUT'])
@@ -108,7 +132,7 @@ def complex_attribute(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey, itemID],
+    manual_parameters=[regi_uri, service_key, item_id],
     request_body=CD_FeatureSerializer
 )
 @api_view(['PUT'])
@@ -133,7 +157,7 @@ def feature(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey, itemID],
+    manual_parameters=[regi_uri, service_key, item_id],
     request_body=CD_InformationSerializer
 )
 @api_view(['PUT'])
@@ -169,7 +193,7 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_2
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=DDR_PUT_Associated_Attribute
 )
 @api_view(['PUT'])
@@ -198,7 +222,7 @@ def common_update_association(model_class, request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=DDR_PUT_Association
 )
 @api_view(['PUT'])
@@ -208,7 +232,7 @@ def sub_attribute(request):
 
 @swagger_auto_schema(
     method='put', 
-    manual_parameters=[regiURI, serviceKey],
+    manual_parameters=[regi_uri, service_key],
     request_body=DDR_PUT_Association
 )
 @api_view(['PUT'])

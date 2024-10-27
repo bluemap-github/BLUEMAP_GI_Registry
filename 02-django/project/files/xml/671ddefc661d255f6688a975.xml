@@ -1,0 +1,1262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<S100FC:S100_FC_FeatureCatalogue xmlns:S100FC="http://www.iho.int/S100FC/5.0" xmlns:S100Base="http://www.iho.int/S100Base/5.0" xmlns:S100CI="http://www.iho.int/S100CI/5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:S100CD="http://www.iho.int/S100CD/5.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.iho.int/S100FC/5.0 https://schemas.s100dev.net/schemas/S100/5.0.0/S100FC/20220610/S100FC.xsd">
+	<S100FC:name>DGNSS Station Almanac</S100FC:name>
+	<S100FC:scope>-</S100FC:scope>
+	<S100FC:fieldOfApplication>-</S100FC:fieldOfApplication>
+	<S100FC:versionNumber>1.2.0</S100FC:versionNumber>
+	<S100FC:versionDate>2024-03-29</S100FC:versionDate>
+	<S100FC:productId>S-240</S100FC:productId>
+	<S100FC:producer>
+		<S100CI:role S100CI:nilReason="unknown">pointOfContact</S100CI:role>
+		<S100CI:party>
+			<S100CI:CI_Organisation>
+				<S100CI:name>IALA</S100CI:name>
+				<S100CI:contactInfo>
+				</S100CI:contactInfo>
+			</S100CI:CI_Organisation>
+		</S100CI:party>
+	</S100FC:producer>
+	<S100FC:classification>unclassified</S100FC:classification>
+	<S100FC:S100_FC_DefinitionSources>
+		<S100FC:FC_DefinitionSource id="IHOREG">
+			<S100FC:source>
+				<S100CI:title>IHO GI Registry</S100CI:title>
+				<S100CI:onlineResource>
+					<S100CI:linkage>http://registry.iho.int</S100CI:linkage>
+				</S100CI:onlineResource>
+			</S100FC:source>
+		</S100FC:FC_DefinitionSource>
+	</S100FC:S100_FC_DefinitionSources>
+	<S100FC:S100_FC_SimpleAttributes>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Text</S100FC:name>
+			<S100FC:definition>A non-formatted digital text string.</S100FC:definition>
+			<S100FC:code>text</S100FC:code>
+			<S100FC:remarks>Should be used, for example, to hold the information that is for short cautionary or explanatory notes. Therefore, text populated in text must not exceed 300 characters. Text may be in English, or in a national language. No formatting of text is possible within text. If formatted text, or text strings exceeding 300 characters, is required, then an alternate concept should be used.</S100FC:remarks>
+			<S100FC:alias>INFORM</S100FC:alias>
+			<S100FC:alias>NINFOM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>176</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Headline</S100FC:name>
+			<S100FC:definition>Words set at the head of a passage or page to introduce or categorize.</S100FC:definition>
+			<S100FC:code>headline</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>108</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>File Reference</S100FC:name>
+			<S100FC:definition>The file name of an externally referenced text file.</S100FC:definition>
+			<S100FC:code>fileReference</S100FC:code>
+			<S100FC:alias>TXTDSC</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>102</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>File Locator</S100FC:name>
+			<S100FC:definition>The location of a fragment of text or other information in a support file.</S100FC:definition>
+			<S100FC:code>fileLocator</S100FC:code>
+			<S100FC:remarks>Application schemas must describe how the associated file is identified. The associated file will commonly be named in a file reference co-attribute of the same complex attribute. Each DCEG must specify requirements for the format of the associated file and the semantics of file locator. For example, the value of file locator may be an HTML ID in an HTML file, line number in a text file) or a bookmark in a PDF file.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>101</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Date Start</S100FC:name>
+			<S100FC:definition>The earliest date on which an object (for example a buoy) will be present.</S100FC:definition>
+			<S100FC:code>dateStart</S100FC:code>
+			<S100FC:remarks>The Date Start should be encoded using 4 digits for the calendar year (YYYY), 2 digits for the month (MM) (for example April = 04) and 2 digits for the day (DD). When no specific month and/or day is required/known, indication of the month and/or day is omitted, and replaced with dashes (-). When no specific year is required (that is, the event or date range ends at the same time each year) the following two cases may be considered:- same day each year: ----MMDD- same month each year: ----MM--This conforms to ISO 8601: 2004. Date Start indicates the earliest date of an event or the start of a date range. It is used to indicate the start of a fixed date range, the start of a periodic date range, or the deployment or implementation of a feature at a specific date in the future.</S100FC:remarks>
+			<S100FC:alias>DATSTA</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>792</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>S100_TruncatedDate</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Date End</S100FC:name>
+			<S100FC:definition>The latest date on which an object (for example a buoy) will be present.</S100FC:definition>
+			<S100FC:code>dateEnd</S100FC:code>
+			<S100FC:remarks>The Date End should be encoded using 4 digits for the calendar year (YYYY), 2 digits for the month (MM) (for example April = 04) and 2 digits for the day (DD). When no specific month and/or day is required/known, indication of the month and/or day is omitted, and replaced with dashes (-). When no specific year is required (that is, the event or date range ends at the same time each year) the following two cases may be considered:- same day each year: ----MMDD- same month each year: ----MM--This conforms to ISO 8601: 2004. Date End indicates the latest date of an event or the end of a date range. It is used to indicate the end of a fixed date range, the end of a periodic date range, or the removal or cancellation of a feature at a specific date in the future.</S100FC:remarks>
+			<S100FC:alias>DATEND</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>790</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>S100_TruncatedDate</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Name</S100FC:name>
+			<S100FC:definition>The individual name of a feature.</S100FC:definition>
+			<S100FC:code>name</S100FC:code>
+			<S100FC:alias>OBJNAM</S100FC:alias>
+			<S100FC:alias>NOBJNM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>134</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Language</S100FC:name>
+			<S100FC:definition>The method of human communication, either spoken or written, consisting of the use of words in a structured and conventional way.</S100FC:definition>
+			<S100FC:code>language</S100FC:code>
+			<S100FC:remarks>The language is encoded by a 3 character code following ISO 639-2/T.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>120</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Display Name</S100FC:name>
+			<S100FC:definition>A statement expressing if a feature name is to be displayed in certain system display settings or not.</S100FC:definition>
+			<S100FC:code>displayName</S100FC:code>
+			<S100FC:remarks>Where it is allowable to encode multiple instances of feature name for a single feature instance, only one feature name instance can indicate that the name is to be displayed (display name set to True).</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>94</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>boolean</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Country Name</S100FC:name>
+			<S100FC:definition>The name of a nation.</S100FC:definition>
+			<S100FC:code>countryName</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>449</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Date of Last Update</S100FC:name>
+			<S100FC:definition>Date when something was last updated.</S100FC:definition>
+			<S100FC:code>dateOfLastUpdate</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>455</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>date</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Date of Issue</S100FC:name>
+			<S100FC:definition>First date item was reported to IALA.</S100FC:definition>
+			<S100FC:code>dateOfIssue</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>454</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>dateTime</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Transmitting Station ID</S100FC:name>
+			<S100FC:definition>ID of transmitting station.</S100FC:definition>
+			<S100FC:code>transmittingStationID</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>688</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Transmitted Message Type</S100FC:name>
+			<S100FC:definition>Transmitted message type from DGNSS station.</S100FC:definition>
+			<S100FC:code>transmittedMessageType</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>686</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>Differential GPS Corrections</S100FC:label>
+					<S100FC:definition>Primary message type which provides the differentially corrected pseudorange measurement that should be processed by the User Equipment navigation filter.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2598</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Delta Differential GPS Corrections</S100FC:label>
+					<S100FC:definition>Message that is provided for situations where the user equipment may not immediately decode new satellite ephemerides in the satellite data.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2599</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GPS Reference Station Parameters</S100FC:label>
+					<S100FC:definition>Message that contains reference station information. It includes GPS coordinates (Earth-Centered-Earth-Fixed (ECEF)) of the reference station antenna to the nearest centimetre.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2600</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Reference Station Datum</S100FC:label>
+					<S100FC:definition>Message that contains the reference station datum information. It is designed to inform user equipment of the datum used for the reference station coordinates in Message Type 3 or 32 associated with the corrections being broadcast by the Reference Station.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2601</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GPS Constellation Health</S100FC:label>
+					<S100FC:definition>Message that provides information that can assist in the operation of differential GPS user equipment. It is a mechanism through which the observations made at the reference station can be automatically used by the user equipment to improve performance without operator intervention.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2602</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GPS Null Frame</S100FC:label>
+					<S100FC:definition>Message that contains no parameters and will be used as transmission fill, if required. Its purpose is to provide messages when the GPS Reference Station has no other message ready to send, or to synchronize the beginning of a message to come unspecified epoch.</S100FC:definition>
+					<S100FC:code>6</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2603</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>DGPS Radio Beacon Almanac</S100FC:label>
+					<S100FC:definition>Message that sends the radiobeacon almanac, which provides the location, frequency, service range, and health information for a network of marine radiobeacons equipped to transmit differential GPS data. It also provides the identification of the broadcast station.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2604</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Pseudolite Almanac</S100FC:label>
+					<S100FC:definition>Message that sends the pseudolite almanac. It is similar to the beacon almanac message (Message Type 7).</S100FC:definition>
+					<S100FC:code>8</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2605</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GPS Partial Correction Set</S100FC:label>
+					<S100FC:definition>Message that services the same purpose as the Type 1 Message, in that it contains the primary differential GPS corrections. However, unlike Type 1&apos;s, this message does not require a complete satellite set.</S100FC:definition>
+					<S100FC:code>9</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2606</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>P-Code Differential Corrections</S100FC:label>
+					<S100FC:definition>This message has been reserved for P-code users, who will want differential corrections for both L1 and L2 frequencies.</S100FC:definition>
+					<S100FC:code>10</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2607</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>C/A-Code L1 L2 Delta Corrections</S100FC:label>
+					<S100FC:definition>This message has been reserved for C/A-code L2 corrections in case future GPS satellites transmit the C/A code on the L2 frequency.</S100FC:definition>
+					<S100FC:code>11</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2608</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Pseudolite Station Parameters</S100FC:label>
+					<S100FC:definition>This message has been reserved for a Pseudolite Station Parameter message which will provide clock offset parameters and the location of the phase center of the pseudolite transmitter antenna.</S100FC:definition>
+					<S100FC:code>12</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2609</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Ground Transmitter Parameters</S100FC:label>
+					<S100FC:definition>Message that identifies the location and estimated range of the data link transmitter transmitting the differential corrections.</S100FC:definition>
+					<S100FC:code>13</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2610</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GPS Time of Week</S100FC:label>
+					<S100FC:definition>Message that is a special time tag message intended to supplement the time information provided by the modified Z-count available in the message header.</S100FC:definition>
+					<S100FC:code>14</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2611</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Ionospheric Delay Message</S100FC:label>
+					<S100FC:definition>Message that is designed to provide ionospheric delay and delay rate of change along the line of sight vector to different satellites.</S100FC:definition>
+					<S100FC:code>15</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2612</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GPS Special Message</S100FC:label>
+					<S100FC:definition>Message that is a special GPS ASCII message that can be displayed on a printer, CRT, LCD or other graphic display.</S100FC:definition>
+					<S100FC:code>16</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2613</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GPS Ephemerides</S100FC:label>
+					<S100FC:definition>Message that contains GPS satellite ephemeris information.</S100FC:definition>
+					<S100FC:code>17</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2614</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>RTK Uncorrected Carrier Phases</S100FC:label>
+					<S100FC:definition>Message that gives Real-Time Kinematic (RTK) measurements for uncorrected carrier phases.</S100FC:definition>
+					<S100FC:code>18</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2615</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>RTK Uncorrected Pseudo Ranges</S100FC:label>
+					<S100FC:definition>Message that gives Real-Time Kinematic (RTK) measurements for uncorrected pseudoranges.</S100FC:definition>
+					<S100FC:code>19</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2616</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>RTK Carrier Phase Corrections</S100FC:label>
+					<S100FC:definition>Message that gives Real-Time Kinematic (RTK) carrier phase corrections.</S100FC:definition>
+					<S100FC:code>20</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2617</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>RTK/Hi-Accuracy Pseudorange Corrections</S100FC:label>
+					<S100FC:definition>Message that gives Real-Time Kinematic (RTK) / High accuracy pseudorange corrections.</S100FC:definition>
+					<S100FC:code>21</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2618</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Extended Reference Station Parameters</S100FC:label>
+					<S100FC:definition>Message that provides a means of achieving sub-millimetre precision for base station coordinates in a kinematic application and base station antenna height above a monument, which enables mobile units to reference measured position to the monument directly in real time.</S100FC:definition>
+					<S100FC:code>22</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2619</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Antenna Type Definition Record</S100FC:label>
+					<S100FC:definition>Message the provides the information on the antenna type used on the reference station.</S100FC:definition>
+					<S100FC:code>23</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2620</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Antenna Reference Point (ARP)</S100FC:label>
+					<S100FC:definition>Message that has been introduced to replace messages 3 and 22 for Real-Time Kinematic (RTK) operations.</S100FC:definition>
+					<S100FC:code>24</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2621</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Extended Radio Beacon Almanac</S100FC:label>
+					<S100FC:definition>This message provides the ID of the reference stations.</S100FC:definition>
+					<S100FC:code>27</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2622</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Differential GLONASS Corrections</S100FC:label>
+					<S100FC:definition>This is the primary message type which provides the pseudorange correction for any user receiver GLONASS measurement time.</S100FC:definition>
+					<S100FC:code>31</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2623</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Differential GLONASS Reference Station Parameters</S100FC:label>
+					<S100FC:definition>This message contains GLONASS reference station information.</S100FC:definition>
+					<S100FC:code>32</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2624</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GLONASS Constellation Health</S100FC:label>
+					<S100FC:definition>This message provides information that can assist in the operation of differential user equipment. It is a mechanism through which the observations made at the reference station can be automatically used by the user equipment to improve performance without operator intervention.</S100FC:definition>
+					<S100FC:code>33</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2625</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GLONASS Partial Differential Correction Set</S100FC:label>
+					<S100FC:definition>Message that services the same purpose as the Type 31 Message, in that it contains the primary differential GLONASS corrections. However, unlike Type 31&apos;s, this message do not require a complete satellite set.</S100FC:definition>
+					<S100FC:code>34</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2626</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GLONASS Radio Beacon Almanac</S100FC:label>
+					<S100FC:definition>Message that sends the radiobeacon almanac, which provides the location, frequency, service range, and health information for a network of marine radiobeacons equipped to transmit differential GLONASS data. It also provides the identification of the broadcast station.</S100FC:definition>
+					<S100FC:code>35</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2627</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GLONASS Special Message</S100FC:label>
+					<S100FC:definition>Message that is a special GLONASS ASCII message that can be displayed on a printer, CRT, LCD or other graphic display.</S100FC:definition>
+					<S100FC:code>36</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2628</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>GNSS System Time Offset</S100FC:label>
+					<S100FC:definition>This message is used to relate the differential corrections from different GNSS&apos;s to each other.</S100FC:definition>
+					<S100FC:code>37</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2629</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Proprietary Message</S100FC:label>
+					<S100FC:definition>This message is reserved for private use by operators who wish to use their data links to communicate proprietary information to their users.</S100FC:definition>
+					<S100FC:code>59</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2630</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Multipurpose Usage</S100FC:label>
+					<S100FC:definition>This message is reserved at least temporarily, for use in exploring the use of multi-purpose data links.</S100FC:definition>
+					<S100FC:code>60</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2631</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Station Name</S100FC:name>
+			<S100FC:definition>The name of the reference tide station with reference water level for tidal stream panel observations.</S100FC:definition>
+			<S100FC:code>stationName</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>168</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Reference Station ID</S100FC:name>
+			<S100FC:definition>Identification of reference station.</S100FC:definition>
+			<S100FC:code>referenceStationID</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>614</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Radio Beacon Health</S100FC:name>
+			<S100FC:definition>Operational status and integrity monitoring of DGNSS station.</S100FC:definition>
+			<S100FC:code>radioBeaconHealth</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>610</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>Radio Beacon Operational Normal</S100FC:label>
+					<S100FC:definition>The operation of DGNSS station is normal.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2536</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>No Integrity Monitor Operating</S100FC:label>
+					<S100FC:definition>The integrity monitoring is not operated.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2537</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>No Information Available</S100FC:label>
+					<S100FC:definition>Information about DGNSS station is not available.</S100FC:definition>
+					<S100FC:code>3</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2538</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Do Not Use This Radio Beacon</S100FC:label>
+					<S100FC:definition>Do not use any information from DGNSS station.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>2539</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Nominal Range KM</S100FC:name>
+			<S100FC:definition>Nominal range in Km (kilometre) for the Medium frequency signal of DGNSS.</S100FC:definition>
+			<S100FC:code>nominalRangeKM</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>950</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Nominal Range At</S100FC:name>
+			<S100FC:definition>Nominal range in microvolt per metre for the Medium frequency signal of DGNSS.</S100FC:definition>
+			<S100FC:code>nominalRangeAt</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>949</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Signal Frequency</S100FC:name>
+			<S100FC:definition>The frequency of a signal.</S100FC:definition>
+			<S100FC:code>signalFrequency</S100FC:code>
+			<S100FC:alias>SIGFRQ</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>1105</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Bit Rate</S100FC:name>
+			<S100FC:definition>Bit rate of Medium frequency from DGNSS station.</S100FC:definition>
+			<S100FC:code>bitRate</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>916</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Pictorial Representation</S100FC:name>
+			<S100FC:definition>Indicates whether a pictorial representation of the feature is available.</S100FC:definition>
+			<S100FC:code>pictorialRepresentation</S100FC:code>
+			<S100FC:remarks>The &apos;pictorial representation&apos; could be a drawing or a photo. The string encodes the file name of an external graphic file (pixel/vector).</S100FC:remarks>
+			<S100FC:alias>PICREP</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>142</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Status</S100FC:name>
+			<S100FC:definition>The condition of an object at a given instant in time.</S100FC:definition>
+			<S100FC:code>status</S100FC:code>
+			<S100FC:alias>STATUS</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>725</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>Permanent</S100FC:label>
+					<S100FC:definition>Intended to last or function indefinitely.</S100FC:definition>
+					<S100FC:code>1</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1052</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Occasional</S100FC:label>
+					<S100FC:definition>Acting on special occasions; happening irregularly.</S100FC:definition>
+					<S100FC:code>2</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1053</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Not in Use</S100FC:label>
+					<S100FC:definition>Use has ceased, but the facility still exists intact; disused.</S100FC:definition>
+					<S100FC:code>4</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1055</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Periodic/Intermittent</S100FC:label>
+					<S100FC:definition>Recurring at intervals.</S100FC:definition>
+					<S100FC:code>5</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1056</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Temporary</S100FC:label>
+					<S100FC:definition>Meant to last only for a time.</S100FC:definition>
+					<S100FC:code>7</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1058</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+				<S100FC:listedValue>
+					<S100FC:label>Private</S100FC:label>
+					<S100FC:definition>Administered by an individual or corporation, rather than a State or a public body.</S100FC:definition>
+					<S100FC:code>8</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>1059</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Scale Minimum</S100FC:name>
+			<S100FC:definition>The minimum scale at which the feature may be used for example for ECDIS presentation.</S100FC:definition>
+			<S100FC:code>scaleMinimum</S100FC:code>
+			<S100FC:remarks>The modulus of the scale is indicated, that is 1:1 250 000 is encoded as 1250000.</S100FC:remarks>
+			<S100FC:alias>SCAMIN</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>958</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>integer</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Communication Channel</S100FC:name>
+			<S100FC:definition>A channel number assigned to a specific radio frequency, frequencies or frequency band.</S100FC:definition>
+			<S100FC:code>communicationChannel</S100FC:code>
+			<S100FC:remarks>The expected input is the specific VHF-Channel. The attribute &apos;communication channel&apos; encodes the various VHF-channels used for communication.</S100FC:remarks>
+			<S100FC:alias>COMCHA</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>74</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Category of Radio Station</S100FC:name>
+			<S100FC:definition>Classification of radio services offered by a radio station.</S100FC:definition>
+			<S100FC:code>categoryOfRadioStation</S100FC:code>
+			<S100FC:remarks>A radiobeacon is a radio transmitter which emits a distinctive or characteristic signal on which a bearing may be taken.</S100FC:remarks>
+			<S100FC:alias>CATROS</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>52</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>enumeration</S100FC:valueType>
+			<S100FC:listedValues>
+				<S100FC:listedValue>
+					<S100FC:label>Differential GNSS</S100FC:label>
+					<S100FC:definition>Differential GNSS is implemented by placing a GNSS monitor receiver at a precisely known location. Instead of computing a navigation fix, the monitor determines the range error to every GNSS satellite it can track. These ranging errors are then transmitted to local users where they are applied as corrections before computing the navigation result.</S100FC:definition>
+					<S100FC:code>10</S100FC:code>
+					<S100FC:definitionReference>
+						<S100FC:sourceIdentifier>385</S100FC:sourceIdentifier>
+						<S100FC:definitionSource ref="IHOREG" />
+					</S100FC:definitionReference>
+				</S100FC:listedValue>
+			</S100FC:listedValues>
+		</S100FC:S100_FC_SimpleAttribute>
+		<S100FC:S100_FC_SimpleAttribute>
+			<S100FC:name>Call Sign</S100FC:name>
+			<S100FC:definition>The designated call-sign of a station (radio station, radar station, pilot, ...).</S100FC:definition>
+			<S100FC:code>callSign</S100FC:code>
+			<S100FC:alias>CALSGN</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>271</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:valueType>text</S100FC:valueType>
+		</S100FC:S100_FC_SimpleAttribute>
+	</S100FC:S100_FC_SimpleAttributes>
+	<S100FC:S100_FC_ComplexAttributes>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Feature Name</S100FC:name>
+			<S100FC:definition>Provides the name of an entity, defines the national language of the name, and provides the option to display the name at various system display settings.</S100FC:definition>
+			<S100FC:code>featureName</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>1129</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="displayName" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="language" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="name" />
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Fixed Date Range</S100FC:name>
+			<S100FC:definition>An active period of a single fixed event or occurrence, as the date range between discrete start and end dates.</S100FC:definition>
+			<S100FC:code>fixedDateRange</S100FC:code>
+			<S100FC:remarks>Dates must be encoded in the format YYYYMMDD; using 4 digits for the calendar year (YYYY) and, optionally, 2 digits for the month (MM) (for example April = 04) and 2 digits for the day (DD). When no specific month and/or day is required/known, the values are replaced with dashes (-). The date range of a recurring event or occurrence must be encoded using periodicDateRange.</S100FC:remarks>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>798</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateEnd" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateStart" />
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Information</S100FC:name>
+			<S100FC:definition>Textual information about the feature. The information may be provided as a string of text or as a file name of a single external text file that contains the text.</S100FC:definition>
+			<S100FC:code>information</S100FC:code>
+			<S100FC:remarks>At least one of the sub-attributes file reference or text must be populated.The sub-attribute file reference is generally used for long text strings or those that require formatting, however, there is no restriction on the type of text (except for lexical level) that can be held in files referenced by sub-attribute file reference.</S100FC:remarks>
+			<S100FC:alias>INFORM</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>1130</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="fileLocator" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="fileReference" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="headline" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="language" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="text" />
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Periodic Date Range</S100FC:name>
+			<S100FC:definition>The active period of a recurring event or occurrence.</S100FC:definition>
+			<S100FC:code>periodicDateRange</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>794</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateEnd" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateStart" />
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+		<S100FC:S100_FC_ComplexAttribute>
+			<S100FC:name>Textual Description</S100FC:name>
+			<S100FC:definition>Encodes the file name of a single external text file that contains the text in a defined language, which provides additional textual information that cannot be provided using other allowable attributes for the feature.</S100FC:definition>
+			<S100FC:code>textualDescription</S100FC:code>
+			<S100FC:alias>TXTDSC</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>294</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="fileReference" />
+			</S100FC:subAttributeBinding>
+			<S100FC:subAttributeBinding sequential="true">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="language" />
+			</S100FC:subAttributeBinding>
+		</S100FC:S100_FC_ComplexAttribute>
+	</S100FC:S100_FC_ComplexAttributes>
+	<S100FC:S100_FC_Roles>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>Provided by</S100FC:name>
+			<S100FC:definition>a pointer to a specific feature(s) for which further information is required.</S100FC:definition>
+			<S100FC:code>providedBy</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>4</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+		</S100FC:S100_FC_Role>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>Provides</S100FC:name>
+			<S100FC:definition>a pointer to a specific feature(s) for which further information is required.</S100FC:definition>
+			<S100FC:code>provides</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>5</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+		</S100FC:S100_FC_Role>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>Station Region</S100FC:name>
+			<S100FC:definition>-</S100FC:definition>
+			<S100FC:code>stationRegion</S100FC:code>
+			<S100FC:remarks>-</S100FC:remarks>
+		</S100FC:S100_FC_Role>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>DGNSS Station Almanac</S100FC:name>
+			<S100FC:definition>-</S100FC:definition>
+			<S100FC:code>dgnssStationAlmanac</S100FC:code>
+			<S100FC:remarks>-</S100FC:remarks>
+		</S100FC:S100_FC_Role>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>Station Almanac</S100FC:name>
+			<S100FC:definition>-</S100FC:definition>
+			<S100FC:code>stationAlmanac</S100FC:code>
+			<S100FC:remarks>-</S100FC:remarks>
+		</S100FC:S100_FC_Role>
+		<S100FC:S100_FC_Role>
+			<S100FC:name>Radio Station</S100FC:name>
+			<S100FC:definition>-</S100FC:definition>
+			<S100FC:code>radioStation</S100FC:code>
+			<S100FC:remarks>-</S100FC:remarks>
+		</S100FC:S100_FC_Role>
+	</S100FC:S100_FC_Roles>
+	<S100FC:S100_FC_InformationAssociations>
+		<S100FC:S100_FC_InformationAssociation isAbstract="false">
+			<S100FC:name>Group of DGNSS Station</S100FC:name>
+			<S100FC:definition>-</S100FC:definition>
+			<S100FC:code>GroupOfDgnssStation</S100FC:code>
+			<S100FC:remarks>-</S100FC:remarks>
+			<S100FC:role ref="stationRegion" />
+			<S100FC:role ref="dgnssStationAlmanac" />
+		</S100FC:S100_FC_InformationAssociation>
+		<S100FC:S100_FC_InformationAssociation isAbstract="false">
+			<S100FC:name>Details of DGNSS Station </S100FC:name>
+			<S100FC:definition>-</S100FC:definition>
+			<S100FC:code>DetailsOfDgnssStation</S100FC:code>
+			<S100FC:remarks>-</S100FC:remarks>
+			<S100FC:role ref="stationAlmanac" />
+			<S100FC:role ref="radioStation" />
+		</S100FC:S100_FC_InformationAssociation>
+		<S100FC:S100_FC_InformationAssociation isAbstract="false">
+			<S100FC:name>Supplement Information</S100FC:name>
+			<S100FC:definition>-</S100FC:definition>
+			<S100FC:code>SupplementInformation</S100FC:code>
+			<S100FC:remarks>-</S100FC:remarks>
+			<S100FC:role ref="provides" />
+			<S100FC:role ref="providedBy" />
+		</S100FC:S100_FC_InformationAssociation>
+	</S100FC:S100_FC_InformationAssociations>
+	<S100FC:S100_FC_InformationTypes>
+		<S100FC:S100_FC_InformationType isAbstract="false">
+			<S100FC:name>Supplementary Information</S100FC:name>
+			<S100FC:definition>Additional information that is useful within the context.</S100FC:definition>
+			<S100FC:code>SupplementaryInformation</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>50</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="information" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="textualDescription" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="pictorialRepresentation" />
+			</S100FC:attributeBinding>
+		</S100FC:S100_FC_InformationType>
+		<S100FC:S100_FC_InformationType isAbstract="false">
+			<S100FC:name>DGNSS Station Almanac</S100FC:name>
+			<S100FC:definition>Detailed information about a specific DGNSS station.</S100FC:definition>
+			<S100FC:code>DgnssStationAlmanac</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>39</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="bitRate" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="signalFrequency" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="nominalRangeAt" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="nominalRangeKM" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="radioBeaconHealth" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">2</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="referenceStationID" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="stationName" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>3</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>6</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+					<S100FC:value>9</S100FC:value>
+					<S100FC:value>10</S100FC:value>
+					<S100FC:value>11</S100FC:value>
+					<S100FC:value>12</S100FC:value>
+					<S100FC:value>13</S100FC:value>
+					<S100FC:value>14</S100FC:value>
+					<S100FC:value>15</S100FC:value>
+					<S100FC:value>16</S100FC:value>
+					<S100FC:value>17</S100FC:value>
+					<S100FC:value>18</S100FC:value>
+					<S100FC:value>19</S100FC:value>
+					<S100FC:value>20</S100FC:value>
+					<S100FC:value>21</S100FC:value>
+					<S100FC:value>22</S100FC:value>
+					<S100FC:value>23</S100FC:value>
+					<S100FC:value>24</S100FC:value>
+					<S100FC:value>27</S100FC:value>
+					<S100FC:value>31</S100FC:value>
+					<S100FC:value>32</S100FC:value>
+					<S100FC:value>33</S100FC:value>
+					<S100FC:value>34</S100FC:value>
+					<S100FC:value>35</S100FC:value>
+					<S100FC:value>36</S100FC:value>
+					<S100FC:value>37</S100FC:value>
+					<S100FC:value>59</S100FC:value>
+					<S100FC:value>60</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="transmittedMessageType" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="transmittingStationID" />
+			</S100FC:attributeBinding>
+			<S100FC:informationBinding roleType="association">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:association ref="GroupOfDgnssStation" />
+				<S100FC:role ref="stationRegion" />
+				<S100FC:informationType ref="DgnssStationRegion" />
+			</S100FC:informationBinding>
+		</S100FC:S100_FC_InformationType>
+		<S100FC:S100_FC_InformationType isAbstract="false">
+			<S100FC:name>DGNSS Station Region</S100FC:name>
+			<S100FC:definition>Approximate region where DGNSS station is located.</S100FC:definition>
+			<S100FC:code>DgnssStationRegion</S100FC:code>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>40</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateOfIssue" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="dateOfLastUpdate" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="countryName" />
+			</S100FC:attributeBinding>
+			<S100FC:informationBinding roleType="association">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:association ref="GroupOfDgnssStation" />
+				<S100FC:role ref="dgnssStationAlmanac" />
+				<S100FC:informationType ref="DgnssStationAlmanac" />
+			</S100FC:informationBinding>
+		</S100FC:S100_FC_InformationType>
+	</S100FC:S100_FC_InformationTypes>
+	<S100FC:S100_FC_FeatureTypes>
+		<S100FC:S100_FC_FeatureType isAbstract="false">
+			<S100FC:name>Radio Station</S100FC:name>
+			<S100FC:definition>A place equipped to transmit radio waves. Such a station may be either stationary or mobile, and may also be provided with a radio receiver.</S100FC:definition>
+			<S100FC:code>RadioStation</S100FC:code>
+			<S100FC:remarks>The transmission of a radio station may serve to provide mariners with a line of position (IHO Chart Specifications, M-4). The feature &apos;radio station&apos; is used to encode the point of transmission of the signal.</S100FC:remarks>
+			<S100FC:alias>RDOSTA</S100FC:alias>
+			<S100FC:alias>W/T Station</S100FC:alias>
+			<S100FC:definitionReference>
+				<S100FC:sourceIdentifier>717</S100FC:sourceIdentifier>
+				<S100FC:definitionSource ref="IHOREG" />
+			</S100FC:definitionReference>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="callSign" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+					<S100FC:value>9</S100FC:value>
+					<S100FC:value>10</S100FC:value>
+					<S100FC:value>11</S100FC:value>
+					<S100FC:value>12</S100FC:value>
+					<S100FC:value>13</S100FC:value>
+					<S100FC:value>14</S100FC:value>
+					<S100FC:value>19</S100FC:value>
+					<S100FC:value>20</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="categoryOfRadioStation" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="communicationChannel" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="fixedDateRange" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="periodicDateRange" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="scaleMinimum" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:permittedValues>
+					<S100FC:value>1</S100FC:value>
+					<S100FC:value>2</S100FC:value>
+					<S100FC:value>4</S100FC:value>
+					<S100FC:value>5</S100FC:value>
+					<S100FC:value>7</S100FC:value>
+					<S100FC:value>8</S100FC:value>
+				</S100FC:permittedValues>
+				<S100FC:attribute ref="status" />
+			</S100FC:attributeBinding>
+			<S100FC:attributeBinding sequential="false">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="true" infinite="true" />
+				</S100FC:multiplicity>
+				<S100FC:attribute ref="featureName" />
+			</S100FC:attributeBinding>
+			<S100FC:informationBinding roleType="association">
+				<S100FC:multiplicity>
+					<S100Base:lower>1</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:association ref="DetailsOfDgnssStation" />
+				<S100FC:role ref="stationAlmanac" />
+				<S100FC:informationType ref="DgnssStationAlmanac" />
+			</S100FC:informationBinding>
+			<S100FC:informationBinding roleType="association">
+				<S100FC:multiplicity>
+					<S100Base:lower>0</S100Base:lower>
+					<S100Base:upper xsi:nil="false" infinite="false">1</S100Base:upper>
+				</S100FC:multiplicity>
+				<S100FC:association ref="SupplementInformation" />
+				<S100FC:role ref="providedBy" />
+				<S100FC:informationType ref="SupplementaryInformation" />
+			</S100FC:informationBinding>
+			<S100FC:featureUseType>geographic</S100FC:featureUseType>
+			<S100FC:permittedPrimitives>point</S100FC:permittedPrimitives>
+		</S100FC:S100_FC_FeatureType>
+	</S100FC:S100_FC_FeatureTypes>
+</S100FC:S100_FC_FeatureCatalogue>

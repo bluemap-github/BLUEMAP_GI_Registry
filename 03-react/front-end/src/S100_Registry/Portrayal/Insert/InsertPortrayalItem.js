@@ -461,7 +461,7 @@ const InsertPortrayalItem = () => {
     ) : (
       <>
         <div>
-          <button onClick={dynamicLog}>dynamicLog</button>
+          {/* <button onClick={dynamicLog}>dynamicLog</button> */}
           {/* Render the dynamic form based on the selected apiType */} 
           <DynamicItemForm itemType={apiType} onFormSubmit={handleDynamicFormSubmit} />
         </div>

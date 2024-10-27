@@ -2,7 +2,7 @@ from django.urls import path
 
 from openApiSystem.views.concept import (get, post, put, delete)
 
-app_name = 'openApiSystem'
+app_name = 'openApi_concept'
 urlpatterns = [
     path('get/item_list/', get.item_list),
     path('get/item_detail/', get.item_detail),

@@ -13,8 +13,8 @@ import os
 from pathlib import Path
 from decouple import config
 import base64
-API_BASE_URL = "http://bluemap.kr:21803"
-#API_BASE_URL = "http://localhost:21803"
+# API_BASE_URL = "http://bluemap.kr:21803"
+API_BASE_URL = "http://localhost:21803"
 
 # import KEY
 

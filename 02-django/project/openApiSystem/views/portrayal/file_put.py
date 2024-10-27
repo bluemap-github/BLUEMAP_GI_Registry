@@ -33,8 +33,8 @@ from openApiSystem.models.portrayal.item import (
 from drf_yasg import openapi
 
 # Swagger에서 JSON과 파일 업로드 파라미터 정의 (초기값 포함)
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
 item_id = openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 item_identifier_param = openapi.Parameter('item_identifier', openapi.IN_FORM, description='Item Identifier', type=openapi.TYPE_INTEGER, default=1)
@@ -183,7 +183,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey, item_id,  # 쿼리 파라미터
+        regi_uri, service_key, item_id,  # 쿼리 파라미터
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, item_detail_param, preview_type_param, engineering_image_type_param,  # JSON 필드 파라미터
@@ -194,8 +194,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def symbol(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -210,7 +210,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey, item_id,  # 쿼리 파라미터
+        regi_uri, service_key, item_id,  # 쿼리 파라미터
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, item_detail_param, preview_type_param, engineering_image_type_param,  # JSON 필드 파라미터
@@ -221,8 +221,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def line_style(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -236,7 +236,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey, item_id,  # 쿼리 파라미터
+        regi_uri, service_key, item_id,  # 쿼리 파라미터
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, item_detail_param, preview_type_param, engineering_image_type_param,  # JSON 필드 파라미터
@@ -247,8 +247,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def area_fill(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -263,7 +263,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey, item_id,  # 쿼리 파라미터
+        regi_uri, service_key, item_id,  # 쿼리 파라미터
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, item_detail_param, preview_type_param, engineering_image_type_param,  # JSON 필드 파라미터
@@ -274,8 +274,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def pixmap(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -291,7 +291,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey,item_id,
+        regi_uri, service_key,item_id,
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, xml_schema_param
@@ -301,8 +301,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def symbol_schema(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -316,7 +316,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey,item_id,
+        regi_uri, service_key,item_id,
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, xml_schema_param
@@ -326,8 +326,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def line_style_schema(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -343,7 +343,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey,item_id,
+        regi_uri, service_key,item_id,
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, xml_schema_param
@@ -353,8 +353,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def area_fill_schema(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -368,7 +368,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey,item_id,
+        regi_uri, service_key,item_id,
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, xml_schema_param
@@ -378,8 +378,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def pixmap_schema(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -393,7 +393,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey,item_id,
+        regi_uri, service_key,item_id,
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, xml_schema_param
@@ -403,8 +403,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])
 def colour_profile_schema(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -418,7 +418,7 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @swagger_auto_schema(
     method='put',
     manual_parameters=[
-        regiURI, serviceKey, item_id,  # 쿼리 파라미터
+        regi_uri, service_key, item_id,  # 쿼리 파라미터
         item_type_param, item_identifier_param, name_param, definition_param, remarks_param, item_status_param, alias_param,
         camel_case_param, definition_source_param, reference_param, similarity_to_source_param, justification_param, proposed_change_param,
         xml_id_param, description_param, font_file_param, font_type_param
@@ -429,8 +429,8 @@ item_type_param = openapi.Parameter('itemType', openapi.IN_FORM, description='It
 @api_view(['PUT'])
 @parser_classes([MultiPartParser])  # MultiPartParser를 사용하여 파일을 처리
 def font(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response

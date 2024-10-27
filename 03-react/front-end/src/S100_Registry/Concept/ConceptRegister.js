@@ -144,7 +144,7 @@ function Register() {
         <tbody>
           {itemList.length === 0 && (
             <tr>
-              <td colSpan="4" className="text-center">No items found</td>
+              <td colSpan="4" className="text-center">No Items found</td>
             </tr>
           )}
           {itemList.map((item) => (

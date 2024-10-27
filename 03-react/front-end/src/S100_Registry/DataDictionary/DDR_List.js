@@ -193,7 +193,7 @@ const DDR_FilterList = ({ viewType }) => {
           <tbody>
             {items.length === 0 ? (
               <tr>
-                <td colSpan="4" className="text-center">No items found</td>
+                <td colSpan="4" className="text-center">No Items found</td>
               </tr>
             ) : (
               items.map((item) => (

@@ -112,24 +112,18 @@ from bson import ObjectId
 from django.conf import settings
 
 def handle_file_update(request, model_class, file_fields, directory, file_extension, file_db, serializer):
-    """
-    FormData 처리를 통해 파일을 업데이트하고, 필요한 데이터를 변환한 후 모델을 수정하는 공통 함수.
-    """
-    # item_id 복호화
     item_iv = request.GET.get('item_iv')
     M_id = decrypt(request.GET.get('item_id'), item_iv)
 
-    # 데이터 전처리
     mutable_data = {}
+    print(request.data)  # 첫 번째 출력
 
     try:
-        # request.data를 순회하며 각 필드를 mutable_data에 저장
         for key, value in request.data.items():
             if key in file_fields:
-                # 파일 필드는 비워둡니다 (필드만 생성)
-                mutable_data[key] = ""
+                # 파일 필드는 빈 문자열로 설정하지 않고 넘어갑니다.
+                continue
             elif key == 'description':
-                # description 필드가 JSON 문자열이므로 리스트로 변환
                 try:
                     description_list = json.loads(value)
                     if isinstance(description_list, list):
@@ -139,63 +133,54 @@ def handle_file_update(request, model_class, file_fields, directory, file_extens
                 except json.JSONDecodeError:
                     return Response({"error": "Invalid description format."}, status=HTTP_400_BAD_REQUEST)
             else:
-                # 기타 필드는 그대로 저장
                 mutable_data[key] = value
+
+        print(mutable_data, "mutable_data")  # 두 번째 출력
+
     except Exception as e:
         return Response({"error": f"Failed to process request data: {str(e)}"}, status=HTTP_400_BAD_REQUEST)
 
-    # 데이터 업데이트
     updated_ = model_class.update(M_id, mutable_data, uri_to_serial(request.GET.get('regi_uri')), serializer)
     if not updated_:
         return Response({"error": "Item not found."}, status=HTTP_404_NOT_FOUND)
-    print(updated_, "됨?")
 
-    # 파일 처리 및 경로 업데이트
     try:
-        # 기존 데이터 조회
         one_page = file_db.find_one({"_id": ObjectId(M_id)})
         if not one_page:
             return Response({"error": "Failed to find item."}, status=HTTP_404_NOT_FOUND)
 
-        # 업로드된 각 파일을 저장하고 파일 경로를 업데이트
         for file_field in file_fields:
-            print(file_field, "file_field")
             uploaded_file = request.FILES.get(file_field)
-            if uploaded_file:
-                # 파일 경로 설정
+            if uploaded_file is not None:
                 file_path = os.path.join(
                     settings.MEDIA_ROOT,
                     directory,
                     f"{M_id}.{file_extension}" if file_extension else M_id
                 )
                 
-                # 파일 저장
                 save_file(
                     uploaded_file,
                     directory,
                     f"{M_id}.{file_extension}" if file_extension else M_id
                 )
                 
-                # 저장된 파일 경로 업데이트
                 one_page[file_field] = file_path
-        print(one_page, "one_page")
+            else:
+                # 파일이 없을 경우 기존 경로 유지
+                one_page[file_field] = one_page.get(file_field)
 
         update_result = file_db.update_one(
             {"_id": ObjectId(M_id)},
             {"$set": one_page}
         )
 
-        # 문서가 존재하는 경우 성공 응답 반환
         if update_result.matched_count > 0:
             return Response({"status": "success", "updated_id": str(M_id)}, status=HTTP_200_OK)
         else:
-            # 문서를 찾지 못한 경우
             return Response({"error": "Item not found."}, status=HTTP_404_NOT_FOUND)
 
-        
     except Exception as e:
         return Response({"error": f"Failed to process data: {str(e)}"}, status=HTTP_400_BAD_REQUEST)
-
 
 
 derectory_to_match_file = {
@@ -207,25 +192,17 @@ derectory_to_match_file = {
 }
 
 def handle_visual_file_update(request, model_class, file_fields, directory, file_db):
-    """
-    FormData 처리를 통해 파일을 업데이트하고, 필요한 데이터를 변환한 후 모델을 수정하는 공통 함수.
-    """
     # item_id와 iv 값을 이용해 기존 아이템을 찾음
     item_iv = request.GET.get('item_iv')
     M_id = decrypt(request.GET.get('item_id'), item_iv)
-
-    # 기존 데이터 조회
-    one_page = file_db.find_one({"_id": ObjectId(M_id)})
-    if not one_page:
-        return Response({"error": "Item not found."}, status=HTTP_404_NOT_FOUND)
 
     mutable_data = {}
 
     try:
         for key, value in request.data.items():
             if key in file_fields:
-                # 파일 필드는 기존 값 유지
-                mutable_data[key] = one_page.get(key, "")
+                # 파일 필드는 기존 값 유지하도록 넘어감
+                continue
             elif key == 'description':
                 try:
                     description_list = json.loads(value)
@@ -241,10 +218,14 @@ def handle_visual_file_update(request, model_class, file_fields, directory, file
         return Response({"error": f"Failed to process request data: {str(e)}"}, status=HTTP_400_BAD_REQUEST)
 
     # update_file_item을 통해 JSON 데이터를 먼저 업데이트
-    res = update_file_item(model_class, request, mutable_data, M_id)
-    if not res:
-        return Response({"error": "Failed to update item."}, status=HTTP_400_BAD_REQUEST)
-
+    print(mutable_data, "mutable_data")
+    print(uri_to_serial(request.GET.get('regi_uri')))
+    print(request.GET)
+    updated_ = model_class.update(M_id, mutable_data, uri_to_serial(request.GET.get('regi_uri')))
+    if not updated_:
+        return Response({"error": "Item not found."}, status=HTTP_404_NOT_FOUND)
+    print(updated_, "됨?는거야?")
+    
     fileType = {
         "previewImage": "",
         "engineeringImage": "",
@@ -256,35 +237,64 @@ def handle_visual_file_update(request, model_class, file_fields, directory, file
     }
 
     # 파일 처리 및 경로 업데이트
-    updated_data = one_page.copy()
-    updated_data.update(mutable_data)  # 기존 데이터에 새 데이터 병합
+    try:
+        # 기존 데이터 조회
+        one_page = file_db.find_one({"_id": ObjectId(M_id)})
+        if not one_page:
+            return Response({"error": "Failed to find item."}, status=HTTP_404_NOT_FOUND)
 
-    for file_field in file_fields:
-        uploaded_file = request.FILES.get(file_field)
-        if uploaded_file:
-            # 파일 확장자 설정
-            if file_field != "itemDetail":
-                fileType[file_field] = updated_data.get(file_set_type[file_field])
-            
-            file_path = os.path.join(settings.MEDIA_ROOT, 
-                                   derectory_to_match_file[file_field], 
-                                   f"{M_id}.{fileType[file_field]}")
-            
-            save_file(uploaded_file, 
-                     derectory_to_match_file[file_field], 
-                     f"{M_id}.{fileType[file_field]}" if fileType[file_field] else M_id)
-            
-            updated_data[file_field] = file_path
+        # 기존 데이터에 새 데이터 병합
+        updated_data = one_page.copy()
+        updated_data.update(mutable_data)
 
-    # 경로가 포함된 데이터로 업데이트
-    
-    updated_data['concept_id'] = ObjectId(updated_data['concept_id'])
-    res = file_db.update_one({"_id": ObjectId(M_id)}, {"$set": updated_data})
-    if not res:
-        return Response({"error": "Failed to update item."}, status=HTTP_400_BAD_REQUEST)
+        # 업로드된 각 파일을 저장하고 파일 경로를 업데이트
+        for file_field in file_fields:
+            uploaded_file = request.FILES.get(file_field)
+            if uploaded_file:
+                # 파일 확장자 설정
+                if file_field != "itemDetail":
+                    fileType[file_field] = updated_data.get(file_set_type[file_field], "")
 
-    encrypted_id = get_encrypted_id([M_id])
-    return Response(encrypted_id, status=HTTP_200_OK)
+                # 파일 경로 설정
+                file_path = os.path.join(
+                    settings.MEDIA_ROOT,
+                    derectory_to_match_file[file_field], 
+                    f"{M_id}.{fileType[file_field]}" if fileType[file_field] else M_id
+                )
+
+                # 파일 저장
+                save_file(
+                    uploaded_file,
+                    derectory_to_match_file[file_field], 
+                    f"{M_id}.{fileType[file_field]}" if fileType[file_field] else M_id
+                )
+
+                # 저장된 파일 경로 업데이트
+                updated_data[file_field] = file_path
+            else:
+                # 파일이 업로드되지 않은 경우 기존 파일 경로 유지
+                updated_data[file_field] = one_page.get(file_field)
+
+        print(updated_data, "updated_data")
+        updated_data['concept_id'] = ObjectId(updated_data['concept_id'])
+
+        # 업데이트된 데이터를 데이터베이스에 반영
+        update_result = file_db.update_one(
+            {"_id": ObjectId(M_id)},
+            {"$set": updated_data}
+        )
+
+        # 문서가 존재하는 경우 성공 응답 반환
+        if update_result.matched_count > 0:
+            return Response({"status": "success", "updated_id": get_encrypted_id([M_id])}, status=HTTP_200_OK)
+        else:
+            # 문서를 찾지 못한 경우
+            return Response({"error": "Item not found."}, status=HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        return Response({"error": f"Failed to process data: {str(e)}"}, status=HTTP_400_BAD_REQUEST)
+
+
 
 from mongo_driver import db
 Symbol_File = db['S100_Portrayal_Symbol']
@@ -359,11 +369,111 @@ from regiSystem.models.PR_Class import (
 def update_line_style_schema(request):
     file_fields = ['xmlSchema']
     return handle_file_update(request, LineStyleSchemaModel, file_fields, 'xml', 'xml', LineStyleSchema_File, S100_PR_ItemSchemaSerializer)
+from rest_framework.response import Response
+from bson import ObjectId
+import os
+import json
+
+def handle_xml_file_update(request, model_class, file_fields, directory, file_extension, file_db, serializer):
+    """
+    XML 파일을 업데이트하고, 필요한 데이터를 변환한 후 모델을 수정하는 공통 함수.
+    """
+    # item_id 복호화
+    item_iv = request.GET.get('item_iv')
+    M_id = decrypt(request.GET.get('item_id'), item_iv)
+
+    mutable_data = {}
+    print(request.data)  # 첫 번째 출력
+
+    try:
+        # request.data를 순회하며 각 필드를 mutable_data에 저장
+        for key, value in request.data.items():
+            if key in file_fields:
+                # 파일 필드는 빈 문자열로 설정하지 않고 넘어갑니다.
+                continue
+            elif key == 'description':
+                try:
+                    description_list = json.loads(value)
+                    if isinstance(description_list, list):
+                        mutable_data[key] = description_list
+                    else:
+                        return Response({"error": "Invalid description format."}, status=HTTP_400_BAD_REQUEST)
+                except json.JSONDecodeError:
+                    return Response({"error": "Invalid description format."}, status=HTTP_400_BAD_REQUEST)
+            else:
+                # 기타 필드는 그대로 저장
+                mutable_data[key] = value
+
+        print(mutable_data, "mutable_data")  # 두 번째 출력
+
+    except Exception as e:
+        return Response({"error": f"Failed to process request data: {str(e)}"}, status=HTTP_400_BAD_REQUEST)
+
+    # 모델 업데이트
+    updated_ = model_class.update(M_id, mutable_data, uri_to_serial(request.GET.get('regi_uri')))
+    if not updated_:
+        return Response({"error": "Item not found."}, status=HTTP_404_NOT_FOUND)
+
+    try:
+        # 기존 데이터 조회
+        one_page = file_db.find_one({"_id": ObjectId(M_id)})
+        if not one_page:
+            return Response({"error": "Failed to find item."}, status=HTTP_404_NOT_FOUND)
+
+        # 업로드된 각 파일을 저장하고 파일 경로를 업데이트
+        for file_field in file_fields:
+            uploaded_file = request.FILES.get(file_field)
+            if uploaded_file is not None:
+                # 파일 경로 설정
+                file_path = os.path.join(
+                    settings.MEDIA_ROOT,
+                    directory,
+                    f"{M_id}.{file_extension}" if file_extension else M_id
+                )
+                
+                # 파일 저장
+                save_file(
+                    uploaded_file,
+                    directory,
+                    f"{M_id}.{file_extension}" if file_extension else M_id
+                )
+                
+                # 저장된 파일 경로 업데이트
+                one_page[file_field] = file_path
+            else:
+                # 파일이 없을 경우 기존 경로 유지
+                one_page[file_field] = one_page.get(file_field)
+
+        # MongoDB에 업데이트된 데이터를 반영
+        update_result = file_db.update_one(
+            {"_id": ObjectId(M_id)},
+            {"$set": one_page}
+        )
+
+        # 업데이트 성공 여부 확인
+        if update_result.matched_count > 0:
+            return Response({"status": "success", "updated_id": str(M_id)}, status=HTTP_200_OK)
+        else:
+            return Response({"error": "Item not found."}, status=HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        return Response({"error": f"Failed to process data: {str(e)}"}, status=HTTP_400_BAD_REQUEST)
+
+
+from regiSystem.models.PR_Class import (
+    LineStyleSchemaModel, SymbolSchemaModel, AreaFillSchemaModel,
+    ColourProfileSchemaModel, PixmapSchemaModel
+)
+@api_view(['PUT'])
+def update_line_style_schema(request):
+    file_fields = ['xmlSchema']
+    return handle_file_update(request, LineStyleSchemaModel, file_fields, 'xml', 'xml', LineStyleSchema_File, S100_PR_ItemSchemaSerializer)
+
 
 @api_view(['PUT'])
 def update_symbol_schema(request):
     file_fields = ['xmlSchema']
-    return handle_file_update(request, SymbolSchemaModel, file_fields, 'xml', 'xml', SymbolSchema_File, S100_PR_ItemSchemaSerializer)
+    return handle_xml_file_update(request, SymbolSchemaModel, file_fields, 'xml', 'xml', SymbolSchema_File, S100_PR_ItemSchemaSerializer)
 
 @api_view(['PUT'])
 def update_area_fill_schema(request):

@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
 item_id = openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 from openApiSystem.models.registry.item import RE_Register
@@ -33,11 +33,11 @@ from openApiSystem.models.portrayal.item import (
     PR_AlertMessage
 
 )
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def visual_item_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -50,11 +50,11 @@ def visual_item_list(request):
     serialized_items = S100_PR_VisualItemSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def symbol_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -66,11 +66,11 @@ def symbol_list(request):
     serialized_items = S100_PR_VisualItemSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def line_style_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -82,11 +82,11 @@ def line_style_list(request):
     serialized_items = S100_PR_VisualItemSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def area_fill_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -98,11 +98,11 @@ def area_fill_list(request):
     serialized_items = S100_PR_VisualItemSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def pixmap_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -114,11 +114,11 @@ def pixmap_list(request):
     serialized_items = S100_PR_VisualItemSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def item_schema_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -130,11 +130,11 @@ def item_schema_list(request):
     serialized_items = S100_PR_ItemSchemaSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def symbol_schema_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -146,11 +146,11 @@ def symbol_schema_list(request):
     serialized_items = S100_PR_ItemSchemaSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def line_style_schema_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -162,11 +162,11 @@ def line_style_schema_list(request):
     serialized_items = S100_PR_ItemSchemaSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def area_fill_schema_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -178,11 +178,11 @@ def area_fill_schema_list(request):
     serialized_items = S100_PR_ItemSchemaSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def pixmap_schema_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -194,11 +194,11 @@ def pixmap_schema_list(request):
     serialized_items = S100_PR_ItemSchemaSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def colour_profile_schema_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -210,11 +210,11 @@ def colour_profile_schema_list(request):
     serialized_items = S100_PR_ItemSchemaSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def colour_token_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -226,11 +226,11 @@ def colour_token_list(request):
     serialized_items = S100_PR_ColourTokenSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def palette_item_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -242,11 +242,11 @@ def palette_item_list(request):
     serialized_items = S100_PR_PaletteItemSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def colour_palette_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -258,11 +258,11 @@ def colour_palette_list(request):
     serialized_items = S100_PR_ColourPalletteSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def display_plane_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -274,11 +274,11 @@ def display_plane_list(request):
     serialized_items = S100_PR_DisplayPlaneSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def display_mode_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -290,11 +290,11 @@ def display_mode_list(request):
     serialized_items = S100_PR_DisplayModeSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def viewing_group_layer_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -306,11 +306,11 @@ def viewing_group_layer_list(request):
     serialized_items = S100_PR_ViewingGroupLayerSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def viewing_group_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -322,11 +322,11 @@ def viewing_group_list(request):
     serialized_items = S100_PR_ViewingGroupSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def font_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -338,11 +338,11 @@ def font_list(request):
     serialized_items = S100_PR_FontSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def context_parameter_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -354,11 +354,11 @@ def context_parameter_list(request):
     serialized_items = S100_PR_ContextParameterSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def drawing_priority_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -372,11 +372,11 @@ def drawing_priority_list(request):
 
 
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def alert_highlight_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -395,11 +395,11 @@ from regiSystem.serializers.PR import S100_PR_AlertInfoSerializer
 from regiSystem.models.PR_Class import AlertInfoModel, AlertPriorityModel
 from regiSystem.info_sec.getByURI import uri_to_serial
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def alert_info_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -425,11 +425,11 @@ def alert_info_list(request):
     serialized_items = S100_PR_AlertInfoSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def symbol_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -442,11 +442,11 @@ def symbol_detail(request):
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def line_style_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -459,11 +459,11 @@ def line_style_detail(request):
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def area_fill_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -475,11 +475,11 @@ def area_fill_detail(request):
     serialized_item = S100_PR_VisualItemSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def pixmap_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -491,11 +491,11 @@ def pixmap_detail(request):
     serialized_item = S100_PR_VisualItemSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def item_schema_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -507,11 +507,11 @@ def item_schema_detail(request):
     serialized_item = S100_PR_ItemSchemaSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def symbol_schema_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -522,11 +522,11 @@ def symbol_schema_detail(request):
     serialized_item = S100_PR_ItemSchemaSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def line_style_schema_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -538,11 +538,11 @@ def line_style_schema_detail(request):
     serialized_item = S100_PR_ItemSchemaSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def area_fill_schema_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -554,11 +554,11 @@ def area_fill_schema_detail(request):
     serialized_item = S100_PR_ItemSchemaSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def pixmap_schema_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -569,11 +569,11 @@ def pixmap_schema_detail(request):
     serialized_item = S100_PR_ItemSchemaSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def colour_profile_schema_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -584,11 +584,11 @@ def colour_profile_schema_detail(request):
     serialized_item = S100_PR_ItemSchemaSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def colour_token_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -599,11 +599,11 @@ def colour_token_detail(request):
     serialized_item = S100_PR_ColourTokenSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def palette_item_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -615,11 +615,11 @@ def palette_item_detail(request):
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def colour_palette_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -631,11 +631,11 @@ def colour_palette_detail(request):
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def display_plane_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -646,11 +646,11 @@ def display_plane_detail(request):
     serialized_item = S100_PR_DisplayPlaneSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def display_mode_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -661,11 +661,11 @@ def display_mode_detail(request):
     serialized_item = S100_PR_DisplayModeSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def viewing_group_layer_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -676,11 +676,11 @@ def viewing_group_layer_detail(request):
     serialized_item = S100_PR_ViewingGroupLayerSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def viewing_group_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -691,11 +691,11 @@ def viewing_group_detail(request):
     serialized_item = S100_PR_ViewingGroupSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def font_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -706,11 +706,11 @@ def font_detail(request):
     serialized_item = S100_PR_FontSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def context_parameter_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -721,11 +721,11 @@ def context_parameter_detail(request):
     serialized_item = S100_PR_ContextParameterSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def drawing_priority_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -740,11 +740,11 @@ def drawing_priority_detail(request):
 # @api_view(['GET'])
 # def alert_detail(request):
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def alert_highlight_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -755,11 +755,11 @@ def alert_highlight_detail(request):
     serialized_item = S100_PR_AlertHighlightSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def alert_info_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -786,11 +786,11 @@ def alert_info_detail(request):
     return Response({"status": "success", "data": serialized_item.data}, status=200)
     
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def alert_message_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -803,11 +803,11 @@ def alert_message_detail(request):
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def alert_message_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -819,11 +819,11 @@ def alert_message_list(request):
     serialized_items = S100_PR_AlertMessageSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def alert_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -836,11 +836,11 @@ def alert_detail(request):
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
 from regiSystem.serializers.PR import S100_PR_Alert_POST_Serializer
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def alert_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -860,7 +860,7 @@ def alert_list(request):
 # )
 
 # #### 연관관계
-# @swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, item_id])
+# @swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 # @api_view(['GET'])
 
 from openApiSystem.models.portrayal.association import (
@@ -900,52 +900,52 @@ def common_get_association(request, model, serializer):
 
     
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def symbol_association(request):
     return common_get_association(request, SymbolAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def item_schema_association(request):
     return common_get_association(request, ItemSchemaAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def colour_token_association(request):
     return common_get_association(request, ColourTokenAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def palette_association(request):
     return common_get_association(request, PaletteAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def display_mode_association(request):
     return common_get_association(request, DisplayModeAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def viewing_group_association(request):
     return common_get_association(request, ViewingGroupAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def highlight_association(request):
     return common_get_association(request, HighlightAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def icon_association(request):
     return common_get_association(request, IconAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def value_association(request):
     return common_get_association(request, ValueAssociation, PR_Association_List)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, parent_id])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, parent_id])
 @api_view(['GET'])
 def msg_association(request):
     return common_get_association(request, MessageAssociation, PR_Association_List)

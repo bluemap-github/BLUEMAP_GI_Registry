@@ -2,7 +2,7 @@ from django.urls import path
 
 from openApiSystem.views.portrayal import (get, post, put, delete, svg_file, ttf_file, xml_file, img_file)
 
-app_name = 'openApiSystem'
+app_name = 'openApi_portrayal'
 urlpatterns = [
     # '''
     # 객체 url

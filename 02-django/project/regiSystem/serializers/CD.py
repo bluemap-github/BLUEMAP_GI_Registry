@@ -32,13 +32,14 @@ class InformationSerializer(ConceptItemSerializer):
     _id = ObjectIdField(read_only=True)
     # distinctedInformation = serializers.JSONField(default=list) 
 
+
 class AttributeConstraintsSerializer(serializers.Serializer):
-    _id = ObjectIdField(read_only=True)
-    stringLength = serializers.CharField(allow_blank=True)
-    textPattern = serializers.CharField(allow_blank=True)
-    ACRange = serializers.CharField(allow_blank=True)
-    precision = serializers.CharField(allow_blank=True)
-    simpleAttribute = ObjectIdField(read_only=True)
+    _id = ObjectIdField(read_only=True)  # ObjectId 필드
+    stringLength = serializers.CharField(allow_blank=True, required=False)
+    textPattern = serializers.IntegerField(allow_null=True, required=False)  # allow_blank -> allow_null
+    ACRange = serializers.CharField(allow_blank=True, required=False)
+    precision = serializers.IntegerField(allow_null=True, required=False)  # allow_blank -> allow_null
+    simpleAttribute = ObjectIdField(read_only=True)  # ObjectId 필
 
 class MultiplicitySerializer(serializers.Serializer):
     lower = serializers.IntegerField()

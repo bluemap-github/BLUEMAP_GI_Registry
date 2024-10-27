@@ -192,7 +192,7 @@ const PR_List = ({ viewType }) => {
           <tbody>
             {schemaList.length === 0 ? (
               <tr>
-                <td colSpan="4" className="text-center">No {viewType} Schemas Found</td>
+                <td colSpan="4" className="text-center">No Items found</td>
               </tr>
             ) : (
               schemaList.map((schema) => (

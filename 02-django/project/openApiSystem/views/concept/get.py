@@ -5,9 +5,9 @@ from openApiSystem.utils import check_key_validation
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
-regiURI = openapi.Parameter('regiURI', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING)
-serviceKey = openapi.Parameter('serviceKey', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING)
-itemID = openapi.Parameter('itemID', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING)
+service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING)
+item_id =openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 
 from openApiSystem.models.concept.item import (
     Concept,
@@ -23,11 +23,11 @@ from openApiSystem.serializers.registry.item import (
     RE_ReferenceSourceSerializer,
 )
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key])
 @api_view(['GET'])
 def item_list(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
@@ -39,32 +39,32 @@ def item_list(request):
     serialized_items = RE_ItemSerializer(get_item_list, many=True)
     return Response({"status": "success", "data": serialized_items.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def item_detail(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_item_detail = Concept.get_item_detail(I_id)
     if get_item_detail is None:
         return Response({"status": "error", "message": "No item found"}, status=404)
     serialized_item = RE_ItemSerializer(get_item_detail)
     return Response({"status": "success", "data": serialized_item.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def management_info_list_related_item(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_management_info_list = ManagementInfo.get_management_info_list_related_item(I_id)
     if get_management_info_list is None:
         return Response({"status": "error", "message": "No management info found"}, status=404)
@@ -72,32 +72,32 @@ def management_info_list_related_item(request):
     return Response({"status": "success", "data": serialized_management_info.data}, status=200)
 
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def reference_list_related_item(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_reference_list = Reference.get_reference_list_related_item(I_id)
     if get_reference_list is None:
         return Response({"status": "error", "message": "No reference found"}, status=404)
     serialized_reference = RE_ReferenceSerializer(get_reference_list, many=True)
     return Response({"status": "success", "data": serialized_reference.data}, status=200)
 
-@swagger_auto_schema(method='get', manual_parameters=[regiURI, serviceKey, itemID])
+@swagger_auto_schema(method='get', manual_parameters=[regi_uri, service_key, item_id])
 @api_view(['GET'])
 def reference_source_related_item(request):
-    regi_uri = request.GET.get('regiURI')
-    service_key = request.GET.get('serviceKey')
+    regi_uri = request.GET.get('regi_uri')
+    service_key = request.GET.get('service_key')
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
     
-    I_id = request.GET.get('itemID')
+    I_id = request.GET.get('item_id')
     get_reference_source_list = ReferenceSource.get_reference_source_list_related_item(I_id)
     if get_reference_source_list is None:
         return Response({"status": "error", "message": "No reference source found"}, status=404)
