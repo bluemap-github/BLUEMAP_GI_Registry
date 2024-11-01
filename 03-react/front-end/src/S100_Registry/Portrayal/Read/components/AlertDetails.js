@@ -6,6 +6,7 @@ import UpdateModal from '../../Update/PRAlertUpdate/UpdateModal';
 import AddAlertInfoModal from '../../Update/PRAlertUpdate/AddAlertInfoModal';
 import {DELETE_ALERT_INFO, DELETE_ALERT} from '../../api/api';
 import Cookies from 'js-cookie';
+import FullScreenLoadingSpinner from '../../../../Common/FullScreenLoadingSpinner';
 
 const tableFields = [
     { name: 'XML ID', key: 'xmlID' },
@@ -101,7 +102,7 @@ const AlertDetails = ({ items }) => {
     };
 
     if (!items) {
-        return <div>Loading...</div>;
+        return <FullScreenLoadingSpinner />;
     }
 
     const deletePriority = (priorityID) => {

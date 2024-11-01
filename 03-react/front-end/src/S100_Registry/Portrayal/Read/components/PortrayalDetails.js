@@ -10,6 +10,7 @@ import {
     DELETE_VIEWING_GROUP, DELETE_FONT, DELETE_CONTEXT_PARAMETER, DELETE_DRAWING_PRIORITY, DELETE_ALERT, DELETE_ALERT_HIGHLIGHT, DELETE_ALERT_MESSAGE
 } from '../../api/api';
 import axios from 'axios';
+import FullScreenLoadingSpinner from '../../../../Common/FullScreenLoadingSpinner';
 
 // 공통 테이블 필드 정의
 const commonFields = [
@@ -157,7 +158,7 @@ const PortrayalDetails = ({ items, itemType }) => {
         setIsOpened(false);
     };
     if (!items) {
-        return <div>Loading...</div>;
+        return <FullScreenLoadingSpinner />;
     }
 
     // itemType에 맞는 테이블 필드 선택
@@ -229,10 +230,13 @@ const PortrayalDetails = ({ items, itemType }) => {
                                                     </li>
                                                 ))}
                                             </ul>
-                                        ) : key === 'itemDetail' && items[key] ? (
+                                        ) : (key === 'itemDetail' || key === 'fontFile' || key === 'xmlSchema') && items[key] ? (
                                             // Item Detail 항목의 경우 다운로드 버튼만 표시
                                             <div>
-                                                <a href={`${DEPLOY_URL}${items[key]}`} download={items[key]} className="btn btn-sm btn-primary">
+                                                <a href={`${DEPLOY_URL}${items[key]}`} download={items[key]} className="btn btn-sm btn-outline-secondary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style={{ marginRight: '5px', verticalAlign: 'middle' }}>
+                                                        <path fill="currentColor" fillRule="evenodd" d="M8.53 11.78a.75.75 0 0 1-1.06 0l-2.5-2.5a.75.75 0 0 1 1.06-1.06l1.22 1.22V1.75a.75.75 0 0 1 1.5 0v7.69l1.22-1.22a.75.75 0 1 1 1.06 1.06zM4.25 4a.75.75 0 1 1 0 1.5H4A1.5 1.5 0 0 0 2.5 7v5A1.5 1.5 0 0 0 4 13.5h8a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 12 5.5h-.25a.75.75 0 0 1 0-1.5H12a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z" clipRule="evenodd"/>
+                                                    </svg>
                                                     자세히
                                                 </a>
                                             </div>
@@ -245,11 +249,14 @@ const PortrayalDetails = ({ items, itemType }) => {
                                                     style={{ maxWidth: '250px', height: 'auto' }} 
                                                 />
                                                 <div>
-                                                    <a href={`${DEPLOY_URL}${items[key]}`} download={items[key]} className="btn btn-sm btn-primary mt-2">
-                                                        다운로드
-                                                    </a>
+                                                <a href={`${DEPLOY_URL}${items[key]}`} download={items[key]} className="btn btn-sm btn-outline-secondary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style={{ marginRight: '5px', verticalAlign: 'middle' }}>
+                                                        <path fill="currentColor" fillRule="evenodd" d="M8.53 11.78a.75.75 0 0 1-1.06 0l-2.5-2.5a.75.75 0 0 1 1.06-1.06l1.22 1.22V1.75a.75.75 0 0 1 1.5 0v7.69l1.22-1.22a.75.75 0 1 1 1.06 1.06zM4.25 4a.75.75 0 1 1 0 1.5H4A1.5 1.5 0 0 0 2.5 7v5A1.5 1.5 0 0 0 4 13.5h8a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 12 5.5h-.25a.75.75 0 0 1 0-1.5H12a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z" clipRule="evenodd"/>
+                                                    </svg>
+                                                    자세히
+                                                </a>
                                                 </div>
-                                                <p>{items[key]}</p>
+                                                {/* <p>{items[key]}</p> */}
                                             </div>
                                         ) : (
                                             items[key] || "--"

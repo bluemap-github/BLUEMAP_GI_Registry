@@ -11,6 +11,7 @@ import {
   GET_DISPLAY_PLANE_LIST, GET_VIEWING_GROUP_LIST, GET_FONT_LIST, GET_CONTEXT_PARAMETER_LIST, GET_DRAWING_PRIORITY_LIST, GET_ALERT_LIST, GET_ALERT_HIGHLIGHT_LIST,
   GET_ALERT_MESSAGE_LIST
 } from '../api/api';
+import FullScreenLoadingSpinner from '../../../Common/FullScreenLoadingSpinner';
 
 const schemaApiTypes = {
   'Symbol': GET_SYMBOL_LIST,
@@ -174,7 +175,7 @@ const PR_List = ({ viewType }) => {
       </div>
 
       {loading ? (
-        <div>Loading...</div>
+        <FullScreenLoadingSpinner />
       ) : error ? (
         <div className="text-danger">{error}</div>
       ) : (

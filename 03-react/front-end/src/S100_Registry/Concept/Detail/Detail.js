@@ -9,6 +9,7 @@ import ManagementInfoDetail from './components/ManagementInfoDetail';
 import ReferenceSourceDetail from './components/ReferenceSourceDetail';
 import ReferenceDetail from './components/ReferenceDetail';
 import Base from './modals/Base';
+import FullScreenLoadingSpinner from '../../../Common/FullScreenLoadingSpinner';
 
 const componentDetails = [
   { Component: ItemDetail, state: 'itemList', setState: 'setItemList', api: CONCEPT_ITEM_ONE },
@@ -85,7 +86,7 @@ function Detail() {
   }, [item_id, item_iv]);
 
   if (state.loading) {
-    return <div>Loading...</div>;
+    return <FullScreenLoadingSpinner />;
   }
 
   return (

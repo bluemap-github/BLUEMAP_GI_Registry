@@ -35,6 +35,9 @@ const PRMngAddModal = ({ IsOpened, onClose, item_id, item_iv }) => {
     };
 
     const callCreate = async () => {
+        
+        const confirmSubmit = window.confirm("Are you sure you want to add this Management information?");
+        if (!confirmSubmit) return; // Exit if the user cancels
         try {
             console.log('bodyData:', formData);
             // axios 요청

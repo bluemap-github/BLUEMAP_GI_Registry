@@ -6,9 +6,9 @@ const getValidationItem = (formType) => {
             return ['name', 'itemStatus', 'valueType'];
         case 'ComplexAttribute':
             return ['name', 'itemStatus', 'subAttribute'];
-        case 'Feature':
+        case 'FeatureType':
             return ['name', 'itemStatus', 'featureUseType'];
-        case 'Information':
+        case 'InformationType':
             return ['name', 'itemStatus'];
         case 'EnumeratedValue':
             return ['name', 'attributeId', 'enumType', 'numericCode'];

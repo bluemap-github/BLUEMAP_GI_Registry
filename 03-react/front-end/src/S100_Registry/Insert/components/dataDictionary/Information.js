@@ -201,7 +201,7 @@ function Information({ onFormSubmit, selectedApiUrl }) {
                             onClose={closeRelModal}
                             handleRelatedEnumList={handleRelatedEnumList}
                             relatedEnumList={relatedEnumList}
-                            componentType='Information'
+                            componentType='InformationType'
                         />
                         <div className='input-group input-group-sm mt-2'>
                             <div className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>
@@ -234,7 +234,7 @@ function Information({ onFormSubmit, selectedApiUrl }) {
                 <AddAttributes 
                     handleRelatedEnumList={handleRelatedEnumList}
                     relatedEnumList={relatedEnumList}
-                    componentType='Information'
+                    componentType='InformationType'
                     InputTitle={'Connect Disticted Informations'}
                 />
             </div>

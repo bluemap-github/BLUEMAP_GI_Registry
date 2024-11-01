@@ -5,6 +5,7 @@ import PortrayalDetails from './components/PortrayalDetails'; // 기타 컴포�
 import ManagementInformation from './components/ManagementInformation';
 import DynamicAssociations from './components/DynamicAssociations';
 import AlertDetails from './components/AlertDetails';
+import FullScreenLoadingSpinner from '../../../Common/FullScreenLoadingSpinner';
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -280,18 +281,18 @@ const PR_Detail = () => {
           <PortrayalDetails items={data} itemType={item_type} />
         )
       ) : (
-        <div>Loading...</div>
+        <FullScreenLoadingSpinner />
       )}
 
       {associationKeys.includes(item_type) ? (
           <DynamicAssociations associationItems={associations} UpdateAssoType={item_type} itemID={item_id} itemIV={item_iv}/>
         ) : null}
-      {data ? <ConceptInformation items={data} /> : <div>Loading...</div>}
+      {data ? <ConceptInformation items={data} /> : <FullScreenLoadingSpinner />}
       {managementInfo ? <ManagementInformation 
                       items={managementInfo.management_infos} 
                       item_id={item_id}
                       item_iv={item_iv}
-                      /> : <div>Loading...</div>}
+                      /> : <FullScreenLoadingSpinner />}
       
       <div>
         <button onClick={moveToList} className="btn btn-primary" style={{ maxWidth: '150px', width: '100%' }}>Back to list</button>

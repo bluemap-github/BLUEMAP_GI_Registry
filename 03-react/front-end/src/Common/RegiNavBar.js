@@ -1,35 +1,105 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
-import { SIGN_IN, MY_MAIN, BROWSING } from './PageLinks';
+import { SIGN_IN, ENTER_REGI } from './PageLinks';
 import NavDropDown from './NavDropDown';
+import { getOwnRegistries } from '../User/myPage/GetRegistery';
 
 const RegiNavBar = ({ userInfo }) => {
+    const [ownRegistries, setOwnRegistries] = useState([]);
+    const [error, setError] = useState(null);
+    const [selectedRegistry, setSelectedRegistry] = useState(null); // 현재 선택된 레지스트리 상태
     const navigate = useNavigate();
-    const gotoBrowse = () => {
-        Cookies.remove('itemDetails'); // 아이템 세부사항을 쿠키에서 제거
-        Cookies.remove('REGISTRY_NAME'); // 레지스트리 이름을 쿠키에서 제거
-        Cookies.remove('REGISTRY_URI'); // 레지스트리 URI를 쿠키에서 제거
-        navigate("/main/browsing");
+    const role = Cookies.get('role'); // 쿠키에서 role을 가져옴
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await getOwnRegistries("owner");
+                setOwnRegistries(result);
+
+                // 쿠키에서 REGISTRY_URI를 가져와 현재 레지스트리로 설정
+                const savedRegistryURI = Cookies.get('REGISTRY_URI');
+                const initialRegistry = result.find(reg => reg.uniformResourceIdentifier === savedRegistryURI) || result[0];
+                
+                if (initialRegistry) {
+                    setSelectedRegistry(initialRegistry);
+                    Cookies.set('REGISTRY_URI', initialRegistry.uniformResourceIdentifier, { expires: 7 });
+                    Cookies.set('REGISTRY_NAME', initialRegistry.name, { expires: 7 });
+                }
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+        fetchData();
+    }, []); // 첫 렌더링 시 한 번만 호출
+
+    const handleRegistryChange = (e) => {
+        const selectedUri = e.target.value;
+        const registry = ownRegistries.find(reg => reg.uniformResourceIdentifier === selectedUri);
+
+        if (registry) {
+            setSelectedRegistry(registry); // 선택된 레지스트리 상태 업데이트
+            Cookies.set('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 });
+            Cookies.set('REGISTRY_NAME', registry.name, { expires: 7 });
+            navigate(ENTER_REGI(registry.uniformResourceIdentifier));
+        }
     };
 
-    const goto_login = () => {
+    const gotoLogin = () => {
         navigate(SIGN_IN);
     };
 
     return (
-        <nav className='nav-inner'>
-            <div style={{ display: 'flex', alignItems: 'center'}}>
-                <div style={{ fontSize: '23px', fontWeight: 'bold', color: '#007bff', marginLeft: '10px'}}>레지스트리 이름</div>                
+        <nav className="nav-inner">
+            <div>
+                <div style={{ fontSize: '23px', fontWeight: 'bold', color: '#007bff', marginLeft: '10px' }}>
+                    BLUEMAP GI Registry
+                </div>
             </div>
-            <div style={{height: '100%', alignContent: 'center', marginRight: '10px'}}>
-                {userInfo ? <></> : (
-                    <button className='btn btn-outline-secondary' onClick={goto_login}>Log in</button>
+            <div style={{ height: '100%', alignContent: 'center', marginRight: '10px', display: 'flex', alignItems: 'center'  }}>
+                {role && role !== 'guest' && ownRegistries.length > 0 && (
+                    <div style={{ marginRight: '10px', display: 'flex', alignItems: 'center', position: 'relative', padding: '1px' }}>
+                        <div style={{ fontSize: '18px', fontWeight: 'bold', marginLeft: '5px' }}>
+                            Currently In-Use:
+                        </div>
+                        <select
+                            className="form-select"
+                            style={{
+                                width: '250px',
+                                height: '45px',
+                                fontSize: '16px',
+                                padding: '5px 10px',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                marginLeft: '10px',
+                            }}
+                            onChange={handleRegistryChange}
+                            value={selectedRegistry?.uniformResourceIdentifier || ""}
+                        >
+                            {ownRegistries.map((registry) => (
+                                <option
+                                    key={registry.uniformResourceIdentifier}
+                                    value={registry.uniformResourceIdentifier}
+                                    style={{ padding: '8px 10px' }}
+                                >
+                                    {registry.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 )}
-                {userInfo ? <NavDropDown userInfo={userInfo} /> : (<></>)}
+                {userInfo ? (
+                    <NavDropDown userInfo={userInfo} />
+                ) : (
+                    <button className="btn btn-outline-secondary" onClick={gotoLogin}>
+                        Log in
+                    </button>
+                )}
             </div>
         </nav>
     );
-}
+};
 
 export default RegiNavBar;

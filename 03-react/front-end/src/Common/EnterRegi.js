@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Cookies from 'js-cookie';  // js-cookie 라이브러리 임포트
+import Cookies from 'js-cookie';
 import { GET_REGI_INFO_FOR_GUEST } from '../User/api';
 import { SIGN_IN } from '../Common/PageLinks';
+import FullScreenLoadingSpinner from './FullScreenLoadingSpinner';
 
 const EnterRegi = ({ children }) => {
     const location = useLocation();
@@ -13,14 +14,21 @@ const EnterRegi = ({ children }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            // 쿠키에서 기존 REGISTRY_URI 제거
-            Cookies.remove('REGISTRY_URI');
-            
+            Cookies.remove('REGISTRY_URI'); // Clear previous REGISTRY_URI cookie
             const regi_uri = location.pathname.slice(1);
+            
             const headers = {};
-            const token = localStorage.getItem('jwt'); // 쿠키에서 JWT 토큰 가져오기
+            const token = localStorage.getItem('jwt'); // Get JWT token from local storage
+
             if (token) {
                 headers['Authorization'] = `Bearer ${token}`;
+            } else {
+                // 토큰이 없을 경우 role을 'guest'로 설정하고 authorized를 true로 설정
+                Cookies.set('REGISTRY_URI', regi_uri);
+                Cookies.set('role', 'guest');
+                setAuthorized(true);
+                setLoading(false);
+                return; // 서버 요청을 건너뜀
             }
             
             try {
@@ -29,20 +37,18 @@ const EnterRegi = ({ children }) => {
                     params: { regi_uri: regi_uri }
                 });
 
-                // REGISTRY_URI를 쿠키에 저장
-                Cookies.set('REGISTRY_URI', regi_uri); // 쿠키 유효기간 7일로 설정
-
-                // role을 쿠키에 저장
+                Cookies.set('REGISTRY_URI', regi_uri);
                 Cookies.set('role', response.data.role);
-                // 사용자가 owner인지 guest인지에 따라 접근 허용
+
+                // Check if user is authorized
                 if (response.data.role === 'owner' || response.data.role === 'guest') {
                     setAuthorized(true);
                 } else {
-                    navigate(SIGN_IN);  // 권한이 없으면 로그인 페이지로 리디렉션
+                    navigate(SIGN_IN);
                 }
             } catch (error) {
                 console.log(error);
-                navigate(SIGN_IN);  // 오류가 발생하면 로그인 페이지로 리디렉션
+                navigate(SIGN_IN);
             } finally {
                 setLoading(false);
             }
@@ -52,14 +58,14 @@ const EnterRegi = ({ children }) => {
     }, [location, navigate]);
 
     if (loading) {
-        return <div>Loading...</div>;  // 로딩 중에는 로딩 상태 표시
+        return <FullScreenLoadingSpinner />;
     }
 
     if (!authorized) {
-        return null;  // 권한이 없으면 아무것도 렌더링하지 않음 (리디렉션이 실행됨)
+        return null;
     }
 
-    return children;  // 권한이 확인되면 자식 컴포넌트를 렌더링
+    return children;
 };
 
 export default EnterRegi;

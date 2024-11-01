@@ -21,6 +21,8 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
     };
 
     const handleSubmitItem = async () => {
+        const confirmSubmit = window.confirm("Are you sure you want to update this item?");
+        if (!confirmSubmit) return; // Exit if the user cancels
         try {
             const { encrypted_data: RId, iv: item_iv } = itemList.references[followIdx]._id;
             await axios.put(PUT_R_URL, R, {
@@ -29,6 +31,7 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
                     item_iv: item_iv
                 }
             });
+            alert('Reference updated successfully');
             onClose();
             window.location.reload();
         } catch (error) {

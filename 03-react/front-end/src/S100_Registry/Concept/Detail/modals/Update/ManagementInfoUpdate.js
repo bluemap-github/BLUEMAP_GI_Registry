@@ -22,6 +22,8 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
     };
 
     const handleSubmitItem = async () => {
+        const confirmSubmit = window.confirm("Are you sure you want to update this item?");
+        if (!confirmSubmit) return; // Exit if the user cancels
         try {
             const MIId = itemList.management_infos[followIdx]._id.encrypted_data;
             const item_iv = itemList.management_infos[followIdx]._id.iv;
@@ -31,6 +33,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                     item_iv: item_iv
                 }
             });
+            alert('Management Info updated successfully.');
             onClose();
             window.location.reload();
         } catch (error) {
@@ -52,7 +55,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
         { type: "date", name: 'dateAccepted', spanName: 'Accepted Date', isDate: true },
         { type: "date", name: 'dateProposed', spanName: '*Proposed Date', isDate: true },
         { type: "date", name: 'dateAmended', spanName: 'Amended Date', isDate: true },
-        { type: "text", name: 'controlBodyNotes', spanName: 'Control Body Notes' }
+        { type: "text", name: 'controlBodyNotes', spanName: 'Control Body Notes', readOnly: true },
     ];
 
     const proposalTypes = ["addition", "clarification", "supersession", "retirement"];
@@ -86,6 +89,7 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         name={field.name}
                         spanName={field.spanName}
                         isDate={field.isDate}
+                        readOnly={field.readOnly || false}
                     />
                 ))}
                 <div className='input-group input-group-sm mt-2'>

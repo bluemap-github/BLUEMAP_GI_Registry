@@ -33,6 +33,9 @@ const PRMngUpdateModal = ({ IsOpened, onClose, data }) => {
     };
 
     const callUpdate = async () => {
+        
+        const confirmSubmit = window.confirm("Are you sure you want to add this Management information?");
+        if (!confirmSubmit) return; // Exit if the user cancels
         try {
             // _id는 파라미터로 추출
             const { _id, ...bodyData } = formData;

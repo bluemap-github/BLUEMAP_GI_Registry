@@ -14,8 +14,8 @@ const ChooseType = ({ initial, getSelestedApi }) => {
                 <option value="EnumeratedValue">Enumerated value</option>
                 <option value="SimpleAttribute">Simple Attribute</option>
                 <option value="ComplexAttribute">Complex Attribute</option>
-                <option value="Feature">Feature</option>
-                <option value="Information">Information</option>
+                <option value="FeatureType">Feature</option>
+                <option value="InformationType">Information</option>
             </select>
         </div>
     );

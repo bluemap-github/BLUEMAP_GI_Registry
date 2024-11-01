@@ -21,13 +21,16 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
     };
 
     const handleSubmitItem = async () => {
+        const confirmSubmit = window.confirm("Are you sure you want to update this item?");
+        if (!confirmSubmit) return; // Exit if the user cancels
         try {
             const { encrypted_data: RSId, iv: item_iv } = RS._id;
-            const RSResponse = await axios.put(PUT_RS_URL, RS, {
+            await axios.put(PUT_RS_URL, RS, {
                 params: {
                     item_id: RSId,
                     item_iv: item_iv
                 }});
+            alert('Reference Source updated successfully.');
             onClose();
             window.location.reload();
         } catch (error) {

@@ -228,7 +228,7 @@ function Feature({ onFormSubmit, selectedApiUrl }) {
                             onClose={closeRelModal}
                             handleRelatedEnumList={handleRelatedEnumList}
                             relatedEnumList={relatedEnumList}
-                            componentType='Feature'
+                            componentType='FeatureType'
                         />
                         <div className='input-group input-group-sm mt-2'>
                             <div className="input-group-text" id="basic-addon1" style={{ width: "20.5%" }}>
@@ -261,7 +261,7 @@ function Feature({ onFormSubmit, selectedApiUrl }) {
                 <AddAttributes 
                     handleRelatedEnumList={handleRelatedEnumList}
                     relatedEnumList={relatedEnumList}
-                    componentType='Feature'
+                    componentType='FeatureType'
                     InputTitle={'Connect Disticted Features'}
                 />
             </div>

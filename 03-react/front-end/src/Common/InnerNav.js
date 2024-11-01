@@ -1,88 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
-import { RERI_HOME } from '../Common/PageLinks';
+import Cookies from 'js-cookie';
 
 const InnerNav = () => {
-    const registry_name = Cookies.get('REGISTRY_NAME');
     const location = useLocation();
     const navigate = useNavigate();
-    const moveToHome = () => {
-        // 쿠키에서 REGISTRY_URI를 가져옴
-        navigate(`/${Cookies.get('REGISTRY_URI')}`);
-    };
+    
     const [error, setError] = useState('');
-    const [pathSegments, setPathSegments] = useState(['Home', '']);
+    const [breadcrumb, setBreadcrumb] = useState(['Home']); // 기본 브레드크럼 상태
 
-    const getPathSegments = () => {
-        const pathSegments = location.pathname.split('/').filter(Boolean);
-        try {
-            if (pathSegments.length === 0) {
-                return ['Home', '']; // Default to 'Home' if the path is empty
-            }
+    useEffect(() => {
+        let newBreadcrumb = ['Home'];
+        console.log(location.pathname, `/${Cookies.get('REGISTRY_URI')}`);
 
-            // Capitalize the first letter of the first path segment
-            const firstSegment = pathSegments[0];
-            const capitalizedSegment = firstSegment.charAt(0).toUpperCase() + firstSegment.slice(1);
+        // 각 경로에 따른 브레드크럼 설정
+        switch (location.pathname) {
+            case '/':
+                newBreadcrumb = ['Home'];
+                break;
+            case `/${Cookies.get('REGISTRY_URI')}/concept/list`:
+                newBreadcrumb = ['Home', 'Concept Register', 'Item List'];
+                break;
+            case `/${Cookies.get('REGISTRY_URI')}/concept/detail`:
+                newBreadcrumb = ['Home', 'Concept Register', 'Item Detail'];
+                break;
+            case `/${Cookies.get('REGISTRY_URI')}/create`:
+                newBreadcrumb = ['Home', 'Create Concept & Data Dictionary Item'];
+                break;
+            case `/${Cookies.get('REGISTRY_URI')}/dataDictionary/list`:
+                newBreadcrumb = ['Home', 'Data Dictionary Register', 'Item List'];
+                break;
+            case `/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`:
+                newBreadcrumb = ['Home', 'Data Dictionary Register', 'Item Detail'];
+                break;
+            case `/${Cookies.get('REGISTRY_URI')}/portrayal/list`:
+                newBreadcrumb = ['Home', 'Portrayal Register', 'Item List'];
+                break;
+            case `/${Cookies.get('REGISTRY_URI')}/portrayal/detail`:
+                newBreadcrumb = ['Home', 'Portrayal Register', 'Item Detail'];
+                break;
+            case `/${Cookies.get('REGISTRY_URI')}/create-portrayal`:
+                newBreadcrumb = ['Home', 'Portrayal Register', 'Create Item'];
+                break;
+            default:
+                break;
+        }
 
-            // Handle second segment, provide a default if undefined
-            const secondSegment = pathSegments[1] || 'Default'; // Default to 'Default' if undefined
-            const capitalizedSecondSegment = secondSegment.charAt(0).toUpperCase() + secondSegment.slice(1);
+        setBreadcrumb(newBreadcrumb); // 브레드크럼 업데이트
+    }, [location]);
 
-            return [capitalizedSegment, capitalizedSecondSegment];
-        } catch (error) {
-            setError(error.message);
-            return ['Home', '']; // Return default in case of error
+    const handleClick = (segment) => {
+        if (segment === 'Home') {
+            navigate(`/${Cookies.get('REGISTRY_URI')}`);
+        } else if (segment === 'Portrayal Register') {
+            navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
+        } else if (segment === 'Concept Register') {
+            navigate(`/${Cookies.get('REGISTRY_URI')}/concept/list`);
+        } else if (segment === 'Data Dictionary Register') {
+            navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/list`);
         }
     };
 
-    useEffect(() => {
-        const segments = getPathSegments();
-        setPathSegments(segments);
-    }, [location]);
-
-    const [firstSegment, secondSegment] = pathSegments;
-
     return (
-        <div className='inner-nav'>
+        <div className='inner-nav' style={{marginLeft: '20px'}}>
             {error ? (
                 <div>{error}</div>
             ) : (
-                <>
-                    {/* <h5 style={{ fontWeight: 'bold' }}>{registry_name}</h5> */}
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div
-                            className='inner-nav-link inner-nav-link-click'
-                            style={{ display: 'flex', alignItems: 'center' }}
-                            onClick={moveToHome}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="1em"
-                                height="1em"
-                                viewBox="0 0 1024 1024"
-                            >
-                                <path
-                                    fill="currentColor"
-                                    d="M946.5 505L534.6 93.4a31.93 31.93 0 0 0-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3c0 35.3 28.7 64 64 64h43.4V908c0 17.7 14.3 32 32 32H448V716h112v224h265.9c17.7 0 32-14.3 32-32V614.3h43.4c17 0 33.3-6.7 45.3-18.8c24.9-25 24.9-65.5-.1-90.5"
-                                />
-                            </svg>
-                            <div>Home</div>
-                        </div>
-                        {firstSegment === 'Home' ? null : (
-                            <>
-                                <p className='inner-nav-link'>|</p>
-                                {secondSegment === 'Create' 
-                                    ? <p className='inner-nav-link'>{`${secondSegment} Item` }</p>
-                                    : (secondSegment === 'Default' 
-                                    ? <p className='inner-nav-link'>'Register Info'</p>
-                                    : <p className='inner-nav-link'>{`${secondSegment} Register`}</p>
-                                    )
-                                }
-                            </>
-                        )}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className='inner-nav-link' style={{display: "flex", alignItems: "center"}}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.1em" viewBox="0 0 15 15"><path fill="currentColor" fillRule="evenodd" d="m6.44 4.06l.439.44H12.5A1.5 1.5 0 0 1 14 6v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V4.5A1.5 1.5 0 0 1 3.5 3h1.257a1.5 1.5 0 0 1 1.061.44zM.5 4.5a3 3 0 0 1 3-3h1.257a3 3 0 0 1 2.122.879L7.5 3h5a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3zm4.25 2a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5z" clipRule="evenodd"/></svg>
                     </div>
-                </>
+                    {breadcrumb.map((segment, index) => (
+                        <React.Fragment key={index}>
+                            {index !== 0 && 
+                                <p className='inner-nav-link'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="27" viewBox="0 0 12 24"><defs><path id="weuiArrowOutlined0" fill="currentColor" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"/></defs><use fillRule="evenodd" href="#weuiArrowOutlined0" transform="rotate(-180 5.02 9.505)"/></svg>
+                                </p>}
+                            <p
+                                className={index === breadcrumb.length - 1 ? 'inner-nav-final' : 'inner-nav-link'}
+                                onClick={() => index !== breadcrumb.length - 1 && handleClick(segment)}
+                                style={{ cursor: index === breadcrumb.length - 1 ? 'default' : 'pointer' }}
+                            >
+                                {segment}
+                            </p>
+                        </React.Fragment>
+                    ))}
+                </div>
             )}
         </div>
     );

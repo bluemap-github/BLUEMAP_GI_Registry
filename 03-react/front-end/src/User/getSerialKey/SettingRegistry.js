@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { GET_REGI_API_INFO } from '../api';
+import FullScreenLoadingSpinner from '../../Common/FullScreenLoadingSpinner';
 
 const SettingRegistry = () => {
     const [loading, setLoading] = useState(true); // 로딩 상태 관리
@@ -24,7 +25,7 @@ const SettingRegistry = () => {
     }, [regi_uri]);
 
     if (loading) {
-        return <div>Loading...</div>; // 로딩 중일 때 보여줄 UI
+        return <FullScreenLoadingSpinner />; // 로딩 중일 때 보여줄 UI
     }
 
     if (!registry) {
@@ -133,6 +134,9 @@ const SettingRegistry = () => {
                     {/* Additional rows as needed */}
                 </tbody>
             </table>
+            <div>
+                <button className='btn btn-primary mt-4' onClick={() => window.history.back()}>Back to My Page</button>
+            </div>
         </div>
     );
 };

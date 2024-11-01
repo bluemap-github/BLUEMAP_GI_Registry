@@ -73,10 +73,10 @@ function AddAttributes({ handleRelatedEnumList, relatedEnumList, componentType, 
         case 'ComplexAttribute':
             callAPIItemTypes = 'SimpleAttribute,ComplexAttribute';
             break;
-        case 'Feature':
+        case 'FeatureType':
             callAPIItemTypes = 'FeatureType';
             break;
-        case 'Information':
+        case 'InformationType':
             callAPIItemTypes = 'InformationType';
             break;
         default:
@@ -91,7 +91,7 @@ function AddAttributes({ handleRelatedEnumList, relatedEnumList, componentType, 
             <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <h3 style={{ color: (isAnyValueSelected || (componentType === 'Feature' || componentType === 'Information')) ? 'black' : 'red' }}>
+                        <h3 style={{ color: (isAnyValueSelected || (componentType === 'FeatureType' || componentType === 'InformationType')) ? 'black' : 'red' }}>
                             {InputTitle}
                         </h3>
                         {componentType === 'ComplexAttribute' && !isAnyValueSelected && (

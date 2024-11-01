@@ -22,7 +22,7 @@ import {
 } from '../api/api';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-
+import FullScreenLoadingSpinner from '../../../Common/FullScreenLoadingSpinner';
 const associationPostAPI = {
     'symbol': PUT_SYMBOL_ASSOCIATION,
     'icon': PUT_ICON_ASSOCIATION,
@@ -295,10 +295,11 @@ const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemI
             }));
         });
     
-        console.log('Prepared postData:', postData);
     
         // API 매핑 및 요청
         try {
+            const confirmSubmit = window.confirm("Are you sure you want to update this Association?");
+            if (!confirmSubmit) return; // Exit if the user cancels
             // 각 associationName에 맞는 API로 POST 요청 보내기
             for (const associationName of Object.keys(postData)) {
                 const apiEndpoint = associationPostAPI[associationName];
@@ -323,7 +324,7 @@ const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemI
                     console.log(`No API found for ${associationName}`);
                 }
             }
-            
+            alert('Association updated successfully!');
             window.location.reload();
         } catch (error) {
             console.error('Error sending data to API:', error);
@@ -337,7 +338,7 @@ const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemI
     }
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <FullScreenLoadingSpinner />;
     }
 
     return (

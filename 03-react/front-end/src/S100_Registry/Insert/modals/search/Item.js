@@ -9,10 +9,10 @@ function Item({ onSearch, componentType}) {
         case 'ComplexAttribute':
             callAPIItemTypes = 'SimpleAttribute,ComplexAttribute';
             break;
-        case 'Feature':
+        case 'FeatureType':
             callAPIItemTypes = 'FeatureType';
             break;
-        case 'Information':
+        case 'InformationType':
             callAPIItemTypes = 'InformationType';
             break;
         default:

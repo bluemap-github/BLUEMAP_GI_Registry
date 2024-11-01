@@ -157,7 +157,9 @@ const InsertPortrayalItem = () => {
       ...itemInputData,    // itemInputData 데이터를 병합
       ...mainData,         // main 데이터를 병합
     };
-
+    
+    const confirmSubmit = window.confirm("Are you sure you want to submit this Item?");
+    if (!confirmSubmit) return; // Exit if the user cancels
     if (validateType === 'Alert') {
       alertMadeInsertItem(combinedData);
     } else {
@@ -172,9 +174,6 @@ const InsertPortrayalItem = () => {
     };
     const routeMonitorData = [...data.routeMonitor];
     const routePlanData = [...data.routePlan];
-    
-    console.log('Route Monitor Data:', routeMonitorData);
-    console.log('Route Plan Data:', routePlanData);
     
     data.routeMonitor = [];
     data.routePlan = [];
@@ -212,7 +211,6 @@ const InsertPortrayalItem = () => {
     data.routeMonitor = AlertInfoIds.routeMonitor;
     data.routePlan = AlertInfoIds.routePlan;
   
-    console.log('Final Data:', data);
   
     try {
       const itemResponse = await axios.post(
@@ -231,10 +229,7 @@ const InsertPortrayalItem = () => {
           params: { item_id: itemId, item_iv: item_iv }
         });
       }
-  
-      console.log("Route Monitor Data:", routeMonitorData);
-      console.log("Route Plan Data:", routePlanData);
-  
+
       // routeMonitorData의 associationAndAPI 부분을 처리
       for (let i = 0; i < AlertInfoIds.routeMonitor.length; i++) {
         const parentId = AlertInfoIds.routeMonitor[i];
@@ -289,8 +284,7 @@ const InsertPortrayalItem = () => {
   
       // 모든 POST 요청 완료 후 아이템 정보 설정 및 페이지 이동
       setItemDetails({ item_id: itemId, item_iv: item_iv, item_type: "Alert" });
-      console.log("itemId", itemId);
-      console.log("item_iv", item_iv);
+      alert('Item created successfully!');
   
       // 페이지 이동
       navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
@@ -385,7 +379,7 @@ const InsertPortrayalItem = () => {
               item_iv: item_iv,
               item_type: apiType,
           });
-
+          alert('Item created successfully!');
           // 모든 요청 완료 후 navigate 실행
           navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
 

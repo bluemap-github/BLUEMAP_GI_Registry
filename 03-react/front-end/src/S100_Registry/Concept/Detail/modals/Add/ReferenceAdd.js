@@ -19,6 +19,8 @@ function ReferenceAdd({onClose}){
         }));
     }
     const handleSubmitItem = async () => {
+        const confirmSubmit = window.confirm("Are you sure you want to update this item?");
+        if (!confirmSubmit) return; // Exit if the user cancels
         try {
             await axios.post(POST_REFERENCE, reference, {
                 params: {
@@ -26,6 +28,7 @@ function ReferenceAdd({onClose}){
                     "item_iv": item_iv
                 }
             });
+            alert("Reference added successfully");
             onClose();
             window.location.reload();
         } catch (error) {

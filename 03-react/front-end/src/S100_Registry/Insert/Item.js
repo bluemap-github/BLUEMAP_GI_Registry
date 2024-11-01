@@ -30,16 +30,17 @@ function Item() {
     const { setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
     const regi_uri = Cookies.get('REGISTRY_URI');
+    console.log('createViewType:', createViewType);
 
     useEffect(() => {
         if (createViewType) {
-            setSelectedApiUrl(createViewType)
+            getSelestedApi(createViewType)
         }
         const role = Cookies.get('role');
-        // if (!role || role === 'guest') {
-        //     alert('권한이 없습니다. 접근이 제한됩니다.');
-        //     navigate(`/${regi_uri}`); // 권한이 없으면 메인 페이지로 리디렉션
-        // }
+        if (!role || role === 'guest') {
+            alert('권한이 없습니다. 접근이 제한됩니다.');
+            navigate(`/${regi_uri}`); // 권한이 없으면 메인 페이지로 리디렉션
+        }
     }, [navigate]);
 
     const validationTest = (validateType) => {
@@ -55,7 +56,10 @@ function Item() {
             (referenceSource === null || performValidation(referenceSource, 'ReferenceSource')) &&
             references.every(ref => performValidation(ref, 'Reference'))
         ) {
-            handleSubmitItem();
+            const result = window.confirm('Do you want to submit?');
+            if (result) {
+                handleSubmitItem();
+            }
         }
     };
 
@@ -144,13 +148,13 @@ function Item() {
                 setSelectedApiUrl(POST_COMPLEX_ATTRIBUTE);
                 setApiType('ComplexAttribute');
                 break;
-            case 'Feature':
+            case 'FeatureType':
                 setSelectedApiUrl(POST_FEATURE);
-                setApiType('Feature');
+                setApiType('FeatureType');
                 break;
-            case 'Information':
+            case 'InformationType':
                 setSelectedApiUrl(POST_INFORMATION);
-                setApiType('Information');
+                setApiType('InformationType');
                 break;
             default:
                 break;
@@ -166,8 +170,8 @@ function Item() {
                 {apiType === 'EnumeratedValue' && <EnumeratedValue item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
                 {apiType === 'SimpleAttribute' && <SimpleAttribute item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
                 {apiType === 'ComplexAttribute' && <ComplexAttribute item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
-                {apiType === 'Feature' && <Feature item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
-                {apiType === 'Information' && <Information item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
+                {apiType === 'FeatureType' && <Feature item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
+                {apiType === 'InformationType' && <Information item={item} onFormSubmit={ItemChange} selectedApiUrl={selectedApiUrl} />}
                 {apiType === 'SimpleAttribute' && <AttributeConstraints onFormSubmit={ACChange} />}
                 <ManagementInfoInput onFormSubmit={MIChange} />
                 <ReferenceSourceInput onFormSubmit={RSChange} />

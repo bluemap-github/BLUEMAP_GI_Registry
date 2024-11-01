@@ -4,6 +4,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
 import { CHECK_AUTH } from '../User/api';
 import { SIGN_IN, CREATE_ITEM } from './PageLinks';
+import FullScreenLoadingSpinner from './FullScreenLoadingSpinner';
 
 const MySidebar = () => {
   const location = useLocation();
@@ -56,20 +57,23 @@ const MySidebar = () => {
   }
 
   if (!userInfo) {
-    return <div>Loading...</div>;
+    return <FullScreenLoadingSpinner />;
   }
 
   return (
     <nav className="sidebar-wide">
       <div style={{ textDecoration: 'none', color: 'black' }} className={isActive(`/user/mymain`)} onClick={moveToHome}>
-        <div className='regi-menu' >
+        <div className='regi-menu' style={{marginLeft: '15px', fontWeight: 'bold', fontSize: '18px'}} >
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
             <path fill="currentColor" d="M4 4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h8v-2H4V8h16v4h2V8a2 2 0 0 0-2-2h-8l-2-2m8 10a.26.26 0 0 0-.26.21l-.19 1.32c-.3.13-.59.29-.85.47l-1.24-.5c-.11 0-.24 0-.31.13l-1 1.73c-.06.11-.04.24.06.32l1.06.82a4.2 4.2 0 0 0 0 1l-1.06.82a.26.26 0 0 0-.06.32l1 1.73c.06.13.19.13.31.13l1.24-.5c.26.18.54.35.85.47l.19 1.32c.02.12.12.21.26.21h2c.11 0 .22-.09.24-.21l.19-1.32c.3-.13.57-.29.84-.47l1.23.5c.13 0 .26 0 .33-.13l1-1.73a.26.26 0 0 0-.06-.32l-1.07-.82c.02-.17.04-.33.04-.5s-.01-.33-.04-.5l1.06-.82a.26.26 0 0 0 .06-.32l-1-1.73c-.06-.13-.19-.13-.32-.13l-1.23.5c-.27-.18-.54-.35-.85-.47l-.19-1.32A.236.236 0 0 0 20 14m-1 3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5c-.84 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5"></path>
           </svg>
-          마이페이지
+          <div style={{alignItems: "center"}}>
+            <span>My Registries</span>
+          </div>
+          
         </div>
       </div>
-      <div style={{ textDecoration: 'none', color: 'black' }} >
+      {/* <div style={{ textDecoration: 'none', color: 'black' }} >
         <div className='regi-menu' >
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
             <path fill="currentColor" d="M4 4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h8v-2H4V8h16v4h2V8a2 2 0 0 0-2-2h-8l-2-2m8 10a.26.26 0 0 0-.26.21l-.19 1.32c-.3.13-.59.29-.85.47l-1.24-.5c-.11 0-.24 0-.31.13l-1 1.73c-.06.11-.04.24.06.32l1.06.82a4.2 4.2 0 0 0 0 1l-1.06.82a.26.26 0 0 0-.06.32l1 1.73c.06.13.19.13.31.13l1.24-.5c.26.18.54.35.85.47l.19 1.32c.02.12.12.21.26.21h2c.11 0 .22-.09.24-.21l.19-1.32c.3-.13.57-.29.84-.47l1.23.5c.13 0 .26 0 .33-.13l1-1.73a.26.26 0 0 0-.06-.32l-1.07-.82c.02-.17.04-.33.04-.5s-.01-.33-.04-.5l1.06-.82a.26.26 0 0 0 .06-.32l-1-1.73c-.06-.13-.19-.13-.32-.13l-1.23.5c-.27-.18-.54-.35-.85-.47l-.19-1.32A.236.236 0 0 0 20 14m-1 3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5c-.84 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5"></path>
@@ -84,7 +88,7 @@ const MySidebar = () => {
           </svg>
           기본정보 수정
         </div>
-      </div>
+      </div> */}
     </nav>
   );
 };

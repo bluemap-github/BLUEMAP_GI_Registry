@@ -14,6 +14,7 @@ import {
     GET_ALERT_HIGHLIGHT_LIST
 } from '../../api/api';  // Import the API URLs here
 
+import FullScreenLoadingSpinner from '../../../../Common/FullScreenLoadingSpinner';
 const callAPI = {
     'Symbol': [
         { 
@@ -331,7 +332,7 @@ const DynamicAssociationForm = ({ itemType, onFormSubmit }) => {
         );
     }
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <FullScreenLoadingSpinner />;
 
     const consoleAssociation = () => {
         console.log(inputFields);

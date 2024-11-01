@@ -206,6 +206,11 @@ hr {
   color: black;
   cursor: pointer;
 }
+.inner-nav-final {
+  color: black;
+  margin: 7px;
+  font-weight: bold;
+}
 .sidebar-title{
   height: 100px;
   align-content: center;
@@ -238,7 +243,7 @@ hr {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1440px;
+  width: 1500px;
 }
 .regi-card-dots:hover {
   cursor: pointer;

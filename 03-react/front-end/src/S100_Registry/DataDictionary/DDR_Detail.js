@@ -12,6 +12,7 @@ import FDetail from './components/FDetail';
 import IDetail from './components/IDetail';
 import { DDR_LIST } from '../../Common/PageLinks';
 import Cookies from 'js-cookie'; 
+import FullScreenLoadingSpinner from '../../Common/FullScreenLoadingSpinner';
 
 const componentMap = {
     'EnumeratedValue': EVDetail,
@@ -58,7 +59,7 @@ const DDR_Detail = () => {
     }, [view_item_type, item_id, item_iv]);
 
     if (!item) {
-        return <div>Loading...</div>;
+        return <FullScreenLoadingSpinner />;
     }
 
     const DetailComponent = componentMap[view_item_type] || null;

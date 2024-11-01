@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import FullScreenLoadingSpinner from '../../../../Common/FullScreenLoadingSpinner';
 
 // 테이블 필드 정의
 const tableFields = [
@@ -23,7 +24,7 @@ const ConceptInformation = ({ items }) => {
     const role = Cookies.get('role');  
 
     if (!items) {
-        return <div>Loading...</div>;
+        return <FullScreenLoadingSpinner />;
     }
     
 

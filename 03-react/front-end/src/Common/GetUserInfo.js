@@ -1,49 +1,71 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { CHECK_AUTH } from '../User/api';
+import FullScreenLoadingSpinner from './FullScreenLoadingSpinner';
+
+function clearAllCookies() {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    }
+}
 
 const GetUserInfo = ({ children }) => {
+    const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
                 const token = localStorage.getItem('jwt');
                 if (!token) {
-                    // 토큰이 없으면 바로 로딩 종료
+                    // Set role to 'guest' if no JWT token
+                    Cookies.set('role', 'guest');
                     setLoading(false);
                     return;
                 }
 
                 const response = await axios.get(CHECK_AUTH, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    withCredentials: true
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 if (response.status === 200) {
                     setUserInfo(response.data.user);
                 }
             } catch (error) {
-                console.error('Failed to fetch user info:', error);
+                if (error.response && error.response.status === 401) {
+                    if (!isRedirecting) {
+                        setIsRedirecting(true);
+                        localStorage.removeItem('jwt');
+                        sessionStorage.clear();
+                        clearAllCookies();
+                        alert('시스템 오류로 로그아웃 되었습니다.');
+                    }
+                    navigate('/login');
+                } else {
+                    console.error('Unexpected error:', error);
+                }
             } finally {
                 setLoading(false);
             }
         };
+        
+        if (!isRedirecting) {
+            fetchUserInfo();
+        }
+    }, [navigate, isRedirecting]);
 
-        fetchUserInfo();
-    }, []);
+    if (loading) return <FullScreenLoadingSpinner />;
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    // userInfo가 없더라도 자식 컴포넌트를 렌더링하도록 함
-    return React.Children.map(children, child => {
-        return React.cloneElement(child, { userInfo });
-    });
+    return React.Children.map(children, child => 
+        React.cloneElement(child, { userInfo })
+    );
 };
 
 export default GetUserInfo;
