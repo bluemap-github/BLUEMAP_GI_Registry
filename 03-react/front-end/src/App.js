@@ -40,7 +40,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         <p>© 2024 BLUEMAP Inc. All rights reserved.</p>
-        <p>v0.0.3</p>
+        <p>v0.0.4</p>
       </div>
     </footer>
   );
