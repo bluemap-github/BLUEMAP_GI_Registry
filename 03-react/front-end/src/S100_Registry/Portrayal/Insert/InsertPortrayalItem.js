@@ -109,9 +109,13 @@ const InsertPortrayalItem = () => {
   };
 
   const validationTest = (validateType) => {
+    console.log('Validation Test:', itemInputData);
     let errorMessages = [];
-
-    // 1. Check if itemInputData and managementInfos (MI) are provided
+    console.log(dynamicFormData)
+    // 1. Check if Item, itemInputData and managementInfos (MI) are provided
+    if (!dynamicFormData) {
+      errorMessages.push(`- ${validateType} Information is required`);
+    }
     if (!itemInputData) {
       errorMessages.push('- Concept Information is required');
     }

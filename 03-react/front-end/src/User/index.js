@@ -1,2 +1,2 @@
-export const DEPLOY_URL = 'http://bluemap.kr:21803';
-// export const DEPLOY_URL = 'http://localhost:21803';
+import {ROOT_DEPLOY_URL} from '../deployUrl.js';
+export const DEPLOY_URL =ROOT_DEPLOY_URL;

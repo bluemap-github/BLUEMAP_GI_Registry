@@ -172,6 +172,8 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
     formData[alertType] = alertInfo;
     onFormSubmit(formData);
   }
+  
+  const mandatoryFields = ["xmlID"];
 
   
 
@@ -195,12 +197,14 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
                 <NationalLangueString itemType={itemType} tagName={"Description"} onFormSubmit={(addNLS) => onNLSChange("description", addNLS)}/>
               ) : (
                 <div className="input-group input-group-sm mb-4">
-                  <span className="input-group-text" style={{ width: '40%', fontWeight: 'bold' }}>
+                  <span 
+                    className={`input-group-text ${mandatoryFields.includes(key) && key.split('.').reduce((acc, part) => acc && acc[part], formData).trim() === '' ? 'tag-invalid' : ''}`}
+                    style={{ width: '40%', fontWeight: 'bold' }}>
                     {name}
                   </span>
                   <input
                     type={inputType}
-                    className="form-control"
+                    className={`form-control ${mandatoryFields.includes(key) && key.split('.').reduce((acc, part) => acc && acc[part], formData).trim() === '' ? 'tag-invalid' : ''}`}
                     name={key}
                     placeholder={`Enter ${name}`}
                     value={key.split('.').reduce((acc, part) => acc && acc[part], formData) || ''}
