@@ -189,11 +189,13 @@ const AlertInfoInput = ({ tagName, onFormSubmit }) => {
                                     </div>
                                     {alertInfo.priority.map((priorityInfo, priorityIndex) => (
                                         <div key={priorityIndex} className="input-group mt-3">
-                                            <span className="input-group-text" style={{ width: '10%', fontWeight: 'bold' }}>
+                                            <span 
+                                                className={`input-group-text ${priorityInfo.priority ? '' : 'tag-invalid'}`}
+                                                style={{ width: '10%', fontWeight: 'bold' }}>
                                                 Priority
                                             </span>
                                             <select
-                                                className="form-select"
+                                                className={`form-select ${priorityInfo.priority ? '' : 'tag-invalid'} `}
                                                 value={priorityInfo.priority || ''}
                                                 onChange={(e) => handleChange(setIndex, alertIndex, priorityIndex, e)}
                                             >

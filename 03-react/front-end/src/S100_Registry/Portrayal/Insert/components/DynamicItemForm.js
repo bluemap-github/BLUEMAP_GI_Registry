@@ -173,7 +173,7 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
     onFormSubmit(formData);
   }
   
-  const mandatoryFields = ["xmlID"];
+  const mandatoryFields = ["xmlID", "xmlSchema", "token", "order", "parameterType", "priority"];
 
   
 
@@ -198,13 +198,13 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
               ) : (
                 <div className="input-group input-group-sm mb-4">
                   <span 
-                    className={`input-group-text ${mandatoryFields.includes(key) && key.split('.').reduce((acc, part) => acc && acc[part], formData).trim() === '' ? 'tag-invalid' : ''}`}
+                    className={`input-group-text ${mandatoryFields.includes(key) && (typeof (key.split('.').reduce((acc, part) => acc && acc[part], formData)) === "string" && key.split('.').reduce((acc, part) => acc && acc[part], formData).trim() === '') ? 'tag-invalid' : ''}`}
                     style={{ width: '40%', fontWeight: 'bold' }}>
                     {name}
                   </span>
                   <input
                     type={inputType}
-                    className={`form-control ${mandatoryFields.includes(key) && key.split('.').reduce((acc, part) => acc && acc[part], formData).trim() === '' ? 'tag-invalid' : ''}`}
+                    className={`form-control ${mandatoryFields.includes(key) && (typeof (key.split('.').reduce((acc, part) => acc && acc[part], formData)) === "string" && key.split('.').reduce((acc, part) => acc && acc[part], formData).trim() === '') ? 'tag-invalid' : ''}`}
                     name={key}
                     placeholder={`Enter ${name}`}
                     value={key.split('.').reduce((acc, part) => acc && acc[part], formData) || ''}
@@ -233,7 +233,11 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
         ) : null
       }
       {
-        NLS.includes(itemType) ? (<NationalLangueString tagName={"Text"} onFormSubmit={(addNLS) => onNLSChange("text", addNLS)}/>) : null
+        NLS.includes(itemType) ? (
+          <div>
+            <NationalLangueString tagName={"Text"} onFormSubmit={(addNLS) => onNLSChange("text", addNLS)}/>
+          </div>
+        ) : null
       }
       { itemType in Booleans ? (
           <BooleanTag
@@ -246,11 +250,13 @@ const DynamicItemForm = ({ itemType, onFormSubmit }) => {
           <div>
             {Object.keys(Enums[itemType]).map((fieldKey) => (
               <div key={fieldKey} className="input-group input-group-sm mb-4">
-                <span className="input-group-text" style={{ width: '40%', fontWeight: 'bold' }}>
+                <span 
+                  className={`input-group-text ${mandatoryFields.includes(fieldKey) && formData[fieldKey]?.trim?.() === '' ? 'tag-invalid' : ''}`}
+                  style={{ width: '40%', fontWeight: 'bold' }}>
                   Select {fieldKey}
                 </span>
                 <select
-                  className="form-select"
+                  className={`form-select ${mandatoryFields.includes(fieldKey) && formData[fieldKey]?.trim?.() === '' ? 'tag-invalid' : ''}`}
                   name={fieldKey}
                   value={formData[fieldKey] || ''}  // Set the selected value from formData
                   onChange={handleChange}  // Update formData when the selection changes

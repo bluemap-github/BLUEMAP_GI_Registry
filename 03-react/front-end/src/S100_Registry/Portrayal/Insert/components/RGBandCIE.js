@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 
 function RGBandCIE({ onValuesChange }) {
     // State to handle transparency, RGB, and CIE values
     const [transparency, setTransparency] = useState("");
     const [rgbValues, setRgbValues] = useState({ red: "", green: "", blue: "" });
     const [cieValues, setCieValues] = useState({ x: "", y: "", L: "" });
+
+    useEffect(() => {
+        onValuesChange(transparency, { sRGB: rgbValues, cie: cieValues });
+    }, []); // []: 컴포넌트가 처음 렌더링될 때만 실행됨
 
     // Handle change for transparency input
     const handleTransparencyChange = (e) => {

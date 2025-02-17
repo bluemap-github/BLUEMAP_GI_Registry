@@ -86,11 +86,14 @@ function FileInput({ tagName, fileType, setFile, ImageType }) {
           <div style={{fontSize: '20px'}} className="mb-2">{tagName}</div>
           <input
               type="file"
-              className="form-control"
+              className={`form-control ${image ? "is-valid" : "is-invalid"}`}
               accept={fileType === "font" ? ".ttf" : allowedFormats.join(", ")}
               onChange={handleImageChange}
             />
           {error && <p className="text-danger">{error}</p>}
+          {/* <p className="mt-2" style={{ fontSize: "14px", color: image ? "green" : "gray" }}>
+            {image ? `선택된 파일: ${image.name}` : "파일이 선택되지 않았습니다."}
+          </p> */}
         </div>
       </div>
     </div>

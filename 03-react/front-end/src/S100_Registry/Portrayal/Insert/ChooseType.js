@@ -31,7 +31,6 @@ const ChooseType = ({ initial, getSelestedApi }) => {
                 <option value="Alert">Alert</option>
                 <option value="AlertHighlight">Alert Highlight</option>
                 <option value="AlertMessage">Alert Message</option>
-                <option value="AlertInfo">Alert Info</option>
             </select>
         </div>
     );
