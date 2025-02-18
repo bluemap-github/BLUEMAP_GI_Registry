@@ -4,6 +4,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const UpdateAlertAssociation = ({ data, priorityID, onClose}) => {
+    // console.log(JSON.stringify(data[priorityID]?.message), "?????");
     const [highlight, setHighlight] = useState(data[priorityID]?.highlight || null);
     const [message, setMessage] = useState(data[priorityID]?.message || null);
     const [getHighlight, setGetHighlight] = useState([]);
@@ -12,7 +13,7 @@ const UpdateAlertAssociation = ({ data, priorityID, onClose}) => {
     const [isupdatedMessage, setIsUpdatedMessage] = useState(false);
     const regi_uri = Cookies.get('REGISTRY_URI');
     
-    // API 요청에 사용할 기본 파라미터 설정
+    // API 요청에 사용할 기본 파라미터
     const params = {
         params: {
             regi_uri,
@@ -32,6 +33,7 @@ const UpdateAlertAssociation = ({ data, priorityID, onClose}) => {
                 // Highlight 리스트 가져오기
                 const highlightResponse = await axios.get(GET_ALERT_HIGHLIGHT_LIST, params);
                 if (highlightResponse.data && highlightResponse.data.data) {
+                    // console.log(highlightResponse.data.data);
                     setGetHighlight(highlightResponse.data.data); // 데이터를 옵션에 사용
                 }
 
@@ -81,36 +83,50 @@ const UpdateAlertAssociation = ({ data, priorityID, onClose}) => {
         setIsUpdatedMessage(true);
     };
 
+    function transformData(data) {
+        return {
+            "associations": [{
+                "child_id": data.child_id.encrypted_data,
+                "child_iv": data.child_id.iv
+            }]
+        };
+    }
+
     const fetchPUTAssociations = async () => {
         if (!isupdatedHighlight && !isupdatedMessage) {
             alert('There is no association to update');
-        }
-        // if (isupdatedHighlight) {
-        //     try {
-        //         await axios.put(PUT_HIGHLIGHT_ASSOCIATION, highlight, {params: { 
-        //             item_id : priorityID,
-        //             item_type : "AlertInfo"
-        //          }});
-        //         setIsUpdatedHighlight(false);
-        //     } catch (error) {
-        //         console.error('Error updating highlight association:', error);
-        //     }
-        // }
-
-        if (isupdatedMessage) {
-            console.log(priorityID);
-            try {
-                await axios.put(PUT_MESSAGE_ASSOCIATION, message, {params: { 
-                    item_id : priorityID,
-                    item_type : "AlertInfo"
-                 }});
-                setIsUpdatedMessage(false);
-            } catch (error) {
-                console.error('Error updating message association:', error);
+        } else {
+            // console.log(highlight, isupdatedHighlight);
+            // console.log(message, isupdatedMessage);
+            if (isupdatedHighlight) {
+                const postData = transformData(highlight);
+                try {
+                    await axios.put(PUT_HIGHLIGHT_ASSOCIATION, postData, {params: { 
+                        item_id : priorityID,
+                        item_type : "AlertInfo"
+                     }});
+                    setIsUpdatedHighlight(false);
+                } catch (error) {
+                    console.error('Error updating highlight association:', error);
+                }
             }
-        }
-        // onClose();
-        // window.location.reload();
+    
+            if (isupdatedMessage) {
+                const postData = transformData(message);
+                try {
+                    await axios.put(PUT_MESSAGE_ASSOCIATION, postData, {params: { 
+                        item_id : priorityID,
+                        item_type : "AlertInfo"
+                     }});
+                    setIsUpdatedMessage(false);
+                } catch (error) {
+                    console.error('Error updating message association:', error);
+                }
+            }
+            onClose();
+            window.location.reload();
+            
+        } 
     }
 
     return (

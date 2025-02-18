@@ -497,7 +497,7 @@ def update_pixmap_schema(request):
 from regiSystem.models.PR_Association import (
     SymbolAssociation, IconAssociation, ItemSchemaAssociation, ColourTokenAssociation,
     PaletteAssociation, DisplayModeAssociation, ViewingGroupAssociation,
-    HighlightAssociation, MessageAssociation, PR_Association
+    HighlightAssociation, MessageAssociation, PR_Association, ValueAssociation
 )
 from bson.objectid import ObjectId
 
@@ -505,7 +505,10 @@ from bson.objectid import ObjectId
 def update_association(request, AssociationClass):
     print(AssociationClass)
     item_iv = request.GET.get('item_iv')
-    item_id = decrypt(request.GET.get('item_id'), item_iv)
+    if not item_iv:
+        item_id = request.GET.get('item_id')
+    else: 
+        item_id = decrypt(request.GET.get('item_id'), item_iv)
 
     associations = request.data.get('associations')
 
@@ -553,41 +556,43 @@ def update_display_mode_association(request):
 
 @api_view(['PUT'])
 def update_message_association(request):
-    item_type = request.GET.get('item_type')
-    # print(item_type)
-    # if item_type != 'AlertInfo':
-    #     return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
-    # print("??????????")
-    data = request.data.get('associations')[0]
-    # print(data, "??????????")
-    parent_id = data.get('parent_id')
-    child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
-    data['child_id'] = child_id
-    result = MessageAssociation.update(parent_id, child_id)
-    if result["status"] == "error":
-        return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
-    return Response(result, status=HTTP_201_CREATED)
+    return update_association(request, MessageAssociation)
+    # item_type = request.GET.get('item_type')
+    # # print(item_type)
+    # # if item_type != 'AlertInfo':
+    # #     return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
+    # # print("??????????")
+    # data = request.data.get('associations')[0]
+    # # print(data, "??????????")
+    # parent_id = data.get('parent_id')
+    # child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
+    # data['child_id'] = child_id
+    # result = MessageAssociation.update(parent_id, child_id)
+    # if result["status"] == "error":
+    #     return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
+    # return Response(result, status=HTTP_201_CREATED)
 
 
 
 @api_view(['PUT'])
 def update_highlight_association(request):
-    item_type = request.GET.get('item_type')
-    if item_type != 'AlertInfo':
-        return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
-    data = request.data
-    parent_id = data.get('parent_id')
-    child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
-    data['child_id'] = child_id
-    result = HighlightAssociation.update(parent_id, child_id)
-    if result["status"] == "error":
-        return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
-    return Response(result, status=HTTP_201_CREATED)
+    return update_association(request, HighlightAssociation)
+    # item_type = request.GET.get('item_type')
+    # if item_type != 'AlertInfo':
+    #     return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
+    # data = request.data
+    # parent_id = data.get('parent_id')
+    # child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
+    # data['child_id'] = child_id
+    # result = HighlightAssociation.update(parent_id, child_id)
+    # if result["status"] == "error":
+    #     return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
+    # return Response(result, status=HTTP_201_CREATED)
     
 
 @api_view(['PUT'])
 def update_value_association(request):
-    return update_association(request, PR_Association)
+    return update_association(request, ValueAssociation)
 
 from regiSystem.models.PR_Class import AlertInfoModel
 @api_view(['PUT'])
