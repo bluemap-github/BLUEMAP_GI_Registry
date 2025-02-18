@@ -85,19 +85,20 @@ const UpdateAlertAssociation = ({ data, priorityID, onClose}) => {
         if (!isupdatedHighlight && !isupdatedMessage) {
             alert('There is no association to update');
         }
-        if (isupdatedHighlight) {
-            try {
-                await axios.put(PUT_HIGHLIGHT_ASSOCIATION, highlight, {params: { 
-                    item_id : priorityID,
-                    item_type : "AlertInfo"
-                 }});
-                setIsUpdatedHighlight(false);
-            } catch (error) {
-                console.error('Error updating highlight association:', error);
-            }
-        }
+        // if (isupdatedHighlight) {
+        //     try {
+        //         await axios.put(PUT_HIGHLIGHT_ASSOCIATION, highlight, {params: { 
+        //             item_id : priorityID,
+        //             item_type : "AlertInfo"
+        //          }});
+        //         setIsUpdatedHighlight(false);
+        //     } catch (error) {
+        //         console.error('Error updating highlight association:', error);
+        //     }
+        // }
 
         if (isupdatedMessage) {
+            console.log(priorityID);
             try {
                 await axios.put(PUT_MESSAGE_ASSOCIATION, message, {params: { 
                     item_id : priorityID,
@@ -108,8 +109,8 @@ const UpdateAlertAssociation = ({ data, priorityID, onClose}) => {
                 console.error('Error updating message association:', error);
             }
         }
-        onClose();
-        window.location.reload();
+        // onClose();
+        // window.location.reload();
     }
 
     return (

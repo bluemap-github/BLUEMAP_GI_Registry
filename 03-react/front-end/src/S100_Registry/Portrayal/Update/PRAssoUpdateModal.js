@@ -351,42 +351,46 @@ const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemI
                     <h3>{UpdateAssoType} Association Update</h3>
                     <div>
                         {Object.keys(assoData).map((associationName, index) => (
-                            <div key={index} className="input-group input-group mt-2" style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                                {inputFields[associationName]?.map((field, idx) => (
-                                    <div key={idx} className="d-flex mt-2">
-                                        <label className="input-group-text" style={{ width: '40%' }}>
-                                            {associationName}
-                                        </label>
-                                        <select
-                                            className="form-select"
-                                            value={`${field.child_id},${field.child_iv}`}
-                                            onChange={(e) => {
-                                                const [child_id, child_iv] = e.target.value.split(',');
-                                                handleInputChange(associationName, idx, 'child_id', child_id);
-                                                handleInputChange(associationName, idx, 'child_iv', child_iv);
-                                            }}
-                                        >
-                                            <option value="">{field.child_id}, {field.xml_id}</option>
-                                            {assoData[associationName] &&
-                                                assoData[associationName].map((entry, idx2) => (
-                                                    <option key={idx2} value={`${entry._id.encrypted_data},${entry._id.iv}`}>
-                                                        {entry._id.encrypted_data}, {entry.name}
-                                                    </option>
-                                                ))}
-                                        </select>
-                                        {inputFields[associationName].length > 1 && (
-                                            <button className="btn btn-danger btn-sm ms-2" onClick={() => handleRemoveField(associationName, idx)}>
-                                                Remove
-                                            </button>
-                                        )}
-                                    </div>
-                                ))}
-
-                                {callAPI[UpdateAssoType].find((item) => item.associationName === associationName).isPlural && (
-                                    <button className="btn btn-outline-secondary btn-sm mt-2" onClick={() => handleAddField(associationName)}>
-                                        + Add Another {associationName}
-                                    </button>
-                                )}
+                            <div className="mt-4">
+                                <div style={{ display: 'flex' }}>
+                                <div style={{display: 'flex', alignItems: 'center', marginRight: '8px'}}>{associationName}</div>
+                                    <span>{callAPI[UpdateAssoType].find((item) => item.associationName === associationName).isPlural && (
+                                        <button className="btn btn-outline-secondary btn-sm" onClick={() => handleAddField(associationName)}>
+                                            + add
+                                        </button>
+                                    )}</span>
+                                </div>
+                                <div key={index} >
+                                    <span>{inputFields[associationName]?.map((field, idx) => (
+                                        <div key={idx} className="d-flex input-group mt-2">
+                                            <span className="input-group-text" style={{ width: '40%' }}>
+                                                {associationName}
+                                            </span>
+                                            <select
+                                                className="form-select"
+                                                value={`${field.child_id},${field.child_iv}`}
+                                                onChange={(e) => {
+                                                    const [child_id, child_iv] = e.target.value.split(',');
+                                                    handleInputChange(associationName, idx, 'child_id', child_id);
+                                                    handleInputChange(associationName, idx, 'child_iv', child_iv);
+                                                }}
+                                            >
+                                                <option value="">{field.child_id}, {field.xml_id}</option>
+                                                {assoData[associationName] &&
+                                                    assoData[associationName].map((entry, idx2) => (
+                                                        <option key={idx2} value={`${entry._id.encrypted_data},${entry._id.iv}`}>
+                                                            {entry._id.encrypted_data}, {entry.name}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                            {inputFields[associationName].length > 1 && (
+                                                <button className="btn btn-danger btn-sm ms-2" onClick={() => handleRemoveField(associationName, idx)}>
+                                                    Remove
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}</span>
+                                </div>
                             </div>
                         ))}
                     </div>

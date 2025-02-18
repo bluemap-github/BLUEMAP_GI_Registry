@@ -1,5 +1,4 @@
 import {DEPLOY_URL} from '../index.js'
-import {USER_SERIAL} from '../../userSerial.js'
 
 
 // Concept > Register.js

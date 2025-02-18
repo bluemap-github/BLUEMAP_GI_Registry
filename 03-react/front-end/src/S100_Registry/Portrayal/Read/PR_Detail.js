@@ -167,7 +167,6 @@ const PR_Detail = () => {
   const moveToList = () => {
     navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
   };
-  console.log(item_id, item_iv);
   useEffect(() => {
     const apiEndpoint = schemaApiTypes[item_type]; // Select the API based on item_type
     if (!apiEndpoint) {
@@ -265,14 +264,22 @@ const PR_Detail = () => {
       });
   }, [item_id, item_iv, item_type, regi_uri]);
   
-  const assoLogs = () => {
-    console.log(associations);
-  };
   
   // 스키마 및 비주얼 아이템 타입에 따라 렌더링
   return (
     <div>
-      <h3 style={{fontWeight: "bold"}}>Portrayal Information</h3>
+          {data ? (
+            <h2 style={{display: 'flex', alignItems: 'center'}}>
+              <span className="badge text-bg-success">Portrayal</span>
+              <span style={{marginLeft : "15px"}} className="badge text-bg-info">{data.itemType}</span>
+              <div style={{marginLeft : "15px"}}>{data.name}</div>
+            </h2>
+          ) : (
+            <p style={{ fontWeight: "bold", color: "gray" }}>
+              Loading portrayal information...
+            </p>
+          )}
+
       <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1', marginBottom: '15px' }}></div>
       {data ? (
         item_type === 'Alert' ? (

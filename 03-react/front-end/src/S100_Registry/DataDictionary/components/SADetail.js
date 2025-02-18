@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { USER_SERIAL } from '../../../userSerial';
 import { ItemContext } from '../../../context/ItemContext';
 import { getAttributeConstraints } from '../../components/requestAPI.js';
 import Cookies from 'js-cookie';
@@ -28,7 +27,6 @@ const SADetail = ({ item }) => {
     const movetoPage = (value) => {
         setItemDetails({
             view_item_type: value.itemType,
-            user_serial: USER_SERIAL,
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
@@ -37,7 +35,6 @@ const SADetail = ({ item }) => {
     const movetoConcept = (value) => {
         setItemDetails({
             view_item_type: value.itemType,
-            user_serial: USER_SERIAL,
             item_id: value._id.encrypted_data,
             item_iv: value._id.iv,
         });
@@ -107,7 +104,17 @@ const SADetail = ({ item }) => {
             <ConstraintModal IsOpened={IsConstOpened} onClose={onConstClose} items={constraints}/>
             <AddConstraint IsOpened={IsAddConstOpened} onClose={onAddConstClose} parentId={item}/>
             <DDRUpdate IsOpened={IsOpened} onClose={onClose} data={item} />
-            <h3 style={{fontWeight: "bold"}}>Simple Attribute</h3>
+            {item ? (
+                <h3 style={{display: 'flex', alignItems: 'center'}}>
+                <span className="badge text-bg-success">Data Dictionary</span>
+                <span style={{marginLeft : "15px"}} className="badge text-bg-info">Simple Attribute</span>
+                <div style={{marginLeft : "15px"}}>{item.name}</div>
+                </h3>
+            ) : (
+                <p style={{ fontWeight: "bold", color: "gray" }}>
+                Loading portrayal information...
+                </p>
+            )}
             <div style={{ height: '5px', borderBottom: '1px solid #d1d1d1', marginBottom: '15px' }}></div>
             <div className='p-3' style={{ flex: 7, backgroundColor: '#F8F8F8' }}>
                 <div className="card p-3">

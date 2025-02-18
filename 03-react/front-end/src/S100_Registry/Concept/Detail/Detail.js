@@ -37,6 +37,7 @@ function Detail() {
     loading: true
   });
 
+
   const openModal = () => setState(prev => ({ ...prev, isModalOpen: true }));
   const closeModal = () => setState(prev => ({ ...prev, isModalOpen: false }));
   
@@ -91,6 +92,17 @@ function Detail() {
 
   return (
     <div>
+      {state ? (
+          <h2 style={{display: 'flex', alignItems: 'center'}}>
+          <span className="badge text-bg-success">Concept</span>
+          <div style={{marginLeft : "15px"}}>{state.itemList.item.name}</div>
+          </h2>
+      ) : (
+          <p style={{ fontWeight: "bold", color: "gray" }}>
+          Loading portrayal information...
+          </p>
+      )}
+      <hr />
       <Base
         itemList={state.originData}
         isOpen={state.isModalOpen}

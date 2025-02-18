@@ -503,6 +503,7 @@ from bson.objectid import ObjectId
 
 # 공통 로직 함수
 def update_association(request, AssociationClass):
+    print(AssociationClass)
     item_iv = request.GET.get('item_iv')
     item_id = decrypt(request.GET.get('item_id'), item_iv)
 
@@ -553,9 +554,12 @@ def update_display_mode_association(request):
 @api_view(['PUT'])
 def update_message_association(request):
     item_type = request.GET.get('item_type')
-    if item_type != 'AlertInfo':
-        return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
-    data = request.data
+    # print(item_type)
+    # if item_type != 'AlertInfo':
+    #     return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
+    # print("??????????")
+    data = request.data.get('associations')[0]
+    # print(data, "??????????")
     parent_id = data.get('parent_id')
     child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
     data['child_id'] = child_id

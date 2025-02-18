@@ -51,6 +51,15 @@ const AlertInfoInput = ({ tagName, onFormSubmit }) => {
         }]);
     };
 
+    // 특정 세트를 삭제하는 함수
+    const removeSet = (setIndex) => {
+        setAllSets((prevSets) => {
+            const updatedSets = prevSets.filter((_, index) => index !== setIndex);
+            onFormSubmit(updatedSets);
+            return updatedSets;
+        });
+    };
+
     // 특정 세트의 alertInfoList를 업데이트하는 함수
     const updateAlertInfoList = (setIndex, alertInfoList) => {
         setAllSets((prevSets) => {
@@ -174,7 +183,16 @@ const AlertInfoInput = ({ tagName, onFormSubmit }) => {
 
                 {allSets.map((set, setIndex) => (
                     <div key={setIndex} id="AlertInfoTags" className="card p-3 mt-4">
-                        <h5>Set {setIndex + 1}</h5>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h5>{tagName} Set {setIndex + 1}</h5>
+                            <button 
+                                className="btn btn-outline-danger btn-sm"
+                                onClick={() => removeSet(setIndex)}
+                                disabled={allSets.length === 1} // 최소 1개는 유지
+                            >
+                                Remove Set
+                            </button>
+                        </div>
                         {/* <button onClick={() => indexLog(setIndex)}>인덱스별 로그</button> */}
                         <div style={{ backgroundColor: 'white' }}>
                             {set.alertInfoList.map((alertInfo, alertIndex) => (

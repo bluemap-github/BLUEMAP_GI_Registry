@@ -11,7 +11,6 @@ const InnerNav = () => {
 
     useEffect(() => {
         let newBreadcrumb = ['Home'];
-        console.log(location.pathname, `/${Cookies.get('REGISTRY_URI')}`);
 
         // 각 경로에 따른 브레드크럼 설정
         switch (location.pathname) {
