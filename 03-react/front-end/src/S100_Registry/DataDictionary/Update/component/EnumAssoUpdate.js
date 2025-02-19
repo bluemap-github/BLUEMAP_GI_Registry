@@ -3,14 +3,16 @@ import axios from 'axios';
 import Cookies from 'js-cookie'; 
 import { SEARCH_RELATED_ITEM } from '../../api.js';
 import { PUT_ASSOCIATED_ATTRIBUTE } from '../../api.js';
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const EnumAssoUpdate = ({ IsOpened, onClose, formData }) => {
-    const regi_uri = Cookies.get('REGISTRY_URI'); // 쿠키에서 레지스트리 URI 가져오기
+    const regi_uri = getDecryptedItem('REGISTRY_URI'); // 쿠키에서 레지스트리 URI 가져오기
     const [data, setData] = useState([]);
     const [selectedObj, setSelectedObj] = useState(null);
     const [selectedID, setSelectedID] = useState(''); // 초기값을 formData에서 가져오기 위해 변경
     const [isInvalid, setIsInvalid] = useState(true); // 선택 안된 상태
     const [isDifferent, setIsDifferent] = useState(false); // 선택된 값이 변경된 경우
+    const role = getDecryptedItem('role'); 
 
     const handleChange = (e) => {
         const selectedId = e.target.value;
@@ -137,10 +139,11 @@ const EnumAssoUpdate = ({ IsOpened, onClose, formData }) => {
                 </select>
             </div>
             <div className="text-end mt-3">
+            {role === 'owner' && (
                 <button 
                     className='btn btn-primary'
                     onClick={handleUpdate}
-                    >Update</button>
+                    >Update</button>)}
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { getDecryptedItem, setEncryptedItem } from "../../cryptoComponent/storageUtils";
 
 const buttonTypes = [
     { type: 'EnumeratedValue', label: 'Enumerated Values' },
@@ -16,7 +17,7 @@ const DDRChoose = ({ clickHandler, viewType }) => {
     const selectedLabel = buttonTypes.find((btn) => btn.type === viewType)?.label || '';
     const handleMovePage = () => {
         Cookies.set('createViewType', viewType);
-        navigate(`/${Cookies.get('REGISTRY_URI')}/create`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/create`);
     };
     return (
         <>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { PUT_MANAGEMENT_INFO } from '../api/api';
+import { getDecryptedItem } from '../../../cryptoComponent/storageUtils';
 
 const PRMngUpdateModal = ({ IsOpened, onClose, data }) => {
     // 데이터가 변경될 때마다 formData가 업데이트되도록 useEffect 사용
     const [formData, setFormData] = useState(data || {});
+    const role = getDecryptedItem('role'); 
 
     useEffect(() => {
         if (data) {
@@ -103,9 +105,10 @@ const PRMngUpdateModal = ({ IsOpened, onClose, data }) => {
                         ))}
                     </form>
                 </div>
+                {role === 'owner' && (
                 <div className='text-end'>
                     <button className="btn btn-secondary btn-sm" onClick={callUpdate}>Update</button>
-                </div>
+                </div>)}
             </div>
         </div>
     );

@@ -14,6 +14,7 @@ import { ItemContext } from '../../../context/ItemContext';
 import DynamicItemForm from './components/DynamicItemForm'; // Import the DynamicItemForm component
 import DynamicAssociationForm from './components/DynamicAssociationForm'; // Import the DynamicItemForm component
 import AlertInfoInput from './components/AlertInfoInput'; // Import the DynamicItemForm component
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 const associationPostAPI = {
   'symbol': POST_SYMBOL_ASSOCIATION,
@@ -52,7 +53,7 @@ const InsertPortrayalItem = () => {
   const [postType, setPostType] = useState("formData");  
   const [itemInputData, setItemInputData] = useState(null);      // State for ItemInput
   const [managementInfos, setManagementInfos] = useState([]);    // State for Management Info
-  const regi_uri = Cookies.get('REGISTRY_URI');
+  const regi_uri = getDecryptedItem('REGISTRY_URI');
   const { setItemDetails } = useContext(ItemContext);
   
   const [associationAndAPI, setAssociationAndAPI] = useState([]);
@@ -291,7 +292,7 @@ const InsertPortrayalItem = () => {
       alert('Item created successfully!');
   
       // 페이지 이동
-      navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+      navigate(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/detail`);
   
     } catch (error) {
       // 에러 핸들링
@@ -385,7 +386,7 @@ const InsertPortrayalItem = () => {
           });
           alert('Item created successfully!');
           // 모든 요청 완료 후 navigate 실행
-          navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+          navigate(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/detail`);
 
       } catch (error) {
           // 에러 핸들링

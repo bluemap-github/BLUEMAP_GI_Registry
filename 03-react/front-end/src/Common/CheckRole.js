@@ -1,9 +1,10 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { getDecryptedItem } from "../cryptoComponent/storageUtils";
 
 const CheckRole = ({ children }) => {
-    const role = Cookies.get('role');
+    const role = getDecryptedItem('role');
     const location = useLocation(); // 현재 경로에 접근
 
     // role 쿠키가 없을 경우 리디렉션 처리

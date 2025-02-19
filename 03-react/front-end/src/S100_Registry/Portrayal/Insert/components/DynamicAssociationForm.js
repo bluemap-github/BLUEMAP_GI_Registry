@@ -15,6 +15,7 @@ import {
 } from '../../api/api';  // Import the API URLs here
 
 import FullScreenLoadingSpinner from '../../../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 const callAPI = {
     'Symbol': [
         { 
@@ -195,11 +196,12 @@ const callAPI = {
 };
 
 const DynamicAssociationForm = ({ itemType, onFormSubmit }) => {
+    const role = getDecryptedItem('role');
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
     const [inputFields, setInputFields] = useState({}); // 각 어소시에이션별 입력 필드를 관리하기 위한 객체
 
-    const regi_uri = Cookies.get('REGISTRY_URI');
+    const regi_uri = getDecryptedItem('REGISTRY_URI');
 
     useEffect(() => {
         if (itemType && callAPI[itemType]) {
@@ -352,9 +354,13 @@ const DynamicAssociationForm = ({ itemType, onFormSubmit }) => {
                     {itemType === 'AlertInfo' ? (<></>): (
                         <h5>{item.name}</h5>)}
                         {item.isPlural && (
-                            <button className="btn btn-outline-secondary btn-sm mt-2" onClick={() => handleAddField(item.associationName)}>
-                                + Add Another {item.name}
-                            </button>
+                            <>
+                            {role === 'owner' && (
+                                <button className="btn btn-outline-secondary btn-sm mt-2" onClick={() => handleAddField(item.associationName)}>
+                                    + Add Another {item.name}
+                                </button>
+                            )}
+                            </>
                         )}
                     </div>
                     {/* 단일 선택 */}

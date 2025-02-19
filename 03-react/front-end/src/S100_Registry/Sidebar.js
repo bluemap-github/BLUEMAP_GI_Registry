@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
+import { getDecryptedItem, setEncryptedItem } from "../cryptoComponent/storageUtils";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -23,33 +24,33 @@ const Navbar = () => {
   };
 
   const goto_home = () => {
-    navigate(`/${Cookies.get('REGISTRY_URI')}`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}`);
   };
 
   const goto_concept_list = () => {
-    navigate(`/${Cookies.get('REGISTRY_URI')}/concept/list`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/list`);
   };
 
   const goto_create_item = () => {
-    navigate(`/${Cookies.get('REGISTRY_URI')}/create`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/create`);
   };
 
   const goto_ddr_list = () => {
-    navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/list`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/list`);
   };
 
   const goto_portayal_list = () => {
-    navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/list`);
   };
 
   const goto_create_portrayal_item = () => {
-    navigate(`/${Cookies.get('REGISTRY_URI')}/create-portrayal`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/create-portrayal`);
   };
 
   return (
     <nav className="sidebar-wide">
       <div>
-        <div onClick={goto_home} style={{ textDecoration: 'none', color: 'black', fontWeight: 'bold' }} className={isActive(`/${Cookies.get('REGISTRY_URI')}`)}>
+        <div onClick={goto_home} style={{ textDecoration: 'none', color: 'black', fontWeight: 'bold' }} className={isActive(`/${getDecryptedItem('REGISTRY_URI')}`)}>
           <div className='regi-menu' style={{paddingLeft: '10px'}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="currentColor" fillRule="evenodd" d="M8 13.5a5.5 5.5 0 1 0 0-11a5.5 5.5 0 0 0 0 11M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14m1-9.5a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-.25 3a.75.75 0 0 0-1.5 0V11a.75.75 0 0 0 1.5 0z" clipRule="evenodd"/></svg>
             REGISTRY INFO
@@ -76,17 +77,17 @@ const Navbar = () => {
           {isRegistryOpen && (
             <>
               {/* CONCEPT */}
-              <div onClick={goto_concept_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${Cookies.get('REGISTRY_URI')}/concept/list`)}`}>
+              <div onClick={goto_concept_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${getDecryptedItem('REGISTRY_URI')}/concept/list`)}`}>
                 <div className='regi-menu-item-inner'>CONCEPT</div>
               </div>
 
               {/* DATA DICTIONARY */}
-              <div onClick={goto_ddr_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/list`)}`}>
+              <div onClick={goto_ddr_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/list`)}`}>
                 <div className='regi-menu-item-inner'>DATA DICTIONARY</div>
               </div>
 
               {/* PORTRAYAL */}
-              <div onClick={goto_portayal_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`)}`}>
+              <div onClick={goto_portayal_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/list`)}`}>
                 <div className='regi-menu-item-inner'>PORTRAYAL</div>
               </div>
             </>
@@ -110,10 +111,10 @@ const Navbar = () => {
 
       {isCreateOpen && (
         <>
-          <div onClick={goto_create_item} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${Cookies.get('REGISTRY_URI')}/create`)}`}>
+          <div onClick={goto_create_item} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${getDecryptedItem('REGISTRY_URI')}/create`)}`}>
             <div className='regi-menu-item-inner'>CREATE CONCEPT DATA</div>
           </div>
-          <div onClick={goto_create_portrayal_item} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${Cookies.get('REGISTRY_URI')}/create-portrayal`)}`}>
+          <div onClick={goto_create_portrayal_item} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${getDecryptedItem('REGISTRY_URI')}/create-portrayal`)}`}>
             <div className='regi-menu-item-inner'>CREATE PORTRAYAL DATA</div>
           </div>
         </>

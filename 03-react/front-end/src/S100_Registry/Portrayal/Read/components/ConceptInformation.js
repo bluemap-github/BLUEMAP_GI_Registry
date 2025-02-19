@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import FullScreenLoadingSpinner from '../../../../Common/FullScreenLoadingSpinner';
-
+import { getDecryptedItem } from "../../../../cryptoComponent/storageUtils";
 // 테이블 필드 정의
 const tableFields = [
     { name: 'Name', key: 'name' },
@@ -21,7 +21,7 @@ const tableFields = [
 
 const ConceptInformation = ({ items }) => {
     const navigate = useNavigate();
-    const role = Cookies.get('role');  
+    const role = getDecryptedItem('role');  
 
     if (!items) {
         return <FullScreenLoadingSpinner />;

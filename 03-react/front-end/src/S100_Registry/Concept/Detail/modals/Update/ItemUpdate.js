@@ -3,11 +3,13 @@ import { ItemContext } from '../../../../../context/ItemContext';
 import axios from 'axios';
 import { PUT_ITEM_URL } from '../../../api';
 import UpdateInput from '../tags/UpdateInput';
+import { getDecryptedItem } from "../../../../../cryptoComponent/storageUtils";
 
 function ItemUpdate({ items, onClose }) {
     const [item, setItem] = useState(items);
     const { itemDetails } = useContext(ItemContext); 
     const { item_id, item_iv } = itemDetails;
+    const role = getDecryptedItem('role'); 
 
     useEffect(() => {
         // setItem(items); // props로 받은 items를 초기 상태로 설정
@@ -73,9 +75,10 @@ function ItemUpdate({ items, onClose }) {
                         options={field.options} // Pass options for select fields
                     />
                 ))}
+                {role === 'owner' && (
                 <div className='text-end'>
                     <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>Update</button>
-                </div>
+                </div>)}
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie'; // Import Cookies library
 import TableContents from './tags/TableContens';
+import { getDecryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const ToggleButtonIcon = ({ isOpened }) => (
     isOpened ? (
@@ -27,7 +28,7 @@ const tableFields = [
 
 function ManagementInfoDetail({ itemList, handleUpdateButtonClick, handleFollowIdx, handleKeyIdx }) {
     const [toggleOpened, setToggleOpened] = useState(true);
-    const role = Cookies.get('role'); // Get the user's role from cookies
+    const role = getDecryptedItem('role'); 
 
     const handleClick = (idx) => {
         handleUpdateButtonClick(2);

@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SEARCH_RELATED_ITEM } from '../../DataDictionary/api';
 import Cookies from 'js-cookie';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 function AddAttributes({ handleRelatedEnumList, relatedEnumList, componentType, InputTitle }) {
+    const role = getDecryptedItem('role');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedValues, setSelectedValues] = useState(relatedEnumList);
     const [selectBoxes, setSelectBoxes] = useState([{}]);
     const [filteredList, setFilteredList] = useState([]);
-    const regi_uri = Cookies.get('REGISTRY_URI');
+    const regi_uri = getDecryptedItem('REGISTRY_URI');
     const [searchTerm, setSearchTerm] = useState('');
     const [itemTypes, setItemTypes] = useState('All');
 
@@ -99,13 +101,15 @@ function AddAttributes({ handleRelatedEnumList, relatedEnumList, componentType, 
                         )}
                     </div>
 
-                    
+                    <>
+                    {role === 'owner' && (
                     <button 
                         className="btn btn-outline-secondary btn-sm mt-2" 
                         onClick={addSelectBox}
                     >
                         + Add Related Values
-                    </button>
+                    </button>)}
+                    </>
                 </div>
 
                 <div className="mt-3">

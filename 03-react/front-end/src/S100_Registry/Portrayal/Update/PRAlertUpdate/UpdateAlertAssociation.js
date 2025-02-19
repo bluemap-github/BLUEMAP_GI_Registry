@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GET_ALERT_HIGHLIGHT_LIST, GET_ALERT_MESSAGE_LIST, PUT_HIGHLIGHT_ASSOCIATION, PUT_MESSAGE_ASSOCIATION } from '../../api/api';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const UpdateAlertAssociation = ({ data, priorityID, onClose}) => {
     // console.log(JSON.stringify(data[priorityID]?.message), "?????");
@@ -11,7 +12,7 @@ const UpdateAlertAssociation = ({ data, priorityID, onClose}) => {
     const [getMessage, setGetMessage] = useState([]);
     const [isupdatedHighlight, setIsUpdatedHighlight] = useState(false);    
     const [isupdatedMessage, setIsUpdatedMessage] = useState(false);
-    const regi_uri = Cookies.get('REGISTRY_URI');
+    const regi_uri = getDecryptedItem('REGISTRY_URI');
     
     // API 요청에 사용할 기본 파라미터
     const params = {

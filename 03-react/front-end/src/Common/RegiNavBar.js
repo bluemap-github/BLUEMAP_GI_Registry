@@ -4,13 +4,14 @@ import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
 import { SIGN_IN, ENTER_REGI } from './PageLinks';
 import NavDropDown from './NavDropDown';
 import { getOwnRegistries } from '../User/myPage/GetRegistery';
+import { getDecryptedItem, setEncryptedItem } from "../cryptoComponent/storageUtils";
 
 const RegiNavBar = ({ userInfo }) => {
     const [ownRegistries, setOwnRegistries] = useState([]);
     const [error, setError] = useState(null);
     const [selectedRegistry, setSelectedRegistry] = useState(null); // 현재 선택된 레지스트리 상태
     const navigate = useNavigate();
-    const role = Cookies.get('role'); // 쿠키에서 role을 가져옴
+    const role = getDecryptedItem('role'); // 쿠키에서 role을 가져옴
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,13 +20,13 @@ const RegiNavBar = ({ userInfo }) => {
                 setOwnRegistries(result);
 
                 // 쿠키에서 REGISTRY_URI를 가져와 현재 레지스트리로 설정
-                const savedRegistryURI = Cookies.get('REGISTRY_URI');
+                const savedRegistryURI = getDecryptedItem('REGISTRY_URI');
                 const initialRegistry = result.find(reg => reg.uniformResourceIdentifier === savedRegistryURI) || result[0];
                 
                 if (initialRegistry) {
                     setSelectedRegistry(initialRegistry);
-                    Cookies.set('REGISTRY_URI', initialRegistry.uniformResourceIdentifier, { expires: 7 });
-                    Cookies.set('REGISTRY_NAME', initialRegistry.name, { expires: 7 });
+                    setEncryptedItem('REGISTRY_URI', initialRegistry.uniformResourceIdentifier, { expires: 7 });
+                    setEncryptedItem('REGISTRY_NAME', initialRegistry.name, { expires: 7 });
                 }
             } catch (error) {
                 setError(error.message);
@@ -40,8 +41,8 @@ const RegiNavBar = ({ userInfo }) => {
 
         if (registry) {
             setSelectedRegistry(registry); // 선택된 레지스트리 상태 업데이트
-            Cookies.set('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 });
-            Cookies.set('REGISTRY_NAME', registry.name, { expires: 7 });
+            setEncryptedItem('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 });
+            setEncryptedItem('REGISTRY_NAME', registry.name, { expires: 7 });
             navigate(ENTER_REGI(registry.uniformResourceIdentifier));
         }
     };

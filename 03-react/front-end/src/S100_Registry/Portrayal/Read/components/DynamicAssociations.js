@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { ItemContext } from '../../../../context/ItemContext';
 import PRAssoUpdateModal from '../../Update/PRAssoUpdateModal';
+import { getDecryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const DynamicAssociations = ({ associationItems, UpdateAssoType , itemID, itemIV}) => {
     
-    const role = Cookies.get('role');  // role 가져오기
+    const role = getDecryptedItem('role');  // role 가져오기
     const navigate = useNavigate();
     const { setItemDetails } = useContext(ItemContext);
     const moveToAssociatedItem = (value) => {
@@ -15,7 +16,7 @@ const DynamicAssociations = ({ associationItems, UpdateAssoType , itemID, itemIV
             item_id: value.child_id,
             item_iv: value.child_iv,
         });
-        navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/detail`);
     };
     const [IsOpened, setIsOpened] = useState(false);
     const handleUpdateClick = () => {

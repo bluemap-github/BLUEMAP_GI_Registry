@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
 import { GET_REGISTRY_DETAIL } from '../User/api';
+import { getDecryptedItem, setEncryptedItem } from "../cryptoComponent/storageUtils";
 
 const RegiHome = () => {
-    const regi_uri = Cookies.get('REGISTRY_URI'); // 쿠키에서 REGISTRY_URI 가져오기
+    const regi_uri = getDecryptedItem('REGISTRY_URI'); // 쿠키에서 REGISTRY_URI 가져오기
     const navigate = useNavigate();
     const [registryInfo, setRegistryInfo] = useState(null);
 

@@ -7,6 +7,7 @@ import AddAlertInfoModal from '../../Update/PRAlertUpdate/AddAlertInfoModal';
 import {DELETE_ALERT_INFO, DELETE_ALERT} from '../../api/api';
 import Cookies from 'js-cookie';
 import FullScreenLoadingSpinner from '../../../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const tableFields = [
     { name: 'XML ID', key: 'xmlID' },
@@ -14,6 +15,7 @@ const tableFields = [
 ];
 
 const AlertDetails = ({ items }) => {
+    const role = getDecryptedItem('role');
     const [associations, setAssociations] = useState({});
     const [updateType, setUpdateType] = useState('');
     const [updatePage, setUpdatePage] = useState(0);
@@ -132,7 +134,7 @@ const AlertDetails = ({ items }) => {
                     item_iv: items._id.iv
                 } });
                 alert('Alert deleted successfully');
-                navigate(`${Cookies.get('REGISTRY_URI')}/portrayal/list`);
+                navigate(`${getDecryptedItem('REGISTRY_URI')}/portrayal/list`);
             } catch (error) {
                 console.error('Error deleting alert:', error);
             }
@@ -175,8 +177,14 @@ const AlertDetails = ({ items }) => {
                         </tbody>
                     </table>
                     <div className='text-end'>
-                        <button className='btn btn-sm btn-outline-primary' onClick={() => handleUpdateClick('AlertItem', 0)}>Update Alert</button>
-                        <button className='btn btn-sm btn-outline-danger' onClick={deleteAlert}>Delete Alert</button>
+                        <>
+                        {role === 'owner' && (
+                            <>
+                            <button className='btn btn-sm btn-outline-primary' onClick={() => handleUpdateClick('AlertItem', 0)}>Update Alert</button>
+                            <button className='btn btn-sm btn-outline-danger' onClick={deleteAlert}>Delete Alert</button>
+                        </>
+                        )}
+                        </>
                     </div>
                 </div>
             </div>
@@ -185,9 +193,13 @@ const AlertDetails = ({ items }) => {
             <div className="mb-3 p-3" style={{ backgroundColor: '#F8F8F8' }}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <h3>Route Monitor</h3>
-                    <div className='text-end'>
-                        <button className='btn btn-outline-secondary' onClick={() => handleAddAlertInfo('routeMonitor')}>+ Add Alert Info</button>
-                    </div>
+                    <>
+                    {role === 'owner' && (
+                        <div className='text-end'>
+                            <button className='btn btn-outline-secondary' onClick={() => handleAddAlertInfo('routeMonitor')}>+ Add Alert Info</button>
+                        </div>
+                    )}
+                    </>
                 </div>
                 <div className="mt-3 mb-3 card p-3">
                     <table className="table table-sm">
@@ -203,7 +215,9 @@ const AlertDetails = ({ items }) => {
                                 <tr key={index}>
                                     <th className="text-center" style={{ width: '25%' }}>
                                         <p>Priority, {monitor._id}</p>
+                                        {role === 'owner' && (   
                                         <button className='btn btn-sm btn-outline-danger' onClick={() => deletePriority(monitor._id)}>Delete priority</button>
+                                        )}
                                     </th>
                                     <td>
                                         <ul>
@@ -214,14 +228,19 @@ const AlertDetails = ({ items }) => {
                                             ))}
                                         </ul>
                                         <div className='text-end'>
+                                        {role === 'owner' && (
                                             <button className='btn btn-sm btn-outline-primary'  onClick={() => handleUpdateClick('RouteMonitor', index)}>Update Route Monitor</button>
+                                        )}
                                         </div>
                                         <hr style={{ borderTop: '1px solid gray', width: '100%', margin: '20px 0' }} />
                                         {/* 이 부분이  Route Monitor Association 부분*/}
                                         <p><strong>Message Association:</strong> {renderAssociationData(associations[monitor._id]?.message?.data || [])}</p>
                                         <p><strong>Highlight Association:</strong> {renderAssociationData(associations[monitor._id]?.highlight?.data || [])}</p>
                                         <div className='text-end'>
+                                            
+                                        {role === 'owner' && (
                                             <button className='btn btn-sm btn-outline-primary' onClick={() => handleAssoUpdateClick('AlertAssociation', 0, monitor._id)}>Update Route Monitor Association</button>
+                                        )}
                                         </div>
                                     </td>
                                 </tr>
@@ -235,9 +254,13 @@ const AlertDetails = ({ items }) => {
             <div className="mb-3 p-3" style={{ backgroundColor: '#F8F8F8' }}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <h3>Route Plan</h3>
-                    <div className='text-end'>
-                        <button className='btn btn-outline-secondary'onClick={() => handleAddAlertInfo('routePlan')}>+ Add Alert Info</button>
-                    </div>
+                    <>
+                    {role === 'owner' && (
+                        <div className='text-end'>
+                            <button className='btn btn-outline-secondary'onClick={() => handleAddAlertInfo('routePlan')}>+ Add Alert Info</button>
+                        </div>
+                    )}
+                    </>
                 </div>
                 <div className="mt-3 mb-3 card p-3">
                     <table className="table table-sm">
@@ -252,8 +275,10 @@ const AlertDetails = ({ items }) => {
                             {items.routePlan?.map((plan, index) => (
                                 <tr key={index}>
                                     <th className="text-center" style={{ width: '25%' }}>
-                                        <p>Priority, {plan._id}</p>                                        
+                                        <p>Priority, {plan._id}</p>              
+                                        {role === 'owner' && (                             
                                         <button className='btn btn-sm btn-outline-danger' onClick={() => deletePriority(plan._id)}>Delete priority</button>
+                                        )}
                                     </th>
                                     <td>
                                         <ul>
@@ -265,14 +290,18 @@ const AlertDetails = ({ items }) => {
                                             ))}
                                         </ul>
                                         <div className='text-end'>
+                                        {role === 'owner' && (
                                             <button className='btn btn-sm btn-outline-primary' onClick={() => handleUpdateClick('RoutePlan', index)}>Update Route Plan</button>
-                                        </div>
+                                        )}
+                                            </div>
                                         <hr style={{ borderTop: '1px solid gray', width: '100%', margin: '20px 0' }} />
                                         {/* API 결과 출력 */}
                                         <p><strong>Message Association:</strong> {renderAssociationData(associations[plan._id]?.message?.data || [])}</p>
                                         <p><strong>Highlight Association:</strong> {renderAssociationData(associations[plan._id]?.highlight?.data || [])}</p>
                                         <div className='text-end'>
+                                        {role === 'owner' && (
                                             <button className='btn btn-sm btn-outline-primary' onClick={() => handleAssoUpdateClick('AlertAssociation', 0, plan._id)}>Update Route Plan Association</button>
+                                        )}
                                         </div>
                                     </td>
                                 </tr>

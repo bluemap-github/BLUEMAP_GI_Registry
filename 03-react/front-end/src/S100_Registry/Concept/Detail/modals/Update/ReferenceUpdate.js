@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from 'axios';
 import { PUT_R_URL } from '../../../api';
 import UpdateInput from '../tags/UpdateInput';
+import { getDecryptedItem } from "../../../../../cryptoComponent/storageUtils";
 
 const inputFields = [
     { type: "text", name: "referenceIdentifier", spanName: "*Reference Identifier" },
@@ -11,6 +12,7 @@ const inputFields = [
 function ReferenceUpdate({ itemList, onClose, followIdx }) {
     const str = JSON.stringify(itemList.references[followIdx]);
     const [R, setR] = useState(JSON.parse(str)); 
+        const role = getDecryptedItem('role'); 
 
     const RChange = (event) => {
         const { name, value } = event.target;
@@ -56,9 +58,10 @@ function ReferenceUpdate({ itemList, onClose, followIdx }) {
                         spanName={spanName} 
                     />
                 ))}
+                {role === 'owner' && (
                 <div className='text-end'>
                     <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>update</button>
-                </div>
+                </div>)}
             </div>
         </div>
     );

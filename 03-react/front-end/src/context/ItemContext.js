@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
+import { getDecryptedItem, setEncryptedItem, removeEncryptedItem } from "../cryptoComponent/storageUtils";
 
 // Context 생성
 export const ItemContext = createContext();
@@ -8,7 +9,7 @@ export const ItemContext = createContext();
 export const ItemProvider = ({ children }) => {
     // 쿠키에서 초기 상태 가져오기
     const getInitialItemDetails = () => {
-        const savedItemDetails = Cookies.get('itemDetails');
+        const savedItemDetails = getDecryptedItem('itemDetails');
         return savedItemDetails ? JSON.parse(savedItemDetails) : null;
     };
 
@@ -18,9 +19,9 @@ export const ItemProvider = ({ children }) => {
     // itemDetails가 변경될 때마다 쿠키에 저장
     useEffect(() => {
         if (itemDetails) {
-            Cookies.set('itemDetails', JSON.stringify(itemDetails), { expires: 7 }); // 쿠키 유효 기간 7일
+            setEncryptedItem('itemDetails', JSON.stringify(itemDetails), { expires: 7 }); // 쿠키 유효 기간 7일
         } else {
-            Cookies.remove('itemDetails');
+            removeEncryptedItem('itemDetails');
         }
     }, [itemDetails]);
 

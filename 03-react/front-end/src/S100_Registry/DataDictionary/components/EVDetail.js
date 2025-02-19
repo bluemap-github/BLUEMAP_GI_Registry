@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import TableContents from '../../Concept/Detail/components/tags/TableContens';
 import DDRUpdate from '../Update/DDRUpdate';
 import AssoUpdate from '../Update/AssoUpdate';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 // Listed Value와 Associated Attribute의 필드 정의
 const listedValueFields = [
@@ -22,7 +23,7 @@ const associatedAttributeFields = [
 ];
 
 const EVDetail = ({ item }) => {
-
+    const role = getDecryptedItem('role'); 
     const { setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
 
@@ -32,7 +33,7 @@ const EVDetail = ({ item }) => {
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/detail`);
     };
 
     const movetoConcept = (value) => {
@@ -41,7 +42,7 @@ const EVDetail = ({ item }) => {
             item_id: value._id.encrypted_data,
             item_iv: value._id.iv,
         });
-        navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/detail`);
     };
 
     const [IsOpened, setIsOpened] = useState(false);
@@ -103,9 +104,10 @@ const EVDetail = ({ item }) => {
                         </tbody>
                     </table>
                     <div className="text-end">
+                    {role === 'owner' && (                        
                         <button onClick={handleUpdateClick} className='btn btn-sm btn-secondary'>
                             Update
-                        </button>
+                        </button>)}
                     </div>
                 </div>
             </div>
@@ -149,6 +151,7 @@ const EVDetail = ({ item }) => {
                             ))}
                         </tbody>
                     </table>
+                    {role === 'owner' && (        
                     <div className="text-end">
                         <button 
                             className='btn btn-sm btn-secondary'
@@ -156,7 +159,7 @@ const EVDetail = ({ item }) => {
                             >
                             Update
                         </button>
-                    </div>
+                    </div>)}
                 </div>
             </div>
         </div>

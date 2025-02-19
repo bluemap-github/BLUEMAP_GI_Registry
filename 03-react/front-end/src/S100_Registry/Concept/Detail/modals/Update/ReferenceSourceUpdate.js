@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { PUT_RS_URL } from "../../../api";
 import UpdateInput from '../tags/UpdateInput';
+import { getDecryptedItem } from "../../../../../cryptoComponent/storageUtils";
 
 const similarityOptions = ["identical", "restyled", "contextAdded", "generalization", "specialization", "unspecified"];
 const inputFields = [
@@ -11,6 +12,7 @@ const inputFields = [
 
 function ReferenceSourceUpdate({ referenceSources, onClose }) {
     const [RS, setRS] = useState(referenceSources[0]);
+    const role = getDecryptedItem('role'); 
 
     const RChange = (event) => {
         const { name, value } = event.target;
@@ -63,9 +65,10 @@ function ReferenceSourceUpdate({ referenceSources, onClose }) {
                         ))}
                     </select>
                 </div>
+                {role === 'owner' && (
                 <div className='text-end'>
                     <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>update</button>
-                </div>
+                </div>)}
             </div>
         </div>
     );

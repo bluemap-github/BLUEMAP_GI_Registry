@@ -3,6 +3,7 @@ import axios from 'axios';
 import { PUT_SUB_ATTRIBUTE, PUT_DISTINCTION } from '../../api.js';
 import { SEARCH_RELATED_ITEM } from '../../../DataDictionary/api.js';
 import Cookies from 'js-cookie';
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const UpdateAPIs = {
     'ComplexAttribute': PUT_SUB_ATTRIBUTE,
@@ -22,7 +23,8 @@ const callAPIItemTypes = {
 };
 
 const SubDistinctUpdate = ({ TagItemType, onClose, formData }) => {
-    const regi_uri = Cookies.get('REGISTRY_URI');  // 쿠키에서 레지스트리 URI 가져오기
+    const role = getDecryptedItem('role'); // Get the user's role from cookies
+    const regi_uri = getDecryptedItem('REGISTRY_URI');  // 쿠키에서 레지스트리 URI 가져오기
     const [selectedValues, setSelectedValues] = useState([]);    
     const [searchResults, setSearchResults] = useState([]);  // API로 가져온 데이터를 저장할 상태
     const [filteredList, setFilteredList] = useState([]);  // 필터링된 리스트
@@ -103,12 +105,15 @@ const SubDistinctUpdate = ({ TagItemType, onClose, formData }) => {
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h3>Update</h3>
-                <button 
-                    className="btn btn-outline-secondary btn-sm mt-2" 
-                    onClick={addSelectBox}
-                >
-                    + Add Related Values
-                </button>
+                <>{role === 'owner' && (
+                        <button 
+                        className="btn btn-outline-secondary btn-sm mt-2" 
+                        onClick={addSelectBox}
+                    >
+                        + Add Related Values
+                    </button>
+                )}
+                </>
             </div>
             <div className="mt-3">
                 {selectedValues.map((value, index) => (

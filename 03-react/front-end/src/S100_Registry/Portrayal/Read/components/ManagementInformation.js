@@ -4,6 +4,7 @@ import PRMngUpdateModal from '../../Update/PRMngUpdateModal'; // Update 모달 �
 import PRMngAddModal from '../../Update/PRMngAddModal';
 import axios from 'axios';
 import {DEL_MANAGEMENT_INFO} from '../../api/api';
+import { getDecryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 // 테이블 필드 정의
 const tableFields = [
@@ -35,7 +36,7 @@ const ManagementInformation = ({ items, item_id, item_iv }) => {
     const [updateItem, setUpdateItem] = useState({});
     const [isOpened, setIsOpened] = useState(false);
     const [isAddOpened, setIsAddOpened] = useState(false);
-    const role = Cookies.get('role');
+    const role = getDecryptedItem('role');
 
     const handleUpdateClick = (item) => {
         setUpdateItem(item);
@@ -130,10 +131,11 @@ const ManagementInformation = ({ items, item_id, item_iv }) => {
                         </table>
                         {role === 'owner' && (
                             <div className='text-end'>
+                                {role === 'owner' && (
                                 <button
                                     className='btn btn-secondary btn-sm'
                                     onClick={() => handleUpdateClick(item)}
-                                >Update</button>
+                                >Update</button>)}
                                 {items.length > 1 && (
                                     <button className='btn btn-danger btn-sm m-1' onClick={() => handleDeleteClick(item)}>
                                         Delete

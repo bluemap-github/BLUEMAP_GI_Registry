@@ -6,6 +6,7 @@ import ManagementInformation from './components/ManagementInformation';
 import DynamicAssociations from './components/DynamicAssociations';
 import AlertDetails from './components/AlertDetails';
 import FullScreenLoadingSpinner from '../../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -162,10 +163,10 @@ const PR_Detail = () => {
   const [managementInfo, setManagementInfo] = useState(null);
   const [associations, setAssociations] = useState(null);
 
-  const regi_uri = Cookies.get('REGISTRY_URI');
+  const regi_uri = getDecryptedItem('REGISTRY_URI');
   
   const moveToList = () => {
-    navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/list`);
   };
   useEffect(() => {
     const apiEndpoint = schemaApiTypes[item_type]; // Select the API based on item_type

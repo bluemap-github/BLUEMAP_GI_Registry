@@ -5,18 +5,19 @@ import { ItemContext } from '../../../context/ItemContext';
 import TableContents from '../../Concept/Detail/components/tags/TableContens';
 import DDRUpdate from '../Update/DDRUpdate';
 import AssoUpdate from '../Update/AssoUpdate';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 const FDetail = ({ item }) => {
     const { setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
-
+    const role = getDecryptedItem('role');
     const movetoPage = (value) => {
         setItemDetails({
             view_item_type: value.itemType,
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/detail`);
     };
 
     const movetoConcept = (value) => {
@@ -25,7 +26,7 @@ const FDetail = ({ item }) => {
             item_id: value._id.encrypted_data,
             item_iv: value._id.iv,
         });
-        navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/detail`);
     };
 
     const fields = [
@@ -102,11 +103,12 @@ const FDetail = ({ item }) => {
                                 </tr>
                             </tbody>
                         </table>
+                        {role === 'owner' && (  
                         <div className="text-end">
                             <button onClick={handleUpdateClick} className='btn btn-sm btn-secondary'>
                                 Update
                             </button>
-                        </div>
+                        </div>)}
                     </div>
                 </div>
 
@@ -137,11 +139,12 @@ const FDetail = ({ item }) => {
                                 )}
                             </tbody>
                         </table>
+                        {role === 'owner' && (  
                         <div className="text-end">
                             <button onClick={handleAssoUpdateClick} className='btn btn-sm btn-secondary'>
                                 Update
                             </button>
-                        </div>
+                        </div>)}
                     </div>
                 </div>
             </div>

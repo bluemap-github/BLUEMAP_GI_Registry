@@ -6,6 +6,7 @@ import { ItemContext } from '../../context/ItemContext';
 import { CONCEPT_DETAIL } from '../../Common/PageLinks';
 import { REGISTER_ITEM_LIST_URL } from './api';
 import Toast from '../Toast';
+import { getDecryptedItem, setEncryptedItem } from "../../cryptoComponent/storageUtils";
 
 function Register() {
   const [itemList, setItemList] = useState([]);
@@ -22,7 +23,7 @@ function Register() {
 
   const fetchItems = async (updatedPage = page) => {
     try {
-      const regi_uri = Cookies.get('REGISTRY_URI');  // 쿠키에서 REGISTRY_URI를 가져옴
+      const regi_uri = getDecryptedItem('REGISTRY_URI');  // 쿠키에서 REGISTRY_URI를 가져옴
       const response = await axios.get(REGISTER_ITEM_LIST_URL, {
         params: {
           regi_uri,
@@ -78,7 +79,7 @@ function Register() {
       item_id: item._id.encrypted_data,
       item_iv: item._id.iv,
     });
-    navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);  // 쿠키에서 REGISTRY_URI를 가져옴
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/detail`);  // 쿠키에서 REGISTRY_URI를 가져옴
   };
 
   const renderSortArrow = (key) => {
@@ -125,7 +126,7 @@ function Register() {
           </div>
         </div>
         <div>
-          <button className="btn btn-outline-primary" onClick={() => navigate(`/${Cookies.get('REGISTRY_URI')}/create`)}>+ Create Concept data</button>
+          <button className="btn btn-outline-primary" onClick={() => navigate(`/${getDecryptedItem('REGISTRY_URI')}/create`)}>+ Create Concept data</button>
         </div>
       </div>
       <table className="table table-hover table-bordered" style={{ tableLayout: 'fixed', marginTop: '20px' }}>

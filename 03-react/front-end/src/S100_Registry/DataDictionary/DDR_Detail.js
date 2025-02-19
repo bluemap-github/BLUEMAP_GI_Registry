@@ -13,6 +13,7 @@ import IDetail from './components/IDetail';
 import { DDR_LIST } from '../../Common/PageLinks';
 import Cookies from 'js-cookie'; 
 import FullScreenLoadingSpinner from '../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../cryptoComponent/storageUtils";
 
 const componentMap = {
     'EnumeratedValue': EVDetail,
@@ -37,7 +38,7 @@ const DDR_Detail = () => {
     const [item, setItem] = useState(null);
     const navigate = useNavigate();
     const moveToPage = () => {
-        navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/list`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/list`);
     }
     useEffect(() => {
         const fetchItemList = async () => {

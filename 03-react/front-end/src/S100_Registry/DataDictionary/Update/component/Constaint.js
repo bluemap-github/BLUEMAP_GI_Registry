@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PUT_CONSTRAINT } from "../../api";
+import { getDecryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const conceptTableFields = [
   { name: 'String Length', key: 'stringLength', inputType: 'text' },
@@ -11,6 +12,8 @@ const conceptTableFields = [
 
 const Constraint = ({ items, IsOpened, onClose }) => {
   const [constraint, setConstraint] = useState({});
+  const role = getDecryptedItem('role'); 
+  
 
   // Initialize the form with the first item from the items array
   useEffect(() => {
@@ -89,9 +92,10 @@ const Constraint = ({ items, IsOpened, onClose }) => {
             </div>
             ))}
         </div>
+        {role === 'owner' && (
         <div className='text-end mt-3'>
           <button onClick={updateConst} className="btn btn-secondary" aria-label="Close">Update</button>
-        </div>
+        </div>)}
       </div>
     </div>
   );

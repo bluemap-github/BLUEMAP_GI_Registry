@@ -3,11 +3,12 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { GET_REGI_API_INFO } from '../api';
 import FullScreenLoadingSpinner from '../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../cryptoComponent/storageUtils";
 
 const SettingRegistry = () => {
     const [loading, setLoading] = useState(true); // 로딩 상태 관리
     const [registry, setRegistry] = useState(null); // 레지스트리 데이터 상태 관리
-    const regi_uri = Cookies.get('REGISTRY_URI');
+    const regi_uri = getDecryptedItem('REGISTRY_URI');
 
     useEffect(() => {
         const fetchData = async () => {

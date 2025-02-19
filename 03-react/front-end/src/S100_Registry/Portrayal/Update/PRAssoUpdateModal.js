@@ -23,6 +23,7 @@ import {
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import FullScreenLoadingSpinner from '../../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 const associationPostAPI = {
     'symbol': PUT_SYMBOL_ASSOCIATION,
     'icon': PUT_ICON_ASSOCIATION,
@@ -198,6 +199,7 @@ const callAPI = {
 
 
 const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemID, itemIV }) => {
+    const role = getDecryptedItem('role');
     const [assoData, setAssoData] = useState({});
     const [inputFields, setInputFields] = useState({});
     const [loading, setLoading] = useState(true);
@@ -207,7 +209,7 @@ const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemI
             const fetchData = async () => {
                 setLoading(true);
                 try {
-                    const regi_uri = Cookies.get('REGISTRY_URI');
+                    const regi_uri = getDecryptedItem('REGISTRY_URI');
     
                     // API 호출
                     const apiPromises = callAPI[UpdateAssoType].map((item) => {
@@ -355,9 +357,12 @@ const PRAssoUpdateModal = ({ IsOpened, onClose, propsData, UpdateAssoType, itemI
                                 <div style={{ display: 'flex' }}>
                                 <div style={{display: 'flex', alignItems: 'center', marginRight: '8px'}}>{associationName}</div>
                                     <span>{callAPI[UpdateAssoType].find((item) => item.associationName === associationName).isPlural && (
+                                        <> 
+                                        {role === 'owner' && (
                                         <button className="btn btn-outline-secondary btn-sm" onClick={() => handleAddField(associationName)}>
                                             + add
-                                        </button>
+                                        </button>)}
+                                        </>
                                     )}</span>
                                 </div>
                                 <div key={index} >

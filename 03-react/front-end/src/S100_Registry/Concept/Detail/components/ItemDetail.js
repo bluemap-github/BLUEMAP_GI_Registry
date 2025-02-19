@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ItemContext } from '../../../../context/ItemContext';
 import TableContents from './tags/TableContens';
 import Cookies from 'js-cookie'; 
+import { getDecryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const tableFields = [
     { name: 'Name', key: 'name' },
@@ -31,7 +32,7 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
             item_iv: itemList.item._id.iv,
         });
         setTimeout(() => {
-            navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/detail`);
         }, 0);
     };
 
@@ -41,7 +42,7 @@ function ItemDetail({ itemList, handleUpdateButtonClick, handleKeyIdx }) {
         handleKeyIdx(idx);
     };
 
-    const role = Cookies.get('role'); // 쿠키에서 role 정보를 가져옴
+    const role = getDecryptedItem('role'); // 쿠키에서 role 정보를 가져옴
     if (!itemList || !itemList.item) {
         return <div>No item data available</div>;
     }

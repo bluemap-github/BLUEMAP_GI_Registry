@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { getDecryptedItem, setEncryptedItem } from "../cryptoComponent/storageUtils";
 
 const InnerNav = () => {
     const location = useLocation();
@@ -17,28 +18,28 @@ const InnerNav = () => {
             case '/':
                 newBreadcrumb = ['Home'];
                 break;
-            case `/${Cookies.get('REGISTRY_URI')}/concept/list`:
+            case `/${getDecryptedItem('REGISTRY_URI')}/concept/list`:
                 newBreadcrumb = ['Home', 'Concept Register', 'Item List'];
                 break;
-            case `/${Cookies.get('REGISTRY_URI')}/concept/detail`:
+            case `/${getDecryptedItem('REGISTRY_URI')}/concept/detail`:
                 newBreadcrumb = ['Home', 'Concept Register', 'Item Detail'];
                 break;
-            case `/${Cookies.get('REGISTRY_URI')}/create`:
+            case `/${getDecryptedItem('REGISTRY_URI')}/create`:
                 newBreadcrumb = ['Home', 'Create Concept & Data Dictionary Item'];
                 break;
-            case `/${Cookies.get('REGISTRY_URI')}/dataDictionary/list`:
+            case `/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/list`:
                 newBreadcrumb = ['Home', 'Data Dictionary Register', 'Item List'];
                 break;
-            case `/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`:
+            case `/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/detail`:
                 newBreadcrumb = ['Home', 'Data Dictionary Register', 'Item Detail'];
                 break;
-            case `/${Cookies.get('REGISTRY_URI')}/portrayal/list`:
+            case `/${getDecryptedItem('REGISTRY_URI')}/portrayal/list`:
                 newBreadcrumb = ['Home', 'Portrayal Register', 'Item List'];
                 break;
-            case `/${Cookies.get('REGISTRY_URI')}/portrayal/detail`:
+            case `/${getDecryptedItem('REGISTRY_URI')}/portrayal/detail`:
                 newBreadcrumb = ['Home', 'Portrayal Register', 'Item Detail'];
                 break;
-            case `/${Cookies.get('REGISTRY_URI')}/create-portrayal`:
+            case `/${getDecryptedItem('REGISTRY_URI')}/create-portrayal`:
                 newBreadcrumb = ['Home', 'Portrayal Register', 'Create Item'];
                 break;
             default:
@@ -50,13 +51,13 @@ const InnerNav = () => {
 
     const handleClick = (segment) => {
         if (segment === 'Home') {
-            navigate(`/${Cookies.get('REGISTRY_URI')}`);
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}`);
         } else if (segment === 'Portrayal Register') {
-            navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/list`);
         } else if (segment === 'Concept Register') {
-            navigate(`/${Cookies.get('REGISTRY_URI')}/concept/list`);
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/list`);
         } else if (segment === 'Data Dictionary Register') {
-            navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/list`);
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/list`);
         }
     };
 

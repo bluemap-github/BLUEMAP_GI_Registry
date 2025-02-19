@@ -1,10 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; 
+import { getDecryptedItem, setEncryptedItem } from "../cryptoComponent/storageUtils";
 
 const NotAllowed = () => {
     const navigate = useNavigate();
-    const regiurl = Cookies.get('REGISTRY_URI');
+    const regiurl = getDecryptedItem('REGISTRY_URI');
 
     const goToHome = () => {
         navigate(`/${regiurl}`);

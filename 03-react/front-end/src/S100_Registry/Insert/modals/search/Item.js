@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SEARCH_RELATED_ITEM } from '../../../DataDictionary/api.js';
 import Cookies from 'js-cookie'; 
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 function Item({ onSearch, componentType}) {
     let callAPIItemTypes;
@@ -18,7 +19,7 @@ function Item({ onSearch, componentType}) {
         default:
             break;
     }
-    const regi_uri = Cookies.get('REGISTRY_URI');
+    const regi_uri = getDecryptedItem('REGISTRY_URI');
     
     useEffect(() => {
         axios.get(SEARCH_RELATED_ITEM, {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 const buttonTypes = [
     { type: 'Symbol', label: 'Symbol' },
     { type: 'LineStyle', label: 'Line Style' },
@@ -33,7 +33,7 @@ function PR_Filter({ clickHandler, viewType }) {
     const handleCreateClick = () => {
         if (viewType) {
             Cookies.set('createViewType', viewType);
-            navigate(`/${Cookies.get('REGISTRY_URI')}/create-portrayal`);
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}/create-portrayal`);
         }
     };
     return (

@@ -7,6 +7,7 @@ import { getOwnRegistries } from './GetRegistery';
 import { SIGN_IN, CREATE_REGI, ENTER_REGI } from '../../Common/PageLinks';
 import MyMainDropDown from './myMainDropDown';
 import FullScreenLoadingSpinner from '../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../cryptoComponent/storageUtils";
 
 function MyMain() {
     const navigate = useNavigate();
@@ -57,8 +58,8 @@ function MyMain() {
     }, [navigate]);
 
     const connectToRegistry = (e, registry) => {
-        Cookies.set('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 });
-        Cookies.set('REGISTRY_NAME', registry.name, { expires: 7 });
+        setEncryptedItem('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 });
+        setEncryptedItem('REGISTRY_NAME', registry.name, { expires: 7 });
         
         // 이동 후 상태 변경 또는 재랜더링 확인
         navigate(ENTER_REGI(registry.uniformResourceIdentifier));
@@ -67,7 +68,7 @@ function MyMain() {
     
 
     const connectToSetting = (e, registry) => {
-        Cookies.set('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 });
+        setEncryptedItem('REGISTRY_URI', registry.uniformResourceIdentifier, { expires: 7 });
         navigate('/user/setting-registry');
     };
 

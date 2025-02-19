@@ -11,6 +11,7 @@ import {
 } from '../../api/api';
 import axios from 'axios';
 import FullScreenLoadingSpinner from '../../../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 // 공통 테이블 필드 정의
 const commonFields = [
@@ -122,10 +123,10 @@ const getTableFields = (itemType) => [
 
 const PortrayalDetails = ({ items, itemType }) => {
     const navigate = useNavigate();
-    const role = Cookies.get('role');  // role 가져오기
+    const role = getDecryptedItem('role');  // role 가져오기
 
     const moveToList = () => {
-        navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/list`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/list`);
     };
 
     const [IsOpened, setIsOpened] = useState(false);

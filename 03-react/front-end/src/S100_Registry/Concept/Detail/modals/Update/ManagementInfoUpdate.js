@@ -2,12 +2,14 @@ import React, { useState, useEffect, forwardRef } from "react";
 import axios from 'axios';
 import { PUT_MI_URL  } from '../../../api';
 import UpdateInput from "../tags/UpdateInput";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { getDecryptedItem } from "../../../../../cryptoComponent/storageUtils";
 
 function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
     const initialMI = itemList.management_infos[followIdx];
     const [MI, setMI] = useState(initialMI);
+    const role = getDecryptedItem('role'); 
+    
 
     useEffect(() => {
         setMI(initialMI); // props로 받은 initialMI를 초기 상태로 설정
@@ -100,9 +102,10 @@ function ManagementInfoUpdate({ itemList, onClose, followIdx }) {
                         ))}
                     </select>
                 </div>
+                {role === 'owner' && (
                 <div className='text-end'>
                     <button className='btn btn-secondary btn-sm mt-3' onClick={handleSubmitItem}>Update</button>
-                </div>
+                </div>)}
             </div>
         </div>
     );

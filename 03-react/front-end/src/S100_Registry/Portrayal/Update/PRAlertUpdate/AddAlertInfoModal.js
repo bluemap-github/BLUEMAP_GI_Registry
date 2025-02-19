@@ -3,7 +3,8 @@ import { POST_MESSAGE_ASSOCIATION, POST_HIGHLIGHT_ASSOCIATION, POST_ALERT_INFO, 
 import DynamicAssociationForm from '../../Insert/components/DynamicAssociationForm';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-const regi_uri = Cookies.get('REGISTRY_URI');
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
+const regi_uri = getDecryptedItem('REGISTRY_URI');
 const priorityType = ['alarm', 'warning', 'caution', 'indication'];
 const Association = {
     'msg' : POST_MESSAGE_ASSOCIATION,
@@ -47,6 +48,7 @@ const preProcessingData = (data) => {
 
 
 const AddAlertInfoModal = ({ IsOpened, onClose, data, routeType }) => {
+    const role = getDecryptedItem('role');
     const { data: preProcessedData, extractedId } = preProcessingData(data);
     const [alertInfo, setAlertInfo] = useState({
         priority: [
@@ -180,13 +182,16 @@ const AddAlertInfoModal = ({ IsOpened, onClose, data, routeType }) => {
                 <div>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <h2>Add {routeType}</h2>
+                        <>
+                        {role === 'owner' && (
                         <button
                             type="button"
                             className="btn btn-outline-secondary"
                             onClick={addAlertPriority}
                         >
                             + Add Alert Priority
-                        </button>
+                        </button>)}
+                        </>
                     </div>
 
                     {/* Priority 항목들 렌더링 */}

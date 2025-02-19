@@ -9,6 +9,7 @@ import ConstraintModal from '../Update/component/Constaint.js';
 import AddConstraint from '../Update/component/AddConstraint.js';
 import {DELETE_CONSTRAINT} from '../api.js';
 import axios from 'axios';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 // Constraints fields definition
 const constraintFields = [
@@ -19,7 +20,7 @@ const constraintFields = [
 ];
 
 const SADetail = ({ item }) => {
-
+    const role = getDecryptedItem('role'); 
     const { setItemDetails } = useContext(ItemContext);
     const [constraints, setConstraints] = useState([]);
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ const SADetail = ({ item }) => {
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/detail`);
     };
     const movetoConcept = (value) => {
         setItemDetails({
@@ -38,7 +39,7 @@ const SADetail = ({ item }) => {
             item_id: value._id.encrypted_data,
             item_iv: value._id.iv,
         });
-        navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/detail`);
     };
 
     useEffect(() => {
@@ -142,11 +143,12 @@ const SADetail = ({ item }) => {
                             </tr>
                         </tbody>
                     </table>
+                    {role === 'owner' && (      
                     <div className="text-end">
                         <button onClick={handleUpdateClick} className='btn btn-sm btn-secondary'>
                             Update
                         </button>
-                    </div>
+                    </div>)}
                 </div>
             </div>
 
@@ -179,18 +181,22 @@ const SADetail = ({ item }) => {
                         </tbody>
                     </table>
                     <div className="text-end">
-                        {constraints.length === 0 ? (<>
+                        {constraints.length === 0 ? (<> 
+                            {role === 'owner' && (
                         <button className='btn btn-sm btn-outline-secondary' onClick={addConstraint}>
                             + Add Constaint
-                        </button>
+                        </button>)}
                         </>) : (
                             <>
-                                <button className='btn btn-sm btn-secondary' onClick={handleConstraintClick}>
-                                    Update
-                                </button>
-                                <button style={{marginLeft : "5px"}} className='btn btn-sm btn-danger' onClick={() => deleteConstraint(constraints[0])}>
-                                    Delete
-                                </button>
+                    {role === 'owner' && (     
+                        <><button className='btn btn-sm btn-secondary' onClick={handleConstraintClick}>
+                        Update
+                    </button>
+                    <button style={{marginLeft : "5px"}} className='btn btn-sm btn-danger' onClick={() => deleteConstraint(constraints[0])}>
+                        Delete
+                    </button>
+                        </>
+                                )}
                             </>
                         )}
                     </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { GET_ALERT_INFO_LIST } from '../../api/api';
+import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 const AlertInfoTags = ({ tagName, onFormSubmit }) => {
     const [alertInfoList, setAlertInfoList] = useState([]);
@@ -11,7 +12,7 @@ const AlertInfoTags = ({ tagName, onFormSubmit }) => {
             try {
                 const response = await axios.get(GET_ALERT_INFO_LIST, {
                     params: {
-                        regi_uri: Cookies.get('REGISTRY_URI') // 쿠키에서 regi_uri 가져오기
+                        regi_uri: getDecryptedItem('REGISTRY_URI') // 쿠키에서 regi_uri 가져오기
                     }
                 });
                 setAlertInfoList(response.data.data); // API 응답을 상태로 저장

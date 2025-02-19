@@ -5,6 +5,7 @@ import { GET_DDR_ITEM_LIST } from './api';
 import { ItemContext } from '../../context/ItemContext';
 import { DDR_DETAIL } from '../../Common/PageLinks';
 import Cookies from 'js-cookie'; 
+import { getDecryptedItem, setEncryptedItem } from "../../cryptoComponent/storageUtils";
 
 const DDR_FilterList = ({ viewType }) => {
   const [status, setStatus] = useState('');
@@ -23,7 +24,7 @@ const DDR_FilterList = ({ viewType }) => {
 
   const fetchItems = async (updatedPage = page) => {
     try {
-      const regi_uri = Cookies.get('REGISTRY_URI');
+      const regi_uri = getDecryptedItem('REGISTRY_URI');
       const response = await axios.get(GET_DDR_ITEM_LIST, {
         params: {
           regi_uri,
@@ -91,7 +92,7 @@ const DDR_FilterList = ({ viewType }) => {
       item_id: item._id.encrypted_data,
       item_iv: item._id.iv,
     });
-    navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/detail`);
   };
 
   return (

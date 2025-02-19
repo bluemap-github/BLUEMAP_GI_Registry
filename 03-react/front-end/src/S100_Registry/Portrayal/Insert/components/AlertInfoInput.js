@@ -9,6 +9,7 @@ import {
     POST_HIGHLIGHT_ASSOCIATION, POST_VALUE_ASSOCIATION,
     POST_ALERT_INFO
  } from '../../api/api';
+ import { getDecryptedItem, setEncryptedItem } from "../../../../cryptoComponent/storageUtils";
 
 // API 맵핑 객체
 const associationPostAPI = {
@@ -27,6 +28,7 @@ const associationPostAPI = {
 const priorityType = ['alarm', 'warning', 'caution', 'indication'];
 
 const AlertInfoInput = ({ tagName, onFormSubmit }) => {
+    const role = getDecryptedItem('role');
     const [allSets, setAllSets] = useState([
         {
             associationAndAPI: [], // 초기 세트 상태
@@ -176,9 +178,13 @@ const AlertInfoInput = ({ tagName, onFormSubmit }) => {
                 {/* <button onClick={veiwAllLog}>viewall</button> */}
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h5>{tagName}</h5>
-                    <button id="addSets" className="btn btn-outline-secondary btn-sm" onClick={addSet}>
-                        + Add Set
-                    </button>
+                    <>
+                    {role === 'owner' && (
+                        <button id="addSets" className="btn btn-outline-secondary btn-sm" onClick={addSet}>
+                            + Add Set
+                        </button>
+                    )}
+                    </>
                 </div>
 
                 {allSets.map((set, setIndex) => (
@@ -198,12 +204,16 @@ const AlertInfoInput = ({ tagName, onFormSubmit }) => {
                             {set.alertInfoList.map((alertInfo, alertIndex) => (
                                 <div key={alertIndex}>
                                     <div className="text-end">
+                                        <>
+                                        {role === 'owner' && (
                                         <button
                                             className="btn btn-outline-secondary btn-sm"
                                             onClick={() => addAlertPriority(setIndex, alertIndex)}
                                         >
                                             + Add Alert Information
                                         </button>
+                                        )}
+                                        </>
                                     </div>
                                     {alertInfo.priority.map((priorityInfo, priorityIndex) => (
                                         <div key={priorityIndex} className="input-group mt-3">

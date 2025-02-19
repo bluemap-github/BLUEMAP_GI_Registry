@@ -4,8 +4,10 @@ import { ItemContext } from '../../../context/ItemContext';
 import AssoUpdate from '../Update/AssoUpdate';
 import DDRUpdate from '../Update/DDRUpdate';
 import Cookies from 'js-cookie'; 
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 const CADetail = ({item}) => {
+    const role = getDecryptedItem('role');
     const { setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
     const movetoPage = (value) => {
@@ -14,7 +16,7 @@ const CADetail = ({item}) => {
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate(`/${Cookies.get('REGISTRY_URI')}/dataDictionary/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/detail`);
     }
     const [IsOpened, setIsOpened] = useState(false);
     const handleUpdateClick = () => {
@@ -82,11 +84,12 @@ const CADetail = ({item}) => {
                                 </tr>
                             </tbody>
                         </table>
+                        {role === 'owner' && (    
                         <div className="text-end">
                             <button onClick={handleUpdateClick} className='btn btn-sm btn-secondary'>
                                 Update
                             </button>
-                        </div>
+                        </div>)}
                     </div>
                 </div>
 
@@ -116,11 +119,12 @@ const CADetail = ({item}) => {
                                 )}
                             </tbody>
                         </table>
+                        {role === 'owner' && (         
                         <div className="text-end">
                             <button onClick={handleAssoUpdateClick} className='btn btn-sm btn-secondary'>
                                 Update
                             </button>
-                        </div>
+                        </div>)}
                     </div>
                 </div>
             </div>

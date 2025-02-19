@@ -10,6 +10,7 @@ import ReferenceSourceDetail from './components/ReferenceSourceDetail';
 import ReferenceDetail from './components/ReferenceDetail';
 import Base from './modals/Base';
 import FullScreenLoadingSpinner from '../../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 const componentDetails = [
   { Component: ItemDetail, state: 'itemList', setState: 'setItemList', api: CONCEPT_ITEM_ONE },
@@ -60,7 +61,7 @@ function Detail() {
   const handleKeyIdx = (int) => setState(prev => ({ ...prev, keyIdx: int }));
 
   const moveToList = () => {
-    navigate(`/${Cookies.get('REGISTRY_URI')}/concept/list`); // Cookies에서 REGISTRY_URI를 가져옴
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/list`); // Cookies에서 REGISTRY_URI를 가져옴
   };
     
 

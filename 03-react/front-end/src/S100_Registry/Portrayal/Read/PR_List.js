@@ -12,6 +12,7 @@ import {
   GET_ALERT_MESSAGE_LIST
 } from '../api/api';
 import FullScreenLoadingSpinner from '../../../Common/FullScreenLoadingSpinner';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 const schemaApiTypes = {
   'Symbol': GET_SYMBOL_LIST,
@@ -51,7 +52,7 @@ const PR_List = ({ viewType }) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(15);
   const [totalPages, setTotalPages] = useState(1);
-  const regi_uri = Cookies.get('REGISTRY_URI'); 
+  const regi_uri = getDecryptedItem('REGISTRY_URI'); 
   const { setItemDetails } = useContext(ItemContext);
 
   // viewType에 따라 API 엔드포인트를 결정
@@ -98,7 +99,7 @@ const PR_List = ({ viewType }) => {
       item_iv: item._id.iv,
       item_type: viewType,
     });
-    navigate(`/${Cookies.get('REGISTRY_URI')}/portrayal/detail`);
+    navigate(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/detail`);
   };
 
   const handleSearch = () => {

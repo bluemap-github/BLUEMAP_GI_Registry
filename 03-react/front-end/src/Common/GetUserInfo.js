@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { CHECK_AUTH } from '../User/api';
 import FullScreenLoadingSpinner from './FullScreenLoadingSpinner';
-
+import { setEncryptedItem } from "../cryptoComponent/storageUtils";
 function clearAllCookies() {
     const cookies = document.cookie.split(";");
     for (let cookie of cookies) {
@@ -26,7 +26,7 @@ const GetUserInfo = ({ children }) => {
                 const token = localStorage.getItem('jwt');
                 if (!token) {
                     // Set role to 'guest' if no JWT token
-                    Cookies.set('role', 'guest');
+                    setEncryptedItem('role', 'guest');
                     setLoading(false);
                     return;
                 }

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie'; 
 import { SEARCH_RELATED_ITEM } from '../../DataDictionary/api.js';
+import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
 
 const mandatoryFields = ["attributeId"];
 
 const AddAssociatedAttributes = ({ handleRelatedValueList }) => {
-    const regi_uri = Cookies.get('REGISTRY_URI');
+    const regi_uri = getDecryptedItem('REGISTRY_URI');
     const [data, setData] = useState([]);
     const [selectedObj, setSelectedObj] = useState(null);
     const [selectedID, setSelectedID] = useState('');

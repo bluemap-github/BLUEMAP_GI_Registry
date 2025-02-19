@@ -17,6 +17,7 @@ import EnumeratedValue from './components/dataDictionary/EnumeratedValue';
 import { ItemContext } from '../../context/ItemContext';
 import { performValidation } from './validation/ValidateItems.js';
 import AttributeConstraints from './components/AttributeConstraints.js';
+import { getDecryptedItem, setEncryptedItem } from "../../cryptoComponent/storageUtils";
 
 function Item() {
     const createViewType = Cookies.get('createViewType');
@@ -29,14 +30,14 @@ function Item() {
     const [apiType, setApiType] = useState('ConceptItem');
     const { setItemDetails } = useContext(ItemContext);
     const navigate = useNavigate();
-    const regi_uri = Cookies.get('REGISTRY_URI');
+    const regi_uri = getDecryptedItem('REGISTRY_URI');
     console.log('createViewType:', createViewType);
 
     useEffect(() => {
         if (createViewType) {
             getSelestedApi(createViewType)
         }
-        const role = Cookies.get('role');
+        const role = getDecryptedItem('role');
         if (!role || role === 'guest') {
             alert('권한이 없습니다. 접근이 제한됩니다.');
             navigate(`/${regi_uri}`); // 권한이 없으면 메인 페이지로 리디렉션
@@ -118,7 +119,7 @@ function Item() {
                 item_id: itemId,
                 item_iv: item_iv
             });
-            navigate(`/${Cookies.get('REGISTRY_URI')}/concept/detail`);
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/detail`);
         } catch (error) {
             console.error('Error posting data:', error);
         }
