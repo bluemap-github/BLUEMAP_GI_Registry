@@ -13,9 +13,10 @@ import os
 from pathlib import Path
 from decouple import config
 import base64
-# API_BASE_URL = "http://bluemap.kr:21803"
+### 배포시 변경
+API_BASE_URL = "http://bluemap.kr:21803"
 # API_BASE_URL = "http://localhost:21803"
-API_BASE_URL = "http://127.0.0.1:8000"
+# API_BASE_URL = "http://127.0.0.1:8000"
 
 
 # import KEY
@@ -69,9 +70,10 @@ REST_FRAMEWORK = {
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
+### 배포시 변경
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG', default=False, cast=bool)
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = True
 
 
 ALLOWED_HOSTS = ['bluemap.kr', 'localhost', '127.0.0.1']
