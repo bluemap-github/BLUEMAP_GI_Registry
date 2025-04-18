@@ -16,7 +16,7 @@ class AttributeSerializer(ConceptItemSerializer):
 class SimpleAttributeSerializer(AttributeSerializer):
     _id = ObjectIdField(read_only=True)
     valueType = serializers.CharField()# Enum - S100_CD_AttributeValueType
-    quantitySpecification = serializers.CharField()# Enum - S100_CD_QuantitySpecification
+    quantitySpecification = serializers.CharField(allow_blank=True)# Enum - S100_CD_QuantitySpecification
     # listedValue = serializers.JSONField(default=list) 
 
 class ComplexAttributeSerializer(AttributeSerializer):

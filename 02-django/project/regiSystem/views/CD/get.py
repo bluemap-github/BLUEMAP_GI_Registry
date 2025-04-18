@@ -40,30 +40,18 @@ def make_response_data(serializer):
     }
     return response_data
 
-def offer_item_nameNtype(id):
-    c_item = S100_Concept_Item.find_one({"_id": ObjectId(id)})
-    if "numericCode" in c_item:  # numericCode가 존재하면 반환
-        return c_item["name"], c_item["itemType"], c_item["numericCode"]
-    return c_item["name"], c_item["itemType"]
-
-    
-from regiSystem.info_sec.getByURI import uri_to_serial
-@api_view(['GET'])
-def ddr_item_list(request):
-    C_id = uri_to_serial(request.GET.get('regi_uri'))
-    item_type = request.GET.get('item_type')
-    search_term = request.GET.get('search_term', '')
-    status = request.GET.get('status', '')
-    category = request.GET.get('category', '')
-    enumType = request.GET.get('enum_type', '')
-    valueType = request.GET.get('value_type', '')
-    sort_key = request.GET.get('sort_key', '_id')  # 기본값 '_id'
-    sort_direction = request.GET.get('sort_direction', 'ascending')  # 기본값 'ascending'
-    page = int(request.GET.get('page', 1))  # 기본값 1
-    page_size = int(request.GET.get('page_size', 10))  # 기본값 10
-
-    if request.method == 'GET':
+def query_ddr_item_list(request, collection, query=None):
+    if query is None:
+        # 기존 로직 사용
+        C_id = uri_to_serial(request.GET.get('regi_uri'))
+        item_type = request.GET.get('item_type')
         query = {"concept_id": ObjectId(C_id), "itemType": item_type}
+        # 이하 status, search_term 등 조건 추가...
+        search_term = request.GET.get('search_term', '')
+        status = request.GET.get('status', '')
+        category = request.GET.get('category', '')
+        enumType = request.GET.get('enum_type', '')
+        valueType = request.GET.get('value_type', '')
         if status:
             query["itemStatus"] = status
         if search_term:
@@ -73,47 +61,75 @@ def ddr_item_list(request):
                 query["camelCase"] = {"$regex": search_term, "$options": "i"}
             elif category == "definition":
                 query["definition"] = {"$regex": search_term, "$options": "i"}
-        if item_type == "EnumeratedValue" and enumType != "":
+        if item_type == "EnumeratedValue" and enumType:
             query["enumType"] = enumType
-        elif item_type == "SimpleAttribute" and valueType != "":
+        elif item_type == "SimpleAttribute" and valueType:
             query["valueType"] = valueType
 
-        # 전체 항목 수 계산
-        total_items = S100_Concept_Item.count_documents(query)
+    # pagination 공통 처리
+    sort_key = request.GET.get('sort_key', '_id')
+    sort_direction = request.GET.get('sort_direction', 'ascending')
+    page = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('page_size', 10))
 
-        # 정렬 및 페이지네이션 적용
-        sort_order = 1 if sort_direction == 'ascending' else -1
-        c_item_list = list(S100_Concept_Item.find(query)
-                           .sort(sort_key, sort_order)
-                           .skip((page - 1) * page_size)
-                           .limit(page_size))
+    total_items = collection.count_documents(query)
+    sort_order = 1 if sort_direction == 'ascending' else -1
+    c_item_list = list(collection.find(query)
+                       .sort(sort_key, sort_order)
+                       .skip((page - 1) * page_size)
+                       .limit(page_size))
 
-        serializer = itemTypeSet[item_type](c_item_list, many=True)
+    item_type = query.get("itemType")
+    serializer = itemTypeSet[item_type](c_item_list, many=True)
 
-        for item in serializer.data:
-            item["_id"] = get_encrypted_id([item["_id"]])
+    for item in serializer.data:
+        item["_id"] = get_encrypted_id([item["_id"]])
 
-        response_data = {
-            'register_items': serializer.data,
-            'total_items': total_items,
-            'total_pages': (total_items + page_size - 1) // page_size,
-            'current_page': page,
-            'page_size': page_size
-        }
-        return Response(response_data)
+    return {
+        'register_items': serializer.data,
+        'total_items': total_items,
+        'total_pages': (total_items + page_size - 1) // page_size,
+        'current_page': page,
+        'page_size': page_size
+    }
 
-    return Response(status=400, data={"error": "Invalid request method"})
+from ihoDataIntegrationSystem.models import (
+    IHO_Item, IHO_ManagementInfo, IHO_Reference, IHO_ReferenceSource,
+)
+from regiSystem.info_sec.getByURI import uri_to_serial
+
+@api_view(['GET'])
+def ddr_item_list(request):
+    if request.method != 'GET':
+        return Response(status=400, data={"error": "Invalid request method"})
+
+    response_data = query_ddr_item_list(request, S100_Concept_Item, query=None)
+    return Response(response_data)
 
 
 
-def one_encrypt_process(id_attribute_set):
-    if type(id_attribute_set) == list:
+def one_encrypt_process(id_attribute_set, collection):
+    if isinstance(id_attribute_set, list):
         for i in range(len(id_attribute_set)):
-            id_attribute_set[i] = get_encrypted_id([str(id_attribute_set[i]), *offer_item_nameNtype(id_attribute_set[i])])
+            print("?????????", i)
+            id_attribute_set[i] = get_encrypted_id(
+                [str(id_attribute_set[i]), *fetch_name_type(id_attribute_set[i], collection)]
+            )
         return id_attribute_set
-    elif type(id_attribute_set) == str:
-        res = get_encrypted_id([str(id_attribute_set), *offer_item_nameNtype(id_attribute_set)])
+    elif isinstance(id_attribute_set, str):
+        res = get_encrypted_id(
+            [str(id_attribute_set), *fetch_name_type(id_attribute_set, collection)]
+        )
         return res
+
+def fetch_name_type(id, collection):
+    print("fetch_name_type", id)
+    c_item = collection.find_one({"_id": ObjectId(id)})
+
+    print("fetch_name_type", c_item)
+    if "numericCode" in c_item:
+        return c_item["name"], c_item["itemType"], c_item["numericCode"]
+    return c_item["name"], c_item["itemType"]
 
 class GetRelatedValues:
     itemIncryption = {
@@ -124,40 +140,43 @@ class GetRelatedValues:
         "InformationType": "distinction"
     }
 
-    def __init__(self, parent_id, data):
+    def __init__(self, parent_id, data, class_map=None):
         self.parent_id = parent_id
         self.data = data
+        self.class_map = class_map or {
+            "ListedValue": ListedValue,
+            "AttributeUsage": AttributeUsage,
+            "Distinction": Distinction,
+        }
 
     def get_listed_value(self):
         self.data["listedValue"] = []
-        items = ListedValue.get_listed_value(self.parent_id)
+        items = self.class_map["ListedValue"].get_listed_value(self.parent_id)
         for item in items:
             self.data["listedValue"].append(item["child_id"])
         return self.data
 
     def get_attribute_id(self):
         self.data["attributeId"] = []
-        parent_id = ListedValue.get_parent_id(self.parent_id)
+        parent_id = self.class_map["ListedValue"].get_parent_id(self.parent_id)
         self.data["attributeId"].append(parent_id)
         return self.data
-    
+
     def get_sub_attribute_id(self):
         self.data["subAttribute"] = []
-        sub_attribute = AttributeUsage.get_sub_attributes(self.parent_id)
+        sub_attribute = self.class_map["AttributeUsage"].get_sub_attributes(self.parent_id)
         for item in sub_attribute:
             self.data["subAttribute"].append(item["child_id"])
         return self.data
-    
+
     def get_distincted_item(self):
         self.data["distinction"] = []
-        items = Distinction.get_distincted_item(self.parent_id)
+        items = self.class_map["Distinction"].get_distincted_item(self.parent_id)
         for item in items:
             self.data["distinction"].append(item["child_id"])
         return self.data
 
-
-    
-    def call_function(self, key):
+    def get_related_data_by_type(self, key):
         get_related_values_function = {
             "EnumeratedValue": "get_attribute_id",
             "SimpleAttribute": "get_listed_value",
@@ -165,9 +184,9 @@ class GetRelatedValues:
             "FeatureType": "get_distincted_item",
             "InformationType": "get_distincted_item"
         }
-        
+
         function_name = get_related_values_function.get(key)
-        
+
         if function_name:
             return getattr(self, function_name)()
         else:
@@ -179,38 +198,51 @@ class GetRelatedValues:
         else:
             raise ValueError(f"Invalid item_type for encryption: {key}")
 
-
-@api_view(['GET'])
-def ddr_item_one(request):
+def query_ddr_item_one(request, collection, class_map):
     item_type = request.GET.get('item_type')
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
 
     if request.method == 'GET':
         try:
-            c_item = S100_Concept_Item.find_one({"_id": ObjectId(I_id)})
+            c_item = collection.find_one({"_id": ObjectId(I_id)})
             if c_item is None:
-                return Response(status=404, data={"error": "Item not found"})
-            
+                return {"error": "Item not found", "status": 404}
+
             parent_id = str(c_item["_id"])
             c_item["_id"] = get_encrypted_id([c_item["_id"]])
             serializer = itemTypeSet[item_type](c_item)
             data = dict(serializer.data)
-            
-            related_values = GetRelatedValues(parent_id, data)
-            data = related_values.call_function(item_type)
+
+            related_values = GetRelatedValues(parent_id, data, class_map=class_map)
+
+            data = related_values.get_related_data_by_type(item_type)
             encryption_key = related_values.get_encryption_key(item_type)
-            data[encryption_key] = one_encrypt_process(data[encryption_key])
-            
-            return Response(data)
-        
+            print(data[encryption_key], "!!!!!!!!!!!")
+            data[encryption_key] = one_encrypt_process(data[encryption_key], collection)
+            return {"data": data, "status": 200}
+
         except Exception as e:
-            return Response(status=500, data={"error": str(e)})
-    
-    return Response(status=400, data={"error": "Invalid request method"})
+            return {"error": str(e), "status": 500}
+
+    return {"error": "Invalid request method", "status": 400}
 
 
 
+@api_view(['GET'])
+def ddr_item_one(request):
+
+    class_map = {
+        "ListedValue": ListedValue,
+        "AttributeUsage": AttributeUsage,
+        "Distinction": Distinction,
+    }
+
+    result = query_ddr_item_one(request, S100_Concept_Item, class_map)
+
+    if "error" in result:
+        return Response({"error": result["error"]}, status=result["status"])
+    return Response(result["data"], status=result["status"])
 
 @api_view(['GET'])
 def attribute_constraints(request):

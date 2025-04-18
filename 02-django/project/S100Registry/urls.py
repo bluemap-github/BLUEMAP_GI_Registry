@@ -12,6 +12,7 @@ allow_patterns = [
     re_path('dataDictionary/', include('openApiSystem.urls.dataDictionary', namespace='openApi_dataDictionary')),
     re_path('portrayal/', include('openApiSystem.urls.portrayal', namespace='openApi_portrayal')),
     re_path('registry/', include('openApiSystem.urls.registry', namespace='openApiSystem_registry')),
+    re_path('iho-integration/', include('ihoDataIntegrationSystem.urls', namespace='openApiSystem_service')),
 ]
 
 # Swagger 설정

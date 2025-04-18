@@ -1,0 +1,26 @@
+from django.urls import path
+
+from .views.ihoData import (integrateIho, get, post)
+
+app_name = 'regiSystem'
+urlpatterns = [
+    # iho 데이터 동기화 
+    path('sync/item_list/', integrateIho.sync_iho_data),
+    path('fetch/item-preview/', integrateIho.sync_iho_data_one),
+    
+    # Concept
+    path('concept_item_list/get/', get.iho_concept_item_list),
+    path('concept_item_one/get/', get.iho_concept_item_one),
+    path('concept_management_info/get/', get.iho_concept_management_info),
+    path('concept_reference/get/', get.iho_concept_reference),
+    path('concept_reference_source/get/', get.iho_concept_reference_source),
+
+    path('concept_item/post/', post.iho_concept_item),
+    path('concept_management_info/post/', post.iho_concept_management_info),
+    path('concept_reference/post/', post.iho_concept_reference),    
+    path('concept_reference_source/post/', post.iho_concept_reference_source),
+
+    # DDR 
+    path('ddr_item_list/get/', get.iho_DDR_item_list),
+    path('ddr_item_one/get/', get.iho_DDR_item_one),
+]

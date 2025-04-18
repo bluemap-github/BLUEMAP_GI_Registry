@@ -104,66 +104,70 @@ def make_response_data(serializer):
 
 import math
 
+import math
+from bson import ObjectId
+
+def query_concept_items(request, collection, serializer_class, query):
+    # 정렬 및 페이지네이션 처리
+    sort_key = request.GET.get('sort_key', '_id')
+    sort_direction = request.GET.get('sort_direction', 'ascending')
+    page = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('page_size', 10))
+
+    total_items = collection.count_documents(query)
+    sort_order = 1 if sort_direction == 'ascending' else -1
+
+    c_item_list = list(
+        collection.find(query)
+        .sort(sort_key, sort_order)
+        .skip((page - 1) * page_size)
+        .limit(page_size)
+    )
+
+    serializer = serializer_class(c_item_list, many=True)
+
+    for item in serializer.data:
+        item["_id"] = get_encrypted_id([item["_id"]])
+
+    return {
+        'total_items': total_items,
+        'total_pages': math.ceil(total_items / page_size),
+        'current_page': page,
+        'page_size': page_size,
+        'register_items': serializer.data,
+    }
+
 @api_view(['GET'])
-def concept_item_list(request): 
-    if request.method == 'GET':
+def concept_item_list(request):
+    try:
         C_id = uri_to_serial(request.GET.get('regi_uri'))
         search_term = request.GET.get('search_term', '')
         status = request.GET.get('status', '')
         category = request.GET.get('category', '')
-        sort_key = request.GET.get('sort_key', '_id')  # 정렬 키 (기본값: _id)
-        sort_direction = request.GET.get('sort_direction', 'ascending')  # 정렬 방향 (기본값: ascending)
-        page = int(request.GET.get('page', 1))  # 현재 페이지 번호, 기본값은 1
-        page_size = int(request.GET.get('page_size', 10))  # 페이지 크기, 기본값은 10
 
-        try:
-            query = {"concept_id": ObjectId(C_id)}
-            if status:
-                query["itemStatus"] = status
-            if search_term:
-                if category == "name":
-                    query["name"] = {"$regex": search_term, "$options": "i"}
-                elif category == "camelCase":
-                    query["camelCase"] = {"$regex": search_term, "$options": "i"}
-                elif category == "definition":
-                    query["definition"] = {"$regex": search_term, "$options": "i"}
+        query = {"concept_id": ObjectId(C_id)}
+        if status:
+            query["itemStatus"] = status
+        if search_term:
+            if category == "name":
+                query["name"] = {"$regex": search_term, "$options": "i"}
+            elif category == "camelCase":
+                query["camelCase"] = {"$regex": search_term, "$options": "i"}
+            elif category == "definition":
+                query["definition"] = {"$regex": search_term, "$options": "i"}
 
-            total_items = S100_Concept_Item.count_documents(query)  # 총 항목 수 계산
-            sort_order = 1 if sort_direction == 'ascending' else -1
+        response_data = query_concept_items(request, S100_Concept_Item, ConceptItemSerializer, query)
+        return Response(response_data)
+    except Exception as e:
+        return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
 
-            c_item_list = list(S100_Concept_Item.find(query)
-                               .sort(sort_key, sort_order)
-                               .skip((page - 1) * page_size)
-                               .limit(page_size))
-
-            serializer = ConceptItemSerializer(c_item_list, many=True)
-
-            for item in serializer.data:
-                item["_id"] = get_encrypted_id([item["_id"]])
-
-            total_pages = math.ceil(total_items / page_size)  # 총 페이지 수 계산
-
-            response_data = {
-                'total_items': total_items,
-                'total_pages': total_pages,
-                'current_page': page,
-                'page_size': page_size,
-                'register_items': serializer.data,  # 데이터 응답
-            }
-
-            return Response(response_data)
-        except Exception as e:
-            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-def concept_item_one(request):
+def query_concept_item_one(request, collection):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
     
     if request.method == 'GET':
         try:
-            c_item = S100_Concept_Item.find_one({'_id': ObjectId(I_id)})
+            c_item = collection.find_one({'_id': ObjectId(I_id)})
             if not c_item:
                 return Response({'error': 'Concept item not found'}, status=HTTP_400_BAD_REQUEST)
             c_item["_id"] = get_encrypted_id([c_item["_id"]])
@@ -174,13 +178,18 @@ def concept_item_one(request):
 
 
 @api_view(['GET'])
-def concept_managemant_info(request):
+def concept_item_one(request):
+    collection = S100_Concept_Item
+    return query_concept_item_one(request, collection)
+
+
+def query_concept_managemant_info(request, collection):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
 
     if request.method == 'GET':
         try:
-            c_item = S100_Concept_ManagementInfo.find({'concept_item_id': ObjectId(I_id)})
+            c_item = collection.find({'concept_item_id': ObjectId(I_id)})
             if not c_item:
                 Response({"management_infos" : []})
             serializer = ConceptManagementInfoSerializer(c_item, many=True)
@@ -190,15 +199,19 @@ def concept_managemant_info(request):
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
 
-
 @api_view(['GET'])
-def concept_reference_source(request):
+def concept_managemant_info(request):
+    collection = S100_Concept_ManagementInfo
+    return query_concept_managemant_info(request, collection)
+
+
+def query_concept_reference_source(request, collection):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
 
     if request.method == 'GET':
         try:
-            c_item = S100_Concept_ReferenceSource.find({'concept_item_id': ObjectId(I_id)})
+            c_item = collection.find({'concept_item_id': ObjectId(I_id)})
             if not c_item:
                 Response({"reference_sources" : []})
             serializer = ConceptReferenceSourceSerializer(c_item, many=True)
@@ -207,15 +220,19 @@ def concept_reference_source(request):
             return Response({"reference_sources" : serializer.data})
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
-
+       
 @api_view(['GET'])
-def concept_reference(request):
+def concept_reference_source(request):
+    collection = S100_Concept_ReferenceSource
+    return query_concept_reference_source(request, collection)
+
+def query_concept_reference(request, collection):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
 
     if request.method == 'GET':
         try:
-            c_item = S100_Concept_Reference.find({'concept_item_id': ObjectId(I_id)})
+            c_item = collection.find({'concept_item_id': ObjectId(I_id)})
             if not c_item:
                 Response({"references" : []})
             serializer = ConceptReferenceSerializer(c_item, many=True)
@@ -224,6 +241,11 @@ def concept_reference(request):
             return Response({"references" : serializer.data})
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def concept_reference(request):
+    collection = S100_Concept_Reference
+    return query_concept_reference(request, collection)
 
 import jwt
 from django.conf import settings

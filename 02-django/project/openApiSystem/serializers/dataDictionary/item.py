@@ -15,7 +15,7 @@ class CD_AttributeSerializer(ConceptSerializer):
 
 class CD_SimpleAttributeSerializer(CD_AttributeSerializer):
     valueType = serializers.CharField()# Enum - S100_CD_AttributeValueType
-    quantitySpecification = serializers.CharField()
+    quantitySpecification = serializers.CharField(allow_blank=True)
     itemType = serializers.CharField(default='SimpleAttribute')
 
 class CD_ComplexAttributeSerializer(CD_AttributeSerializer):

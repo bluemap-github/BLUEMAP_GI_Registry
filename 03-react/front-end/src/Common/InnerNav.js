@@ -42,6 +42,18 @@ const InnerNav = () => {
             case `/${getDecryptedItem('REGISTRY_URI')}/create-portrayal`:
                 newBreadcrumb = ['Home', 'Portrayal Register', 'Create Item'];
                 break;
+            case `/${getDecryptedItem('REGISTRY_URI')}/iho-concept/list`:
+                newBreadcrumb = ['Home', 'IHO Concept Register', 'Item List'];
+                break;
+            case `/${getDecryptedItem('REGISTRY_URI')}/iho-concept/detail`:
+                newBreadcrumb = ['Home', 'IHO Concept Register', 'Item Detail'];
+                break;
+            case `/${getDecryptedItem('REGISTRY_URI')}/iho-dataDictionary/list`:
+                newBreadcrumb = ['Home', 'IHO Data Dictionary Register', 'Item List'];
+                break;
+            case `/${getDecryptedItem('REGISTRY_URI')}/iho-dataDictionary/detail`:
+                newBreadcrumb = ['Home', 'IHO Data Dictionary Register', 'Item Detail'];
+                break;
             default:
                 break;
         }
@@ -58,6 +70,10 @@ const InnerNav = () => {
             navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/list`);
         } else if (segment === 'Data Dictionary Register') {
             navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/list`);
+        } else if (segment === 'IHO Concept Register') {
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}/iho-concept/list`);
+        } else if (segment === 'IHO Data Dictionary Register') {
+            navigate(`/${getDecryptedItem('REGISTRY_URI')}/iho-dataDictionary/list`);
         }
     };
 
