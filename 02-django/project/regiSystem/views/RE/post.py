@@ -58,51 +58,38 @@ def concept_register(request):
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def mamagement_info(request):
+def query_concept_additional_info(request, serializer_class, db_class):
     item_iv = request.GET.get('item_iv')
     I_id = decrypt(request.GET.get('item_id'), item_iv)
-
-    serializer = ConceptManagementInfoSerializer(data=request.data)
+    serializer = serializer_class(data=request.data)
     if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['concept_item_id'] = ObjectId(I_id)
-
-        S100_Concept_ManagementInfo.insert_one(validated_data)
+        db_class.insert_one(validated_data)
         return Response(serializer.data, status=HTTP_201_CREATED)
     return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def management_info(request):
+    return query_concept_additional_info(
+        request=request,
+        serializer_class=ConceptManagementInfoSerializer,
+        db_class=S100_Concept_ManagementInfo
+    )
 
 @api_view(['POST'])
 def reference_source(request):
-    item_iv = request.GET.get('item_iv')
-    I_id = decrypt(request.GET.get('item_id'), item_iv)
-
-    serializer = ConceptReferenceSourceSerializer(data=request.data)
-    if serializer.is_valid():
-        validated_data = serializer.validated_data
-        validated_data['concept_item_id'] = ObjectId(I_id)
-        
-        S100_Concept_ReferenceSource.insert_one(validated_data)
-        return Response(serializer.data, status=HTTP_201_CREATED)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
+    return query_concept_additional_info(
+        request=request,
+        serializer_class=ConceptReferenceSourceSerializer,
+        db_class=S100_Concept_ReferenceSource
+    )
 
 @api_view(['POST'])
 def reference(request):
-    item_iv = request.GET.get('item_iv')
-    I_id = decrypt(request.GET.get('item_id'), item_iv)
-
-    serializer = ConceptReferenceSerializer(data=request.data)
-    if serializer.is_valid():
-        validated_data = serializer.validated_data
-        validated_data['concept_item_id'] = ObjectId(I_id)
-        
-        S100_Concept_Reference.insert_one(validated_data)
-        return Response(serializer.data, status=HTTP_201_CREATED)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
-
-
-
+    return query_concept_additional_info(
+        request=request,
+        serializer_class=ConceptReferenceSerializer,
+        db_class=S100_Concept_Reference
+    )
 

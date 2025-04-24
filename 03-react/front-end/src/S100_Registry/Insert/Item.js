@@ -24,7 +24,6 @@ import { getDecryptedItem, setEncryptedItem } from "../../cryptoComponent/storag
 import { useLocation } from 'react-router-dom';
 
 function Item() {
-    const createViewType = Cookies.get('createViewType');
     const [item, setItem] = useState(null);
     const [managementInfos, setManagementInfos] = useState([]); // 관리 정보 입력 창 배열
     const [referenceSource, setReferenceSource] = useState(null);
@@ -36,10 +35,15 @@ function Item() {
     const navigate = useNavigate();
     const regi_uri = getDecryptedItem('REGISTRY_URI');
     const location = useLocation();
+    
+    // const createViewType = Cookies.get('createViewType');
+    const createViewType = location.state?.createViewType;
     const isIHO = location.state?.isIHO;
-    console.log('isIHO:', isIHO);
+    // console.log('isIHO:', isIHO);
+    // console.log('selectedApiUrl:', selectedApiUrl);
 
     useEffect(() => {
+        console.log('>>> useEffect 진입 / isIHO:', isIHO);  // 디버깅용
         if (createViewType) {
             getSelestedApi(createViewType)
         }
@@ -73,6 +77,7 @@ function Item() {
     const handleSubmitItem = async () => {
         try {
             // 메인 아이템 등록 (isIHO 여부에 따라 이미 selectedApiUrl은 설정되어 있음)
+            console.log('selectedApiUrl:', selectedApiUrl); // 디버깅용
             const itemResponse = await axios.post(
                 selectedApiUrl,
                 item,
@@ -135,11 +140,11 @@ function Item() {
                 item_id: itemId,
                 item_iv: item_iv
             });
-    
-            navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/detail`, {
-                state: { isIHO } // 페이지 넘길 때도 다시 넘겨주자!
-            });
-    
+            if (isIHO) {
+                navigate(`/${getDecryptedItem('REGISTRY_URI')}/iho-concept/detail`);
+            } else {
+                navigate(`/${getDecryptedItem('REGISTRY_URI')}/concept/detail`);
+            }
         } catch (error) {
             console.error('Error posting data:', error);
         }

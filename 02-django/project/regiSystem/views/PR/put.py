@@ -557,37 +557,11 @@ def update_display_mode_association(request):
 @api_view(['PUT'])
 def update_message_association(request):
     return update_association(request, MessageAssociation)
-    # item_type = request.GET.get('item_type')
-    # # print(item_type)
-    # # if item_type != 'AlertInfo':
-    # #     return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
-    # # print("??????????")
-    # data = request.data.get('associations')[0]
-    # # print(data, "??????????")
-    # parent_id = data.get('parent_id')
-    # child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
-    # data['child_id'] = child_id
-    # result = MessageAssociation.update(parent_id, child_id)
-    # if result["status"] == "error":
-    #     return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
-    # return Response(result, status=HTTP_201_CREATED)
-
 
 
 @api_view(['PUT'])
 def update_highlight_association(request):
     return update_association(request, HighlightAssociation)
-    # item_type = request.GET.get('item_type')
-    # if item_type != 'AlertInfo':
-    #     return Response({"error": "Invalid item type."}, status=HTTP_400_BAD_REQUEST)
-    # data = request.data
-    # parent_id = data.get('parent_id')
-    # child_id = decrypt(data.get('child_id').get('encrypted_data'), data.get('child_id').get('iv'))
-    # data['child_id'] = child_id
-    # result = HighlightAssociation.update(parent_id, child_id)
-    # if result["status"] == "error":
-    #     return Response(result["errors"], status=HTTP_400_BAD_REQUEST)
-    # return Response(result, status=HTTP_201_CREATED)
     
 
 @api_view(['PUT'])

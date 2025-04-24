@@ -43,3 +43,5 @@ export const POST_COMPLEX_ATTRIBUTE_IHO = `${DEPLOY_URL}/iho-integration/complex
 export const POST_ENUMERATED_VALUE_IHO = `${DEPLOY_URL}/iho-integration/enumerated_value/post/`;
 export const POST_FEATURE_IHO = `${DEPLOY_URL}/iho-integration/feature/post/`;
 export const POST_INFORMATION_IHO = `${DEPLOY_URL}/iho-integration/information/post/`;
+
+export const SEARCH_RELATED_ITEM_IHO = `${DEPLOY_URL}/iho-integration/related_item/search/`;

@@ -55,8 +55,6 @@ def insert_file_item(model_class, request, data):
     
     C_id = uri_to_serial(request.GET.get('regi_uri'))
     inserted_ = model_class.insert(data, ObjectId(C_id))
-    
-    print(inserted_, data, "????????????")
 
     if inserted_["status"] == "error":
         return Response(inserted_["errors"], status=HTTP_400_BAD_REQUEST)

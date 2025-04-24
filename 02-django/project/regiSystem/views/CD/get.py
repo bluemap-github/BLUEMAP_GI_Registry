@@ -111,7 +111,6 @@ def ddr_item_list(request):
 def one_encrypt_process(id_attribute_set, collection):
     if isinstance(id_attribute_set, list):
         for i in range(len(id_attribute_set)):
-            print("?????????", i)
             id_attribute_set[i] = get_encrypted_id(
                 [str(id_attribute_set[i]), *fetch_name_type(id_attribute_set[i], collection)]
             )

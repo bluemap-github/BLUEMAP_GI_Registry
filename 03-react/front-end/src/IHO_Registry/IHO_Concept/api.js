@@ -13,7 +13,7 @@ export const CREATE_ITEM_URL = `${DEPLOY_URL}/api/v1/concept_item/post/`;
 
 // Concept > Detail > modals > Add > MIAdd.js
 // Concept > Insert > Item.js
-export const POST_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/post/`;
+export const POST_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/management_info/post/`;
 
 // Concept > Detail > modals > Add > RSAdd.js
 // Concept > Insert > Item.js
@@ -27,7 +27,7 @@ export const POST_REFERENCE  = `${DEPLOY_URL}/api/v1/concept_item/reference/post
 export const PUT_ITEM_URL = `${DEPLOY_URL}/api/v1/concept_item/put/`;
 
 // Concept > Detail > modals > Update > MIUpdate.js
-export const PUT_MI_URL =  `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/put/`
+export const PUT_MI_URL =  `${DEPLOY_URL}/api/v1/concept_item/management_info/put/`
 
 // Concept > Detail > modals > Update > RSUpdate.js
 export const PUT_RS_URL = `${DEPLOY_URL}/api/v1/concept_item/reference_source/put/`;
@@ -40,7 +40,7 @@ export const PUT_R_URL = `${DEPLOY_URL}/api/v1/concept_item/reference/put/`;
 // Concept > Detail > modals > Base.js
 // Concept > Register.js
 export const DEL_ITEM_URL  = `${DEPLOY_URL}/api/v1/concept_item/delete/`;
-export const DEL_MI_URL  = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/delete/`;
+export const DEL_MI_URL  = `${DEPLOY_URL}/api/v1/concept_item/management_info/delete/`;
 export const DEL_RS_URL  = `${DEPLOY_URL}/api/v1/concept_item/reference_source/delete/`;
 export const DEL_R_URL  = `${DEPLOY_URL}/api/v1/concept_item/reference/delete/`;
 

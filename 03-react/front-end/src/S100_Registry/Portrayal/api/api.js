@@ -1,6 +1,6 @@
 import { DEPLOY_URL } from '../../index';
 
-export const POST_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/post/`;
+export const POST_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/management_info/post/`;
 export const POST_SYMBOL = `${DEPLOY_URL}/api/v1/portrayal_item/symbol/post/`;
 export const POST_LINE_STYLE = `${DEPLOY_URL}/api/v1/portrayal_item/line_style/post/`;
 export const POST_AREA_FILL = `${DEPLOY_URL}/api/v1/portrayal_item/area_fill/post/`;
@@ -27,7 +27,7 @@ export const POST_ALERT_HIGHLIGHT = `${DEPLOY_URL}/api/v1/portrayal_item/alert_h
 export const POST_ALERT_INFO = `${DEPLOY_URL}/api/v1/portrayal_item/alert_info/post/`;
 
 
-export const GET_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/get/`;
+export const GET_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/management_info/get/`;
 export const GET_SYMBOL_SCHEMA_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_schema_list/get/`;
 export const GET_SYMBOL_SCHEMA_ONE = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_schema/get/`;
 
@@ -122,8 +122,8 @@ export const GET_ICON_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/ic
 export const GET_SYMBOL_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/symbol_association_list/get/`;
 export const GET_ITEM_SCHEMA_ASSOCIATION_LIST = `${DEPLOY_URL}/api/v1/portrayal_item/item_schema_association_list/get/`;
 
-export const PUT_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/put/`;
-export const DEL_MANAGEMENT_INFO  = `${DEPLOY_URL}/api/v1/concept_item/mamagement_info/delete/`;
+export const PUT_MANAGEMENT_INFO = `${DEPLOY_URL}/api/v1/concept_item/management_info/put/`;
+export const DEL_MANAGEMENT_INFO  = `${DEPLOY_URL}/api/v1/concept_item/management_info/delete/`;
 
 
 export const PUT_COLOUR_TOKEN = `${DEPLOY_URL}/api/v1/portrayal_item/colour_token_put/`;

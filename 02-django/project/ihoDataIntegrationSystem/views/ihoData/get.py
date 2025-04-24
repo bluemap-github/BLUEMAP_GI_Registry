@@ -199,3 +199,13 @@ def iho_DDR_item_one(request):
     if "error" in result:
         return Response({"error": result["error"]}, status=result["status"])
     return Response(result["data"], status=result["status"])
+
+
+from regiSystem.views.SEARCH.search import query_related_item
+@api_view(['GET'])
+def iho_related_item(request):
+    return query_related_item(
+        request=request,
+        db=IHO_ItemDB,
+        C_id="----",  # IHO는 문자열
+    )

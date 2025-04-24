@@ -16,7 +16,7 @@ const CADetail = ({item}) => {
             item_id: value.encrypted_data,
             item_iv: value.iv,
         });
-        navigate(`/${getDecryptedItem('REGISTRY_URI')}/dataDictionary/detail`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/iho-dataDictionary/detail`);
     }
     const [IsOpened, setIsOpened] = useState(false);
     const handleUpdateClick = () => {

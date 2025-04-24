@@ -19,20 +19,18 @@ itemTypeSet = {
         "InformationType": InformationSerializer
     }
 from regiSystem.info_sec.getByURI import uri_to_serial
-@api_view(['GET'])
-def related_item(request):
-    C_id = uri_to_serial(request.GET.get('regi_uri'))
+def query_related_item(request, db, C_id):
     search_term = request.query_params.get('search_term', '')
     item_type = list(request.GET.get('item_type').split(','))
     
     if request.method == 'GET':
         query = {
-            "concept_id": ObjectId(C_id), 
+            "concept_id": C_id,
             "itemType": {"$in": item_type}, 
         }
         if search_term:
             query["name"] = {"$regex": search_term, "$options": "i"}
-        simple_attributes = list(S100_Concept_Item.find(query).sort("_id", -1))
+        simple_attributes = list(db.find(query).sort("_id", -1))
         attributes_serialized = []
 
         for attribute in simple_attributes:
@@ -41,16 +39,10 @@ def related_item(request):
         return Response({'search_result': attributes_serialized})
     return Response(status=400, data={"error": "Invalid request method"})
 
-# @api_view(['GET'])
-# def browsing_registries(request):
-#     search_term = request.query_params.get('search_term', '')
-    
-#     if request.method == 'GET':
-#         query = {}
-#         if search_term:
-#             query["name"] = {"$regex": search_term, "$options": "i"}
-#         registries = list(S100_Concept_Register.find(query).sort("_id", -1))
-
-        
-#         return Response({'search_result': attributes_serialized})
-#     return Response(status=400, data={"error": "Invalid request method"})
+@api_view(['GET'])
+def related_item(request):
+    return query_related_item(
+        request=request,
+        db=S100_Concept_Item,
+        C_id=ObjectId(uri_to_serial(request.GET.get('regi_uri')))
+    )
