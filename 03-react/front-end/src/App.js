@@ -41,8 +41,8 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>© 2024 BLUEMAP Inc. All rights reserved.</p>
-        <p>v0.0.4</p>
+        <p>© 2025 BLUEMAP Inc. All rights reserved.</p>
+        <p>v0.0.6</p>
       </div>
     </footer>
   );

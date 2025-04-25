@@ -70,8 +70,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div>
-          {/* REGISTRY 버튼을 클릭 시 하위 메뉴를 토글 */}
+        {/* <div>
           <div onClick={toggleIHORegistryMenu} style={{ color: 'black', fontWeight: 'bold' }} className="regi-menu">
             <div style={{paddingLeft: '10px'}}>
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="currentColor" fillRule="evenodd" d="m6.44 4.06l.439.44H12.5A1.5 1.5 0 0 1 14 6v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V4.5A1.5 1.5 0 0 1 3.5 3h1.257a1.5 1.5 0 0 1 1.061.44zM.5 4.5a3 3 0 0 1 3-3h1.257a3 3 0 0 1 2.122.879L7.5 3h5a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3zm4.25 2a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5z" clipRule="evenodd"/></svg>
@@ -84,28 +83,21 @@ const Navbar = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M4.293 7.793a1 1 0 0 1 1.414 0L12 14.086l6.293-6.293a1 1 0 1 1 1.414 1.414L13.414 15.5a2 2 0 0 1-2.828 0L4.293 9.207a1 1 0 0 1 0-1.414"/></svg>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* REGISTRY 하위 메뉴가 열렸을 때만 표시 */}
-          {isIHOOpen && (
+          {/* {isIHOOpen && (
             <>
-              {/* CONCEPT */}
               <div onClick={goto_iho_concept_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${getDecryptedItem('REGISTRY_URI')}/iho-concept/list`)}`}>
                 <div className='regi-menu-item-inner'>IHO CONCEPT</div>
               </div>
 
-              {/* DATA DICTIONARY */}
               <div onClick={goto_iho_ddr_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${getDecryptedItem('REGISTRY_URI')}/iho-dataDictionary/list`)}`}>
                 <div className='regi-menu-item-inner'>IHO DATA DICTIONARY</div>
               </div>
-
-              {/* PORTRAYAL */}
-              {/* <div onClick={goto_portayal_list} style={{ textDecoration: 'none', color: 'black' }} className={`regi-menu create-menu-item ${isActive(`/${getDecryptedItem('REGISTRY_URI')}/portrayal/list`)}`}>
-                <div className='regi-menu-item-inner'>IHO PORTRAYAL</div>
-              </div> */}
             </>
           )}
-        </div>
+        </div> */}
 
         <div>
           {/* REGISTRY 버튼을 클릭 시 하위 메뉴를 토글 */}

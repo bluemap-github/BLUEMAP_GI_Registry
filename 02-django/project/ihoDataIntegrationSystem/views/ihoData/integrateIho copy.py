@@ -6,6 +6,7 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 import requests
 
+regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='registry uri', required=True, type=openapi.TYPE_STRING, default='test')
 service_key = openapi.Parameter('service_key', openapi.IN_QUERY, description='service key', required=True, type=openapi.TYPE_STRING, default='0000')
 item_id =openapi.Parameter('item_id', openapi.IN_QUERY, description='item id', required=True, type=openapi.TYPE_STRING)
 item_type = openapi.Parameter('item_type', openapi.IN_QUERY, description='item type', required=True, type=openapi.TYPE_STRING)
@@ -14,14 +15,11 @@ from ihoDataIntegrationSystem.models import (
     IHO_Item, IHO_ManagementInfo, IHO_Reference, IHO_ReferenceSource,
 )
 
-from openApiSystem.models.concept import (Concept, ManagementInfo, Reference, ReferenceSource)
-from regiSystem.models.Concept import ListedValue, AttributeUsage
-
 def get_item(number):
     params = {
         "serviceKey": "bluemapServiceKey",
         "type": number,
-        "numOfRows" :5000,
+        "numOfRows" :3000,
         "startNumOfRows": 0
     }
     try:
@@ -44,125 +42,7 @@ from regiSystem.serializers.RE import (
     ConceptSerializer,
 
     )
-
-# class DeleteFromIhoCollection:
-#     @classmethod
-#     def clear_collection(cls, target_class, C_id):
-#         result = target_class.collection.delete_many({"isIHO": "yes", "concept_id" : C_id})
-#         return {"status": "success", "message": f"{result.deleted_count}개 삭제 완료 from {target_class.collection.name}"}
-
-
-class DeleteFromIhoCollection:
-    @classmethod
-    def clear_collection(cls, target_class, C_id):
-        if target_class.__name__ == "Concept":
-            # Concept은 isIHO + concept_id 조건
-            result = target_class.collection.delete_many({
-                "isIHO": "yes",
-                "concept_id": C_id
-            })
-            return {
-                "status": "success",
-                "message": f"{result.deleted_count}개 삭제 완료 from {target_class.collection.name}",
-                "deleted_concept_ids": []  # Concept에서는 별로 쓸 일은 없음
-            }
-
-        else:
-            raise NotImplementedError("Concept 외 모델은 별도 처리 필요")
-
-    @classmethod
-    def clear_with_concept_ids(cls, target_class, concept_ids):
-        if target_class.__name__ in ["ManagementInfo", "Reference", "ReferenceSource"]:
-            # concept_item_id가 concept_ids 중 하나인 것 삭제
-            result = target_class.collection.delete_many({
-                "concept_item_id": {"$in": concept_ids}
-            })
-            return {
-                "status": "success",
-                "message": f"{result.deleted_count}개 삭제 완료 from {target_class.collection.name}"
-            }
-
-        elif target_class.__name__ in ["ListedValue", "AttributeUsage"]:
-            # parent_id 또는 child_id가 concept_ids 중 하나인 것 삭제
-            result = target_class.collection.delete_many({
-                "$or": [
-                    {"parent_id": {"$in": concept_ids}},
-                    {"child_id": {"$in": concept_ids}}
-                ]
-            })
-            return {
-                "status": "success",
-                "message": f"{result.deleted_count}개 삭제 완료 from {target_class.collection.name}"
-            }
-
-        else:
-            raise NotImplementedError(f"{target_class.__name__} 모델은 지원되지 않습니다.")
-
-def delete_iho_by_concept_id(C_id):
-    """
-    C_id를 기준으로 IHO 데이터를 삭제하는 공용 유틸 함수
-    """
-
-    # Concept id 리스트 뽑기
-    concept_docs = Concept.collection.find({
-        "isIHO": "yes",
-        "concept_id": C_id
-    })
-    concept_ids = [doc["_id"] for doc in concept_docs]
-
-    print("Concept IDs:", concept_ids)
-
-    # Concept 먼저 삭제
-    concept_delete_result = DeleteFromIhoCollection.clear_collection(Concept, C_id)
-
-    # 관련된 ManagementInfo, Reference, ReferenceSource 삭제
-    management_info_result = DeleteFromIhoCollection.clear_with_concept_ids(ManagementInfo, concept_ids)
-    reference_result = DeleteFromIhoCollection.clear_with_concept_ids(Reference, concept_ids)
-    reference_source_result = DeleteFromIhoCollection.clear_with_concept_ids(ReferenceSource, concept_ids)
-
-    # ListedValue 삭제
-    listed_value_result = DeleteFromIhoCollection.clear_with_concept_ids(ListedValue, concept_ids)
-    attribute_usage_result = DeleteFromIhoCollection.clear_with_concept_ids(AttributeUsage, concept_ids)
-
-    return {
-        "concept_delete_result": concept_delete_result,
-        "management_info_result": management_info_result,
-        "reference_result": reference_result,
-        "reference_source_result": reference_source_result,
-        "listed_value_result": listed_value_result,
-        "attribute_usage_result": attribute_usage_result
-    }
-
-regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='iho 데이터를 삭제할 레지스트리의 URI 입력', required=True, type=openapi.TYPE_STRING, default='test')
 from regiSystem.serializers.CD import (EnumeratedValueSerializer, SimpleAttributeSerializer, ComplexAttributeSerializer, FeatureSerializer, InformationSerializer)
-from openApiSystem.models.registry.item import RE_Register
-@swagger_auto_schema(method='delete', manual_parameters=[regi_uri, service_key])
-@api_view(['DELETE'])
-def delete_iho_data(request):
-    """
-    동기화했던 iho 데이터를 삭제합니다.
-    """
-    regi_uri = request.GET.get('regi_uri')
-    service_key = request.GET.get('service_key')
-
-    # 서비스 키 검증
-    validation_response = check_key_validation(service_key, regi_uri)
-    if isinstance(validation_response, Response):
-        return validation_response
-
-    C_id = RE_Register.get_register_by_url(regi_uri)
-
-    # ✅ 유틸 함수 호출
-    delete_results = delete_iho_by_concept_id(C_id)
-
-    return Response({
-        "status": "success",
-        "results": delete_results
-    })
-
-regi_uri = openapi.Parameter('regi_uri', openapi.IN_QUERY, description='iho 데이터를 넣을 레지스트리의 URI 입력', required=True, type=openapi.TYPE_STRING, default='test')
-from regiSystem.serializers.CD import (EnumeratedValueSerializer, SimpleAttributeSerializer, ComplexAttributeSerializer, FeatureSerializer, InformationSerializer)
-from openApiSystem.models.registry.item import RE_Register
 @swagger_auto_schema(method='post', manual_parameters=[regi_uri, service_key])
 @api_view(['POST'])
 def sync_iho_data(request):
@@ -172,19 +52,18 @@ def sync_iho_data(request):
     - 3번(type=3)은 4번 데이터를 포함함 (4번은 API 호출/저장 모두 생략)
     - 6번(type=6)은 API 호출은 하지만 별도 컬렉션 없이 5번 컬렉션에 함께 저장됨
     """
+    print(IHO_Item.clear_collection()["message"])  
+    print(IHO_ManagementInfo.clear_collection()["message"])
+    print(IHO_Reference.clear_collection()["message"])  
+    print(IHO_ReferenceSource.clear_collection()["message"])
     write_listed_values = {}  # ✅ Step 1: 최상단에 초기화
     regi_uri = request.GET.get('regi_uri')
-    C_id = RE_Register.get_register_by_url(regi_uri)
     service_key = request.GET.get('service_key')
 
     # 서비스 키 검증
     validation_response = check_key_validation(service_key, regi_uri)
     if isinstance(validation_response, Response):
         return validation_response
-
-    # ✅ Step 2: 기존 IHO 데이터 삭제
-    delete_result = delete_iho_by_concept_id(C_id)
-    print("기존 IHO 데이터 삭제 결과:", delete_result)
 
     # 1, 2, 3, 5, 6번 항목 순회
     item_types = {
@@ -234,7 +113,7 @@ def sync_iho_data(request):
                         write_listed_values[combination_fk] = []
                     write_listed_values[combination_fk].append(enum_idx)
 
-            res_item = arrange_concept_common(item, {}, C_id)
+            res_item = arrange_concept_common(item, {})
             res_item = arrange_by_type(item_type, item, res_item)
 
             item_type_for_serializer = res_item.get("itemType")
@@ -246,28 +125,27 @@ def sync_iho_data(request):
 
             serializer = SpecificSerializer(data=res_item)
             if serializer.is_valid():
-                # 유효성 검사는 serializer로만!
-                # validated_data = serializer.validated_data  
-                inserted_id = Concept.insert(C_id, res_item)["inserted_id"]  
+                validated_data = serializer.validated_data
+                inserted_id = IHO_Item.insert_one(validated_data)["inserted_id"]
 
                 res_management = arrange_managementInfo(item, inserted_id)
                 man_serializer = ConceptManagementInfoSerializer(data=res_management)
                 if man_serializer.is_valid():
-                    ManagementInfo.insert(inserted_id, res_management)
+                    IHO_ManagementInfo.insert_one(res_management)
                 else:
                     print(f"[Type {item_type}][Item {idx}] ❌ 관리 정보 유효하지 않음")
 
                 res_refrence = arrange_reference(item, inserted_id)
                 ref_serializer = ConceptReferenceSerializer(data=res_refrence)
                 if ref_serializer.is_valid():
-                    Reference.insert(inserted_id, res_refrence)
+                    IHO_Reference.insert_one(res_refrence)
                 else:
                     print(f"[Type {item_type}][Item {idx}] ❌ 참조 정보 유효하지 않음")
 
                 res_refrenceSource = arrange_referenceSource(item, inserted_id)
                 refS_serializer = ConceptReferenceSourceSerializer(data=res_refrenceSource)
                 if refS_serializer.is_valid():
-                    ReferenceSource.insert(inserted_id, res_refrenceSource)
+                    IHO_ReferenceSource.insert_one(res_refrenceSource)
                 else:
                     print(f"[Type {item_type}][Item {idx}] ❌ 참조 소스 정보 유효하지 않음")
                 
@@ -293,28 +171,18 @@ def sync_iho_data(request):
     print(f"👉 연결된 ID 목록: {write_listed_values}")
 
     # ✅ Step 5: 연결 정보 저장 함수 호출
-    insert_listed_values(write_listed_values, C_id)
+    insert_listed_values(write_listed_values)
 
     return Response({"status": "success", "message": "데이터 유효성 검증 완료"})
 
-class ihoListedValue(ListedValue):
-    @classmethod
-    def insert_listed_value(cls, parent_id, child_id, C_id):
-        cls.collection.insert_one({
-            "parent_id": ObjectId(parent_id),
-            "child_id": ObjectId(child_id),
-            # "concept_id": C_id,
-        })
-def insert_listed_values(write_listed_values, C_id):
+from ihoDataIntegrationSystem.models import IHO_ListedValue
+def insert_listed_values(write_listed_values):
     for parent_identifier, child_identifiers in write_listed_values.items():
         if not child_identifiers:
             continue
 
         try:
-            parent_doc = Concept.collection.find_one({
-                "itemIdentifier": int(parent_identifier),
-                "isIHO": "yes"
-            })
+            parent_doc = IHO_Item.collection.find_one({"itemIdentifier": int(parent_identifier)})
         except ValueError:
             print(f"❌ invalid parent_identifier: {parent_identifier}")
             continue
@@ -327,10 +195,7 @@ def insert_listed_values(write_listed_values, C_id):
 
         for child_identifier in child_identifiers:
             try:
-                child_doc = Concept.collection.find_one({
-                    "itemIdentifier": int(child_identifier),
-                    "isIHO": "yes"
-                })
+                child_doc = IHO_Item.collection.find_one({"itemIdentifier": int(child_identifier)})
             except ValueError:
                 print(f"❌ invalid child_identifier: {child_identifier}")
                 continue
@@ -340,8 +205,9 @@ def insert_listed_values(write_listed_values, C_id):
                 continue
 
             child_id = child_doc["_id"]
-            ihoListedValue.insert_listed_value(parent_id, child_id, C_id)
+            IHO_ListedValue.insert_listed_value(parent_id, child_id)
             print(f"✅ 연결 완료: {parent_identifier} → {child_identifier}")
+
 
 def arrange_by_type(item_type, input_data, base_form):
     """
@@ -385,6 +251,9 @@ def arrange_by_type(item_type, input_data, base_form):
 
     base_form.update(arrange_form)
     return base_form
+
+
+
 
 def arrange_managementInfo(input_data, inserted_id):
     arrange_form = {
@@ -453,7 +322,7 @@ def arrange_reference(input_data, inserted_id):
 
     return arrange_form
 
-def arrange_concept_common(input_data, base_form, inserted_id): ## all
+def arrange_concept_common(input_data, base_form): ## all
     arrange_form = {
         "itemIdentifier":"",
         "name":"",
@@ -467,8 +336,7 @@ def arrange_concept_common(input_data, base_form, inserted_id): ## all
         "similarityToSource":"",
         "justification":"",
         "proposedChange":"",
-        "concept_id": "---", ### Re 시리얼라이저랑 맞추기 위함
-        "isIHO" : "yes"
+        "concept_id":"----", ### Re 시리얼라이저랑 맞추기 위함함
     }
     for att, data in input_data.items():
         if att == "idx":
@@ -492,7 +360,6 @@ def arrange_concept_common(input_data, base_form, inserted_id): ## all
 
 
 
-### 아래로는 아직 안쓰는 메서드임임
 @swagger_auto_schema(method='post', manual_parameters=[regi_uri, service_key, item_type])
 @api_view(['POST'])
 def sync_iho_data_one(request):
@@ -538,6 +405,7 @@ def sync_iho_data_one(request):
                 }
             }
         }, status=500)
+
 
 def serialize_mongo_document(doc):
     """
