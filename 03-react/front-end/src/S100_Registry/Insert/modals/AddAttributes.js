@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { SEARCH_RELATED_ITEM } from '../../DataDictionary/api';
+import { SEARCH_RELATED_ITEM, SEARCH_RELATED_ITEM_IHO} from '../../DataDictionary/api';
 import Cookies from 'js-cookie';
 import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
+import { useLocation } from 'react-router-dom';
 
 function AddAttributes({ handleRelatedEnumList, relatedEnumList, componentType, InputTitle }) {
     const role = getDecryptedItem('role');
@@ -13,9 +14,12 @@ function AddAttributes({ handleRelatedEnumList, relatedEnumList, componentType, 
     const regi_uri = getDecryptedItem('REGISTRY_URI');
     const [searchTerm, setSearchTerm] = useState('');
     const [itemTypes, setItemTypes] = useState('All');
+    const location = useLocation();
+    const isIHO = location.state?.isIHO;
 
     useEffect(() => {
-        axios.get(SEARCH_RELATED_ITEM, {
+        const apiUrl = isIHO ? SEARCH_RELATED_ITEM_IHO : SEARCH_RELATED_ITEM;
+        axios.get(apiUrl, {
             params: {
                 regi_uri: regi_uri,
                 item_type: callAPIItemTypes

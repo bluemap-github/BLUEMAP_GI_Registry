@@ -149,7 +149,6 @@ def handle_file_update(request, model_class, file_fields, directory, serializer_
     # 기존 데이터를 업데이트
     for file_field in file_fields:
         uploaded_file = request.FILES.get(file_field)
-        print(request.FILES.get(file_field), file_field,"1234567890???????????")
         if uploaded_file:
             file_path = os.path.join(settings.MEDIA_ROOT, derectory_to_match_file[file_field])
             mutable_data[file_field] = file_path

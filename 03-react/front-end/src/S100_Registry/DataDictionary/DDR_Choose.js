@@ -16,8 +16,11 @@ const DDRChoose = ({ clickHandler, viewType }) => {
     const navigate = useNavigate();
     const selectedLabel = buttonTypes.find((btn) => btn.type === viewType)?.label || '';
     const handleMovePage = () => {
-        Cookies.set('createViewType', viewType);
-        navigate(`/${getDecryptedItem('REGISTRY_URI')}/create`);
+        navigate(`/${getDecryptedItem('REGISTRY_URI')}/create`, {
+            state: {
+              createViewType: viewType,
+            }
+          });
     };
     return (
         <>

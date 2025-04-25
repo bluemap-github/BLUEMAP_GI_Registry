@@ -21,6 +21,8 @@ import RegiNavBar from './Common/RegiNavBar';
 import PortrayalPage from './rootComponent/PortrayalPage';
 import ConceptPage from './rootComponent/ConceptPage';
 import DataDictionaryPage from './rootComponent/DataDictionaryPage';
+import IhoConceptPage from './rootComponent/IhoConceptPage';
+import IhoDataDictionaryPage from './rootComponent/IhoDataDictionaryPage';
 import UserPage from './rootComponent/UserPage';
 import InsertPortrayalItem from './S100_Registry/Portrayal/Insert/InsertPortrayalItem';
 import './SettingRegistry.css'; 
@@ -104,6 +106,8 @@ function RegistrySection() {
           <div className='p-5 pt-3' style={{maxWidth: '1800px', minWidth: '1200px'}}>
             <Routes>
               <Route path="/" element={<EnterRegi><RegiHome /></EnterRegi>} />
+              <Route path="iho-concept/*" element={<IhoConceptPage />} />
+              <Route path="iho-dataDictionary/*" element={<IhoDataDictionaryPage />} />
               <Route path="concept/*" element={<ConceptPage />} />
               <Route path="dataDictionary/*" element={<DataDictionaryPage />} />
               <Route path="portrayal/*" element={<PortrayalPage />} />

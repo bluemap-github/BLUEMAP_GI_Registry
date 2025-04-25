@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import Base from '../../modals/Base';
 import AddAttributes from '../../modals/AddAttributes';
+import { useLocation } from 'react-router-dom';
 
 function Information({ onFormSubmit, selectedApiUrl }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const mandatoryFields = ["name", "itemStatus"];
+        const location = useLocation();
+        const isIHO = location.state?.isIHO;
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -230,14 +233,14 @@ function Information({ onFormSubmit, selectedApiUrl }) {
                     </div> */}
                 </div>
             </div>
-            <div className="item-input-form-bg p-3 mt-4">
+            {!isIHO && (<div className="item-input-form-bg p-3 mt-4">
                 <AddAttributes 
                     handleRelatedEnumList={handleRelatedEnumList}
                     relatedEnumList={relatedEnumList}
                     componentType='InformationType'
                     InputTitle={'Connect Disticted Informations'}
                 />
-            </div>
+            </div>)}
         </div>
     );
 }

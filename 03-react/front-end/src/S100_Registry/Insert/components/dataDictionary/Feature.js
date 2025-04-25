@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import Base from '../../modals/Base';
 import AddAttributes from '../../modals/AddAttributes';
+import { useLocation } from 'react-router-dom';
 
 function Feature({ onFormSubmit, selectedApiUrl }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const mandatoryFields = ["name", "itemStatus", "featureUseType"];
+    const location = useLocation();
+    const isIHO = location.state?.isIHO;
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -257,14 +260,16 @@ function Feature({ onFormSubmit, selectedApiUrl }) {
                     </div> */}
                 </div>
             </div>
-            <div className="item-input-form-bg p-3 mt-4">
+            {!isIHO && (<div className="item-input-form-bg p-3 mt-4">
                 <AddAttributes 
                     handleRelatedEnumList={handleRelatedEnumList}
                     relatedEnumList={relatedEnumList}
                     componentType='FeatureType'
                     InputTitle={'Connect Disticted Features'}
                 />
-            </div>
+            </div>)
+            }
+            
         </div>
     );
 }

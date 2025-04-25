@@ -20,10 +20,10 @@ urlpatterns = [
     path('concept_item/put/', RE.put.concept_item),
 
     # ManagementInfo
-    path('concept_item/mamagement_info/get/', RE.get.concept_managemant_info), 
-    path('concept_item/mamagement_info/post/', RE.post.mamagement_info), 
-    path('concept_item/mamagement_info/put/', RE.put.concept_managemant_info), 
-    path('concept_item/mamagement_info/delete/', RE.delete.concept_managemant_info), 
+    path('concept_item/management_info/get/', RE.get.concept_managemant_info), 
+    path('concept_item/management_info/post/', RE.post.management_info), 
+    path('concept_item/management_info/put/', RE.put.concept_managemant_info), 
+    path('concept_item/management_info/delete/', RE.delete.concept_managemant_info), 
 
     # ReferenceSource
     path('concept_item/reference_source/get/', RE.get.concept_reference_source), 

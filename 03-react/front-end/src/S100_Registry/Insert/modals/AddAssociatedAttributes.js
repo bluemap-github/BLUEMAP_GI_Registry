@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie'; 
-import { SEARCH_RELATED_ITEM } from '../../DataDictionary/api.js';
+import { SEARCH_RELATED_ITEM, SEARCH_RELATED_ITEM_IHO } from '../../DataDictionary/api.js';
 import { getDecryptedItem, setEncryptedItem } from "../../../cryptoComponent/storageUtils";
+import { useLocation } from 'react-router-dom';
 
 const mandatoryFields = ["attributeId"];
 
@@ -13,6 +14,10 @@ const AddAssociatedAttributes = ({ handleRelatedValueList }) => {
     const [selectedID, setSelectedID] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [isInvalid, setIsInvalid] = useState(true); // 선택이 안 됐을 때 관리하는 상태
+
+    const location = useLocation();
+    const isIHO = location.state?.isIHO;
+
 
     const handleChange = (e) => {
         const selectedId = e.target.value;
@@ -31,7 +36,9 @@ const AddAssociatedAttributes = ({ handleRelatedValueList }) => {
     };
 
     useEffect(() => {
-        axios.get(SEARCH_RELATED_ITEM, {
+        const apiUrl = isIHO ? SEARCH_RELATED_ITEM_IHO : SEARCH_RELATED_ITEM;
+    
+        axios.get(apiUrl, {
             params: {
                 regi_uri: regi_uri,
                 search_term: searchTerm,
@@ -44,7 +51,7 @@ const AddAssociatedAttributes = ({ handleRelatedValueList }) => {
         .catch(error => {
             console.error('There was an error!', error);
         });
-    }, []);
+    }, [isIHO, regi_uri, searchTerm]);
 
     return (
         <div className="input-group mt-3">
