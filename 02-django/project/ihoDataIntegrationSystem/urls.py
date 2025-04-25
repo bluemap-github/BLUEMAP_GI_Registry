@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views.ihoData import (integrateIho, get, post)
+from .views.ihoData import (integrateIho, get, post, put)
 
 app_name = 'regiSystem'
 urlpatterns = [
@@ -25,10 +25,24 @@ urlpatterns = [
     path('concept_reference/post/', post.iho_concept_reference),    
     path('concept_reference_source/post/', post.iho_concept_reference_source),
 
+    path('concept_item/put/', put.iho_concept_item),
+    path('simple_attribute/put/', put.iho_simple_attribute),
+    path('enumerated_value/put/', put.iho_enumerated_value),
+    path('complex_attribute/put/', put.iho_complex_attribute),  
+    path('feature/put/', put.iho_feature),
+    path('information/put/', put.iho_information_type),
+
+    path('concept_management_info/put/', put.iho_concept_management_info),
+    path('concept_reference/put/', put.iho_concept_reference),
+    path('concept_reference_source/put/', put.iho_concept_reference_source),
+
+
     # DDR 
     path('ddr_item_list/get/', get.iho_DDR_item_list),
     path('ddr_item_one/get/', get.iho_DDR_item_one),
 
     
     path('related_item/search/', get.iho_related_item),
+
+
 ]

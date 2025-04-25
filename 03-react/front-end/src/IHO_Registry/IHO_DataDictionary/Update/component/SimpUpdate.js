@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {PUT_SIMPLE_ATTRIBUTE} from '../../api';
+import {PUT_SIMPLE_ATTRIBUTE_IHO} from '../../api';
 
 const conceptTableFields = [
     { name: 'Name', key: 'name' },
@@ -64,7 +64,7 @@ const SimpUpdate = ({ TagItemType, data, onClose }) => {
     
             console.log('Sending PUT request with:', filteredData);
             // 여기에 axios PUT 요청을 추가합니다.
-            axios.put(PUT_SIMPLE_ATTRIBUTE, filteredData, {
+            axios.put(PUT_SIMPLE_ATTRIBUTE_IHO, filteredData, {
                 params: {
                     item_id: _id.encrypted_data,
                     item_iv: _id.iv,

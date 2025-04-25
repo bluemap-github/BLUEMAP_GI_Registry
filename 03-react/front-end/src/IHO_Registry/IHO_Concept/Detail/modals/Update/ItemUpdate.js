@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ItemContext } from '../../../../../context/ItemContext';
 import axios from 'axios';
-import { PUT_ITEM_URL } from '../../../api';
+import { PUT_ITEM_URL_IHO } from '../../../api';
 import UpdateInput from '../tags/UpdateInput';
 import { getDecryptedItem } from "../../../../../cryptoComponent/storageUtils";
 
@@ -25,7 +25,7 @@ function ItemUpdate({ items, onClose }) {
         if (!confirmSubmit) return; // Exit if the user cancels
     
         try {
-            await axios.put(PUT_ITEM_URL, item, {
+            await axios.put(PUT_ITEM_URL_IHO, item, {
                 params: {
                     "item_id": item_id,
                     "item_iv": item_iv,

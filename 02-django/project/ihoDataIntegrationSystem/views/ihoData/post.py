@@ -1,10 +1,3 @@
-### CD > post > concept_item
-### CD > post > enumerated_value
-### CD > post > simple_attribute
-### CD > post > complex_attribute
-### CD > post > feature
-### CD > post > information_type
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from drf_yasg import openapi
@@ -18,8 +11,6 @@ from regiSystem.serializers.CD import (
         ComplexAttributeSerializer,
         FeatureSerializer,
         InformationSerializer,
-        AttributeConstraintsSerializer,
-        AttributeUsageSerializer
 )
 
 from regiSystem.serializers.RE import (

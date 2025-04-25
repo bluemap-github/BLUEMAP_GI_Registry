@@ -1,5 +1,5 @@
 from mongo_driver import db
-
+from openApiSystem.models.concept.item import (Concept)
 IHO_Item = db['IHO_Item']
 IHO_ManagementInfo = db['IHO_ManagementInfo']
 IHO_Reference = db['IHO_Reference']
@@ -8,7 +8,7 @@ IHO_DD_associatedAttribute = db['IHO_DD_associatedAttribute']
 IHO_CD_AttributeUsage = db['IHO_CD_AttributeUsage']
 IHO_DD_distinction = db['IHO_DD_distinction']
 
-class IHO_Classes:
+class IHO_Classes(Concept):
     collection = IHO_Item
     # @classmethod
     # def check_existing_data(cls):

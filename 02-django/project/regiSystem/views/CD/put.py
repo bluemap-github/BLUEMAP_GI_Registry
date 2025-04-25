@@ -29,7 +29,6 @@ def get_params(request):
 @api_view(['PUT'])
 def enumerated_value(request):
     I_id = get_params(request)
-    
     enum_serializer = CD_EnumeratedValueSerializer(data=request.data)
     if enum_serializer.is_valid():
         validated_data = enum_serializer.validated_data
@@ -42,15 +41,12 @@ def enumerated_value(request):
         # Serializer 유효성 검사 실패 시 에러 반환
         return Response({"status": "error", "message": enum_serializer.errors}, status=400)
 
-
-@api_view(['PUT'])
-def simple_attribute(request):
+def query_simple_attribute(request, serializer_class, db_class):
     I_id = get_params(request)
-    
-    simple_serializer = CD_SimpleAttributeSerializer(data=request.data)
+    simple_serializer = serializer_class(data=request.data)
     if simple_serializer.is_valid():
         validated_data = simple_serializer.validated_data
-        res = CD_SimpleAttribute.update(I_id, validated_data)
+        res = db_class.update(I_id, validated_data)
         if res.get("status") == "error":
             return Response({"status": "error", "message": res.get("message")}, status=404)
         else:
@@ -58,6 +54,15 @@ def simple_attribute(request):
     else:
         # Serializer 유효성 검사 실패 시 에러 반환
         return Response({"status": "error", "message": simple_serializer.errors}, status=400)
+
+@api_view(['PUT'])
+def simple_attribute(request):
+    return query_simple_attribute(
+        request=request,
+        serializer_class=CD_SimpleAttributeSerializer,
+        db_class=CD_SimpleAttribute
+    )
+
 
 
 @api_view(['PUT'])
