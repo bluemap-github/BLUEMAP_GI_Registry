@@ -15,7 +15,7 @@ docker load -i ./gi-registry-all.tar
 echo "▶ 현재 디렉토리: $(pwd)"
 echo "▶ GI Registry Docker Compose 실행 시작..."
 
-docker-compose up -d --build
+docker-compose -p gi-registry up -d --build
 
 echo ""
 echo "✅ GI Registry가 다음 주소에서 실행됩니다:"
