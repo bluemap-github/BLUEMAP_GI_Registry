@@ -1,0 +1,52 @@
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - "21801:27017"
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+
+  web:
+    image: gi-web:latest
+    container_name: gi-web
+    command: >
+      sh -c "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 S100Registry.wsgi:application"
+  
+    volumes:
+      - /home/bluemap/media:/usr/src/app/files
+      - /home/bluemap/static:/usr/src/app/_static
+    expose:
+      - "8000"
+    depends_on:
+      - mongodb
+    restart: always
+    environment:
+      - MONGO_URI=${MONGO_URI:-mongodb://localhost:21801}
+      - API_BASE_URL=${API_BASE_URL:-http://localhost:21803}
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "21803:80"
+    volumes:
+      - ./nginx_conf:/etc/nginx/conf.d
+      - /home/bluemap/media:/usr/src/app/files
+      - /home/bluemap/static:/usr/src/app/_static
+    depends_on:
+      - web
+    restart: always
+
+  frontend:
+    image: gi-frontend:latest
+    container_name: gi-frontend
+    ports:
+      - "21804:3000"
+    restart: always
+    environment:
+      - REACT_APP_ROOT_DEPLOY_URL=${REACT_APP_ROOT_DEPLOY_URL:-http://localhost:21803}
+
+volumes:
+  mongo_data:

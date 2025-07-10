@@ -305,6 +305,7 @@ class ihoListedValue(ListedValue):
             "child_id": ObjectId(child_id),
             # "concept_id": C_id,
         })
+    
 def insert_listed_values(write_listed_values, C_id):
     for parent_identifier, child_identifiers in write_listed_values.items():
         if not child_identifiers:
@@ -328,6 +329,7 @@ def insert_listed_values(write_listed_values, C_id):
         for child_identifier in child_identifiers:
             try:
                 child_doc = Concept.collection.find_one({
+                    # "itemType" : "SimpleAttribute",
                     "itemIdentifier": int(child_identifier),
                     "isIHO": "yes"
                 })
