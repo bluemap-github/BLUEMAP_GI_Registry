@@ -10,8 +10,6 @@
 ## 📁 디렉토리 구성
 
 ```bash
-bash
-복사편집
 04-deploy/
 ├── docker-compose.yml
 ├── run_by_docker_hub.sh      # Docker Hub에서 설치할 때 사용
@@ -38,8 +36,6 @@ bash
 ### [방법 1] Docker Hub에서 설치
 
 ```bash
-bash
-복사편집
 chmod +x run_by_docker_hub.sh
 sudo ./run_by_docker_hub.sh
 
@@ -53,8 +49,6 @@ sudo ./run_by_docker_hub.sh
 2. 아래 명령어 실행
 
 ```bash
-bash
-복사편집
 chmod +x run_by_tar.sh
 sudo ./run_by_tar.sh
 
