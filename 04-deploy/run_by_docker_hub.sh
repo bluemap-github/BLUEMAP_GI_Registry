@@ -9,7 +9,7 @@ export REACT_APP_ROOT_DEPLOY_URL=http://${ROOT_SERVER}:21803
 export API_BASE_URL=http://${ROOT_SERVER}:21803
 export MONGO_URI=mongodb://${ROOT_SERVER}:21801
 
-echo "▶ 필요한 이미지 다운로드 중..."
+echo "▶ 필요한 이미지 다운로드 중.."
 docker pull 8x15yz/gi-web:latest
 docker pull 8x15yz/gi-frontend:latest
 docker pull mongo:4.4
@@ -18,6 +18,9 @@ docker pull nginx:latest
 # compose에서 참조하는 이름으로 태그 재설정
 docker tag 8x15yz/gi-web:latest gi-web:latest
 docker tag 8x15yz/gi-frontend:latest gi-frontend:latest
+
+echo "▶ 현재 디렉토리: $(pwd)"
+echo "▶ GI Registry Docker Compose 실행 시작.."
 
 # docker-compose 실행
 docker-compose -p gi-registry up -d --build

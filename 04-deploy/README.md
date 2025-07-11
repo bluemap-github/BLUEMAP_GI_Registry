@@ -38,8 +38,9 @@ sudo ./run_by_docker_hub.sh
 
 ### [방법 2] tar 파일로 설치
 
-1. `.tar` 파일을 서버로 업로드
+1. `.tar` 파일을 서버로 업로드 (docker-compose.yml 파일과 동일한 위치에 둠)
 2. 아래 명령어 실행
+3. 이후 tar 파일은 삭제
 
 ```bash
 chmod +x run_by_tar.sh
@@ -58,3 +59,10 @@ sudo ./run_by_tar.sh
 | 🔎 (선택) Admin CSS 확인 | `http://<서버주소>:21803/static/admin/css/base.css` |
 
 ※ `<서버주소>`는 현재 사용하고 있는 서버의 주소를 대입해 확인하시면 됩니다. 
+
+---
+
+## +) 컨테이너 다운 시
+```bash
+docker-compose -p gi-registry down
+```

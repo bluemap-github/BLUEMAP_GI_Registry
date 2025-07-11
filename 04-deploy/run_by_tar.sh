@@ -9,11 +9,11 @@ export REACT_APP_ROOT_DEPLOY_URL=http://${ROOT_SERVER}:21803
 export API_BASE_URL=http://${ROOT_SERVER}:21803
 export MONGO_URI=mongodb://${ROOT_SERVER}:21801
 
-echo "▶ Docker 이미지 로드 중..."
+echo "▶ Docker 이미지 로드 중.."
 docker load -i ./gi-registry-all.tar
 
 echo "▶ 현재 디렉토리: $(pwd)"
-echo "▶ GI Registry Docker Compose 실행 시작..."
+echo "▶ GI Registry Docker Compose 실행 시작.."
 
 docker-compose -p gi-registry up -d --build
 
