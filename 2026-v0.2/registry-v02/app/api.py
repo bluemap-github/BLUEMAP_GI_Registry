@@ -1,7 +1,7 @@
 # app/api.py
 from __future__ import annotations
 
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone, date, time
 from typing import Any, Dict, Optional, List, Tuple
 
 from fastapi import APIRouter, HTTPException, Query
