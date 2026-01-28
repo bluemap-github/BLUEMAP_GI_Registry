@@ -106,6 +106,10 @@ async def create_register(payload: RegisterCreate):
     if not doc.get("dateOfLastChange"):
         doc["dateOfLastChange"] = date.today()
 
+    dolc = doc.get("dateOfLastChange")
+    if isinstance(dolc, date) and not isinstance(dolc, datetime):
+        doc["dateOfLastChange"] = datetime.combine(dolc, time.min, tzinfo=timezone.utc)
+
     doc["createdAt"] = now
     doc["updatedAt"] = now
 
