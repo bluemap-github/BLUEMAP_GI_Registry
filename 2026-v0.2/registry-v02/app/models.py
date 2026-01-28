@@ -1,7 +1,7 @@
 # app/models.py
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional, List, Literal
 
 from pydantic import BaseModel, Field
@@ -38,7 +38,7 @@ class RegisterCreate(BaseModel):
     operatingLanguage: Optional[RE_Locale] = None
     contentSummary: Optional[str] = None
     uniformResourceIdentifier: Optional[CI_OnlineResource] = None
-    dateOfLastChange: Optional[datetime.date] = None  # 서버에서 기본값(today) 설정
+    dateOfLastChange: Optional[date] = None
 
 
 class RegisterOut(TimeMeta):
@@ -47,7 +47,7 @@ class RegisterOut(TimeMeta):
     operatingLanguage: Optional[RE_Locale] = None
     contentSummary: Optional[str] = None
     uniformResourceIdentifier: Optional[CI_OnlineResource] = None
-    dateOfLastChange: Optional[datetime.date] = None
+    dateOfLastChange: Optional[date] = None
 
 
 # ---------- 2) Register Items (베이스) ----------
