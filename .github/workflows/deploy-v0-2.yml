@@ -1,0 +1,50 @@
+name: Deploy registry-v02
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.
+          
+           }}
+          script: |
+            set -euo pipefail
+
+            PROJECT_ROOT="$HOME/BLUEMAP_GI_Registry"
+            DEMO_DIR="$PROJECT_ROOT/2026-v0.2"
+            ENV_PATH="$DEMO_DIR/.env_v02"
+
+            cd "$PROJECT_ROOT"
+            git pull origin main
+
+            # ✅ clean 이후에 env 파일 생성 (안 지워짐)
+            cat > "$ENV_PATH" <<'EOF'
+            ${{ secrets.ENV_05_DEPLOY }}
+            EOF
+            chmod 600 "$ENV_PATH"
+
+
+             # ✅ fastapi는 docker
+            cd "$DEMO_DIR/registry-v02"
+
+            sudo docker rm -f registry-v02 2>/dev/null || true
+            sudo docker build --no-cache -t registry-v02:latest .
+
+            sudo docker run -d --name registry-v02 \
+              --restart=always \
+              --env-file "$ENV_PATH" \
+              -p 80:8000 \
+              registry-v02:latest

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FastAPI Mini</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <h1>FastAPI + Jinja 템플릿</h1>
+    <p class="msg">{{ message }}</p>
+
+    <section class="card">
+      <h2>폼 POST 테스트</h2>
+      <form method="post" action="/submit">
+        <input name="name" placeholder="이름 입력" />
+        <button type="submit">보내기</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>API 테스트</h2>
+      <ul>
+        <li>GET <code>/api/ping</code></li>
+        <li>POST <code>/api/echo</code> (JSON body)</li>
+      </ul>
+      <pre id="out"></pre>
+      <button id="btn">/api/ping 호출</button>
+    </section>
+  </main>
+
+  <script>
+    const out = document.getElementById("out");
+    document.getElementById("btn").addEventListener("click", async () => {
+      const res = await fetch("/api/ping");
+      out.textContent = JSON.stringify(await res.json(), null, 2);
+    });
+  </script>
+</body>
+</html>
