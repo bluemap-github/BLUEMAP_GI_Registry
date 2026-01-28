@@ -8,10 +8,10 @@ from pydantic import BaseModel, Field
 
 
 # ---------- 공통 ----------
-class PyObjectId(str):
-    """MVP에서는 ObjectId를 그냥 str로 주고받고,
-    CRUD에서 bson.ObjectId로 변환하는 방식 추천."""
-    pass
+# class str(str):
+#     """MVP에서는 ObjectId를 그냥 str로 주고받고,
+#     CRUD에서 bson.ObjectId로 변환하는 방식 추천."""
+#     pass
 
 
 class TimeMeta(BaseModel):
@@ -42,7 +42,7 @@ class RegisterCreate(BaseModel):
 
 
 class RegisterOut(TimeMeta):
-    id: PyObjectId = Field(..., alias="_id")
+    id: str = Field(alias="_id")
     name: str
     operatingLanguage: Optional[RE_Locale] = None
     contentSummary: Optional[str] = None
@@ -52,7 +52,7 @@ class RegisterOut(TimeMeta):
 
 # ---------- 2) Register Items (베이스) ----------
 class RegisterItemCreate(BaseModel):
-    registerId: PyObjectId
+    registerId: str
     kind: Literal["concept", "attribute", "feature", "information", "enumeratedValue", "other"] = "other"
 
     itemIdentifier: int
@@ -72,9 +72,9 @@ class RegisterItemCreate(BaseModel):
     proposedChange: Optional[str] = None
 
     # 관계(선택)
-    managementInfoIds: List[PyObjectId] = Field(default_factory=list)
-    referenceIds: List[PyObjectId] = Field(default_factory=list)
-    referenceSourceId: Optional[PyObjectId] = None
+    managementInfoIds: List[str] = Field(default_factory=list)
+    referenceIds: List[str] = Field(default_factory=list)
+    referenceSourceId: Optional[str] = None
 
 
 class RegisterItemUpdate(BaseModel):
@@ -91,14 +91,14 @@ class RegisterItemUpdate(BaseModel):
     justification: Optional[str] = None
     proposedChange: Optional[str] = None
 
-    managementInfoIds: Optional[List[PyObjectId]] = None
-    referenceIds: Optional[List[PyObjectId]] = None
-    referenceSourceId: Optional[PyObjectId] = None
+    managementInfoIds: Optional[List[str]] = None
+    referenceIds: Optional[List[str]] = None
+    referenceSourceId: Optional[str] = None
 
 
 class RegisterItemOut(TimeMeta):
-    id: PyObjectId = Field(..., alias="_id")
-    registerId: PyObjectId
+    id: str = Field(alias="_id")
+    registerId: str
     kind: str
     itemIdentifier: int
     name: str
@@ -114,9 +114,9 @@ class RegisterItemOut(TimeMeta):
     justification: Optional[str] = None
     proposedChange: Optional[str] = None
 
-    managementInfoIds: List[PyObjectId] = Field(default_factory=list)
-    referenceIds: List[PyObjectId] = Field(default_factory=list)
-    referenceSourceId: Optional[PyObjectId] = None
+    managementInfoIds: List[str] = Field(default_factory=list)
+    referenceIds: List[str] = Field(default_factory=list)
+    referenceSourceId: Optional[str] = None
 
 
 # ---------- 3) Reference Sources ----------
@@ -125,7 +125,7 @@ class ReferenceSourceCreate(BaseModel):
     description: Optional[str] = None
 
 class ReferenceSourceOut(TimeMeta):
-    id: PyObjectId = Field(..., alias="_id")
+    id: str = Field(alias="_id")
     name: str
     description: Optional[str] = None
 
@@ -134,21 +134,21 @@ class ReferenceSourceOut(TimeMeta):
 class ReferenceCreate(BaseModel):
     title: str
     locator: Optional[str] = None
-    referenceSourceId: Optional[PyObjectId] = None
+    referenceSourceId: Optional[str] = None
 
 class ReferenceOut(TimeMeta):
-    id: PyObjectId = Field(..., alias="_id")
+    id: str = Field(alias="_id")
     title: str
     locator: Optional[str] = None
-    referenceSourceId: Optional[PyObjectId] = None
+    referenceSourceId: Optional[str] = None
 
 
 # ---------- 5) Management Info ----------
 class ManagementInfoCreate(BaseModel):
-    registerItemId: PyObjectId
+    registerItemId: str
     note: Optional[str] = None
 
 class ManagementInfoOut(TimeMeta):
-    id: PyObjectId = Field(..., alias="_id")
-    registerItemId: PyObjectId
+    id: str = Field(alias="_id")
+    registerItemId: str
     note: Optional[str] = None
