@@ -1,12 +1,12 @@
 name: Deploy registry-v02
 
-# on:
-#   push:
-#     branches:
-#       - main
-
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+# on:
+#   workflow_dispatch:
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,9 +17,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.
-          
-           }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -euo pipefail
 
@@ -32,7 +30,7 @@ jobs:
 
             # ✅ clean 이후에 env 파일 생성 (안 지워짐)
             cat > "$ENV_PATH" <<'EOF'
-            ${{ secrets.ENV_05_DEPLOY }}
+            ${{ secrets.ENV_02_DEPLOY }}
             EOF
             chmod 600 "$ENV_PATH"
 
