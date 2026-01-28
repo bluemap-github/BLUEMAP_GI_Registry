@@ -566,27 +566,27 @@
 
         <!-- Stats Cards -->
         <section class="stats-grid">
-            <div class="stat-card active" data-filter="feature-type" style="--stat-color: #2563eb">
-                <div class="label">Feature Type</div>
+            <div class="stat-card active" data-filter="" style="--stat-color: #2563eb">
+                <div class="label">All Types</div>
                 <div class="value">393</div>
             </div>
-            <div class="stat-card" data-filter="information-type" style="--stat-color: #06b6d4">
+            <div class="stat-card" data-filter="information" style="--stat-color: #06b6d4">
                 <div class="label">Information Type</div>
                 <div class="value">35</div>
             </div>
-            <div class="stat-card" data-filter="attribute-type" style="--stat-color: #8b5cf6">
+            <div class="stat-card" data-filter="attribute" style="--stat-color: #8b5cf6">
                 <div class="label">Attribute Type</div>
                 <div class="value">846</div>
             </div>
-            <div class="stat-card" data-filter="complex-type" style="--stat-color: #ec4899">
+            <div class="stat-card" data-filter="other" style="--stat-color: #ec4899">
                 <div class="label">Complex Type</div>
                 <div class="value">138</div>
             </div>
-            <div class="stat-card" data-filter="enumeration" style="--stat-color: #f59e0b">
+            <div class="stat-card" data-filter="enumeratedValue" style="--stat-color: #f59e0b">
                 <div class="label">Enumeration Value</div>
                 <div class="value">2,573</div>
             </div>
-            <div class="stat-card" data-filter="codelist" style="--stat-color: #10b981">
+            <div class="stat-card" data-filter="enumeratedValue" style="--stat-color: #10b981">
                 <div class="label">Codelist Value</div>
                 <div class="value">455</div>
             </div>
@@ -719,434 +719,454 @@
     </div>
 
     <script>
-    /**
-    * dd_list.html (API 연동 버전)
-    * - 서버에서 paging/filter/sort 처리
-    * - 응답: { items: [...], total: number }
-    */
+/**
+ * dd_list.html (API 연동 버전)
+ * - 서버에서 paging/filter/sort 처리
+ * - 응답: { items: [...], total: number }
+ *
+ * ✅ API가 받는 파라미터:
+ * page, limit
+ * q, searchBy (name | itemIdentifier)
+ * kind, status, registerId
+ * sortBy, sortOrder
+ */
 
-    // -----------------------------
-    // State
-    // -----------------------------
-    let currentData = [];
-    let currentPage = 1;
-    let rowsPerPage = 20;
+// -----------------------------
+// State
+// -----------------------------
+let currentData = [];
+let currentPage = 1;
+let rowsPerPage = 20;
 
-    // 서버 정렬 파라미터
-    // sort는 API에서 인식하는 필드명으로 보냄
-    // (예: itemIdentifier, name, camelCase, itemStatus, updatedAt)
-    let sortColumn = "itemIdentifier";
-    let sortDirection = "desc";
+// 서버 정렬 파라미터 (API 필드명으로 보냄)
+let sortBy = "updatedAt";
+let sortOrder = "desc";
 
-    // stat card에서 선택한 필터(여기서는 kind로 사용)
-    // 예: attribute / feature / information / concept ...
-    let activeFilter = ""; // ""이면 전체
+// UI에서 어떤 컬럼을 눌렀는지(아이콘 표시용)
+let sortUiKey = "date";
 
-    // 서버가 준 전체 건수
-    let totalItems = 0;
+// stat-card에서 선택한 kind 필터 (""이면 전체)
+let activeKind = "";
 
-    // -----------------------------
-    // Init
-    // -----------------------------
-    document.addEventListener("DOMContentLoaded", () => {
-        // rowsPerPage 초기화 (select가 있으면)
-        const rpp = document.getElementById("rows-per-page");
-        if (rpp && rpp.value) rowsPerPage = parseInt(rpp.value, 10) || 20;
+// 서버가 준 전체 건수
+let totalItems = 0;
 
-        setupStatCardListeners();
-        setupSearchEnterListener();
-        fetchAndRender();
+// (선택) URL 쿼리스트링에 registerId가 있으면 자동 적용
+function getRegisterIdFromUrl() {
+  try {
+    const u = new URL(window.location.href);
+    return u.searchParams.get("registerId") || "";
+  } catch {
+    return "";
+  }
+}
+const registerIdFromUrl = getRegisterIdFromUrl();
+
+// -----------------------------
+// Init
+// -----------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  const rpp = document.getElementById("rows-per-page");
+  if (rpp && rpp.value) rowsPerPage = parseInt(rpp.value, 10) || 20;
+
+  setupStatCardListeners();
+  setupSearchEnterListener();
+
+  // 기본 정렬 아이콘 초기화(기본은 date/updatedAt desc)
+  updateSortIcons(sortUiKey, sortOrder);
+
+  fetchAndRender();
+});
+
+// -----------------------------
+// Sort mapping (UI column key -> API field)
+// -----------------------------
+const sortMap = {
+  id: "itemIdentifier",
+  name: "name",
+  camelcase: "camelCase",
+  definition: "definition",
+  status: "itemStatus",
+  date: "updatedAt",
+  domain: "kind", // UI에 domain 컬럼이 있지만 API에는 없음 → 표시는 kind로 대체
+};
+
+function updateSortIcons(activeKey, direction) {
+  document.querySelectorAll("th").forEach(th => {
+    th.classList.remove("sorted");
+    const icon = th.querySelector(".sort-icon");
+    if (icon) icon.textContent = "↕";
+  });
+
+  const header = document.querySelector(`th[onclick="sortTable('${activeKey}')"]`);
+  if (header) {
+    header.classList.add("sorted");
+    const icon = header.querySelector(".sort-icon");
+    if (icon) icon.textContent = direction === "asc" ? "↑" : "↓";
+  }
+}
+
+function sortTable(uiColumnKey) {
+  const apiField = sortMap[uiColumnKey] || "updatedAt";
+
+  if (sortBy === apiField) {
+    sortOrder = sortOrder === "asc" ? "desc" : "asc";
+  } else {
+    sortBy = apiField;
+    sortOrder = "asc";
+  }
+
+  sortUiKey = uiColumnKey;
+  updateSortIcons(sortUiKey, sortOrder);
+
+  currentPage = 1;
+  fetchAndRender();
+}
+
+// -----------------------------
+// Filters from UI
+// -----------------------------
+function getFiltersFromUI() {
+  // ✅ domain은 UI에만 있고 API에는 없음 (서버 확장 전까지는 전송하지 않음)
+  // const domain = document.getElementById("domain-filter")?.value || "";
+
+  const status = document.getElementById("status-filter")?.value || "";
+  const uiSearchBy = document.getElementById("category-filter")?.value || "name";
+  const q = document.getElementById("search-input")?.value?.trim() || "";
+
+  return { status, uiSearchBy, q };
+}
+
+function buildQueryParams() {
+  const { status, uiSearchBy, q } = getFiltersFromUI();
+  const params = new URLSearchParams();
+
+  // paging
+  params.set("page", String(currentPage));
+  params.set("limit", String(rowsPerPage));
+
+  // sorting (✅ API expects sortBy/sortOrder)
+  params.set("sortBy", sortBy);
+  params.set("sortOrder", sortOrder);
+
+  // filters
+  if (status) params.set("status", status);
+  if (activeKind) params.set("kind", activeKind);
+
+  // registerId (선택)
+  if (registerIdFromUrl) params.set("registerId", registerIdFromUrl);
+
+  // searchBy/q (✅ API expects name | itemIdentifier)
+  if (q) {
+    if (uiSearchBy === "id") {
+      params.set("searchBy", "itemIdentifier");
+    } else {
+      // camelcase/definition도 UI에 남겨두되, 서버가 현재는 name만 처리하므로 name으로 통일
+      params.set("searchBy", "name");
+    }
+    params.set("q", q);
+  }
+
+  return params.toString();
+}
+
+// -----------------------------
+// Normalize + format
+// -----------------------------
+function normalizeItem(raw) {
+  const id = raw.id ?? raw._id ?? raw.itemIdentifier;
+
+  const itemIdentifier = raw.itemIdentifier ?? raw.id ?? "";
+  const name = raw.name ?? "";
+  const camelCase = raw.camelCase ?? raw.camelcase ?? "";
+  const definition = raw.definition ?? "";
+  const domain = raw.domain ?? raw.kind ?? ""; // domain 개념이 없으면 kind로 대체 표시
+  const status = raw.itemStatus ?? raw.status ?? "";
+  const date = raw.updatedAt ?? raw.createdAt ?? raw.date ?? null;
+
+  return {
+    id,
+    itemIdentifier,
+    name,
+    camelCase,
+    definition,
+    domain,
+    status,
+    date,
+  };
+}
+
+function formatDate(val) {
+  if (!val) return "";
+  const d = new Date(val);
+  if (isNaN(d.getTime())) return String(val);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function getStatusClass(status) {
+  const s = (status || "").toString().toLowerCase();
+  switch (s) {
+    case "valid": return "badge-success";
+    case "pending": return "badge-warning";
+    case "deprecated": return "badge-danger";
+    default: return "badge-info";
+  }
+}
+
+// -----------------------------
+// API fetch
+// -----------------------------
+async function fetchItems() {
+  const qs = buildQueryParams();
+  const res = await fetch(`/api/dd/items?${qs}`, { headers: { "Accept": "application/json" } });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`API error ${res.status}: ${text}`);
+  }
+  const data = await res.json();
+
+  const items = Array.isArray(data.items) ? data.items : [];
+  totalItems = typeof data.total === "number" ? data.total : items.length;
+
+  currentData = items.map(normalizeItem);
+}
+
+async function fetchAndRender() {
+  const tbody = document.getElementById("table-body");
+  if (tbody) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty-state">
+            <h3>Loading...</h3>
+            <p>Fetching items from API</p>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  try {
+    await fetchItems();
+    renderTable();
+  } catch (err) {
+    console.error(err);
+    if (tbody) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7">
+            <div class="empty-state">
+              <h3>Failed to load</h3>
+              <p>${escapeHtml(String(err.message || err))}</p>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+    totalItems = 0;
+    currentData = [];
+    updatePagination();
+    updateInfo();
+  }
+}
+
+// -----------------------------
+// Render
+// -----------------------------
+function renderTable() {
+  const tbody = document.getElementById("table-body");
+  if (!tbody) return;
+
+  if (!currentData || currentData.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+            </svg>
+            <h3>No items found</h3>
+            <p>Try adjusting your filters or search terms.</p>
+          </div>
+        </td>
+      </tr>
+    `;
+  } else {
+    tbody.innerHTML = currentData.map(item => `
+      <tr data-item-id="${escapeHtml(item.id)}">
+        <td><span class="item-id">${escapeHtml(item.itemIdentifier)}</span></td>
+        <td>
+          <a class="item-name" href="/ui/dd/${encodeURIComponent(item.itemIdentifier)}" style="text-decoration:none;">
+            ${escapeHtml(item.name)}
+          </a>
+        </td>
+        <td class="truncate"><span class="camelcase">${escapeHtml(item.camelCase)}</span></td>
+        <td class="truncate" title="${escapeHtml(item.definition)}">${escapeHtml(item.definition)}</td>
+        <td>${escapeHtml(item.domain)}</td>
+        <td><span class="badge ${getStatusClass(item.status)}">${escapeHtml(item.status)}</span></td>
+        <td><span class="date">${escapeHtml(formatDate(item.date))}</span></td>
+      </tr>
+    `).join("");
+  }
+
+  updatePagination();
+  updateInfo();
+}
+
+// -----------------------------
+// Info + Pagination
+// -----------------------------
+function updateInfo() {
+  const start = totalItems === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1;
+  const end = Math.min(currentPage * rowsPerPage, totalItems);
+
+  const sEl = document.getElementById("showing-start");
+  const eEl = document.getElementById("showing-end");
+  const tEl = document.getElementById("total-items");
+
+  if (sEl) sEl.textContent = String(start);
+  if (eEl) eEl.textContent = String(end);
+  if (tEl) tEl.textContent = String(totalItems);
+}
+
+function updatePagination() {
+  const pagination = document.getElementById("pagination");
+  if (!pagination) return;
+
+  const totalPages = Math.max(1, Math.ceil(totalItems / rowsPerPage));
+
+  let html = `
+    <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+  `;
+
+  const maxVisiblePages = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  if (startPage > 1) {
+    html += `<button onclick="changePage(1)">1</button>`;
+    if (startPage > 2) html += `<span class="ellipsis">...</span>`;
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    html += `<button onclick="changePage(${i})" class="${i === currentPage ? "active" : ""}">${i}</button>`;
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) html += `<span class="ellipsis">...</span>`;
+    html += `<button onclick="changePage(${totalPages})">${totalPages}</button>`;
+  }
+
+  html += `
+    <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  `;
+
+  pagination.innerHTML = html;
+}
+
+function changePage(page) {
+  const totalPages = Math.max(1, Math.ceil(totalItems / rowsPerPage));
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
+  fetchAndRender();
+  document.querySelector(".table-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function changeRowsPerPage() {
+  const v = document.getElementById("rows-per-page")?.value;
+  rowsPerPage = parseInt(v, 10) || 20;
+  currentPage = 1;
+  fetchAndRender();
+}
+
+// -----------------------------
+// Stat card (kind filter)
+// ✅ data-filter 값은 API의 kind 값과 동일해야 함
+// -----------------------------
+function setupStatCardListeners() {
+  const cards = document.querySelectorAll(".stat-card");
+  if (!cards || cards.length === 0) return;
+
+  cards.forEach(card => {
+    card.addEventListener("click", function() {
+      cards.forEach(c => c.classList.remove("active"));
+      this.classList.add("active");
+
+      // data-filter=""이면 전체
+      activeKind = this.dataset.filter || "";
+      currentPage = 1;
+      fetchAndRender();
     });
+  });
+}
 
-    // -----------------------------
-    // API helpers
-    // -----------------------------
+// -----------------------------
+// Actions
+// -----------------------------
+function applyFilters() {
+  currentPage = 1;
+  fetchAndRender();
+}
 
-    const sortMap = {
-        id: "itemIdentifier",
-        name: "name",
-        camelcase: "camelCase",
-        definition: "definition",
-        status: "itemStatus",
-        date: "updatedAt",
-        domain: "kind", // domain 없으면 kind로 대체 표시 중이니까
-        };
+function resetFilters() {
+  const d = document.getElementById("domain-filter");
+  const s = document.getElementById("status-filter");
+  const c = document.getElementById("category-filter");
+  const q = document.getElementById("search-input");
 
-        function sortTable(column) {
-        const apiField = sortMap[column] || "updatedAt";
+  if (d) d.value = "";
+  if (s) s.value = "";
+  if (c) c.value = "name";
+  if (q) q.value = "";
 
-        if (sortColumn === apiField) {
-            sortDirection = sortDirection === "asc" ? "desc" : "asc";
-        } else {
-            sortColumn = apiField;
-            sortDirection = "asc";
-        }
+  activeKind = "";
+  document.querySelectorAll(".stat-card").forEach(card => card.classList.remove("active"));
+  // 기본: All Types 카드 다시 활성화 (첫 카드)
+  const first = document.querySelector(".stat-card");
+  if (first) first.classList.add("active");
 
-        currentPage = 1;
-        fetchAndRender();
-        }
-        
-    function getFiltersFromUI() {
-        const domain = document.getElementById("domain-filter")?.value || "";
-        const status = document.getElementById("status-filter")?.value || "";
-        const searchBy = document.getElementById("category-filter")?.value || "name";
-        const q = document.getElementById("search-input")?.value?.trim() || "";
+  currentPage = 1;
+  fetchAndRender();
+}
 
-        return { domain, status, searchBy, q };
-    }
+function exportData() {
+  alert("Export functionality would be implemented here.
+In real app, this would export to CSV/Excel.");
+}
 
-    function buildQueryParams() {
-        const { domain, status, searchBy, q } = getFiltersFromUI();
-        const params = new URLSearchParams();
-
-        // paging
-        params.set("page", String(currentPage));
-        params.set("limit", String(rowsPerPage));
-
-        // sorting
-        params.set("sortBy", sortColumn);
-        params.set("sortOrder", sortDirection);
-
-        // filters (API가 받는 키에 맞춰 조정 가능)
-        // if (domain) params.set("domain", domain);
-        if (status) params.set("status", status);
-        if (q) {
-        params.set("q", q);
-        params.set("searchBy", searchBy);
-        }
-        if (activeFilter) params.set("kind", activeFilter);
-
-        return params.toString();
-    }
-
-    // 서버 item → UI 렌더 item으로 매핑(키가 조금 달라도 안전하게)
-    function normalizeItem(raw) {
-        // id 처리: id가 있으면 쓰고, 없으면 _id를 string으로
-        const id = raw.id ?? raw._id ?? raw.itemIdentifier;
-
-        const itemIdentifier = raw.itemIdentifier ?? raw.id ?? raw.itemIdentifier;
-        const name = raw.name ?? "";
-        const camelCase = raw.camelCase ?? raw.camelcase ?? "";
-        const definition = raw.definition ?? "";
-        const domain = raw.domain ?? raw.kind ?? ""; // domain 개념이 없으면 kind로 대체 표시
-        const status = raw.itemStatus ?? raw.status ?? "";
-        const date =
-        raw.updatedAt ?? raw.createdAt ?? raw.date ?? null;
-
-        return {
-        id,
-        itemIdentifier,
-        name,
-        camelCase,
-        definition,
-        domain,
-        status,
-        date
-        };
-    }
-
-    function formatDate(val) {
-        if (!val) return "";
-        // FastAPI가 ISO string 주는 경우
-        const d = new Date(val);
-        if (isNaN(d.getTime())) return String(val);
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, "0");
-        const dd = String(d.getDate()).padStart(2, "0");
-        return `${yyyy}-${mm}-${dd}`;
-    }
-
-    async function fetchItems() {
-        const qs = buildQueryParams();
-        const res = await fetch(`/api/dd/items?${qs}`, { headers: { "Accept": "application/json" } });
-        if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`API error ${res.status}: ${text}`);
-        }
-        const data = await res.json();
-
-        // 기대: { items, total }
-        const items = Array.isArray(data.items) ? data.items : [];
-        totalItems = typeof data.total === "number" ? data.total : items.length;
-
-        currentData = items.map(normalizeItem);
-    }
-
-    async function fetchAndRender() {
-        const tbody = document.getElementById("table-body");
-        // 로딩 UI
-        if (tbody) {
-        tbody.innerHTML = `
-            <tr>
-            <td colspan="7">
-                <div class="empty-state">
-                <h3>Loading...</h3>
-                <p>Fetching items from API</p>
-                </div>
-            </td>
-            </tr>
-        `;
-        }
-
-        try {
-        await fetchItems();
-        renderTable();
-        } catch (err) {
-        console.error(err);
-        if (tbody) {
-            tbody.innerHTML = `
-            <tr>
-                <td colspan="7">
-                <div class="empty-state">
-                    <h3>Failed to load</h3>
-                    <p>${String(err.message || err)}</p>
-                </div>
-                </td>
-            </tr>
-            `;
-        }
-        // pagination/info도 에러 상황 반영
-        totalItems = 0;
-        currentData = [];
-        updatePagination();
-        updateInfo();
-        }
-    }
-
-    // -----------------------------
-    // Stat Card Listeners (kind filter)
-    // -----------------------------
-    function setupStatCardListeners() {
-        const cards = document.querySelectorAll(".stat-card");
-        if (!cards || cards.length === 0) return;
-
-        cards.forEach(card => {
-        card.addEventListener("click", function() {
-            cards.forEach(c => c.classList.remove("active"));
-            this.classList.add("active");
-
-            // ✅ data-filter 값을 kind로 사용 (HTML의 data-filter를 attribute/feature/information 등으로 맞추면 됨)
-            activeFilter = this.dataset.filter || "";
-            currentPage = 1;
-            fetchAndRender();
-        });
-        });
-    }
-
-    // -----------------------------
-    // Render Table (서버가 이미 page 단위로 줌)
-    // -----------------------------
-    function renderTable() {
-        const tbody = document.getElementById("table-body");
-
-        if (!tbody) return;
-
-        if (!currentData || currentData.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-            <td colspan="7">
-                <div class="empty-state">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
-                </svg>
-                <h3>No items found</h3>
-                <p>Try adjusting your filters or search terms.</p>
-                </div>
-            </td>
-            </tr>
-        `;
-        } else {
-        tbody.innerHTML = currentData.map(item => `
-            <tr data-item-id="${item.id}">
-            <td><span class="item-id">${item.itemIdentifier ?? ""}</span></td>
-            <td>
-                <a class="item-name" href="/ui/dd/${item.itemIdentifier}" style="text-decoration:none;">
-                ${escapeHtml(item.name)}
-                </a>
-            </td>
-            <td class="truncate"><span class="camelcase">${escapeHtml(item.camelCase)}</span></td>
-            <td class="truncate" title="${escapeHtml(item.definition)}">${escapeHtml(item.definition)}</td>
-            <td>${escapeHtml(item.domain)}</td>
-            <td><span class="badge ${getStatusClass(item.status)}">${escapeHtml(item.status)}</span></td>
-            <td><span class="date">${escapeHtml(formatDate(item.date))}</span></td>
-            </tr>
-        `).join("");
-        }
-
-        updatePagination();
-        updateInfo();
-    }
-
-    function escapeHtml(str) {
-        if (str === null || str === undefined) return "";
-        return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    // Get Status Badge Class (서버 status 값에 맞춰 확장 가능)
-    function getStatusClass(status) {
-        const s = (status || "").toString().toLowerCase();
-        switch (s) {
-        case "valid": return "badge-success";
-        case "pending": return "badge-warning";
-        case "deprecated": return "badge-danger";
-        default: return "badge-info";
-        }
-    }
-
-    // -----------------------------
-    // Info + Pagination (totalItems 기반)
-    // -----------------------------
-    function updateInfo() {
-        const start = totalItems === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1;
-        const end = Math.min(currentPage * rowsPerPage, totalItems);
-
-        const sEl = document.getElementById("showing-start");
-        const eEl = document.getElementById("showing-end");
-        const tEl = document.getElementById("total-items");
-
-        if (sEl) sEl.textContent = String(start);
-        if (eEl) eEl.textContent = String(end);
-        if (tEl) tEl.textContent = String(totalItems);
-    }
-
-    function updatePagination() {
-        const pagination = document.getElementById("pagination");
-        if (!pagination) return;
-
-        const totalPages = Math.max(1, Math.ceil(totalItems / rowsPerPage));
-
-        let html = `
-        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-        </button>
-        `;
-
-        const maxVisiblePages = 5;
-        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-        if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-        }
-
-        if (startPage > 1) {
-        html += `<button onclick="changePage(1)">1</button>`;
-        if (startPage > 2) html += `<span class="ellipsis">...</span>`;
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
-        html += `<button onclick="changePage(${i})" class="${i === currentPage ? "active" : ""}">${i}</button>`;
-        }
-
-        if (endPage < totalPages) {
-        if (endPage < totalPages - 1) html += `<span class="ellipsis">...</span>`;
-        html += `<button onclick="changePage(${totalPages})">${totalPages}</button>`;
-        }
-
-        html += `
-        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </button>
-        `;
-
-        pagination.innerHTML = html;
-    }
-
-    // Change Page
-    function changePage(page) {
-        const totalPages = Math.max(1, Math.ceil(totalItems / rowsPerPage));
-        if (page < 1 || page > totalPages) return;
-        currentPage = page;
-        fetchAndRender();
-        document.querySelector(".table-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    // Change Rows Per Page
-    function changeRowsPerPage() {
-        const v = document.getElementById("rows-per-page")?.value;
-        rowsPerPage = parseInt(v, 10) || 20;
-        currentPage = 1;
-        fetchAndRender();
-    }
-
-    // Sort Table (서버 정렬)
-    function sortTable(column) {
-        // UI sort 아이콘 업데이트
-        document.querySelectorAll("th").forEach(th => {
-        th.classList.remove("sorted");
-        const icon = th.querySelector(".sort-icon");
-        if (icon) icon.textContent = "↕";
-        });
-
-        if (sortColumn === column) {
-        sortDirection = sortDirection === "asc" ? "desc" : "asc";
-        } else {
-        sortColumn = column;
-        sortDirection = "asc";
-        }
-
-        const header = document.querySelector(`th[onclick="sortTable('${column}')"]`);
-        if (header) {
-        header.classList.add("sorted");
-        const icon = header.querySelector(".sort-icon");
-        if (icon) icon.textContent = sortDirection === "asc" ? "↑" : "↓";
-        }
-
-        currentPage = 1;
-        fetchAndRender();
-    }
-
-    // Apply Filters (서버 필터)
-    function applyFilters() {
-        currentPage = 1;
-        fetchAndRender();
-    }
-
-    // Reset Filters
-    function resetFilters() {
-        const d = document.getElementById("domain-filter");
-        const s = document.getElementById("status-filter");
-        const c = document.getElementById("category-filter");
-        const q = document.getElementById("search-input");
-
-        if (d) d.value = "";
-        if (s) s.value = "";
-        if (c) c.value = "name";
-        if (q) q.value = "";
-
-        activeFilter = "";
-        // stat-card active 해제(있다면)
-        document.querySelectorAll(".stat-card").forEach(card => card.classList.remove("active"));
-
-        currentPage = 1;
-        fetchAndRender();
-    }
-
-    // Export Data (placeholder)
-    function exportData() {
-        alert("Export functionality would be implemented here.\nIn real app, this would export to CSV/Excel.");
-    }
-
-    // Search on Enter key
-    function setupSearchEnterListener() {
-        const input = document.getElementById("search-input");
-        if (!input) return;
-        input.addEventListener("keypress", function(e) {
-        if (e.key === "Enter") {
-            applyFilters();
-        }
-        });
-    }
-    </script>
+function setupSearchEnterListener() {
+  const input = document.getElementById("search-input");
+  if (!input) return;
+  input.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") applyFilters();
+  });
+}
+</script>
 
 
 </body>
