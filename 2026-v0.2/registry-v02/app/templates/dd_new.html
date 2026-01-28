@@ -778,6 +778,18 @@
                     </div>
                     <div class="card-body">
                         <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label class="form-label">
+                                    Register <span class="required">*</span>
+                                </label>
+                                <select class="form-select" name="registerId" id="registerSelect" required>
+                                    <option value="">Loading registers...</option>
+                                </select>
+                                <span class="form-hint">
+                                    If you don't have a register, <a href="/ui/registers/new" style="color: var(--primary); font-weight: 600; text-decoration: none;">+ create a new register</a>
+                                </span>
+                            </div>
+
                             <div class="form-group">
                                 <label class="form-label">
                                     Domain <span class="required">*</span>
@@ -804,7 +816,15 @@
                                     <option value="Codelist Value">Codelist Value</option>
                                 </select>
                             </div>
-                            <div class="form-group full-width">
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Item Identifier <span class="required">*</span>
+                                </label>
+                                <input type="number" class="form-input" name="itemIdentifier" placeholder="e.g., 79" required>
+                                <span class="form-hint">Integer identifier (unique within the register)</span>
+                            </div>
+<div class="form-group full-width">
                                 <label class="form-label">
                                     Name <span class="required">*</span>
                                 </label>
@@ -1432,8 +1452,101 @@
             showToast('Draft saved successfully!', 'success');
         });
 
-        // Load Draft on page load
-        window.addEventListener('load', function() {
+        
+        // Submit (Create DD Item)
+        document.getElementById('registryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('registryForm');
+
+            const registerId = (document.getElementById('registerSelect')?.value || '').trim();
+            if (!registerId) {
+                showToast('Please select a register (or create one).', 'warning');
+                return;
+            }
+
+            const itemTypeRaw = (form.querySelector('[name="itemType"]')?.value || '').trim();
+            const kind = (() => {
+                const v = itemTypeRaw.toLowerCase();
+                if (v.includes('attribute')) return 'attribute';
+                if (v.includes('feature')) return 'feature';
+                if (v.includes('information')) return 'information';
+                if (v.includes('concept')) return 'concept';
+                if (v.includes('enumer')) return 'enumeratedValue';
+                return 'other';
+            })();
+
+            const status = (form.querySelector('input[name="status"]:checked')?.value || 'Draft').trim();
+
+            const domain = (form.querySelector('[name="domain"]')?.value || '').trim();
+            const remarks = (form.querySelector('[name="remarks"]')?.value || '').trim();
+            const mergedRemarks = domain ? (`[domain=${domain}] ` + remarks).trim() : (remarks || null);
+
+            const payload = {
+                registerId,
+                kind,
+                itemIdentifier: parseInt((form.querySelector('[name="itemIdentifier"]')?.value || '0'), 10),
+                name: (form.querySelector('[name="name"]')?.value || '').trim(),
+                definition: (form.querySelector('[name="definition"]')?.value || '').trim() || null,
+                remarks: mergedRemarks,
+                itemStatus: status,
+                camelCase: (form.querySelector('[name="camelCase"]')?.value || '').trim() || null,
+                definitionSource: (form.querySelector('[name="referenceSource"]')?.value || '').trim() || null,
+                reference: (form.querySelector('[name="reference"]')?.value || '').trim() || null,
+                similarityToSource: (form.querySelector('[name="similarity"]')?.value || '').trim() || null,
+                justification: (form.querySelector('[name="justification"]')?.value || '').trim() || null,
+                proposedChange: (form.querySelector('[name="proposedChange"]')?.value || '').trim() || null,
+                alias: []
+            };
+
+            if (!payload.name) {
+                showToast('Name is required.', 'warning');
+                return;
+            }
+            if (!payload.itemIdentifier || Number.isNaN(payload.itemIdentifier)) {
+                showToast('Item Identifier is required (integer).', 'warning');
+                return;
+            }
+
+            const res = await fetch('/api/dd/items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                showToast(`Submit failed: ${res.status} ${text}`, 'error');
+                return;
+            }
+
+            showToast('Created successfully!', 'success');
+            setTimeout(() => { window.location.href = '/ui/dd'; }, 700);
+        });
+
+// Load Draft on page load
+        window.addEventListener('load', async function() {
+            // Load Registers for dropdown
+            try {
+                const sel = document.getElementById('registerSelect');
+                const res = await fetch('/api/registers?limit=200&sortBy=name&sortOrder=asc', { headers: { 'Accept':'application/json' }});
+                if (res.ok) {
+                    const data = await res.json();
+                    const items = Array.isArray(data.items) ? data.items : [];
+                    if (items.length === 0) {
+                        sel.innerHTML = '<option value="">No registers (create one)</option>';
+                    } else {
+                        sel.innerHTML = items.map(r => `<option value="${r._id}">${r.name}</option>`).join('');
+                    }
+                } else {
+                    sel.innerHTML = '<option value="">Failed to load registers</option>';
+                }
+            } catch (e) {
+                const sel = document.getElementById('registerSelect');
+                sel.innerHTML = '<option value="">Failed to load registers</option>';
+            }
+
+
             const draft = localStorage.getItem('registryDraft');
             if (draft) {
                 const data = JSON.parse(draft);

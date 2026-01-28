@@ -20,14 +20,34 @@ class TimeMeta(BaseModel):
 
 
 # ---------- 1) Registers ----------
+class RE_Locale(BaseModel):
+    language: str = Field(..., description="ISO 639 language code, e.g., 'en'")
+    country: Optional[str] = Field(None, description="ISO 3166 country code, e.g., 'GB'")
+    characterEncoding: Optional[str] = Field(None, description="e.g., 'utf-8'")
+
+
+class CI_OnlineResource(BaseModel):
+    linkage: str = Field(..., description="URI/URL")
+    protocol: Optional[str] = None
+    name: Optional[str] = None
+
+
 class RegisterCreate(BaseModel):
+    # S100_RE_Register (MVP)
     name: str
-    registerType: Optional[Literal["concept", "dataDictionary", "other"]] = "other"
+    operatingLanguage: Optional[RE_Locale] = None
+    contentSummary: Optional[str] = None
+    uniformResourceIdentifier: Optional[CI_OnlineResource] = None
+    dateOfLastChange: Optional[datetime.date] = None  # 서버에서 기본값(today) 설정
+
 
 class RegisterOut(TimeMeta):
     id: PyObjectId = Field(..., alias="_id")
     name: str
-    registerType: Optional[str] = None
+    operatingLanguage: Optional[RE_Locale] = None
+    contentSummary: Optional[str] = None
+    uniformResourceIdentifier: Optional[CI_OnlineResource] = None
+    dateOfLastChange: Optional[datetime.date] = None
 
 
 # ---------- 2) Register Items (베이스) ----------
