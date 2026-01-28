@@ -38,7 +38,7 @@ class RegisterCreate(BaseModel):
     operatingLanguage: Optional[RE_Locale] = None
     contentSummary: Optional[str] = None
     uniformResourceIdentifier: Optional[CI_OnlineResource] = None
-    dateOfLastChange: Optional[date] = None
+    dateOfLastChange: Optional[datetime] = None
 
 
 class RegisterOut(TimeMeta):
@@ -47,7 +47,7 @@ class RegisterOut(TimeMeta):
     operatingLanguage: Optional[RE_Locale] = None
     contentSummary: Optional[str] = None
     uniformResourceIdentifier: Optional[CI_OnlineResource] = None
-    dateOfLastChange: Optional[date] = None
+    dateOfLastChange: Optional[datetime] = None
 
 
 # ---------- 2) Register Items (베이스) ----------
