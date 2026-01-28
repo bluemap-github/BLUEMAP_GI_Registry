@@ -1,40 +1,24 @@
-from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+# app/main.py
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-app = FastAPI(title="FastAPI Mini (GET/POST + Jinja)")
+app = FastAPI(title="FastAPI Registry MVP")
 
-# 정적 파일 / 템플릿 설정
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
+# ---------- UI pages (정적 HTML처럼 보이게) ----------
+@app.get("/ui/dd", response_class=HTMLResponse)
+async def ui_dd_list(request: Request):
+    return templates.TemplateResponse("dd_list.html", {"request": request})
 
-# ✅ GET: 템플릿 렌더링
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request, "message": "Hello FastAPI + Jinja!"}
-    )
+@app.get("/ui/dd/new", response_class=HTMLResponse)
+async def ui_dd_new(request: Request):
+    return templates.TemplateResponse("dd_new.html", {"request": request})
 
-
-# ✅ GET: 아주 간단한 API
-@app.get("/api/ping")
-async def ping():
-    return {"ok": True, "message": "pong"}
-
-
-# ✅ POST: JSON body 받기
-@app.post("/api/echo")
-async def echo(payload: dict):
-    return {"received": payload}
-
-
-# ✅ POST: 폼(form) 받기 (템플릿에서 submit)
-@app.post("/submit", response_class=HTMLResponse)
-async def submit(request: Request, name: str = Form(...)):
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request, "message": f"안녕, {name}!"}
-    )
+@app.get("/ui/dd/{item_id}", response_class=HTMLResponse)
+async def ui_dd_detail(request: Request, item_id: int):
+    # 템플릿에 item_id만 꽂아주고, 실제 데이터는 JS가 /api에서 fetch
+    return templates.TemplateResponse("dd_detail.html", {"request": request, "item_id": item_id})

@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Dictionary Register</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --danger: #ef4444;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb .current {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--stat-color, var(--primary));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card.active {
+            border-color: var(--stat-color, var(--primary));
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, transparent 100%);
+        }
+
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--stat-color, var(--primary));
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 150px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            background: var(--card-bg);
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 10px 14px 10px 42px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            background: var(--card-bg);
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .search-wrapper input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-wrapper svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Table Section */
+        .table-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-info {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .table-info strong {
+            color: var(--text);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg);
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        th:hover {
+            background: var(--border);
+        }
+
+        th .sort-icon {
+            display: inline-block;
+            margin-left: 4px;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+        }
+
+        th:hover .sort-icon {
+            opacity: 0.6;
+        }
+
+        th.sorted .sort-icon {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        td {
+            padding: 14px 16px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            max-width: 250px;
+        }
+
+        td.truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        tr:hover {
+            background: rgba(37, 99, 235, 0.03);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .item-id {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .item-name:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .camelcase {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 100px;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-info {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--info);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .date {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Pagination */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .rows-per-page {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .rows-per-page select {
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            background: var(--card-bg);
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pagination button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--bg);
+            border-color: var(--primary);
+        }
+
+        .pagination button.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination .ellipsis {
+            padding: 0 8px;
+            color: var(--text-muted);
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .page-title {
+                font-size: 22px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .search-wrapper {
+                width: 100%;
+            }
+
+            .table-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .pagination {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="page-header">
+            <nav class="breadcrumb">
+                <a href="#">Home</a>
+                <span>/</span>
+                <a href="#">GI Registers</a>
+                <span>/</span>
+                <span class="current">Data Dictionary Register</span>
+            </nav>
+            <h1 class="page-title">Data Dictionary Register</h1>
+        </header>
+
+        <!-- Stats Cards -->
+        <section class="stats-grid">
+            <div class="stat-card active" data-filter="feature-type" style="--stat-color: #2563eb">
+                <div class="label">Feature Type</div>
+                <div class="value">393</div>
+            </div>
+            <div class="stat-card" data-filter="information-type" style="--stat-color: #06b6d4">
+                <div class="label">Information Type</div>
+                <div class="value">35</div>
+            </div>
+            <div class="stat-card" data-filter="attribute-type" style="--stat-color: #8b5cf6">
+                <div class="label">Attribute Type</div>
+                <div class="value">846</div>
+            </div>
+            <div class="stat-card" data-filter="complex-type" style="--stat-color: #ec4899">
+                <div class="label">Complex Type</div>
+                <div class="value">138</div>
+            </div>
+            <div class="stat-card" data-filter="enumeration" style="--stat-color: #f59e0b">
+                <div class="label">Enumeration Value</div>
+                <div class="value">2,573</div>
+            </div>
+            <div class="stat-card" data-filter="codelist" style="--stat-color: #10b981">
+                <div class="label">Codelist Value</div>
+                <div class="value">455</div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="domain-filter">Domain</label>
+                    <select id="domain-filter">
+                        <option value="">All Domains</option>
+                        <option value="IHO Hydro">IHO Hydro</option>
+                        <option value="Inland ENC">Inland ENC</option>
+                        <option value="Maritime">Maritime</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="status-filter">Status</label>
+                    <select id="status-filter">
+                        <option value="">All Status</option>
+                        <option value="Valid" selected>Valid</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Deprecated">Deprecated</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="category-filter">Search By</label>
+                    <select id="category-filter">
+                        <option value="name">Name</option>
+                        <option value="id">Item ID</option>
+                        <option value="camelcase">Camelcase</option>
+                        <option value="definition">Definition</option>
+                    </select>
+                </div>
+                <div class="filter-group search-wrapper">
+                    <label for="search-input">Search</label>
+                    <div class="search-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="search-input" placeholder="Search items...">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Search
+                </button>
+                <button class="btn btn-outline" onclick="resetFilters()">
+                    Reset
+                </button>
+            </div>
+        </section>
+
+        <!-- Data Table -->
+        <section class="table-section">
+            <div class="table-header">
+                <div class="table-info">
+                    Showing <strong><span id="showing-start">1</span>-<span id="showing-end">20</span></strong> of <strong><span id="total-items">393</span></strong> items
+                </div>
+                <div class="table-actions">
+                    <button class="btn btn-outline" onclick="exportData()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Export
+                    </button>
+                </div>
+            </div>
+            <div class="table-container" style="position: relative;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('id')" class="sorted">
+                                Item ID
+                                <span class="sort-icon">↓</span>
+                            </th>
+                            <th onclick="sortTable('name')">
+                                Name
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th onclick="sortTable('camelcase')">
+                                Camelcase
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th onclick="sortTable('definition')">
+                                Definition
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th onclick="sortTable('domain')">
+                                Domain
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th onclick="sortTable('status')">
+                                Status
+                                <span class="sort-icon">↕</span>
+                            </th>
+                            <th onclick="sortTable('date')">
+                                Date Accepted
+                                <span class="sort-icon">↕</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-footer">
+                <div class="rows-per-page">
+                    <span>Rows per page:</span>
+                    <select id="rows-per-page" onchange="changeRowsPerPage()">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+    /**
+     * dd_list.html (API 연동 버전)
+     * - 서버에서 paging/filter/sort 처리
+     * - 응답: { items: [...], total: number }
+     */
+
+    // -----------------------------
+    // State
+    // -----------------------------
+    let currentData = [];
+    let currentPage = 1;
+    let rowsPerPage = 20;
+
+    // 서버 정렬 파라미터
+    // sort는 API에서 인식하는 필드명으로 보냄
+    // (예: itemIdentifier, name, camelCase, itemStatus, updatedAt)
+    let sortColumn = "itemIdentifier";
+    let sortDirection = "desc";
+
+    // stat card에서 선택한 필터(여기서는 kind로 사용)
+    // 예: attribute / feature / information / concept ...
+    let activeFilter = ""; // ""이면 전체
+
+    // 서버가 준 전체 건수
+    let totalItems = 0;
+
+    // -----------------------------
+    // Init
+    // -----------------------------
+    document.addEventListener("DOMContentLoaded", () => {
+        // rowsPerPage 초기화 (select가 있으면)
+        const rpp = document.getElementById("rows-per-page");
+        if (rpp && rpp.value) rowsPerPage = parseInt(rpp.value, 10) || 20;
+
+        setupStatCardListeners();
+        setupSearchEnterListener();
+        fetchAndRender();
+    });
+
+    // -----------------------------
+    // API helpers
+    // -----------------------------
+    function getFiltersFromUI() {
+        const domain = document.getElementById("domain-filter")?.value || "";
+        const status = document.getElementById("status-filter")?.value || "";
+        const searchBy = document.getElementById("category-filter")?.value || "name";
+        const q = document.getElementById("search-input")?.value?.trim() || "";
+
+        return { domain, status, searchBy, q };
+    }
+
+    function buildQueryParams() {
+        const { domain, status, searchBy, q } = getFiltersFromUI();
+        const params = new URLSearchParams();
+
+        // paging
+        params.set("page", String(currentPage));
+        params.set("limit", String(rowsPerPage));
+
+        // sorting
+        params.set("sort", sortColumn);
+        params.set("order", sortDirection);
+
+        // filters (API가 받는 키에 맞춰 조정 가능)
+        if (domain) params.set("domain", domain);
+        if (status) params.set("status", status);
+        if (q) {
+        params.set("q", q);
+        params.set("searchBy", searchBy);
+        }
+        if (activeFilter) params.set("kind", activeFilter);
+
+        return params.toString();
+    }
+
+    // 서버 item → UI 렌더 item으로 매핑(키가 조금 달라도 안전하게)
+    function normalizeItem(raw) {
+        // id 처리: id가 있으면 쓰고, 없으면 _id를 string으로
+        const id = raw.id ?? raw._id ?? raw.itemIdentifier;
+
+        const itemIdentifier = raw.itemIdentifier ?? raw.id ?? raw.itemIdentifier;
+        const name = raw.name ?? "";
+        const camelCase = raw.camelCase ?? raw.camelcase ?? "";
+        const definition = raw.definition ?? "";
+        const domain = raw.domain ?? raw.kind ?? ""; // domain 개념이 없으면 kind로 대체 표시
+        const status = raw.itemStatus ?? raw.status ?? "";
+        const date =
+        raw.updatedAt ?? raw.createdAt ?? raw.date ?? null;
+
+        return {
+        id,
+        itemIdentifier,
+        name,
+        camelCase,
+        definition,
+        domain,
+        status,
+        date
+        };
+    }
+
+    function formatDate(val) {
+        if (!val) return "";
+        // FastAPI가 ISO string 주는 경우
+        const d = new Date(val);
+        if (isNaN(d.getTime())) return String(val);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    async function fetchItems() {
+        const qs = buildQueryParams();
+        const res = await fetch(`/api/dd/items?${qs}`, { headers: { "Accept": "application/json" } });
+        if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`API error ${res.status}: ${text}`);
+        }
+        const data = await res.json();
+
+        // 기대: { items, total }
+        const items = Array.isArray(data.items) ? data.items : [];
+        totalItems = typeof data.total === "number" ? data.total : items.length;
+
+        currentData = items.map(normalizeItem);
+    }
+
+    async function fetchAndRender() {
+        const tbody = document.getElementById("table-body");
+        // 로딩 UI
+        if (tbody) {
+        tbody.innerHTML = `
+            <tr>
+            <td colspan="7">
+                <div class="empty-state">
+                <h3>Loading...</h3>
+                <p>Fetching items from API</p>
+                </div>
+            </td>
+            </tr>
+        `;
+        }
+
+        try {
+        await fetchItems();
+        renderTable();
+        } catch (err) {
+        console.error(err);
+        if (tbody) {
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                <div class="empty-state">
+                    <h3>Failed to load</h3>
+                    <p>${String(err.message || err)}</p>
+                </div>
+                </td>
+            </tr>
+            `;
+        }
+        // pagination/info도 에러 상황 반영
+        totalItems = 0;
+        currentData = [];
+        updatePagination();
+        updateInfo();
+        }
+    }
+
+    // -----------------------------
+    // Stat Card Listeners (kind filter)
+    // -----------------------------
+    function setupStatCardListeners() {
+        const cards = document.querySelectorAll(".stat-card");
+        if (!cards || cards.length === 0) return;
+
+        cards.forEach(card => {
+        card.addEventListener("click", function() {
+            cards.forEach(c => c.classList.remove("active"));
+            this.classList.add("active");
+
+            // ✅ data-filter 값을 kind로 사용 (HTML의 data-filter를 attribute/feature/information 등으로 맞추면 됨)
+            activeFilter = this.dataset.filter || "";
+            currentPage = 1;
+            fetchAndRender();
+        });
+        });
+    }
+
+    // -----------------------------
+    // Render Table (서버가 이미 page 단위로 줌)
+    // -----------------------------
+    function renderTable() {
+        const tbody = document.getElementById("table-body");
+
+        if (!tbody) return;
+
+        if (!currentData || currentData.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+            <td colspan="7">
+                <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                </svg>
+                <h3>No items found</h3>
+                <p>Try adjusting your filters or search terms.</p>
+                </div>
+            </td>
+            </tr>
+        `;
+        } else {
+        tbody.innerHTML = currentData.map(item => `
+            <tr data-item-id="${item.id}">
+            <td><span class="item-id">${item.itemIdentifier ?? ""}</span></td>
+            <td>
+                <a class="item-name" href="/ui/dd/${item.itemIdentifier}" style="text-decoration:none;">
+                ${escapeHtml(item.name)}
+                </a>
+            </td>
+            <td class="truncate"><span class="camelcase">${escapeHtml(item.camelCase)}</span></td>
+            <td class="truncate" title="${escapeHtml(item.definition)}">${escapeHtml(item.definition)}</td>
+            <td>${escapeHtml(item.domain)}</td>
+            <td><span class="badge ${getStatusClass(item.status)}">${escapeHtml(item.status)}</span></td>
+            <td><span class="date">${escapeHtml(formatDate(item.date))}</span></td>
+            </tr>
+        `).join("");
+        }
+
+        updatePagination();
+        updateInfo();
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return "";
+        return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    // Get Status Badge Class (서버 status 값에 맞춰 확장 가능)
+    function getStatusClass(status) {
+        const s = (status || "").toString().toLowerCase();
+        switch (s) {
+        case "valid": return "badge-success";
+        case "pending": return "badge-warning";
+        case "deprecated": return "badge-danger";
+        default: return "badge-info";
+        }
+    }
+
+    // -----------------------------
+    // Info + Pagination (totalItems 기반)
+    // -----------------------------
+    function updateInfo() {
+        const start = totalItems === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1;
+        const end = Math.min(currentPage * rowsPerPage, totalItems);
+
+        const sEl = document.getElementById("showing-start");
+        const eEl = document.getElementById("showing-end");
+        const tEl = document.getElementById("total-items");
+
+        if (sEl) sEl.textContent = String(start);
+        if (eEl) eEl.textContent = String(end);
+        if (tEl) tEl.textContent = String(totalItems);
+    }
+
+    function updatePagination() {
+        const pagination = document.getElementById("pagination");
+        if (!pagination) return;
+
+        const totalPages = Math.max(1, Math.ceil(totalItems / rowsPerPage));
+
+        let html = `
+        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        `;
+
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        if (startPage > 1) {
+        html += `<button onclick="changePage(1)">1</button>`;
+        if (startPage > 2) html += `<span class="ellipsis">...</span>`;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+        html += `<button onclick="changePage(${i})" class="${i === currentPage ? "active" : ""}">${i}</button>`;
+        }
+
+        if (endPage < totalPages) {
+        if (endPage < totalPages - 1) html += `<span class="ellipsis">...</span>`;
+        html += `<button onclick="changePage(${totalPages})">${totalPages}</button>`;
+        }
+
+        html += `
+        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        `;
+
+        pagination.innerHTML = html;
+    }
+
+    // Change Page
+    function changePage(page) {
+        const totalPages = Math.max(1, Math.ceil(totalItems / rowsPerPage));
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        fetchAndRender();
+        document.querySelector(".table-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Change Rows Per Page
+    function changeRowsPerPage() {
+        const v = document.getElementById("rows-per-page")?.value;
+        rowsPerPage = parseInt(v, 10) || 20;
+        currentPage = 1;
+        fetchAndRender();
+    }
+
+    // Sort Table (서버 정렬)
+    function sortTable(column) {
+        // UI sort 아이콘 업데이트
+        document.querySelectorAll("th").forEach(th => {
+        th.classList.remove("sorted");
+        const icon = th.querySelector(".sort-icon");
+        if (icon) icon.textContent = "↕";
+        });
+
+        if (sortColumn === column) {
+        sortDirection = sortDirection === "asc" ? "desc" : "asc";
+        } else {
+        sortColumn = column;
+        sortDirection = "asc";
+        }
+
+        const header = document.querySelector(`th[onclick="sortTable('${column}')"]`);
+        if (header) {
+        header.classList.add("sorted");
+        const icon = header.querySelector(".sort-icon");
+        if (icon) icon.textContent = sortDirection === "asc" ? "↑" : "↓";
+        }
+
+        currentPage = 1;
+        fetchAndRender();
+    }
+
+    // Apply Filters (서버 필터)
+    function applyFilters() {
+        currentPage = 1;
+        fetchAndRender();
+    }
+
+    // Reset Filters
+    function resetFilters() {
+        const d = document.getElementById("domain-filter");
+        const s = document.getElementById("status-filter");
+        const c = document.getElementById("category-filter");
+        const q = document.getElementById("search-input");
+
+        if (d) d.value = "";
+        if (s) s.value = "";
+        if (c) c.value = "name";
+        if (q) q.value = "";
+
+        activeFilter = "";
+        // stat-card active 해제(있다면)
+        document.querySelectorAll(".stat-card").forEach(card => card.classList.remove("active"));
+
+        currentPage = 1;
+        fetchAndRender();
+    }
+
+    // Export Data (placeholder)
+    function exportData() {
+        alert("Export functionality would be implemented here.\nIn real app, this would export to CSV/Excel.");
+    }
+
+    // Search on Enter key
+    function setupSearchEnterListener() {
+        const input = document.getElementById("search-input");
+        if (!input) return;
+        input.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            applyFilters();
+        }
+        });
+    }
+    </script>
+
+</body>
+</html>
