@@ -2,126 +2,700 @@
 
 {% block title %}New PR Item{% endblock %}
 
-{% block content %}
-<h1>Create PR Item</h1>
+{% block extra_styles %}
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--primary:#2563eb;--primary-hover:#1d4ed8;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:12px;--danger:#ef4444;--success:#10b981}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    .breadcrumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-bottom:14px}
+    .breadcrumb a{color:var(--muted);text-decoration:none}
+    .breadcrumb a:hover{color:var(--primary)}
+    .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+    .title h1{font-size:28px;font-weight:900}
+    .title .sub{font-size:14px;color:var(--muted)}
+    .banner{border:1px solid rgba(37,99,235,.25);background:rgba(37,99,235,.08);color:#1e40af;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-weight:700}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+    .card-h{padding:12px 16px;border-bottom:1px solid var(--border);background:#fafbff;font-weight:900;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .card-b{padding:14px 16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    label{font-size:13px;color:var(--muted);font-weight:800;display:block;margin-bottom:4px}
+    .req{color:var(--danger)}
+    input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px;background:#fff;color:var(--text)}
+    textarea{min-height:96px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(37,99,235,.7);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text);font-weight:900;cursor:pointer;text-decoration:none}
+    .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+    .btn.primary:hover{background:var(--primary-hover)}
+    .btn.ghost:hover{border-color:rgba(37,99,235,.35);color:var(--primary)}
 
-<div>
-  <a href="/ui/pr">Back to list</a>
-</div>
+    /* Dynamic list sections */
+    .dyn{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .dyn-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg);border-bottom:1px solid var(--border)}
+    .dyn-title{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.4px}
+    .dyn-b{max-height:320px;overflow:auto}
+    .dyn-empty{padding:16px 12px;color:var(--muted);font-size:13px;text-align:center}
 
-<hr />
+    /* Toast notification */
+    .toast{position:fixed;bottom:22px;right:22px;background:#0f172a;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;transform:translateY(12px);transition:.2s;z-index:9999;font-weight:800}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.success{background:var(--success)}
+    .toast.error{background:var(--danger)}
 
-<form id="form">
-  <h2>Target Register</h2>
-  <label>Register:
-    <select id="registerId" required>
-      <option value="">(select)</option>
-    </select>
-  </label>
-
-  <h2>Kind</h2>
-  <label>kind:
-    <select id="kind" required>
-      <option value="S100_PR_Symbol">S100_PR_Symbol</option>
-      <option value="S100_PR_LineStyle">S100_PR_LineStyle</option>
-      <option value="S100_PR_AreaFill">S100_PR_AreaFill</option>
-      <option value="S100_PR_Pixmap">S100_PR_Pixmap</option>
-      <option value="S100_PR_ItemSchema">S100_PR_ItemSchema</option>
-      <option value="S100_PR_DisplayMode">S100_PR_DisplayMode</option>
-      <option value="S100_PR_ViewingGroupLayer">S100_PR_ViewingGroupLayer</option>
-      <option value="S100_PR_ViewingGroup">S100_PR_ViewingGroup</option>
-      <option value="S100_PR_AlertHighlight">S100_PR_AlertHighlight</option>
-      <option value="S100_PR_AlertMessage">S100_PR_AlertMessage</option>
-      <option value="S100_PR_ColourToken">S100_PR_ColourToken</option>
-      <option value="S100_PR_ColourPalette">S100_PR_ColourPalette</option>
-      <option value="S100_PR_Alert">S100_PR_Alert</option>
-      <option value="S100_PR_PaletteItem">S100_PR_PaletteItem</option>
-      <option value="S100_PR_Font">S100_PR_Font</option>
-      <option value="S100_PR_ContextParameter">S100_PR_ContextParameter</option>
-      <option value="S100_PR_DrawingPriority">S100_PR_DrawingPriority</option>
-      <option value="S100_PR_DisplayPlane">S100_PR_DisplayPlane</option>
-    </select>
-  </label>
-
-  <!-- ✅ 샘플 채우기 버튼 -->
-  <button type="button" id="fillSample">Fill sample data (by kind)</button>
-  <span id="fillMsg"></span>
-
-  <h2>prItem (common)</h2>
-  <div>
-    <label>name: <input id="name" required /></label><br />
-    <label>definition: <input id="definition" /></label><br />
-    <label>remarks: <input id="remarks" /></label><br />
-    <label>itemStatus: <input id="itemStatus" value="Draft" /></label><br />
-    <label>alias (comma): <input id="alias" /></label><br />
-    <label>camelCase: <input id="camelCase" /></label><br />
-    <label>definitionSource: <input id="definitionSource" /></label><br />
-    <label>reference: <input id="reference" /></label><br />
-    <label>similarityToSource: <input id="similarityToSource" /></label><br />
-    <label>justification: <input id="justification" /></label><br />
-    <label>proposedChange: <input id="proposedChange" /></label><br />
-  </div>
-
-  <h2>Top-level PR fields</h2>
-  <div>
-    <label>xmlID: <input id="xmlID" /></label><br />
-    <label>description JSON (array of {text,language}):</label><br />
-    <textarea id="descriptionJson" rows="4" cols="80">[]</textarea><br />
-  </div>
-
-  <h2>Optional links (Visual kinds)</h2>
-  <div>
-    <label>itemSchema (ObjectId): <input id="itemSchema" /></label><br />
-    <label>colourToken (ObjectId comma): <input id="colourToken" /></label><br />
-  </div>
-
-  <h2>kindBody JSON</h2>
-  <p>
-    This will be stored under the key == kind (e.g., item["S100_PR_Symbol"]).
-  </p>
-  <textarea id="kindBodyJson" rows="10" cols="80">{}</textarea>
-
-  <h2>References</h2>
-  <div>
-    <label>referenceIds (ObjectId comma): <input id="referenceIds" /></label>
-  </div>
-
-  <h2>Initial ManagementInfo (required)</h2>
-  <div>
-    <label>proposalType: <input id="mi_proposalType" value="Addition" /></label><br />
-    <label>submittingOrganisation: <input id="mi_submittingOrganisation" /></label><br />
-    <label>proposedChange: <input id="mi_proposedChange" /></label><br />
-    <label>proposalStatus: <input id="mi_proposalStatus" value="Draft" /></label><br />
-    <label>controlBodyNotes (JSON array):</label><br />
-    <textarea id="mi_controlBodyNotes" rows="3" cols="80">[]</textarea><br />
-  </div>
-
-  <hr />
-  <button type="submit">Create</button>
-  <span id="msg"></span>
-</form>
+    /* Relations styling */
+    .rel-section{display:none;grid-column:1/-1;}
+    .rel-section.active{display:block}
+    select[multiple]{min-height:120px}
+</style>
 {% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav class="breadcrumb">
+      <a href="/">Home</a><span>/</span>
+      <a href="/ui/pr">Portrayal Register</a><span>/</span>
+      <span>New</span>
+    </nav>
+
+    <div class="top">
+      <div class="title">
+        <h1>Create PR Item</h1>
+        <div class="sub">S-100 Portrayal Register item creation</div>
+      </div>
+      <div class="actions">
+        <a class="btn ghost" href="/ui/pr">Back</a>
+        <button class="btn ghost" type="button" id="fillSample">Fill Sample</button>
+        <button class="btn primary" form="form" type="submit">Create</button>
+      </div>
+    </div>
+
+    <div class="banner" id="sampleMsg" style="display:none;"></div>
+
+    <form id="form">
+      <!-- Basic Card -->
+      <div class="card">
+        <div class="card-h">Basic</div>
+        <div class="card-b">
+          <div class="grid">
+            <div>
+              <label>Register <span class="req">*</span></label>
+              <select id="registerId" required>
+                <option value="">(select)</option>
+              </select>
+            </div>
+            <div>
+              <label>Kind <span class="req">*</span></label>
+              <select id="kind" required>
+                <option value="S100_PR_Symbol">S100_PR_Symbol</option>
+                <option value="S100_PR_LineStyle">S100_PR_LineStyle</option>
+                <option value="S100_PR_AreaFill">S100_PR_AreaFill</option>
+                <option value="S100_PR_Pixmap">S100_PR_Pixmap</option>
+                <option value="S100_PR_ItemSchema">S100_PR_ItemSchema</option>
+                <option value="S100_PR_DisplayMode">S100_PR_DisplayMode</option>
+                <option value="S100_PR_ViewingGroupLayer">S100_PR_ViewingGroupLayer</option>
+                <option value="S100_PR_ViewingGroup">S100_PR_ViewingGroup</option>
+                <option value="S100_PR_AlertHighlight">S100_PR_AlertHighlight</option>
+                <option value="S100_PR_AlertMessage">S100_PR_AlertMessage</option>
+                <option value="S100_PR_ColourToken">S100_PR_ColourToken</option>
+                <option value="S100_PR_ColourPalette">S100_PR_ColourPalette</option>
+                <option value="S100_PR_Alert">S100_PR_Alert</option>
+                <option value="S100_PR_PaletteItem">S100_PR_PaletteItem</option>
+                <option value="S100_PR_Font">S100_PR_Font</option>
+                <option value="S100_PR_ContextParameter">S100_PR_ContextParameter</option>
+                <option value="S100_PR_DrawingPriority">S100_PR_DrawingPriority</option>
+                <option value="S100_PR_DisplayPlane">S100_PR_DisplayPlane</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PR Item (Common) Card -->
+      <div class="card">
+        <div class="card-h">PR Item (Common)</div>
+        <div class="card-b">
+          <div class="grid">
+            <div style="grid-column:1/-1;">
+              <label>Name <span class="req">*</span></label>
+              <input id="name" required placeholder="Enter name" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Definition</label>
+              <textarea id="definition" placeholder="Definition (optional)"></textarea>
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Remarks</label>
+              <textarea id="remarks" placeholder="Remarks (optional)"></textarea>
+            </div>
+            <div>
+              <label>Item Status</label>
+              <input id="itemStatus" value="Draft" />
+            </div>
+            <div>
+              <label>Alias (comma separated)</label>
+              <input id="alias" placeholder="e.g., alias1, alias2" />
+            </div>
+            <div>
+              <label>CamelCase</label>
+              <input id="camelCase" placeholder="camelCase" />
+            </div>
+            <div>
+              <label>Definition Source</label>
+              <input id="definitionSource" placeholder="e.g., S-101" />
+            </div>
+            <div>
+              <label>Reference</label>
+              <input id="reference" placeholder="optional" />
+            </div>
+            <div>
+              <label>Similarity To Source</label>
+              <input id="similarityToSource" placeholder="optional" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Justification</label>
+              <textarea id="justification" placeholder="optional"></textarea>
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Proposed Change</label>
+              <textarea id="proposedChange" placeholder="optional"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top-level PR Fields Card -->
+      <div class="card">
+        <div class="card-h">Top-level PR Fields</div>
+        <div class="card-b">
+          <div class="grid">
+            <div>
+              <label>XML ID</label>
+              <input id="xmlID" placeholder="e.g., S100_PR_Symbol_SAMPLE" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Description</label>
+              <div class="dyn" id="descDyn">
+                <div class="dyn-h">
+                  <div class="dyn-title">description items</div>
+                  <button class="btn ghost" type="button" id="descAdd">+ Add</button>
+                </div>
+                <div class="dyn-b" id="descList">
+                  <div class="dyn-empty">No description items</div>
+                </div>
+              </div>
+              <div class="hint">Each item is {text, language}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional Links (Visual Kinds) Card -->
+      <div class="card">
+        <div class="card-h">Optional Links (Visual Kinds)</div>
+        <div class="card-b">
+          <div class="grid">
+            <div>
+              <label>Item Schema</label>
+              <select id="itemSchemaSel">
+                <option value="">(none)</option>
+              </select>
+            </div>
+            <div>
+              <label>Colour Token (multi)</label>
+              <select id="colourTokenSel" multiple></select>
+            </div>
+          </div>
+          <div class="hint">Visual kinds: Symbol / LineStyle / AreaFill / Pixmap</div>
+        </div>
+      </div>
+
+      <!-- Relations Card -->
+      <div class="card">
+        <div class="card-h">Relations (ObjId / ObjId[] fields)</div>
+        <div class="card-b">
+          <div class="grid">
+            <!-- LineStyle / AreaFill: symbol[] -->
+            <div id="relLineArea" class="rel-section">
+              <label>Symbol (multi) - For LineStyle / AreaFill</label>
+              <select id="symbolSel" multiple></select>
+            </div>
+
+            <!-- ViewingGroupLayer: displayMode[] -->
+            <div id="relViewingGroupLayer" class="rel-section">
+              <label>Display Mode (multi) - For ViewingGroupLayer</label>
+              <select id="displayModeSel" multiple></select>
+            </div>
+
+            <!-- ViewingGroup: foundationMode + viewingGroup[] -->
+            <div id="relViewingGroup" class="rel-section">
+              <label style="display:flex;align-items:center;gap:8px;">
+                <input id="foundationMode" type="checkbox" style="width:auto;" />
+                <span>Foundation Mode</span>
+              </label>
+              <div style="margin-top:12px;">
+                <label>Viewing Group Layer (multi)</label>
+                <select id="viewingGroupLayerSel" multiple></select>
+              </div>
+            </div>
+
+            <!-- AlertHighlight -->
+            <div id="relAlertHighlight" class="rel-section">
+              <label style="display:flex;align-items:center;gap:8px;">
+                <input id="ah_optional" type="checkbox" style="width:auto;" />
+                <span>Optional</span>
+              </label>
+              <div class="grid" style="margin-top:12px;">
+                <div>
+                  <label>Style</label>
+                  <select id="ah_style">
+                    <option value="AlarmHighlight">AlarmHighlight</option>
+                    <option value="CautionHighlight">CautionHighlight</option>
+                  </select>
+                </div>
+              </div>
+              <div style="margin-top:12px;">
+                <label>Viewing Group (multi)</label>
+                <select id="ah_viewingGroupSel" multiple></select>
+              </div>
+              <div style="margin-top:12px;">
+                <label>Alert Message (multi)</label>
+                <select id="ah_msgSel" multiple></select>
+              </div>
+            </div>
+
+            <!-- AlertMessage: icon -->
+            <div id="relAlertMessage" class="rel-section">
+              <label>Icon (Symbol)</label>
+              <select id="iconSel">
+                <option value="">(none)</option>
+              </select>
+            </div>
+
+            <!-- ColourToken -->
+            <div id="relColourToken" class="rel-section">
+              <div>
+                <label>Token</label>
+                <input id="ct_token" placeholder="e.g., SAMPLE_TOKEN" />
+              </div>
+              <div style="margin-top:12px;">
+                <label>Value (PaletteItem) (multi)</label>
+                <select id="ct_valueSel" multiple></select>
+              </div>
+            </div>
+
+            <!-- PaletteItem -->
+            <div id="relPaletteItem" class="rel-section">
+              <label>Palette (ColourPalette) (multi)</label>
+              <select id="pi_paletteSel" multiple></select>
+            </div>
+
+            <div class="hint" style="grid-column:1/-1;">Relations are shown based on selected Kind.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kind Body Card -->
+      <div class="card">
+        <div class="card-h">Kind Body</div>
+        <div class="card-b">
+          <div class="hint" style="margin-bottom:8px;">Kind-specific fields (auto builds kindBody). Relations above will be auto-injected.</div>
+
+          <!-- Visual common (Symbol/LineStyle/AreaFill/Pixmap) -->
+          <div id="kb_visual" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>itemDetail (path)</label>
+                <input id="kb_itemDetail" placeholder="s3://... or file path" />
+              </div>
+              <div>
+                <label>previewImage (path)</label>
+                <input id="kb_previewImage" placeholder="s3://... or file path" />
+              </div>
+              <div>
+                <label>engineeringImage (path)</label>
+                <input id="kb_engineeringImage" placeholder="s3://... or file path" />
+              </div>
+              <div>
+                <label>previewType</label>
+                <select id="kb_previewType">
+                  <option value="">(none)</option>
+                  <option value="jpg">jpg</option>
+                  <option value="png">png</option>
+                  <option value="tif">tif</option>
+                </select>
+              </div>
+              <div>
+                <label>engineeringImageType</label>
+                <select id="kb_engineeringImageType">
+                  <option value="">(none)</option>
+                  <option value="jpg">jpg</option>
+                  <option value="png">png</option>
+                  <option value="tif">tif</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ItemSchema -->
+          <div id="kb_itemSchema" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>schemaKind</label>
+                <select id="kb_schemaKind">
+                  <option value="S100_PR_SymbolSchema">S100_PR_SymbolSchema</option>
+                  <option value="S100_PR_LineStyleSchema">S100_PR_LineStyleSchema</option>
+                  <option value="S100_PR_AreaFillSchema">S100_PR_AreaFillSchema</option>
+                  <option value="S100_PR_PixmapSchema">S100_PR_PixmapSchema</option>
+                  <option value="S100_PR_ColourProfileSchema">S100_PR_ColourProfileSchema</option>
+                </select>
+              </div>
+              <div>
+                <label>xmlSchema (path)</label>
+                <input id="kb_xmlSchema" placeholder="s3://... or file path" />
+              </div>
+            </div>
+          </div>
+
+          <!-- ViewingGroup -->
+          <div id="kb_viewingGroup" class="rel-section">
+            <div class="grid">
+              <div>
+                <label style="display:flex;align-items:center;gap:8px;">
+                  <input id="kb_foundationMode" type="checkbox" style="width:auto;" />
+                  <span>foundationMode</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- AlertMessage -->
+          <div id="kb_alertMessage" class="rel-section">
+            <label>text (NationalLanguageString list)</label>
+            <div class="dyn" id="amTextDyn">
+              <div class="dyn-h">
+                <div class="dyn-title">alert text items</div>
+                <button class="btn ghost" type="button" id="amTextAdd">+ Add</button>
+              </div>
+              <div class="dyn-b" id="amTextList">
+                <div class="dyn-empty">No text items</div>
+              </div>
+            </div>
+            <div class="hint">Each item is {text, language}</div>
+          </div>
+
+          <!-- ColourToken -->
+          <div id="kb_colourToken" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>token</label>
+                <input id="kb_ct_token" placeholder="e.g., DAYWHITE" />
+              </div>
+            </div>
+          </div>
+
+          <!-- PaletteItem -->
+          <div id="kb_paletteItem" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>transparency</label>
+                <input id="kb_pi_transparency" placeholder="0.0" />
+              </div>
+              <div>
+                <label>sRGB red</label>
+                <input id="kb_pi_red" placeholder="0" />
+              </div>
+              <div>
+                <label>sRGB green</label>
+                <input id="kb_pi_green" placeholder="0" />
+              </div>
+              <div>
+                <label>sRGB blue</label>
+                <input id="kb_pi_blue" placeholder="0" />
+              </div>
+              <div>
+                <label>CIE x</label>
+                <input id="kb_pi_x" placeholder="0" />
+              </div>
+              <div>
+                <label>CIE y</label>
+                <input id="kb_pi_y" placeholder="0" />
+              </div>
+              <div>
+                <label>CIE z</label>
+                <input id="kb_pi_z" placeholder="0" />
+              </div>
+            </div>
+          </div>
+
+          <!-- ContextParameter -->
+          <div id="kb_contextParameter" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>parameterType</label>
+                <select id="kb_cp_type">
+                  <option value="boolean">boolean</option>
+                  <option value="integer">integer</option>
+                  <option value="double">double</option>
+                  <option value="string">string</option>
+                  <option value="date">date</option>
+                </select>
+              </div>
+              <div>
+                <label>defaultValue</label>
+                <input id="kb_cp_default" placeholder="sample" />
+              </div>
+            </div>
+          </div>
+
+          <!-- DrawingPriority -->
+          <div id="kb_drawingPriority" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>priority</label>
+                <input id="kb_dp_priority" placeholder="1" />
+              </div>
+            </div>
+          </div>
+
+          <!-- DisplayPlane -->
+          <div id="kb_displayPlane" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>order</label>
+                <input id="kb_plane_order" placeholder="1" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Alert -->
+          <div id="kb_alert" class="rel-section">
+            <label>routeMonitor priorities</label>
+            <div class="dyn" id="rmDyn">
+              <div class="dyn-h">
+                <div class="dyn-title">routeMonitor</div>
+                <button class="btn ghost" type="button" id="rmAdd">+ Add</button>
+              </div>
+              <div class="dyn-b" id="rmList">
+                <div class="dyn-empty">No routeMonitor items</div>
+              </div>
+            </div>
+
+            <div style="height:12px;"></div>
+
+            <label>routePlan priorities</label>
+            <div class="dyn" id="rpDyn">
+              <div class="dyn-h">
+                <div class="dyn-title">routePlan</div>
+                <button class="btn ghost" type="button" id="rpAdd">+ Add</button>
+              </div>
+              <div class="dyn-b" id="rpList">
+                <div class="dyn-empty">No routePlan items</div>
+              </div>
+            </div>
+
+            <div class="hint">Each item has priority{priority, default, optional}</div>
+          </div>
+
+          <!-- Font -->
+          <div id="kb_font" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>fontFile (path)</label>
+                <input id="kb_font_file" placeholder="s3://.../font.ttf" />
+              </div>
+              <div>
+                <label>fontType</label>
+                <input id="kb_font_type" value="ttf" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- References Card -->
+      <div class="card">
+        <div class="card-h">References</div>
+        <div class="card-b">
+          <label>Reference IDs (multi)</label>
+          <select id="referenceIdsSel" multiple></select>
+        </div>
+      </div>
+
+      <!-- Management Info Card -->
+      <div class="card">
+        <div class="card-h">Initial Management Info <span style="color:var(--muted);font-weight:800;">(required)</span></div>
+        <div class="card-b">
+          <div class="grid">
+            <div>
+              <label>Proposal Type</label>
+              <input id="mi_proposalType" value="Addition" />
+            </div>
+            <div>
+              <label>Submitting Organisation</label>
+              <input id="mi_submittingOrganisation" placeholder="Organisation" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Proposed Change</label>
+              <textarea id="mi_proposedChange" placeholder="What changed / why"></textarea>
+            </div>
+            <div>
+              <label>Proposal Status</label>
+              <input id="mi_proposalStatus" value="Draft" />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Control Body Notes (one per line)</label>
+              <textarea id="mi_controlBodyNotesText" rows="2" placeholder="note1&#10;note2"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="toast" id="msg"></div>
+{% endblock %}
+
 {% block extra_scripts %}
 <script>
+  function showToast(msg, type='success'){
+    const t = document.getElementById('toast');
+    t.className = 'toast ' + type;
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+
+  // Dynamic list helpers for language/text rows
+  function readLangTextList(listEl){
+    const items = [];
+    listEl.querySelectorAll('[data-row="langtext"]').forEach(r => {
+      const t = r.querySelector('input[data-field="text"]').value.trim();
+      const l = r.querySelector('input[data-field="lang"]').value.trim();
+      if (t || l) items.push({ text: t, language: l });
+    });
+    return items;
+  }
+
+  function addLangTextItem(listEl, textVal='', langVal=''){
+    const empty = listEl.querySelector('.dyn-empty');
+    if (empty) empty.remove();
+
+    const row = document.createElement('div');
+    row.dataset.row = 'langtext';
+    row.style.display = 'grid';
+    row.style.gridTemplateColumns = '2fr 1fr auto';
+    row.style.gap = '8px';
+    row.style.padding = '10px 12px';
+    row.style.borderBottom = '1px solid var(--border)';
+
+    const t = document.createElement('input');
+    t.dataset.field = 'text';
+    t.placeholder = 'text';
+    t.value = textVal;
+
+    const l = document.createElement('input');
+    l.dataset.field = 'lang';
+    l.placeholder = 'language (e.g., en)';
+    l.value = langVal;
+
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'btn ghost';
+    rm.textContent = 'Remove';
+    rm.addEventListener('click', () => {
+      row.remove();
+      if (listEl.children.length === 0) {
+        const e = document.createElement('div');
+        e.className = 'dyn-empty';
+        e.textContent = 'No items';
+        listEl.appendChild(e);
+      }
+    });
+
+    row.appendChild(t);
+    row.appendChild(l);
+    row.appendChild(rm);
+    listEl.appendChild(row);
+  }
+
+  // Alert priority list helpers
+  function addAlertPriorityItem(listEl, init){
+    const empty = listEl.querySelector('.dyn-empty');
+    if (empty) empty.remove();
+
+    const row = document.createElement('div');
+    row.style.display = 'grid';
+    row.style.gridTemplateColumns = '1fr 1fr 1fr auto';
+    row.style.gap = '8px';
+    row.style.padding = '10px 12px';
+    row.style.borderBottom = '1px solid var(--border)';
+
+    const pr = document.createElement('select');
+    ['alarm','warning','caution','indication'].forEach(v=>{
+      const o=document.createElement('option');o.value=v;o.textContent=v;pr.appendChild(o);
+    });
+    pr.value = (init && init.priority) || 'warning';
+
+    const def = document.createElement('select');
+    [{v:'false',t:'default=false'},{v:'true',t:'default=true'}].forEach(x=>{
+      const o=document.createElement('option');o.value=x.v;o.textContent=x.t;def.appendChild(o);
+    });
+    def.value = String((init && init.default) || false);
+
+    const opt = document.createElement('select');
+    [{v:'false',t:'optional=false'},{v:'true',t:'optional=true'}].forEach(x=>{
+      const o=document.createElement('option');o.value=x.v;o.textContent=x.t;opt.appendChild(o);
+    });
+    opt.value = String((init && init.optional) || false);
+
+    const rm = document.createElement('button');
+    rm.type='button';
+    rm.className='btn ghost';
+    rm.textContent='Remove';
+    rm.addEventListener('click', ()=>{
+      row.remove();
+      if (listEl.children.length === 0) {
+        const e=document.createElement('div'); e.className='dyn-empty'; e.textContent='No items';
+        listEl.appendChild(e);
+      }
+    });
+
+    row.appendChild(pr);
+    row.appendChild(def);
+    row.appendChild(opt);
+    row.appendChild(rm);
+    listEl.appendChild(row);
+  }
+
+  function readAlertPriorityList(listEl){
+    const items = [];
+    listEl.querySelectorAll('div').forEach(row=>{
+      const sel = row.querySelectorAll('select');
+      if (sel.length !== 3) return;
+      const priority = sel[0].value;
+      const def = (sel[1].value === 'true');
+      const opt = (sel[2].value === 'true');
+      items.push({ priority: { priority, default: def, optional: opt } });
+    });
+    return items;
+  }
+
   function splitCsv(s) {
     const v = (s || '').trim();
     if (!v) return [];
     return v.split(',').map(x => x.trim()).filter(Boolean);
   }
 
-  async function loadRegisters() {
-    const sel = document.getElementById('registerId');
-    const res = await fetch('/api/registers?limit=200');
-    const j = await res.json();
-    (j.items || []).forEach(r => {
-      const opt = document.createElement('option');
-      opt.value = r._id;
-      opt.textContent = `${r.name} (${r._id})`;
-      sel.appendChild(opt);
-    });
+  function selectedValues(sel) {
+    return Array.from(sel.selectedOptions || []).map(o => o.value).filter(Boolean);
   }
 
-  function parseJson(id, fallback) {
+  function parseJsonField(id, fallback) {
     const raw = document.getElementById(id).value.trim();
     if (!raw) return fallback;
     try {
@@ -131,238 +705,572 @@
     }
   }
 
-  // ---- sample fill helpers ----
-  function nowSuffix() {
-    const t = Date.now().toString();
-    return t.slice(-6);
-  }
-  function setValue(id, value) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.value = value == null ? '' : String(value);
-  }
-  function setJson(id, obj) {
-    setValue(id, JSON.stringify(obj, null, 2));
-  }
-  function isVisualKind(kind) {
-    return ['S100_PR_Symbol','S100_PR_LineStyle','S100_PR_AreaFill','S100_PR_Pixmap'].includes(kind);
+  function setJsonField(id, obj) {
+    document.getElementById(id).value = JSON.stringify(obj, null, 2);
   }
 
-  function buildSample(kind) {
-    const sfx = nowSuffix();
-    const common = {
-      name: `${kind.replace('S100_PR_', '')}_${sfx}`,
-      definition: `Sample definition for ${kind}`,
-      remarks: `sample remarks (${kind})`,
-      itemStatus: 'Draft',
-      alias: [`alias_${sfx}`, `alias2_${sfx}`],
-      camelCase: `${kind.replace('S100_PR_', '').toLowerCase()}${sfx}`,
-      definitionSource: 'S-100 PR',
-      reference: 'internal-prototype',
-      similarityToSource: '1.0',
-      justification: 'MVP sample fill',
-      proposedChange: 'Initial creation (sample fill)'
-    };
-
-    const description = [
-      { text: `Sample description for ${kind}`, language: 'en' },
-      { text: `${kind} 샘플 설명`, language: 'ko' }
-    ];
-
-    const kindBodyByKind = {
-      S100_PR_Symbol: {
-        itemDetail: `storage/pr/symbol/${sfx}/detail.bin`,
-        previewImage: `storage/pr/symbol/${sfx}/preview.png`,
-        engineeringImage: `storage/pr/symbol/${sfx}/engineering.png`,
-        previewType: 'png',
-        engineeringImageType: 'png'
-      },
-      S100_PR_LineStyle: {
-        itemDetail: `storage/pr/linestyle/${sfx}/detail.bin`,
-        previewImage: `storage/pr/linestyle/${sfx}/preview.png`,
-        engineeringImage: `storage/pr/linestyle/${sfx}/engineering.png`,
-        previewType: 'png',
-        engineeringImageType: 'png',
-        symbol: []
-      },
-      S100_PR_AreaFill: {
-        itemDetail: `storage/pr/areafill/${sfx}/detail.bin`,
-        previewImage: `storage/pr/areafill/${sfx}/preview.png`,
-        engineeringImage: `storage/pr/areafill/${sfx}/engineering.png`,
-        previewType: 'png',
-        engineeringImageType: 'png',
-        symbol: []
-      },
-      S100_PR_Pixmap: {
-        itemDetail: `storage/pr/pixmap/${sfx}/detail.bin`,
-        previewImage: `storage/pr/pixmap/${sfx}/preview.png`,
-        engineeringImage: `storage/pr/pixmap/${sfx}/engineering.png`,
-        previewType: 'png',
-        engineeringImageType: 'png'
-      },
-      S100_PR_ItemSchema: {
-        schemaKind: 'S100_PR_SymbolSchema',
-        xmlSchema: `storage/pr/schema/${sfx}/symbol_schema.xsd`
-      },
-      S100_PR_DisplayMode: {},
-      S100_PR_ViewingGroupLayer: { displayMode: [] },
-      S100_PR_ViewingGroup: { foundationMode: true, viewingGroup: [] },
-      S100_PR_AlertHighlight: { optional: false, style: 'AlarmHighlight', viewingGroup: [], msg: [] },
-      S100_PR_AlertMessage: {
-        text: [{ text: 'Sample alert message', language: 'en' }, { text: '샘플 경고 메시지', language: 'ko' }],
-        icon: null
-      },
-      S100_PR_ColourToken: { token: `CT_${sfx}`, value: [] },
-      S100_PR_ColourPalette: {},
-      S100_PR_Alert: {
-        routeMonitor: [{ priority: { priority: 'warning', default: true, optional: false } }],
-        routePlan: [{ priority: { priority: 'caution', default: false, optional: true } }]
-      },
-      S100_PR_PaletteItem: {
-        transparency: 0.5,
-        colour: { cieValue: { x: 0.1, y: 0.2, z: 0.3 }, sRGBValue: { red: 255, green: 128, blue: 0 } },
-        palette: []
-      },
-      S100_PR_Font: { fontFile: `storage/pr/font/${sfx}/NotoSans-Regular.ttf`, fontType: 'ttf' },
-      S100_PR_ContextParameter: { parameterType: 'string', defaultValue: 'default' },
-      S100_PR_DrawingPriority: { priority: 10 },
-      S100_PR_DisplayPlane: { order: 1 }
-    };
-
-    const kindBody = kindBodyByKind[kind] ?? {};
-    const visualLinks = isVisualKind(kind)
-      ? { itemSchema: '000000000000000000000000', colourToken: [] }
-      : { itemSchema: '', colourToken: [] };
-
-    return { prItem: common, xmlID: `${kind}:${sfx}`, description, kindBody, visualLinks };
+  async function fetchJson(url) {
+    const res = await fetch(url);
+    const j = await res.json();
+    if (!res.ok) throw new Error(j.detail || JSON.stringify(j));
+    return j;
   }
 
-  function fillSample() {
-    const kind = document.getElementById('kind').value.trim();
-    const sample = buildSample(kind);
-
-    setValue('name', sample.prItem.name);
-    setValue('definition', sample.prItem.definition);
-    setValue('remarks', sample.prItem.remarks);
-    setValue('itemStatus', sample.prItem.itemStatus);
-    setValue('alias', sample.prItem.alias.join(','));
-    setValue('camelCase', sample.prItem.camelCase);
-    setValue('definitionSource', sample.prItem.definitionSource);
-    setValue('reference', sample.prItem.reference);
-    setValue('similarityToSource', sample.prItem.similarityToSource);
-    setValue('justification', sample.prItem.justification);
-    setValue('proposedChange', sample.prItem.proposedChange);
-
-    setValue('xmlID', sample.xmlID);
-    setJson('descriptionJson', sample.description);
-
-    setValue('itemSchema', sample.visualLinks.itemSchema);
-    setValue('colourToken', (sample.visualLinks.colourToken || []).join(','));
-    setJson('kindBodyJson', sample.kindBody);
-
-    setValue('mi_submittingOrganisation', 'DemoOrg');
-    setValue('mi_proposedChange', `Create ${kind} (sample fill)`);
-
-    const fillMsg = document.getElementById('fillMsg');
-    if (fillMsg) fillMsg.textContent = ` filled for ${kind}`;
-    setTimeout(() => { if (fillMsg) fillMsg.textContent = ''; }, 1200);
-  }
-
-  // ✅ 핵심: DOMContentLoaded 이후에 요소 잡고 리스너 등록
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('[pr_new] DOM loaded');
-
-    const btn = document.getElementById('fillSample');
-    if (!btn) {
-      console.error('[pr_new] fillSample button not found. Check id="fillSample" in HTML.');
+  function clearSelect(sel, keepFirstOption) {
+    if (keepFirstOption) {
+      while (sel.options.length > 1) sel.remove(1);
     } else {
-      btn.addEventListener('click', () => {
-        console.log('[pr_new] fillSample clicked');
-        try {
-          fillSample();
-        } catch (e) {
-          console.error(e);
-          const fillMsg = document.getElementById('fillMsg');
-          if (fillMsg) fillMsg.textContent = ' fill failed: ' + (e.message || e);
+      while (sel.options.length > 0) sel.remove(0);
+    }
+  }
+
+  function optionLabel(item) {
+    const nm = (item.prItem && item.prItem.name) ? item.prItem.name : '(no name)';
+    const idn = (item.prItem && item.prItem.itemIdentifier) ? item.prItem.itemIdentifier : '';
+    const k = item.kind || '';
+    return `${nm}${idn ? ' #' + idn : ''} [${k}] (${item._id})`;
+  }
+
+  async function loadRegisters() {
+    const sel = document.getElementById('registerId');
+    const j = await fetchJson('/api/registers?limit=200');
+    (j.items || []).forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r._id;
+      opt.textContent = `${r.name} (${r._id})`;
+      sel.appendChild(opt);
+    });
+  }
+
+  async function loadReferences() {
+    const sel = document.getElementById('referenceIdsSel');
+    clearSelect(sel, false);
+    const j = await fetchJson('/api/references?limit=200');
+    (j.items || []).forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r._id;
+      opt.textContent = `${(r.title || r.name || '(reference)')} (${r._id})`;
+      sel.appendChild(opt);
+    });
+  }
+
+  async function loadPrItemsToSelect(sel, kind, registerId, opts) {
+    const { keepFirstOption=false } = (opts || {});
+    if (!registerId) {
+      clearSelect(sel, keepFirstOption);
+      return;
+    }
+    const url = `/api/pr/items?limit=200&kind=${encodeURIComponent(kind)}&registerId=${encodeURIComponent(registerId)}`;
+    const j = await fetchJson(url);
+    clearSelect(sel, keepFirstOption);
+    (j.items || []).forEach(it => {
+      const opt = document.createElement('option');
+      opt.value = it._id;
+      opt.textContent = optionLabel(it);
+      sel.appendChild(opt);
+    });
+  }
+
+  const visualKinds = new Set([
+    'S100_PR_Symbol','S100_PR_LineStyle','S100_PR_AreaFill','S100_PR_Pixmap'
+  ]);
+
+  function setRelVisibility(kind) {
+    document.querySelectorAll('.rel-section').forEach(el => el.classList.remove('active'));
+    
+    if (kind === 'S100_PR_LineStyle' || kind === 'S100_PR_AreaFill') {
+      document.getElementById('relLineArea').classList.add('active');
+    }
+    if (kind === 'S100_PR_ViewingGroupLayer') {
+      document.getElementById('relViewingGroupLayer').classList.add('active');
+    }
+    if (kind === 'S100_PR_ViewingGroup') {
+      document.getElementById('relViewingGroup').classList.add('active');
+    }
+    if (kind === 'S100_PR_AlertHighlight') {
+      document.getElementById('relAlertHighlight').classList.add('active');
+    }
+    if (kind === 'S100_PR_AlertMessage') {
+      document.getElementById('relAlertMessage').classList.add('active');
+    }
+    if (kind === 'S100_PR_ColourToken') {
+      document.getElementById('relColourToken').classList.add('active');
+    }
+    if (kind === 'S100_PR_PaletteItem') {
+      document.getElementById('relPaletteItem').classList.add('active');
+    }
+  }
+
+  function setKindBodyVisibility(kind){
+    // hide all
+    ['kb_visual','kb_itemSchema','kb_viewingGroup','kb_alertMessage','kb_colourToken','kb_paletteItem','kb_contextParameter','kb_drawingPriority','kb_displayPlane','kb_alert','kb_font']
+      .forEach(id => document.getElementById(id)?.classList.remove('active'));
+
+    // show by kind
+    if (['S100_PR_Symbol','S100_PR_LineStyle','S100_PR_AreaFill','S100_PR_Pixmap'].includes(kind)) {
+      document.getElementById('kb_visual')?.classList.add('active');
+    }
+    if (kind === 'S100_PR_ItemSchema') document.getElementById('kb_itemSchema')?.classList.add('active');
+    if (kind === 'S100_PR_ViewingGroup') document.getElementById('kb_viewingGroup')?.classList.add('active');
+    if (kind === 'S100_PR_AlertMessage') document.getElementById('kb_alertMessage')?.classList.add('active');
+    if (kind === 'S100_PR_ColourToken') document.getElementById('kb_colourToken')?.classList.add('active');
+    if (kind === 'S100_PR_PaletteItem') document.getElementById('kb_paletteItem')?.classList.add('active');
+    if (kind === 'S100_PR_ContextParameter') document.getElementById('kb_contextParameter')?.classList.add('active');
+    if (kind === 'S100_PR_DrawingPriority') document.getElementById('kb_drawingPriority')?.classList.add('active');
+    if (kind === 'S100_PR_DisplayPlane') document.getElementById('kb_displayPlane')?.classList.add('active');
+    if (kind === 'S100_PR_Alert') document.getElementById('kb_alert')?.classList.add('active');
+    if (kind === 'S100_PR_Font') document.getElementById('kb_font')?.classList.add('active');
+  }
+
+  async function refreshAllOptionLists() {
+    const registerId = document.getElementById('registerId').value.trim();
+    const kind = document.getElementById('kind').value.trim();
+
+    // Visual link selects
+    await loadPrItemsToSelect(document.getElementById('itemSchemaSel'), 'S100_PR_ItemSchema', registerId, {keepFirstOption:true});
+    await loadPrItemsToSelect(document.getElementById('colourTokenSel'), 'S100_PR_ColourToken', registerId);
+
+    // Kind relations
+    if (kind === 'S100_PR_LineStyle' || kind === 'S100_PR_AreaFill') {
+      await loadPrItemsToSelect(document.getElementById('symbolSel'), 'S100_PR_Symbol', registerId);
+    }
+    if (kind === 'S100_PR_ViewingGroupLayer') {
+      await loadPrItemsToSelect(document.getElementById('displayModeSel'), 'S100_PR_DisplayMode', registerId);
+    }
+    if (kind === 'S100_PR_ViewingGroup') {
+      await loadPrItemsToSelect(document.getElementById('viewingGroupLayerSel'), 'S100_PR_ViewingGroupLayer', registerId);
+    }
+    if (kind === 'S100_PR_AlertHighlight') {
+      await loadPrItemsToSelect(document.getElementById('ah_viewingGroupSel'), 'S100_PR_ViewingGroup', registerId);
+      await loadPrItemsToSelect(document.getElementById('ah_msgSel'), 'S100_PR_AlertMessage', registerId);
+    }
+    if (kind === 'S100_PR_AlertMessage') {
+      await loadPrItemsToSelect(document.getElementById('iconSel'), 'S100_PR_Symbol', registerId, {keepFirstOption:true});
+    }
+    if (kind === 'S100_PR_ColourToken') {
+      await loadPrItemsToSelect(document.getElementById('ct_valueSel'), 'S100_PR_PaletteItem', registerId);
+    }
+    if (kind === 'S100_PR_PaletteItem') {
+      await loadPrItemsToSelect(document.getElementById('pi_paletteSel'), 'S100_PR_ColourPalette', registerId);
+    }
+  }
+
+  function buildDescription(){
+    const list = document.getElementById('descList');
+    return readLangTextList(list);
+  }
+
+  function buildControlBodyNotes(){
+    const raw = document.getElementById('mi_controlBodyNotesText').value || '';
+    return raw.split('\n').map(x=>x.trim()).filter(Boolean);
+  }
+
+  function numOrNull(v){
+    const s = (v||'').trim();
+    if (!s) return null;
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function buildKindBody(kind){
+    const out = {};
+
+    // visual common
+    if (['S100_PR_Symbol','S100_PR_LineStyle','S100_PR_AreaFill','S100_PR_Pixmap'].includes(kind)) {
+      out.itemDetail = document.getElementById('kb_itemDetail').value.trim() || null;
+      out.previewImage = document.getElementById('kb_previewImage').value.trim() || null;
+      out.engineeringImage = document.getElementById('kb_engineeringImage').value.trim() || null;
+      out.previewType = document.getElementById('kb_previewType').value || null;
+      out.engineeringImageType = document.getElementById('kb_engineeringImageType').value || null;
+    }
+
+    if (kind === 'S100_PR_ItemSchema') {
+      out.schemaKind = document.getElementById('kb_schemaKind').value;
+      out.xmlSchema = document.getElementById('kb_xmlSchema').value.trim() || null;
+    }
+
+    if (kind === 'S100_PR_ViewingGroup') {
+      out.foundationMode = !!document.getElementById('kb_foundationMode').checked;
+    }
+
+    if (kind === 'S100_PR_AlertMessage') {
+      const list = document.getElementById('amTextList');
+      out.text = readLangTextList(list);
+    }
+
+    if (kind === 'S100_PR_ColourToken') {
+      out.token = document.getElementById('kb_ct_token').value.trim() || '';
+    }
+
+    if (kind === 'S100_PR_PaletteItem') {
+      out.transparency = numOrNull(document.getElementById('kb_pi_transparency').value) ?? 0.0;
+      out.colour = {
+        cieValue: {
+          x: numOrNull(document.getElementById('kb_pi_x').value) ?? 0,
+          y: numOrNull(document.getElementById('kb_pi_y').value) ?? 0,
+          z: numOrNull(document.getElementById('kb_pi_z').value) ?? 0,
+        },
+        sRGBValue: {
+          red: (numOrNull(document.getElementById('kb_pi_red').value) ?? 0),
+          green: (numOrNull(document.getElementById('kb_pi_green').value) ?? 0),
+          blue: (numOrNull(document.getElementById('kb_pi_blue').value) ?? 0),
         }
-      });
+      };
     }
 
-    const kindSel = document.getElementById('kind');
-    if (kindSel) {
-      kindSel.addEventListener('change', () => {
-        setValue('kindBodyJson', '{}');
-        setValue('itemSchema', '');
-        setValue('colourToken', '');
-      });
+    if (kind === 'S100_PR_ContextParameter') {
+      out.parameterType = document.getElementById('kb_cp_type').value;
+      out.defaultValue = document.getElementById('kb_cp_default').value.trim() || '';
     }
 
-    const form = document.getElementById('form');
-    if (form) {
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const msg = document.getElementById('msg');
-        msg.textContent = '';
+    if (kind === 'S100_PR_DrawingPriority') {
+      out.priority = numOrNull(document.getElementById('kb_dp_priority').value) ?? 1;
+    }
 
-        try {
-          const payload = {
-            registerId: document.getElementById('registerId').value.trim(),
-            kind: document.getElementById('kind').value.trim(),
-            prItem: {
-              name: document.getElementById('name').value.trim(),
-              definition: document.getElementById('definition').value.trim() || null,
-              remarks: document.getElementById('remarks').value.trim() || null,
-              itemStatus: document.getElementById('itemStatus').value.trim() || null,
-              alias: splitCsv(document.getElementById('alias').value),
-              camelCase: document.getElementById('camelCase').value.trim() || null,
-              definitionSource: document.getElementById('definitionSource').value.trim() || null,
-              reference: document.getElementById('reference').value.trim() || null,
-              similarityToSource: document.getElementById('similarityToSource').value.trim() || null,
-              justification: document.getElementById('justification').value.trim() || null,
-              proposedChange: document.getElementById('proposedChange').value.trim() || null,
-            },
-            xmlID: document.getElementById('xmlID').value.trim() || null,
-            description: parseJson('descriptionJson', []),
-            itemSchema: document.getElementById('itemSchema').value.trim() || null,
-            colourToken: splitCsv(document.getElementById('colourToken').value),
-            kindBody: parseJson('kindBodyJson', {}),
-            referenceIds: splitCsv(document.getElementById('referenceIds').value),
-            managementInfos: [{
-              proposalType: document.getElementById('mi_proposalType').value.trim() || 'Addition',
-              submittingOrganisation: document.getElementById('mi_submittingOrganisation').value.trim() || '',
-              proposedChange: document.getElementById('mi_proposedChange').value.trim() || '',
-              dateProposed: new Date().toISOString(),
-              proposalStatus: document.getElementById('mi_proposalStatus').value.trim() || 'Draft',
-              controlBodyNotes: parseJson('mi_controlBodyNotes', []),
-            }]
-          };
+    if (kind === 'S100_PR_DisplayPlane') {
+      out.order = numOrNull(document.getElementById('kb_plane_order').value) ?? 1;
+    }
 
-          if (!payload.registerId) {
-            msg.textContent = 'Register is required.';
-            return;
+    if (kind === 'S100_PR_Alert') {
+      out.routeMonitor = readAlertPriorityList(document.getElementById('rmList'));
+      out.routePlan = readAlertPriorityList(document.getElementById('rpList'));
+    }
+
+    if (kind === 'S100_PR_Font') {
+      out.fontFile = document.getElementById('kb_font_file').value.trim() || null;
+      out.fontType = document.getElementById('kb_font_type').value.trim() || 'ttf';
+    }
+
+    return out;
+  }
+
+  function injectRelationsIntoKindBody(kind, obj) {
+    const out = (obj && typeof obj === 'object') ? JSON.parse(JSON.stringify(obj)) : {};
+
+    if (kind === 'S100_PR_LineStyle') {
+      out.symbol = selectedValues(document.getElementById('symbolSel'));
+    }
+    if (kind === 'S100_PR_AreaFill') {
+      out.symbol = selectedValues(document.getElementById('symbolSel'));
+    }
+    if (kind === 'S100_PR_ViewingGroupLayer') {
+      out.displayMode = selectedValues(document.getElementById('displayModeSel'));
+    }
+    if (kind === 'S100_PR_ViewingGroup') {
+      out.foundationMode = !!document.getElementById('foundationMode').checked;
+      out.viewingGroup = selectedValues(document.getElementById('viewingGroupLayerSel'));
+    }
+    if (kind === 'S100_PR_AlertHighlight') {
+      out.optional = !!document.getElementById('ah_optional').checked;
+      out.style = document.getElementById('ah_style').value;
+      out.viewingGroup = selectedValues(document.getElementById('ah_viewingGroupSel'));
+      out.msg = selectedValues(document.getElementById('ah_msgSel'));
+    }
+    if (kind === 'S100_PR_AlertMessage') {
+      out.icon = document.getElementById('iconSel').value || null;
+    }
+    if (kind === 'S100_PR_ColourToken') {
+      out.token = document.getElementById('ct_token').value.trim() || out.token || '';
+      out.value = selectedValues(document.getElementById('ct_valueSel'));
+    }
+    if (kind === 'S100_PR_PaletteItem') {
+      out.palette = selectedValues(document.getElementById('pi_paletteSel'));
+    }
+
+    return out;
+  }
+
+  function sampleKindBody(kind) {
+    const commonVisual = {
+      itemDetail: "s3://bucket/path/itemDetail.bin",
+      previewImage: "s3://bucket/path/preview.png",
+      engineeringImage: "s3://bucket/path/engineering.png",
+      previewType: "png",
+      engineeringImageType: "png"
+    };
+
+    switch (kind) {
+      case 'S100_PR_Symbol':
+      case 'S100_PR_Pixmap':
+        return { ...commonVisual };
+      case 'S100_PR_LineStyle':
+      case 'S100_PR_AreaFill':
+        return { ...commonVisual, symbol: [] };
+      case 'S100_PR_ItemSchema':
+        return { schemaKind: "S100_PR_SymbolSchema", xmlSchema: "s3://bucket/path/schema.xsd" };
+      case 'S100_PR_DisplayMode':
+        return {};
+      case 'S100_PR_ViewingGroupLayer':
+        return { displayMode: [] };
+      case 'S100_PR_ViewingGroup':
+        return { foundationMode: false, viewingGroup: [] };
+      case 'S100_PR_AlertHighlight':
+        return { optional: false, style: "AlarmHighlight", viewingGroup: [], msg: [] };
+      case 'S100_PR_AlertMessage':
+        return { text: [{ text: "Sample message", language: "en" }], icon: null };
+      case 'S100_PR_ColourToken':
+        return { token: "SAMPLE_TOKEN", value: [] };
+      case 'S100_PR_ColourPalette':
+        return {};
+      case 'S100_PR_Alert':
+        return {
+          routeMonitor: [{ priority: { priority: "warning", default: true, optional: false } }],
+          routePlan: [{ priority: { priority: "caution", default: false, optional: true } }]
+        };
+      case 'S100_PR_PaletteItem':
+        return {
+          transparency: 0.0,
+          colour: {
+            cieValue: { x: 0, y: 0, z: 0 },
+            sRGBValue: { red: 0, green: 0, blue: 0 }
+          },
+          palette: []
+        };
+      case 'S100_PR_Font':
+        return { fontFile: "s3://bucket/path/font.ttf", fontType: "ttf" };
+      case 'S100_PR_ContextParameter':
+        return { parameterType: "string", defaultValue: "sample" };
+      case 'S100_PR_DrawingPriority':
+        return { priority: 1 };
+      case 'S100_PR_DisplayPlane':
+        return { order: 1 };
+      default:
+        return {};
+    }
+  }
+
+  async function onFillSample() {
+    const banner = document.getElementById('sampleMsg');
+    banner.style.display = 'none';
+
+    const kind = document.getElementById('kind').value.trim();
+
+    // common
+    document.getElementById('name').value = `${kind} Sample`;
+    document.getElementById('definition').value = `Sample definition for ${kind}`;
+    document.getElementById('remarks').value = `[domain=Prototype]`;
+    document.getElementById('itemStatus').value = 'Draft';
+    document.getElementById('alias').value = `sample,${kind}`;
+    document.getElementById('camelCase').value = 'sampleItem';
+    document.getElementById('definitionSource').value = 'Prototype';
+    document.getElementById('reference').value = 'N/A';
+    document.getElementById('similarityToSource').value = '';
+    document.getElementById('justification').value = 'MVP sample';
+    document.getElementById('proposedChange').value = 'initial creation';
+
+    document.getElementById('xmlID').value = `${kind}_SAMPLE`;
+
+    // description UI
+    const descList = document.getElementById('descList');
+    descList.innerHTML = '';
+    addLangTextItem(descList, `Sample description for ${kind}`, 'en');
+
+    // Kind body UI fields
+    if (['S100_PR_Symbol','S100_PR_LineStyle','S100_PR_AreaFill','S100_PR_Pixmap'].includes(kind)) {
+      document.getElementById('kb_itemDetail').value = 's3://bucket/path/itemDetail.bin';
+      document.getElementById('kb_previewImage').value = 's3://bucket/path/preview.png';
+      document.getElementById('kb_engineeringImage').value = 's3://bucket/path/engineering.png';
+      document.getElementById('kb_previewType').value = 'png';
+      document.getElementById('kb_engineeringImageType').value = 'png';
+    }
+    if (kind === 'S100_PR_ItemSchema') {
+      document.getElementById('kb_schemaKind').value = 'S100_PR_SymbolSchema';
+      document.getElementById('kb_xmlSchema').value = 's3://bucket/path/schema.xsd';
+    }
+    if (kind === 'S100_PR_ViewingGroup') {
+      document.getElementById('kb_foundationMode').checked = false;
+    }
+    if (kind === 'S100_PR_AlertMessage') {
+      const amList = document.getElementById('amTextList');
+      amList.innerHTML = '';
+      addLangTextItem(amList, 'Sample message', 'en');
+    }
+    if (kind === 'S100_PR_ColourToken') {
+      document.getElementById('kb_ct_token').value = 'SAMPLE_TOKEN';
+    }
+    if (kind === 'S100_PR_PaletteItem') {
+      document.getElementById('kb_pi_transparency').value = '0.0';
+      document.getElementById('kb_pi_red').value = '255';
+      document.getElementById('kb_pi_green').value = '255';
+      document.getElementById('kb_pi_blue').value = '255';
+      document.getElementById('kb_pi_x').value = '0';
+      document.getElementById('kb_pi_y').value = '0';
+      document.getElementById('kb_pi_z').value = '0';
+    }
+    if (kind === 'S100_PR_ContextParameter') {
+      document.getElementById('kb_cp_type').value = 'string';
+      document.getElementById('kb_cp_default').value = 'sample';
+    }
+    if (kind === 'S100_PR_DrawingPriority') {
+      document.getElementById('kb_dp_priority').value = '1';
+    }
+    if (kind === 'S100_PR_DisplayPlane') {
+      document.getElementById('kb_plane_order').value = '1';
+    }
+    if (kind === 'S100_PR_Alert') {
+      const rm = document.getElementById('rmList');
+      const rp = document.getElementById('rpList');
+      rm.innerHTML = '';
+      rp.innerHTML = '';
+      addAlertPriorityItem(rm, {priority:'warning', default:true, optional:false});
+      addAlertPriorityItem(rp, {priority:'caution', default:false, optional:true});
+    }
+    if (kind === 'S100_PR_Font') {
+      document.getElementById('kb_font_file').value = 's3://bucket/path/font.ttf';
+      document.getElementById('kb_font_type').value = 'ttf';
+    }
+
+    try {
+      await refreshAllOptionLists();
+
+      const registerId = document.getElementById('registerId').value.trim();
+      if (!registerId) {
+        banner.textContent = 'Sample filled. (Select a register to load options.)';
+        banner.style.display = 'block';
+        return;
+      }
+
+      const itemSchemaSel = document.getElementById('itemSchemaSel');
+      if (visualKinds.has(kind) && itemSchemaSel.options.length > 1 && !itemSchemaSel.value) {
+        itemSchemaSel.value = itemSchemaSel.options[1].value;
+      }
+
+      const colourTokenSel = document.getElementById('colourTokenSel');
+      if (visualKinds.has(kind) && colourTokenSel.options.length > 0) {
+        colourTokenSel.options[0].selected = true;
+      }
+
+      if (kind === 'S100_PR_ColourToken') {
+        document.getElementById('ct_token').value = 'SAMPLE_TOKEN';
+      }
+      if (kind === 'S100_PR_AlertHighlight') {
+        document.getElementById('ah_optional').checked = false;
+        document.getElementById('ah_style').value = 'AlarmHighlight';
+      }
+      if (kind === 'S100_PR_ViewingGroup') {
+        document.getElementById('foundationMode').checked = false;
+      }
+
+      showToast('Sample filled successfully!', 'success');
+    } catch (e) {
+      banner.textContent = 'Sample filled, but failed to load options: ' + String(e.message || e);
+      banner.style.display = 'block';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadRegisters();
+    await loadReferences();
+
+    const kind = document.getElementById('kind').value;
+    setRelVisibility(kind);
+    setKindBodyVisibility(kind);
+
+    document.getElementById('fillSample').addEventListener('click', onFillSample);
+
+    // description list
+    document.getElementById('descAdd').addEventListener('click', () => {
+      addLangTextItem(document.getElementById('descList'), '', 'en');
+    });
+
+    // alertMessage text list
+    document.getElementById('amTextAdd').addEventListener('click', () => {
+      addLangTextItem(document.getElementById('amTextList'), '', 'en');
+    });
+
+    // alert routeMonitor / routePlan
+    document.getElementById('rmAdd').addEventListener('click', () => addAlertPriorityItem(document.getElementById('rmList'), {priority:'warning', default:true, optional:false}));
+    document.getElementById('rpAdd').addEventListener('click', () => addAlertPriorityItem(document.getElementById('rpList'), {priority:'caution', default:false, optional:true}));
+
+    document.getElementById('registerId').addEventListener('change', async () => {
+      try {
+        await refreshAllOptionLists();
+      } catch (e) {
+        // ignore
+      }
+    });
+
+    document.getElementById('kind').addEventListener('change', async () => {
+      const k = document.getElementById('kind').value;
+      setRelVisibility(k);
+      setKindBodyVisibility(k);
+      try {
+        await refreshAllOptionLists();
+      } finally {
+        // noop
+      }
+    });
+
+  });
+
+  document.getElementById('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    try {
+      const registerId = document.getElementById('registerId').value.trim();
+      const kind = document.getElementById('kind').value.trim();
+
+      if (!registerId) {
+        showToast('Register is required.', 'error');
+        return;
+      }
+
+      const uiKindBody = buildKindBody(kind);
+      const kindBody = injectRelationsIntoKindBody(kind, uiKindBody);
+
+      const payload = {
+        registerId,
+        kind,
+        prItem: {
+          name: document.getElementById('name').value.trim(),
+          definition: document.getElementById('definition').value.trim() || null,
+          remarks: document.getElementById('remarks').value.trim() || null,
+          itemStatus: document.getElementById('itemStatus').value.trim() || null,
+          alias: splitCsv(document.getElementById('alias').value),
+          camelCase: document.getElementById('camelCase').value.trim() || null,
+          definitionSource: document.getElementById('definitionSource').value.trim() || null,
+          reference: document.getElementById('reference').value.trim() || null,
+          similarityToSource: document.getElementById('similarityToSource').value.trim() || null,
+          justification: document.getElementById('justification').value.trim() || null,
+          proposedChange: document.getElementById('proposedChange').value.trim() || null,
+        },
+        xmlID: document.getElementById('xmlID').value.trim() || null,
+        description: buildDescription(),
+        itemSchema: document.getElementById('itemSchemaSel').value || null,
+        colourToken: selectedValues(document.getElementById('colourTokenSel')),
+        kindBody: kindBody,
+        referenceIds: selectedValues(document.getElementById('referenceIdsSel')),
+        managementInfos: [
+          {
+            proposalType: document.getElementById('mi_proposalType').value.trim() || 'Addition',
+            submittingOrganisation: document.getElementById('mi_submittingOrganisation').value.trim() || '',
+            proposedChange: document.getElementById('mi_proposedChange').value.trim() || '',
+            dateProposed: new Date().toISOString(),
+            proposalStatus: document.getElementById('mi_proposalStatus').value.trim() || 'Draft',
+            controlBodyNotes: buildControlBodyNotes(),
           }
+        ]
+      };
 
-          const res = await fetch('/api/pr/items', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          const j = await res.json();
-          if (!res.ok) {
-            msg.textContent = 'Failed: ' + (j.detail || JSON.stringify(j));
-            return;
-          }
-
-          window.location.href = '/ui/pr/' + j._id;
-        } catch (err) {
-          console.error(err);
-          msg.textContent = String(err.message || err);
-        }
+      const res = await fetch('/api/pr/items', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
-    }
 
-    loadRegisters();
+      const j = await res.json();
+      if (!res.ok) {
+        showToast('Failed: ' + (j.detail || JSON.stringify(j)), 'error');
+        return;
+      }
+
+      showToast('Created successfully!', 'success');
+      setTimeout(() => {
+        window.location.href = '/ui/pr/' + j._id;
+      }, 1000);
+    } catch (err) {
+      showToast(String(err.message || err), 'error');
+    }
   });
 </script>
 {% endblock %}
