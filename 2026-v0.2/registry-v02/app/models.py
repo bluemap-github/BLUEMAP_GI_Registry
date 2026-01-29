@@ -246,6 +246,95 @@ class ConvertFromConceptPayload(BaseModel):
 
     managementInfo: ManagementInfoCreate
 
+
+# ---------- 2b) Portrayal Register (PR) Items ----------
+# PR은 Concept과 무관하며, S100_RE_RegisterItem을 직접 상속받는다고 가정.
+
+PRKind = Literal[
+    "S100_PR_Symbol",
+    "S100_PR_LineStyle",
+    "S100_PR_AreaFill",
+    "S100_PR_Pixmap",
+    "S100_PR_ItemSchema",
+    "S100_PR_DisplayMode",
+    "S100_PR_ViewingGroupLayer",
+    "S100_PR_ViewingGroup",
+    "S100_PR_AlertHighlight",
+    "S100_PR_AlertMessage",
+    "S100_PR_ColourToken",
+    "S100_PR_ColourPalette",
+    "S100_PR_Alert",
+    "S100_PR_PaletteItem",
+    "S100_PR_Font",
+    "S100_PR_ContextParameter",
+    "S100_PR_DrawingPriority",
+    "S100_PR_DisplayPlane",
+]
+
+
+PRParameterType = Literal["boolean", "integer", "double", "string", "date"]
+PRImageType = Literal["jpg", "png", "tif"]
+PRAlertPriorityType = Literal["alarm", "warning", "caution", "indication"]
+PRHighlightStyle = Literal["AlarmHighlight", "CautionHighlight"]
+
+
+class PR_NationalLanguageString(BaseModel):
+    text: str
+    language: str
+
+
+class PRItemCreateInput(BaseModel):
+    # itemIdentifier는 시스템이 registerId 단위로 순차 자동할당 (입력 금지)
+    name: str
+    definition: Optional[str] = None
+    remarks: Optional[str] = None
+    itemStatus: Optional[str] = None
+    alias: List[str] = Field(default_factory=list)
+    camelCase: Optional[str] = None
+    definitionSource: Optional[str] = None
+    reference: Optional[str] = None
+    similarityToSource: Optional[str] = None
+    justification: Optional[str] = None
+    proposedChange: Optional[str] = None
+
+
+class PRItemStored(PRItemCreateInput):
+    itemIdentifier: str  # MongoDB에는 string 저장 원칙
+
+
+class PRRegisterItemCreate(BaseModel):
+    registerId: str
+    kind: PRKind
+    prItem: PRItemCreateInput
+
+    xmlID: Optional[str] = None
+    description: List[PR_NationalLanguageString] = Field(default_factory=list)
+
+    # 공통 연결(일부 kind에서만 의미 있음)
+    itemSchema: Optional[ObjectIdStr] = None
+    colourToken: List[ObjectIdStr] = Field(default_factory=list)
+
+    # kind별 세부 내용: 그대로 저장 (예: S100_PR_Symbol, S100_PR_ItemSchema 등)
+    kindBody: Optional[Dict[str, Any]] = None
+
+    # management / references
+    managementInfos: List[ManagementInfoCreate] = Field(min_length=1)
+    referenceIds: List[ObjectIdStr] = Field(default_factory=list)
+
+
+class PRRegisterItemPatch(BaseModel):
+    prItem: Optional[Dict[str, Any]] = None
+    xmlID: Optional[str] = None
+    description: Optional[List[PR_NationalLanguageString]] = None
+
+    itemSchema: Optional[ObjectIdStr] = None
+    colourToken: Optional[List[ObjectIdStr]] = None
+    kindBody: Optional[Dict[str, Any]] = None
+    referenceIds: Optional[List[ObjectIdStr]] = None
+
+    # append-only management info
+    managementInfo: ManagementInfoCreate
+
 # ---------- 3) Reference Sources ----------
 # (현재 UI/API 호환을 위해 MVP 구조 유지)
 class ReferenceSourceCreate(BaseModel):

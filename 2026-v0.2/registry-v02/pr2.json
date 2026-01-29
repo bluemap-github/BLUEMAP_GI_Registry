@@ -1,10 +1,9 @@
-### S100_RE_RegisterItem
-
-### S100_PR_Registerltem // 이게 기본 구조. 모든 PR 개체는 이 구조를 포함해야 함
+### S100_PR_Registerltem // 이게 기본 구조, 이게 등록되지는 않고, 이게 뼈대임 모든 PR 개체는 이 구조를 포함해야 함
 {
     _id : ObjId, 
-    kind : "S100_CD_Feature"
-    concept : {
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_Registerltem"
+    prItem : {
         itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
         name: string
         definition: string
@@ -25,49 +24,40 @@
             language : string
         }, // 이게 배열로 여러개 올 수 있음
     ],
-}
-
-### S100_PR_Visualltem // 중간객체임 !!! 
-
-{
-    _id : ObjId, 
-    kind : "S100_CD_Feature"
-    concept : {
-        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
-        name: string
-        definition: string
-        remarks: string
-        itemStatus: (enumeration)
-        alias: string[]
-        camelCase: string
-        definitionSource: string
-        reference: string
-        similarityToSource: string
-        justification: string
-        proposedChange: string
-    }, 
-    xmlID : string,
-    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+    
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
         {
-            text : string,
-            language : string
-        }, // 이게 배열로 여러개 올 수 있음
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
     ],
-    (S100_PR_Symbol, S100_PR_LineStyle, S100_PR_AreaFill, S100_PR_Pixmap) : {
-        itemDetail : string, // Blob인데 저장경로 string으로 들어올거임
-        previewlmage : string, // Blob인데 저장경로 string으로 들어올거임
-        engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
-        previewType : (enumeration),
-        engineeringImage Type : (enumeration)
-    }
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
 }
 
+### S100_PR_Visualltem // 중간객체임 !!! pass
+(S100_PR_Symbol, S100_PR_LineStyle, S100_PR_AreaFill, S100_PR_Pixmap)
 
 ### S100_PR_Symbol
 {
     _id : ObjId, 
-    kind : "S100_CD_Feature"
-    concept : {
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_Symbol"
+    prItem : {
         itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
         name: string
         definition: string
@@ -94,14 +84,38 @@
         engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
         previewType : (enumeration),
         engineeringImage Type : (enumeration)
-        // 심볼 고유속성, 연관관계 없이 끝
-    }
+    },
+    itemSchema : ObjId, // S100_PR_ItemSchema의 ObjId [1..1],
+    colourToken : [] // S100_PR_ColourToken의 ObjId 배열 [0..*]
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
 }
 ### S100_PR_LineStyle
 {
     _id : ObjId, 
-    kind : "S100_CD_Feature"
-    concept : {
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_LineStyle"
+    prItem : {
         itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
         name: string
         definition: string
@@ -128,16 +142,42 @@
         engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
         previewType : (enumeration),
         engineeringImage Type : (enumeration),
-        symbol : [] // S100_PR_Symbol의 ObjId 배열
-    }
+        symbol : [] // S100_PR_Symbol의 ObjId 배열 [0..*]
+    },
+    itemSchema : ObjId, // S100_PR_ItemSchema의 ObjId [1..1],
+    colourToken : [], // S100_PR_ColourToken의 ObjId 배열 [0..*]
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+
 }
 
 ### S100_PR_AreaFill
-
 {
     _id : ObjId, 
-    kind : "S100_CD_Feature"
-    concept : {
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_AreaFill"
+    prItem : {
         itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
         name: string
         definition: string
@@ -163,59 +203,935 @@
         previewlmage : string, // Blob인데 저장경로 string으로 들어올거임
         engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
         previewType : (enumeration),
-        engineeringImage Type : (enumeration)
-        // areafil의 고유속성, 연관관계 없이 끝
-    }
+        engineeringImage Type : (enumeration),
+        symbol : [] // S100_PR_Symbol의 ObjId 배열 [0..*]
+    },
+    itemSchema : ObjId, // S100_PR_ItemSchema의 ObjId [1..1],
+    colourToken : [] // S100_PR_ColourToken의 ObjId 배열 [0..*]
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
 }
 
 ### S100_PR_Pixmap
-
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_Pixmap"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_Pixmap : {
+        itemDetail : string, // Blob인데 저장경로 string으로 들어올거임
+        previewlmage : string, // Blob인데 저장경로 string으로 들어올거임
+        engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
+        previewType : (enumeration),
+        engineeringImage Type : (enumeration)
+    },
+    itemSchema : ObjId, // S100_PR_ItemSchema의 ObjId [1..1],
+    colourToken : [] // S100_PR_ColourToken의 ObjId 배열 [0..*]
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
 
 ### S100_PR_DisplayMode
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_DisplayMode"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_DisplayMode : {}
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
 ### S100_PR_ViewingGroupLayer
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_ViewingGroupLayer"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_ViewingGroupLayer : {
+        displayMode : [] // S100_PR_DisplayMode의 ObjId 배열 [0..*]
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
+
 
 ### S100_PR_ViewingGroup
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_ViewingGroup"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_ViewingGroup : {
+        foundationMode : boolean,
+        viewingGroup : [] // S100_PR_ViewingGroupLayer의 ObjId 배열 [0..*]
+
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
 ### S100_PR_AlertHighlight
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_AlertHighlight"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_AlertHighlight : {
+        optional : boolean,
+        style : (enumeration),
+        viewingGroup : [], // S100_PR_ViewingGroup의 ObjId 배열 [0..*]
+        msg : [] // S100_PR_AlertMessage의 ObjId 배열 [0..*]
+
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
 ### S100_PR_AlertMessage
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_AlertMessage"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_AlertMessage : {
+        text : [ // S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+            {
+                text : string,
+                language : string
+            }, // 이게 배열로 여러개 올 수 있음
+        ],
+        icon : ObjId // S100_PR_Symbol의 ObjId [0..1]
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
+
 
 ### S100_PR_ColourToken
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_ColourToken"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_ColourToken : {
+        token: string,
+        value : [] // S100_PR_PaletteItem 의 ObjId 배열 [0..*]
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
 ### S100_PR_ColourPalette
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_ColourPalette"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_ColourPalette : {
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
+
+### S100_PR_AlertInfo 및 S100_PR_AlertPriority // 중간객체임 !!! pass
+{
+    priority : {
+        priority : (enumeration),
+        default : boolean,
+        optional : boolean
+    }
+}
 
 ### S100_PR_Alert
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_Alert"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_Alert : {
+        routeMonitor : [
+            {
+                priority : {
+                    priority : (enumeration),
+                    default : boolean,
+                    optional : boolean
+                }
+            }, // 이게 배열로 여러개 올 수 있음
+        ], 
+        routePlan : [
+            {
+                priority : {
+                    priority : (enumeration),
+                    default : boolean,
+                    optional : boolean
+                }
+            }, // 이게 배열로 여러개 올 수 있음
+        ]
+    }
+    
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
-### S100_PR_AlertInfo
 
-### S100_PR_AlertPriority
+### S100_PR_PaletteItem
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_PaletteItem"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_PaletteItem : {
+        transparency : Real, 
+        colour : {
+            cieValue : {
+                x : Real,
+                y : Real,
+                z : Real
+            },
+            sRGBValue : {
+                red : Integer,
+                green : Integer,
+                blue : Integer
+            }
+        },
+        palette : [] // S100_PR_ColourPalette의 ObjId 배열 [1..*]
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
-### S100_PR_Paletteltem
-
-### S100_PR_ColourValue
-
-### S100_PR_CIEValue
-
-### S100_PR_SRGBValue
+### S100_PR_ColourValue // 중간객체임 !!! pass
+### S100_PR_CIEValue // 중간객체임 !!! pass
+### S100_PR_SRGBValue // 중간객체임 !!! pass
 
 ### S100_PR_Font
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_Font"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_Font : {
+        fontFile : string, // Blob인데 저장경로 string으로 들어올거임
+        fontType : "ttf" // 고정값
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
 ### S100_PR_ContextParameter
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_ContextParameter"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_ContextParameter : {
+        parameterType : (enumeration),
+        defaultValue : string
+    }
+    
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
 ### S100_PR_DrawingPriority
+{
+    _id : ObjId, 
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_DrawingPriority"
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_DrawingPriority : {
+        priority : Integer
+    }
+    
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
 ### S100_PR_DisplayPlane
+{
+    _id : ObjId,
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_DisplayPlane",
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    },
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_DisplayPlane : {
+        order : Integer
+    }
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
-### S100_PR_ItemSchema
+### S100_PR_ItemSchema // 원래는 하위객체들이 상속을 받아야되는데 이거는 예외로 kind 
 
-### S100_PR_SymbolSchema
+{
+    _id : ObjId,
+    registerId : 등록된 S100_RE_Register의 ObjId,
+    kind : "S100_PR_ItemSchema",
+    prItem : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    },
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_ItemSchema : {
+        schemaKind : (enumeration - "S100_PR_SymbolSchema", "S100_PR_LineStyleSchema", "S100_PR_AreaFillSchema", "S100_PR_PixmapSchema", "S100_PR_ColourProfileSchema"),
+        xmlSchema : string // Blob인데 저장경로 string으로 들어올거임
+    }
 
-### S100_PR_LineStyleSchema
+    "createdAt": {
+        "$date": "2026-01-29T08:45:18.000Z"
+    },
+    "updatedAt": {
+        "$date": "2026-01-29T08:46:41.000Z"
+    },
+    "managementInfoIds": [
+        {
+        "$oid": "697b1e1e966e0f3018665ba2"
+        },
+        {
+        "$oid": "697b1e45966e0f3018665ba4"
+        },
+        {
+        "$oid": "697b1e71966e0f3018665ba6"
+        }
+    ],
+    "referenceIds": [
+        {
+        "$oid": "697b1e71966e0f3018665ba5"
+        }
+    ],
+}
+}
 
-### S100_PR_AreaFillSchema
+## (enumeration) S100_PR_Parameter Type
+- boolean
+- intege
+- double
+- string
+- date
 
-### S100_PR_PixmapSchema
+## (enumeration) S100_PR_Image Type
+- jpg
+- png
+- tif
 
-### S100_PR_ColourProfileSchema
+## (enumeration) S100_PR_AlertPriority Type
+- alarm
+- warning
+- caution
+- indication
+
+## (enumeration) S100_PR_HighlightStyle
+- AlarmHighlight
+- CautionHighlight

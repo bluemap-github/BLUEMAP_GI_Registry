@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Portrayal Register{% endblock %}
+
+{% block content %}
+<h1>Portrayal Register - List</h1>
+
+<div>
+  <button id="btnNew">New PR Item</button>
+</div>
+
+<hr />
+
+<div>
+  <label>Register:
+    <select id="registerSelect">
+      <option value="">(all)</option>
+    </select>
+  </label>
+
+  <label>Kind:
+    <select id="kindSelect">
+      <option value="">(all)</option>
+      <option value="S100_PR_Symbol">S100_PR_Symbol</option>
+      <option value="S100_PR_LineStyle">S100_PR_LineStyle</option>
+      <option value="S100_PR_AreaFill">S100_PR_AreaFill</option>
+      <option value="S100_PR_Pixmap">S100_PR_Pixmap</option>
+      <option value="S100_PR_ItemSchema">S100_PR_ItemSchema</option>
+      <option value="S100_PR_DisplayMode">S100_PR_DisplayMode</option>
+      <option value="S100_PR_ViewingGroupLayer">S100_PR_ViewingGroupLayer</option>
+      <option value="S100_PR_ViewingGroup">S100_PR_ViewingGroup</option>
+      <option value="S100_PR_AlertHighlight">S100_PR_AlertHighlight</option>
+      <option value="S100_PR_AlertMessage">S100_PR_AlertMessage</option>
+      <option value="S100_PR_ColourToken">S100_PR_ColourToken</option>
+      <option value="S100_PR_ColourPalette">S100_PR_ColourPalette</option>
+      <option value="S100_PR_Alert">S100_PR_Alert</option>
+      <option value="S100_PR_PaletteItem">S100_PR_PaletteItem</option>
+      <option value="S100_PR_Font">S100_PR_Font</option>
+      <option value="S100_PR_ContextParameter">S100_PR_ContextParameter</option>
+      <option value="S100_PR_DrawingPriority">S100_PR_DrawingPriority</option>
+      <option value="S100_PR_DisplayPlane">S100_PR_DisplayPlane</option>
+    </select>
+  </label>
+
+  <label>Search:
+    <input id="q" type="text" placeholder="name or itemIdentifier" />
+  </label>
+
+  <label>Search By:
+    <select id="searchBy">
+      <option value="name">name</option>
+      <option value="itemIdentifier">itemIdentifier</option>
+    </select>
+  </label>
+
+  <label>Status:
+    <input id="status" type="text" placeholder="Draft/Valid/..." />
+  </label>
+
+  <button id="btnLoad">Load</button>
+</div>
+
+<hr />
+
+<div>
+  <div id="meta"></div>
+  <table border="1" cellpadding="6" cellspacing="0">
+    <thead>
+      <tr>
+        <th>itemIdentifier</th>
+        <th>name</th>
+        <th>kind</th>
+        <th>status</th>
+        <th>updatedAt</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  function escapeHtml(s) {
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function fmtDate(v) {
+    if (!v) return '';
+    try {
+      return new Date(v).toISOString();
+    } catch (e) {
+      return String(v);
+    }
+  }
+
+  async function loadRegisters() {
+    const sel = document.getElementById('registerSelect');
+    try {
+      const res = await fetch('/api/registers?limit=200');
+      const j = await res.json();
+      const items = j.items || [];
+      for (const r of items) {
+        const opt = document.createElement('option');
+        opt.value = r._id;
+        opt.textContent = `${r.name} (${r._id})`;
+        sel.appendChild(opt);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function buildParams() {
+    const params = new URLSearchParams();
+    params.set('page', '1');
+    params.set('limit', '100');
+
+    const registerId = document.getElementById('registerSelect').value.trim();
+    const kind = document.getElementById('kindSelect').value.trim();
+    const q = document.getElementById('q').value.trim();
+    const searchBy = document.getElementById('searchBy').value;
+    const status = document.getElementById('status').value.trim();
+
+    if (registerId) params.set('registerId', registerId);
+    if (kind) params.set('kind', kind);
+    if (q) params.set('q', q);
+    if (searchBy) params.set('searchBy', searchBy);
+    if (status) params.set('status', status);
+
+    params.set('sortBy', 'updatedAt');
+    params.set('sortOrder', 'desc');
+
+    return params;
+  }
+
+  async function loadItems() {
+    const tbody = document.getElementById('tbody');
+    const meta = document.getElementById('meta');
+    tbody.innerHTML = '';
+    meta.textContent = 'Loading...';
+
+    const params = buildParams();
+    const url = '/api/pr/items?' + params.toString();
+
+    try {
+      const res = await fetch(url);
+      const j = await res.json();
+      const items = j.items || [];
+      meta.textContent = `Total: ${j.total ?? items.length}`;
+
+      tbody.innerHTML = items.map(it => {
+        const id = it._id;
+        const itemIdentifier = (it.prItem && it.prItem.itemIdentifier) ? it.prItem.itemIdentifier : '';
+        const name = (it.prItem && it.prItem.name) ? it.prItem.name : '';
+        const status = (it.prItem && it.prItem.itemStatus) ? it.prItem.itemStatus : '';
+        return `
+          <tr data-id="${escapeHtml(id)}" style="cursor:pointer">
+            <td>${escapeHtml(itemIdentifier)}</td>
+            <td>${escapeHtml(name)}</td>
+            <td>${escapeHtml(it.kind || '')}</td>
+            <td>${escapeHtml(status)}</td>
+            <td>${escapeHtml(fmtDate(it.updatedAt))}</td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.querySelectorAll('tr').forEach(tr => {
+        tr.addEventListener('click', () => {
+          const id = tr.getAttribute('data-id');
+          if (id) window.location.href = '/ui/pr/' + id;
+        });
+      });
+
+    } catch (e) {
+      console.error(e);
+      meta.textContent = 'Failed to load.';
+    }
+  }
+
+  document.getElementById('btnLoad').addEventListener('click', loadItems);
+  document.getElementById('btnNew').addEventListener('click', () => {
+    window.location.href = '/ui/pr/new';
+  });
+
+  loadRegisters().then(loadItems);
+</script>
+{% endblock %}

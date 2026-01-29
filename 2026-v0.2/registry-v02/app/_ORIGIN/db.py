@@ -14,6 +14,9 @@ COLL_REF_SOURCES = "s100_re_referencesources"
 COLL_REFERENCES = "s100_re_references"
 COLL_MGMT_INFO = "s100_re_managementinfo"
 
+# ✅ itemIdentifier 시퀀스 관리
+COLL_COUNTERS = "s100_re_counters"
+
 _client: AsyncIOMotorClient | None = None
 
 
@@ -30,10 +33,14 @@ async def init_indexes(db: AsyncIOMotorDatabase) -> None:
     # ✅ register name unique (원하면 version 같이)
     await db[COLL_REGISTERS].create_index([("name", 1)], unique=True)
 
-    # ✅ (registerId, itemIdentifier) unique
-    await db[COLL_ITEMS].create_index([("registerId", 1), ("itemIdentifier", 1)], unique=True)
+    # ✅ (registerId, concept.itemIdentifier) unique
+    await db[COLL_ITEMS].create_index([("registerId", 1), ("concept.itemIdentifier", 1)], unique=True)
     await db[COLL_ITEMS].create_index([("registerId", 1), ("kind", 1)])
-    await db[COLL_ITEMS].create_index([("name", 1)])
+    await db[COLL_ITEMS].create_index([("concept.name", 1)])
+    await db[COLL_ITEMS].create_index([("concept.itemStatus", 1)])
+
+    # ✅ counters: (registerId, name) unique
+    await db[COLL_COUNTERS].create_index([("registerId", 1), ("name", 1)], unique=True)
 
     # ✅ referencesources name unique (MVP: name 기준)
     await db[COLL_REF_SOURCES].create_index([("name", 1)], unique=True)
@@ -41,8 +48,7 @@ async def init_indexes(db: AsyncIOMotorDatabase) -> None:
     # ✅ references: title index (검색용)
     await db[COLL_REFERENCES].create_index([("title", 1)])
 
-    # ✅ managementinfo: (단방향 규칙) RegisterItem을 "모르므로" registerItemId 인덱스 제거
-    # 필요 시 추후 note/search용 인덱스 정도만
+    # ✅ managementinfo: note/search용 인덱스 정도만
     await db[COLL_MGMT_INFO].create_index([("note", 1)])
 
 

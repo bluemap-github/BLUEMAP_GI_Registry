@@ -1,0 +1,50 @@
+{
+  "_id": {
+    "$oid": "697b1e1e966e0f3018665ba3"
+  },
+  "registerId": {
+    "$oid": "697b1dd3966e0f3018665ba1"
+  },
+  "kind": "S100_CD_Feature",
+  "concept": {
+    "name": "1234567",
+    "definition": "1234",
+    "remarks": "1234",
+    "itemStatus": "Draft",
+    "alias": [
+      "1234"
+    ],
+    "camelCase": "11234",
+    "definitionSource": "1234",
+    "reference": "1234",
+    "similarityToSource": "1234",
+    "justification": "1234",
+    "proposedChange": "1234",
+    "itemIdentifier": "1"
+  },
+  "createdAt": {
+    "$date": "2026-01-29T08:45:18.000Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-29T08:46:41.000Z"
+  },
+  "managementInfoIds": [
+    {
+      "$oid": "697b1e1e966e0f3018665ba2"
+    },
+    {
+      "$oid": "697b1e45966e0f3018665ba4"
+    },
+    {
+      "$oid": "697b1e71966e0f3018665ba6"
+    }
+  ],
+  "referenceIds": [
+    {
+      "$oid": "697b1e71966e0f3018665ba5"
+    }
+  ],
+  "S100_CD_Feature": {
+    "featureUseType": "meta"
+  }
+}

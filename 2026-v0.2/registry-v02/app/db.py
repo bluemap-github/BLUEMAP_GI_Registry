@@ -10,6 +10,8 @@ MONGO_DB = os.getenv("MONGO_DB", "registry-v02")
 # ✅ 컬렉션 이름은 코드에서 고정 추천 (MVP에서 안정적)
 COLL_REGISTERS = "s100_re_registers"
 COLL_ITEMS = "s100_re_register_items"
+# ✅ Portrayal Register(PR) items (Concept/DD와 분리)
+COLL_PR_ITEMS = "s100_pr_items"
 COLL_REF_SOURCES = "s100_re_referencesources"
 COLL_REFERENCES = "s100_re_references"
 COLL_MGMT_INFO = "s100_re_managementinfo"
@@ -38,6 +40,12 @@ async def init_indexes(db: AsyncIOMotorDatabase) -> None:
     await db[COLL_ITEMS].create_index([("registerId", 1), ("kind", 1)])
     await db[COLL_ITEMS].create_index([("concept.name", 1)])
     await db[COLL_ITEMS].create_index([("concept.itemStatus", 1)])
+
+    # ✅ PR items
+    await db[COLL_PR_ITEMS].create_index([("registerId", 1), ("prItem.itemIdentifier", 1)], unique=True)
+    await db[COLL_PR_ITEMS].create_index([("registerId", 1), ("kind", 1)])
+    await db[COLL_PR_ITEMS].create_index([("prItem.name", 1)])
+    await db[COLL_PR_ITEMS].create_index([("prItem.itemStatus", 1)])
 
     # ✅ counters: (registerId, name) unique
     await db[COLL_COUNTERS].create_index([("registerId", 1), ("name", 1)], unique=True)

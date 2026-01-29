@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}PR Detail{% endblock %}
+
+{% block content %}
+<h1>PR Item Detail</h1>
+
+<div>
+  <a href="/ui/pr">Back to list</a> |
+  <a href="/ui/pr/{{ item._id }}/edit">Edit</a>
+</div>
+
+<hr />
+
+<h2>Basic</h2>
+<ul>
+  <li><b>_id</b>: {{ item._id }}</li>
+  <li><b>registerId</b>: {{ item.registerId }}</li>
+  <li><b>kind</b>: {{ item.kind }}</li>
+  <li><b>createdAt</b>: {{ item.createdAt }}</li>
+  <li><b>updatedAt</b>: {{ item.updatedAt }}</li>
+</ul>
+
+<h2>prItem</h2>
+<pre id="prePrItem"></pre>
+
+<h2>Links</h2>
+<ul>
+  <li><b>itemSchema</b>: <span id="itemSchema"></span></li>
+  <li><b>colourToken</b>: <span id="colourToken"></span></li>
+</ul>
+
+<h2>description</h2>
+<pre id="preDescription"></pre>
+
+<h2>kindBody (stored under kind key)</h2>
+<pre id="preKindBody"></pre>
+
+<h2>Management Infos</h2>
+<div id="mgmt"></div>
+
+<h2>References</h2>
+<div id="refs"></div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const item = {{ item | tojson }};
+  const mgmtInfos = {{ mgmt_infos | tojson }};
+  const references = {{ references | tojson }};
+
+  function showJson(id, obj) {
+    document.getElementById(id).textContent = JSON.stringify(obj ?? null, null, 2);
+  }
+
+  showJson('prePrItem', item.prItem);
+  showJson('preDescription', item.description);
+  showJson('preKindBody', item[item.kind] || null);
+
+  document.getElementById('itemSchema').textContent = item.itemSchema || '';
+  document.getElementById('colourToken').textContent = Array.isArray(item.colourToken) ? item.colourToken.join(', ') : '';
+
+  // management infos
+  const mgmtEl = document.getElementById('mgmt');
+  if (!mgmtInfos || mgmtInfos.length === 0) {
+    mgmtEl.textContent = '(none)';
+  } else {
+    mgmtEl.innerHTML = mgmtInfos.map(mi => {
+      return `<pre>${JSON.stringify(mi, null, 2)}</pre>`;
+    }).join('');
+  }
+
+  // references
+  const refEl = document.getElementById('refs');
+  if (!references || references.length === 0) {
+    refEl.textContent = '(none)';
+  } else {
+    refEl.innerHTML = references.map(r => {
+      return `<pre>${JSON.stringify(r, null, 2)}</pre>`;
+    }).join('');
+  }
+</script>
+{% endblock %}

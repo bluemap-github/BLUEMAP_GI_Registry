@@ -4,7 +4,8 @@ from __future__ import annotations
 import json
 from typing import Any, Dict
 
-from fastapi import FastAPI, Request, HTTPException
+from pathlib import Path as FsPath
+from fastapi import FastAPI, Path as ApiPath, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -13,6 +14,8 @@ from fastapi.encoders import jsonable_encoder
 from bson import ObjectId
 from .db import attach_db, get_db, COLL_ITEMS, COLL_MGMT_INFO, COLL_REF_SOURCES, COLL_REFERENCES
 from .api import router as api_router
+
+BASE_DIR = FsPath(__file__).resolve().parent  # .../app
 
 app = FastAPI(title="FastAPI Registry MVP")
 
@@ -24,7 +27,7 @@ app.include_router(api_router, prefix="/api")
 
 # Static / Templates
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 # ------------------------
@@ -35,22 +38,10 @@ def _is_objectid_hex(s: str) -> bool:
 
 
 def _normalize_item(doc: dict) -> dict:
-    """Jinja/JS에서 사용하기 편하도록 ObjectId들을 문자열로 변환."""
+    """Jinja/JS에서 사용하기 편하도록 ObjectId들을 문자열로 변환 (recursive)."""
     if not doc:
         return doc
-
-    if isinstance(doc.get("_id"), ObjectId):
-        doc["_id"] = str(doc["_id"])
-
-    for k in ["registerId", "referenceSourceId"]:
-        if isinstance(doc.get(k), ObjectId):
-            doc[k] = str(doc[k])
-
-    for k in ["managementInfoIds", "referenceIds"]:
-        if isinstance(doc.get(k), list):
-            doc[k] = [str(x) if isinstance(x, ObjectId) else x for x in doc[k]]
-
-    return doc
+    return _stringify_oid_any(dict(doc))
 
 
 async def _resolve_item_doc(item_id: str) -> dict:
@@ -69,8 +60,8 @@ async def _resolve_item_doc(item_id: str) -> dict:
         return doc
 
     if item_id.isdigit():
-        iid = int(item_id)
-        docs = await coll.find({"itemIdentifier": iid}).limit(2).to_list(length=2)
+        # ✅ concept.itemIdentifier는 string으로 저장
+        docs = await coll.find({"concept.itemIdentifier": str(item_id)}).limit(2).to_list(length=2)
         if not docs:
             raise HTTPException(status_code=404, detail="Item not found")
         if len(docs) > 1:
@@ -102,8 +93,8 @@ async def ui_register_new(request: Request):
     return templates.TemplateResponse("register_new.html", {"request": request})
 
 
-# Data Dictionary Items
-KIND_KEYS = ["feature", "information", "attribute", "concept", "enumeratedValue", "other"]
+# Data Dictionary Items (UI용)
+KIND_KEYS = ["feature", "information", "attribute", "enumeratedValue", "concept"]
 
 
 @app.get("/ui/dd", response_class=HTMLResponse)
@@ -114,10 +105,11 @@ async def ui_dd_list(request: Request):
 
     page = 1
     limit = 20
-    sort_by = "itemIdentifier"
+    sort_by = "updatedAt"
     sort_order = -1  # desc
 
-    flt: Dict[str, Any] = {}
+    # ✅ Data Dictionary 목록: Concept-only 제외
+    flt: Dict[str, Any] = {"kind": {"$ne": "S100_Concept"}}
 
     total = await coll.count_documents(flt)
 
@@ -132,15 +124,15 @@ async def ui_dd_list(request: Request):
     async for doc in cursor:
         items.append(_normalize_item(doc))
 
-    pipeline = [
-        {"$match": flt},
-        {"$group": {"_id": "$kind", "count": {"$sum": 1}}},
-    ]
-    rows = await coll.aggregate(pipeline).to_list(length=None)
-    initial_stats = {(r["_id"] or "other"): r["count"] for r in rows}
-
-    for k in KIND_KEYS:
-        initial_stats.setdefault(k, 0)
+    # ✅ 타입별 카운트는 kind 기준
+    initial_stats = {
+        "feature": await coll.count_documents({"kind": "S100_CD_Feature"}),
+        "information": await coll.count_documents({"kind": "S100_CD_Information"}),
+        "enumeratedValue": await coll.count_documents({"kind": "S100_CD_EnumeratedValue"}),
+        "simpleAttribute": await coll.count_documents({"kind": "S100_CD_SimpleAttribute"}),
+        "complexAttribute": await coll.count_documents({"kind": "S100_CD_ComplexAttribute"}),
+        "concept": await coll.count_documents({"kind": "S100_Concept"}),
+    }
 
     initial_items_json = json.dumps(items, ensure_ascii=False, default=str)
     initial_stats_json = json.dumps(initial_stats, ensure_ascii=False)
@@ -157,9 +149,63 @@ async def ui_dd_list(request: Request):
     )
 
 
+# ------------------------
+# Concept Register UI
+# ------------------------
+@app.get("/ui/concepts", response_class=HTMLResponse)
+async def ui_concept_list(request: Request):
+    """Concept Register 리스트."""
+    db = get_db()
+    coll = db[COLL_ITEMS]
+
+    page = 1
+    limit = 20
+    sort_by = "updatedAt"
+    sort_order = -1
+
+    # ✅ Concept-only 문서만
+    flt: Dict[str, Any] = {"kind": "S100_Concept"}
+    total = await coll.count_documents(flt)
+
+    cursor = (
+        coll.find(flt)
+        .sort(sort_by, sort_order)
+        .skip((page - 1) * limit)
+        .limit(limit)
+    )
+    items = []
+    async for doc in cursor:
+        items.append(_normalize_item(doc))
+
+    # 타입별 카운트 (참고용)
+    binding_stats = {
+        "concept": await coll.count_documents({"kind": "S100_Concept"}),
+        "feature": await coll.count_documents({"kind": "S100_CD_Feature"}),
+        "information": await coll.count_documents({"kind": "S100_CD_Information"}),
+        "enumeratedValue": await coll.count_documents({"kind": "S100_CD_EnumeratedValue"}),
+        "simpleAttribute": await coll.count_documents({"kind": "S100_CD_SimpleAttribute"}),
+        "complexAttribute": await coll.count_documents({"kind": "S100_CD_ComplexAttribute"}),
+    }
+
+    return templates.TemplateResponse(
+        "concept_list.html",
+        {
+            "request": request,
+            "initial_total": total,
+            "initial_items_json": json.dumps(items, ensure_ascii=False, default=str),
+            "binding_stats": binding_stats,
+            "binding_stats_json": json.dumps(binding_stats, ensure_ascii=False),
+        },
+    )
+
+
 @app.get("/ui/dd/new", response_class=HTMLResponse)
-async def ui_dd_new(request: Request):
-    return templates.TemplateResponse("dd_new.html", {"request": request})
+async def ui_dd_new(request: Request, fromConceptId: str = ""):
+    # fromConceptId가 있으면 convert 모드
+    return templates.TemplateResponse(
+        "dd_new.html",
+        {"request": request, "fromConceptId": fromConceptId},
+    )
 
 
 @app.get("/ui/dd/{item_id}/edit", response_class=HTMLResponse)
@@ -183,7 +229,7 @@ def _stringify_oid_any(x):
     return x
 
 @app.get("/ui/dd/{item_id}", response_class=HTMLResponse)
-async def ui_dd_detail(request: Request, item_id: str):
+async def ui_dd_detail(request: Request, item_id: str, type: str = ""):
     db = get_db()
 
     doc = await _resolve_item_doc(item_id)  # doc 안에는 ObjectId들이 그대로 있음
@@ -205,6 +251,59 @@ async def ui_dd_detail(request: Request, item_id: str):
         by_id = {str(x["_id"]): x for x in ref_list}
         references = [by_id.get(str(rid)) for rid in doc["referenceIds"] if by_id.get(str(rid))]
 
+    # ✅ typed relations (distinction / parent / subAttributes / enum-children)
+    kind_val = doc.get("kind") or ""
+    distinctions = []
+    parent_attribute = None
+    enumerated_values = []
+    sub_attributes = []
+
+    # Feature / Information: distinctionIds -> items
+    if kind_val in {"S100_CD_Feature", "S100_CD_Information"}:
+        t = doc.get(kind_val) or {}
+        ids = t.get("distinctionIds") or []
+        if ids:
+            d_list = [x async for x in db[COLL_ITEMS].find({"_id": {"$in": ids}})]
+            by_id = {str(x["_id"]): x for x in d_list}
+            distinctions = [by_id.get(str(oid)) for oid in ids if by_id.get(str(oid))]
+
+    # EnumeratedValue: parentSimpleAttributeId -> item
+    if kind_val == "S100_CD_EnumeratedValue":
+        t = doc.get(kind_val) or {}
+        pid = t.get("parentSimpleAttributeId")
+        if pid:
+            parent_attribute = await db[COLL_ITEMS].find_one({"_id": pid})
+
+    # SimpleAttribute: children EnumeratedValue (0..*)
+    if kind_val == "S100_CD_SimpleAttribute":
+        enumerated_values = [
+            x async for x in db[COLL_ITEMS].find(
+                {
+                    "kind": "S100_CD_EnumeratedValue",
+                    "S100_CD_EnumeratedValue.parentSimpleAttributeId": doc["_id"],
+                }
+            ).sort("S100_CD_EnumeratedValue.numericCode", 1)
+        ]
+
+    # ComplexAttribute: subAttributes usage -> referenced attribute docs
+    if kind_val == "S100_CD_ComplexAttribute":
+        t = doc.get(kind_val) or {}
+        subs = t.get("subAttributes") or []
+        attr_ids = [s.get("attributeId") for s in subs if isinstance(s, dict) and s.get("attributeId")]
+        if attr_ids:
+            a_list = [x async for x in db[COLL_ITEMS].find({"_id": {"$in": attr_ids}})]
+            by_id = {str(x["_id"]): x for x in a_list}
+            for s in subs:
+                if not isinstance(s, dict):
+                    continue
+                oid = s.get("attributeId")
+                sub_attributes.append(
+                    {
+                        "usage": s,
+                        "attribute": by_id.get(str(oid)) if oid else None,
+                    }
+                )
+
     # item normalize + JSON safe
     doc = _normalize_item(doc)
     doc = jsonable_encoder(doc)
@@ -217,7 +316,57 @@ async def ui_dd_detail(request: Request, item_id: str):
         {
             "request": request,
             "item_id": item_id,
+            "dd_type": type,
             "item": doc,
+            "mgmt_infos": mgmt_infos,
+            "reference_source": reference_source,
+            "references": references,
+            "distinctions": jsonable_encoder(_stringify_oid_any(distinctions)),
+            "parent_attribute": jsonable_encoder(_stringify_oid_any(parent_attribute)),
+            "enumerated_values": jsonable_encoder(_stringify_oid_any(enumerated_values)),
+            "sub_attributes": jsonable_encoder(_stringify_oid_any(sub_attributes)),
+        },
+    )
+
+
+@app.get("/ui/concepts/{item_id}", response_class=HTMLResponse)
+async def ui_concept_detail(request: Request, item_id: str):
+    """Concept 상세 + Convert 버튼 제공."""
+    db = get_db()
+
+    doc = await _resolve_item_doc(item_id)
+
+    mgmt_infos = []
+    if doc.get("managementInfoIds"):
+        mgmt_cursor = db[COLL_MGMT_INFO].find({"_id": {"$in": doc["managementInfoIds"]}}).sort("createdAt", 1)
+        mgmt_infos = [x async for x in mgmt_cursor]
+
+    reference_source = None
+    if doc.get("referenceSourceId"):
+        reference_source = await db[COLL_REF_SOURCES].find_one({"_id": doc["referenceSourceId"]})
+
+    references = []
+    if doc.get("referenceIds"):
+        ref_list = [x async for x in db[COLL_REFERENCES].find({"_id": {"$in": doc["referenceIds"]}})]
+        by_id = {str(x["_id"]): x for x in ref_list}
+        references = [by_id.get(str(rid)) for rid in doc["referenceIds"] if by_id.get(str(rid))]
+
+    # ✅ 신규 스키마: concept-only(kind=S100_Concept)만 여기서 주로 조회
+    current_kind = doc.get("kind")
+
+    doc = _normalize_item(doc)
+    doc = jsonable_encoder(doc)
+    mgmt_infos = jsonable_encoder(_stringify_oid_any(mgmt_infos))
+    reference_source = jsonable_encoder(_stringify_oid_any(reference_source))
+    references = jsonable_encoder(_stringify_oid_any(references))
+
+    return templates.TemplateResponse(
+        "concept_detail.html",
+        {
+            "request": request,
+            "item_id": item_id,
+            "item": doc,
+            "current_kind": current_kind,
             "mgmt_infos": mgmt_infos,
             "reference_source": reference_source,
             "references": references,

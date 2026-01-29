@@ -64,7 +64,6 @@
 ### S100_PR_ColourPalette
 
 ### S100_PR_Alert
-
 - routeMonitor: S100_PR_AlertInfo [0 ..* ]
 - routePlan: S100_PR_AlertInfo [0 ..* ]
 
@@ -137,7 +136,6 @@
 # Enumerations
 
 ## (enumeration) S100_PR_Parameter Type
-
 - boolean
 - intege
 - double
@@ -145,23 +143,20 @@
 - date
 
 ## (enumeration) S100_PR_Image Type
-
 - jpg
 - png
 - tif
 
 ## (enumeration) S100_PR_AlertPriority Type
-
 - alarm
 - warning
 - caution
 - indication
 
-## (enumeration) S100_PR_FontType
-
-- ttf
-
 ## (enumeration) S100_PR_HighlightStyle
-
 - AlarmHighlight
 - CautionHighlight
+
+
+## (enumeration) S100_PR_FontType
+- ttf

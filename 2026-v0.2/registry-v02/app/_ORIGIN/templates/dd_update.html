@@ -1,587 +1,616 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Item #{{ item.itemIdentifier }}</title>
-  <style>
-    /* ✅ dd_new.html 스타일을 최대한 재사용(간단화 버전) */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    :root {
-      --primary:#2563eb; --primary-hover:#1d4ed8; --bg:#f8fafc; --card-bg:#fff;
-      --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0;
-      --success:#10b981; --warning:#f59e0b; --danger:#ef4444; --radius:8px;
-    }
-    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-    .container { max-width:1000px; margin:0 auto; padding:24px; }
-    .breadcrumb { display:flex; gap:8px; font-size:14px; color:var(--text-muted); margin-bottom:16px; }
-    .breadcrumb a { color:var(--text-muted); text-decoration:none; }
-    .breadcrumb a:hover { color:var(--primary); }
-    .breadcrumb .current { color:var(--primary); font-weight:500; }
-    .page-title { font-size:28px; font-weight:700; }
-    .page-subtitle { font-size:14px; color:var(--text-muted); margin-top:4px; }
-    .card { background:var(--card-bg); border-radius:var(--radius); border:1px solid var(--border); margin-bottom:24px; overflow:hidden; }
-    .card-header { padding:16px 24px; background:var(--bg); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
-    .card-title { font-size:16px; font-weight:600; color:var(--text); }
-    .card-body { padding:24px; }
-    .form-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
-    .form-group { display:flex; flex-direction:column; gap:6px; }
-    .full-width { grid-column:1/-1; }
-    .form-label { font-size:14px; font-weight:500; }
-    .required { color:var(--danger); }
-    .form-input,.form-select,.form-textarea {
-      padding:10px 14px; border:1px solid var(--border); border-radius:var(--radius); font-size:14px; background:var(--card-bg);
-    }
-    .form-textarea { min-height:100px; resize:vertical; }
-    .hint { font-size:12px; color:var(--text-muted); }
-    .divider { height:1px; background:var(--border); margin:20px 0; }
-    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 20px; font-size:14px; font-weight:500;
-      border-radius:var(--radius); border:none; cursor:pointer; transition:all .2s; }
-    .btn-primary { background:var(--primary); color:white; }
-    .btn-primary:hover { background:var(--primary-hover); }
-    .btn-secondary { background:var(--bg); color:var(--text); border:1px solid var(--border); }
-    .btn-secondary:hover { background:var(--border); }
-    .actions { display:flex; justify-content:space-between; gap:12px; padding:20px 0; }
-    .toast {
-      position:fixed; bottom:24px; right:24px; background:var(--text); color:white; padding:14px 20px; border-radius:var(--radius);
-      font-size:14px; transform:translateY(100px); opacity:0; transition:all .3s ease; z-index:1000;
-    }
-    .toast.show { transform:translateY(0); opacity:1; }
-    .toast.success { background:var(--success); }
-    .toast.error { background:var(--danger); }
-    @media (max-width:768px){ .container{padding:16px;} .form-grid{grid-template-columns:1fr;} .page-title{font-size:24px;} .actions{flex-direction:column;} }
-  
-    /* Dynamic List (References) */
-    .dynamic-list { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
-    .dynamic-list-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--bg); border-bottom:1px solid var(--border); }
-    .dynamic-list-title { font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; }
-    .dynamic-list-body { max-height:320px; overflow-y:auto; }
-    .dynamic-list-empty { padding:18px 16px; color:var(--text-muted); font-size:13px; text-align:center; }
-    .dynamic-item { display:flex; align-items:flex-start; gap:12px; padding:12px 16px; border-bottom:1px solid var(--border); }
-    .dynamic-item:last-child { border-bottom:none; }
-    .dynamic-item-number { width:22px; height:22px; border-radius:50%; background:var(--primary); color:white; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
-    .dynamic-item-input { flex:1; }
-    .dynamic-item-remove { background:none; border:none; cursor:pointer; color:var(--danger); font-weight:700; padding:6px; border-radius:6px; }
-    .dynamic-item-remove:hover { background:rgba(239,68,68,.08); }
+{% extends "base.html" %}
 
-    .btn-sm { padding:6px 10px; font-size:12px; }
-    .btn-ghost { background:transparent; border:1px solid var(--border); color:var(--text); }
-    .btn-ghost:hover { border-color:var(--primary); color:var(--primary); }
+{% set c = item.concept or {} %}
+{% block title %}Edit Item #{{ c.itemIdentifier or '-' }}{% endblock %}
 
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <nav class="breadcrumb">
-        <a href="/">Home</a><span>/</span>
-        <a href="/ui/registers">GI Registers</a><span>/</span>
-        <a href="/ui/dd">Data Dictionary Register</a><span>/</span>
-        <a href="/ui/dd/{{ item._id }}">Item #{{ item.itemIdentifier }}</a><span>/</span>
-        <span class="current">Edit</span>
-      </nav>
-      <div>
-        <div class="page-title">Edit Item #{{ item.itemIdentifier }}</div>
-        <div class="page-subtitle">PATCH로 수정하며, 수정 이력은 Management Information을 새로 생성해 누적합니다.</div>
-      </div>
-    </header>
+{% block extra_styles %}
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--primary:#2563eb;--primary-hover:#1d4ed8;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:12px;--danger:#ef4444;--success:#10b981}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    .breadcrumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-bottom:14px;flex-wrap:wrap}
+    .breadcrumb a{color:var(--muted);text-decoration:none}
+    .breadcrumb a:hover{color:var(--primary)}
+    .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+    .title h1{font-size:28px;font-weight:900}
+    .title .sub{font-size:14px;color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+    .card-h{padding:12px 16px;border-bottom:1px solid var(--border);background:#fafbff;font-weight:900}
+    .card-b{padding:14px 16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.container{padding:16px}}
+    label{font-size:13px;color:var(--muted);font-weight:800}
+    .req{color:var(--danger)}
+    input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px;background:#fff;color:var(--text)}
+    textarea{min-height:96px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(37,99,235,.7);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+    input:disabled,select:disabled{background:#f5f7fb;color:var(--muted)}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text);font-weight:900;cursor:pointer;text-decoration:none}
+    .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+    .btn.primary:hover{background:var(--primary-hover)}
+    .btn.ghost:hover{border-color:rgba(37,99,235,.35);color:var(--primary)}
 
-    <form id="editForm">
-      <!-- Basic -->
-      <div class="card">
-        <div class="card-header"><div class="card-title">Basic Info</div></div>
-        <div class="card-body">
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">_id</label>
-              <input class="form-input" value="{{ item._id }}" disabled>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Register ID</label>
-              <input class="form-input" value="{{ item.registerId }}" disabled>
-            </div>
+    /* refs */
+    .dyn{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .dyn-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg);border-bottom:1px solid var(--border)}
+    .dyn-title{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.4px}
+    .dyn-b{max-height:320px;overflow:auto}
+    .dyn-empty{padding:14px 12px;color:var(--muted);font-size:13px;text-align:center}
+    .dyn-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-bottom:1px solid var(--border)}
+    .dyn-item:last-child{border-bottom:none}
+    .dyn-num{width:22px;height:22px;border-radius:999px;background:var(--primary);color:#fff;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:2px}
+    .dyn-remove{border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.08);color:var(--danger);border-radius:10px;padding:8px 10px;font-weight:900;cursor:pointer;height:38px}
+    .dyn-remove:hover{background:rgba(239,68,68,.14)}
 
-            <div class="form-group">
-              <label class="form-label">Kind</label>
-              <input class="form-input" value="{{ item.kind }}" disabled>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Item Identifier</label>
-              <input class="form-input" value="{{ item.itemIdentifier }}" disabled>
-              <div class="hint">itemIdentifier는 여기선 변경하지 않는 것을 권장</div>
-            </div>
+    .toast{position:fixed;right:18px;bottom:18px;background:var(--text);color:#fff;padding:12px 14px;border-radius:12px;opacity:0;transform:translateY(12px);transition:all .2s ease;z-index:9999}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.success{background:var(--success)}
+    .toast.error{background:var(--danger)}
+</style>
+{% endblock %}
 
-            <div class="form-group full-width">
-              <label class="form-label">Name <span class="required">*</span></label>
-              <input class="form-input" name="name" required>
-            </div>
+{% block content %}
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">Home</a><span>/</span>
+    <a href="/ui/dd">Data Dictionary Register</a><span>/</span>
+    <a href="/ui/dd/{{ item._id }}">Item #{{ c.itemIdentifier or '-' }}</a><span>/</span>
+    <span>Edit</span>
+  </nav>
 
-            <div class="form-group full-width">
-              <label class="form-label">CamelCase</label>
-              <input class="form-input" name="camelCase">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">Alias (comma separated)</label>
-              <input class="form-input" name="alias">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">Definition</label>
-              <textarea class="form-textarea" name="definition"></textarea>
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">Remarks</label>
-              <textarea class="form-textarea" name="remarks"></textarea>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Item Status</label>
-              <select class="form-select" name="itemStatus">
-                <option value="">(keep)</option>
-                <option value="Draft">Draft</option>
-                <option value="Pending">Pending</option>
-                <option value="Valid">Valid</option>
-                <option value="Deprecated">Deprecated</option>
-                <option value="Retired">Retired</option>
-              </select>
-              <div class="hint">선택하지 않으면 기존 상태 유지</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Definition Source</label>
-              <input class="form-input" name="definitionSource">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">Reference</label>
-              <input class="form-input" name="reference">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">Similarity To Source</label>
-              <input class="form-input" name="similarityToSource">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">Proposed Change (latest)</label>
-              <textarea class="form-textarea" name="proposedChange"></textarea>
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">Justification (latest)</label>
-              <textarea class="form-textarea" name="justification"></textarea>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      
-      <!-- References / ReferenceSource -->
-      <div class="card">
-        <div class="card-header"><div class="card-title">References & Reference Source</div></div>
-        <div class="card-body">
-          <div class="hint">
-            Reference(0..*) / ReferenceSource(0..1)는 아이템 생성 이후에도 Clarification 또는 Supersession 절차를 통해 추가/변경될 수 있습니다.
-            (본 UI는 MVP로, 변경은 PATCH + ManagementInfo append로 기록됩니다.)
-          </div>
-          <div class="divider"></div>
-
-          <div class="form-grid">
-            <div class="form-group full-width">
-              <label class="form-label">Reference Source (0..1)</label>
-              <select class="form-select" id="u_refSourceSelect">
-                <option value="">(keep)</option>
-                <option value="__none__">(set none)</option>
-                <option value="__new__">+ Create new…</option>
-              </select>
-              <div class="hint" id="u_currentRefSourceHint"></div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">New Source Name</label>
-              <input class="form-input" id="u_newRefSourceName" placeholder="e.g., S-101 Ed. X.Y">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">New Source Description</label>
-              <input class="form-input" id="u_newRefSourceDesc" placeholder="Optional">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">References (0..*)</label>
-
-              <div class="dynamic-list" id="u_refsList">
-                <div class="dynamic-list-header">
-                  <span class="dynamic-list-title">References</span>
-                  <button type="button" class="btn btn-ghost btn-sm" id="u_addRefRowBtn">+ Add</button>
-                </div>
-                <div class="dynamic-list-body" id="u_refsBody">
-                  <div class="dynamic-list-empty">Loading…</div>
-                </div>
-              </div>
-
-              <div class="hint">기존 reference는 유지/삭제 가능, 새 reference는 title/locator로 추가됩니다.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ManagementInfo (append) -->
-      <div class="card">
-        <div class="card-header"><div class="card-title">Management Information (append)</div></div>
-        <div class="card-body">
-          <div class="hint">이 수정 작업 자체를 설명하는 Management Information을 1개 반드시 작성합니다. (기존 레코드 수정 X, 새 레코드 생성 후 누적)</div>
-          <div class="divider"></div>
-
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">proposalType <span class="required">*</span></label>
-              <select class="form-select" name="mi_proposalType" required>
-                <option value="Clarification">Clarification</option>
-                <option value="Addition">Addition</option>
-                <option value="Supersession">Supersession</option>
-                <option value="Retirement">Retirement</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">submittingOrganisation <span class="required">*</span></label>
-              <input class="form-input" name="mi_submittingOrganisation" required placeholder="e.g., DCB / Sponsor / Org">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">dateProposed <span class="required">*</span></label>
-              <input class="form-input" type="date" name="mi_dateProposed" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">dateAccepted</label>
-              <input class="form-input" type="date" name="mi_dateAccepted">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">proposedChange <span class="required">*</span></label>
-              <textarea class="form-textarea" name="mi_proposedChange" required placeholder="이번 수정/상태변경에 대한 설명"></textarea>
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">proposalStatus</label>
-              <input class="form-input" name="mi_proposalStatus" placeholder="보통 itemStatus와 동일하게(예: Draft/Pending/Valid)">
-              <div class="hint">비우면 서버로 itemStatus 또는 기존 itemStatus를 따라가게(프론트에서 채워줌)</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save (PATCH)</button>
-      </div>
-    </form>
+  <div class="top">
+    <div class="title">
+      <h1>Edit: {{ c.name or '(no name)' }}</h1>
+      <div class="sub">kind: <span style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;">{{ item.kind }}</span> · _id: <span style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;">{{ item._id }}</span></div>
+    </div>
+    <div class="actions">
+      <a class="btn ghost" href="/ui/dd/{{ item._id }}">Cancel</a>
+      <button form="editForm" class="btn primary" type="submit">Save</button>
+    </div>
   </div>
 
-  <div class="toast" id="toast"><span id="toastMessage">OK</span></div>
-
-  <script>
-    const item = {{ item | tojson }};
-
-    function showToast(message, type='success') {
-      const toast = document.getElementById('toast');
-      const msg = document.getElementById('toastMessage');
-      toast.className = 'toast ' + (type || 'success');
-      msg.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-
-    // References state
-    let currentRefObjects = [];
-    let currentReferenceSourceId = item.referenceSourceId || null;
-
-    async function loadUpdateReferenceSources() {
-      const sel = document.getElementById('u_refSourceSelect');
-      if (!sel) return;
-      try {
-        const res = await fetch('/api/reference-sources?limit=200&sortBy=name&sortOrder=asc', { headers:{'Accept':'application/json'}});
-        if (!res.ok) return;
-        const data = await res.json();
-        const items = Array.isArray(data.items) ? data.items : [];
-        const opts = items.map(x => `<option value="${x._id}">${x.name}</option>`).join('');
-        sel.innerHTML = `<option value="">(keep)</option><option value="__none__">(set none)</option><option value="__new__">+ Create new…</option>` + opts;
-      } catch(e) {}
-    }
-
-    async function fetchRefById(id) {
-      const res = await fetch(`/api/references/${id}`, { headers:{'Accept':'application/json'}});
-      if (!res.ok) return { _id: id, title: '(not found)', locator: null };
-      return await res.json();
-    }
-
-    async function fetchSourceById(id) {
-      const res = await fetch(`/api/reference-sources/${id}`, { headers:{'Accept':'application/json'}});
-      if (!res.ok) return null;
-      return await res.json();
-    }
-
-    function renumberRefRows() {
-      document.querySelectorAll('#u_refsBody .dynamic-item-number').forEach((el, i) => {
-        el.textContent = String(i + 1);
-      });
-    }
-
-    function renderExistingRefs() {
-      const body = document.getElementById('u_refsBody');
-      if (!body) return;
-
-      if (!currentRefObjects.length) {
-        body.innerHTML = `<div class="dynamic-list-empty">No references</div>`;
-        return;
-      }
-
-      body.innerHTML = currentRefObjects.map((r, idx) => `
-        <div class="dynamic-item" data-existing-id="${r._id}">
-          <span class="dynamic-item-number">${idx + 1}</span>
-          <div class="dynamic-item-input">
-            <input class="form-input" value="${(r.title || '').replace(/"/g,'&quot;')}" disabled>
-            <div class="hint">${r.locator ? r.locator : ''}</div>
+  <form id="editForm">
+    <div class="card">
+      <div class="card-h">Concept</div>
+      <div class="card-b">
+        <div class="grid">
+          <div>
+            <label>Item Identifier</label>
+            <input value="{{ c.itemIdentifier or '' }}" disabled />
+            <div class="hint">itemIdentifier는 수정 불가(영구/불변)입니다.</div>
           </div>
-          <button type="button" class="dynamic-item-remove" title="Remove">✕</button>
-        </div>
-      `).join('');
+          <div>
+            <label>Item Status</label>
+            <select id="itemStatus">
+              <option value="">(keep)</option>
+              <option value="Draft">Draft</option>
+              <option value="Pending">Pending</option>
+              <option value="Valid">Valid</option>
+              <option value="Deprecated">Deprecated</option>
+              <option value="Retired">Retired</option>
+            </select>
+          </div>
 
-      body.querySelectorAll('.dynamic-item[data-existing-id] .dynamic-item-remove').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const row = btn.closest('.dynamic-item');
-          const id = row.getAttribute('data-existing-id');
-          currentRefObjects = currentRefObjects.filter(x => x._id !== id);
-          row.remove();
-          if (currentRefObjects.length === 0 && body.querySelectorAll('.dynamic-item').length === 0) {
-            body.innerHTML = `<div class="dynamic-list-empty">No references</div>`;
-          } else {
-            renumberRefRows();
-          }
-        });
-      });
+          <div style="grid-column:1/-1">
+            <label>Name <span class="req">*</span></label>
+            <input id="name" required />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>CamelCase</label>
+            <input id="camelCase" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Alias (comma separated)</label>
+            <input id="alias" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Definition</label>
+            <textarea id="definition"></textarea>
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Remarks</label>
+            <textarea id="remarks"></textarea>
+          </div>
+
+          <div>
+            <label>Definition Source</label>
+            <input id="definitionSource" />
+          </div>
+          <div>
+            <label>Similarity To Source</label>
+            <input id="similarityToSource" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Reference</label>
+            <input id="reference" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Proposed Change</label>
+            <textarea id="proposedChange"></textarea>
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Justification</label>
+            <textarea id="justification"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="typedCard" style="display:none;">
+      <div class="card-h">Typed Body</div>
+      <div class="card-b">
+        <div class="grid">
+          <div id="g_featureUseType" style="display:none;">
+            <label>featureUseType</label>
+            <select id="featureUseType">
+              <option value="">(keep)</option>
+              <option value="geographic">geographic</option>
+              <option value="meta">meta</option>
+              <option value="cartographic">cartographic</option>
+              <option value="theme">theme</option>
+            </select>
+          </div>
+
+          <div id="g_numericCode" style="display:none;">
+            <label>numericCode</label>
+            <input id="numericCode" placeholder="(keep)" />
+          </div>
+
+          <div id="g_valueType" style="display:none;">
+            <label>valueType</label>
+            <select id="valueType">
+              <option value="">(keep)</option>
+              <option value="boolean">boolean</option>
+              <option value="enumeration">enumeration</option>
+              <option value="integer">integer</option>
+              <option value="real">real</option>
+              <option value="date">date</option>
+              <option value="text">text</option>
+              <option value="time">time</option>
+              <option value="dateTime">dateTime</option>
+              <option value="URI">URI</option>
+              <option value="URL">URL</option>
+              <option value="URN">URN</option>
+              <option value="S100_CodeList">S100_CodeList</option>
+              <option value="S100_TruncatedDate">S100_TruncatedDate</option>
+            </select>
+          </div>
+
+          <div id="g_quantitySpecification" style="display:none;">
+            <label>quantitySpecification</label>
+            <select id="quantitySpecification">
+              <option value="">(keep)</option>
+              <option value="__none__">(set none)</option>
+              <option value="angularVelocity">angularVelocity</option>
+              <option value="area">area</option>
+              <option value="density">density</option>
+              <option value="duration">duration</option>
+              <option value="frequency">frequency</option>
+              <option value="length">length</option>
+              <option value="mass">mass</option>
+              <option value="planeAngle">planeAngle</option>
+              <option value="power">power</option>
+              <option value="pressure">pressure</option>
+              <option value="salinity">salinity</option>
+              <option value="speed">speed</option>
+              <option value="temperature">temperature</option>
+              <option value="volume">volume</option>
+              <option value="weight">weight</option>
+              <option value="otherQuantity">otherQuantity</option>
+            </select>
+          </div>
+
+          <div class="hint" id="typedHint" style="grid-column:1/-1;">(no typed fields for this kind)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">References / Reference Source</div>
+      <div class="card-b">
+        <div class="grid">
+          <div style="grid-column:1/-1">
+            <label>Reference Source (0..1)</label>
+            <select id="refSourceSelect">
+              <option value="">(keep)</option>
+              <option value="__none__">(set none)</option>
+              <option value="__new__">+ Create new…</option>
+            </select>
+            <div class="hint" id="currentRefSourceHint"></div>
+          </div>
+          <div>
+            <label>New Source Name</label>
+            <input id="newRefSourceName" placeholder="required when creating" />
+          </div>
+          <div>
+            <label>New Source Description</label>
+            <input id="newRefSourceDesc" placeholder="optional" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>References (0..*)</label>
+            <div class="dyn">
+              <div class="dyn-h">
+                <div class="dyn-title">References</div>
+                <button type="button" class="btn ghost" id="addRefBtn">+ Add</button>
+              </div>
+              <div class="dyn-b" id="refsBody">
+                <div class="dyn-empty">Loading…</div>
+              </div>
+            </div>
+            <div class="hint">기존 reference는 삭제 가능, 새 reference는 title/locator로 추가됩니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">Management Information (append) <span style="font-weight:800;color:var(--muted);font-size:12px;">(required)</span></div>
+      <div class="card-b">
+        <div class="grid">
+          <div>
+            <label>proposalType <span class="req">*</span></label>
+            <input id="mi_proposalType" required />
+          </div>
+          <div>
+            <label>submittingOrganisation <span class="req">*</span></label>
+            <input id="mi_submittingOrganisation" required />
+          </div>
+          <div style="grid-column:1/-1">
+            <label>proposedChange <span class="req">*</span></label>
+            <textarea id="mi_proposedChange" required></textarea>
+          </div>
+          <div>
+            <label>dateProposed <span class="req">*</span></label>
+            <input id="mi_dateProposed" type="date" required />
+          </div>
+          <div>
+            <label>dateAccepted</label>
+            <input id="mi_dateAccepted" type="date" />
+          </div>
+          <div>
+            <label>proposalStatus</label>
+            <input id="mi_proposalStatus" placeholder="Draft/Pending/Valid..." />
+          </div>
+        </div>
+        <div class="hint">저장 시 managementInfo 1건이 새로 생성되어 누적됩니다.</div>
+      </div>
+    </div>
+  </form>
+
+  <div id="toast" class="toast"></div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const item = {{ item | tojson }};
+  const c = item.concept || {};
+  const el = (id) => document.getElementById(id);
+
+  function showToast(msg, type='success'){
+    const t = el('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + (type === 'error' ? 'error' : 'success');
+    setTimeout(()=>{ t.className = 'toast'; }, 2200);
+  }
+
+  function splitAlias(s){
+    return (s||'').split(',').map(x=>x.trim()).filter(Boolean);
+  }
+
+  function typedMode(){
+    const kind = item.kind;
+    const typedCard = el('typedCard');
+    if (kind === 'S100_Concept') { typedCard.style.display='none'; return; }
+    typedCard.style.display='';
+
+    const showFeature = (kind === 'S100_CD_Feature');
+    const showEnum = (kind === 'S100_CD_EnumeratedValue');
+    const showSimpleAttr = (kind === 'S100_CD_SimpleAttribute');
+
+    el('g_featureUseType').style.display = showFeature ? '' : 'none';
+    el('g_numericCode').style.display = showEnum ? '' : 'none';
+    el('g_valueType').style.display = showSimpleAttr ? '' : 'none';
+    el('g_quantitySpecification').style.display = showSimpleAttr ? '' : 'none';
+
+    const any = showFeature || showEnum || showSimpleAttr;
+    el('typedHint').style.display = any ? 'none' : '';
+
+    const body = item[item.kind] || {};
+    if (showFeature) el('featureUseType').value = body.featureUseType || '';
+    if (showEnum) el('numericCode').value = body.numericCode || '';
+    if (showSimpleAttr){
+      el('valueType').value = body.valueType || '';
+      el('quantitySpecification').value = body.quantitySpecification || '';
     }
+  }
 
-    function addUpdateRefRow() {
-      const body = document.getElementById('u_refsBody');
-      if (!body) return;
-      const empty = body.querySelector('.dynamic-list-empty');
-      if (empty) empty.remove();
+  async function loadReferenceSources(){
+    const sel = el('refSourceSelect');
+    try{
+      const res = await fetch('/api/reference-sources?limit=200&sortBy=name&sortOrder=asc');
+      const j = await res.json();
+      const items = j.items || [];
+      const base = '<option value="">(keep)</option><option value="__none__">(set none)</option><option value="__new__">+ Create new…</option>';
+      sel.innerHTML = base + items.map(s=>`<option value="${s._id}">${s.name}</option>`).join('');
+    }catch(e){
+      console.error(e);
+      sel.innerHTML = '<option value="">(keep)</option>';
+    }
+  }
 
-      const row = document.createElement('div');
-      row.className = 'dynamic-item';
-      row.setAttribute('data-new-row', '1');
-      row.innerHTML = `
-        <span class="dynamic-item-number">?</span>
-        <div class="dynamic-item-input" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-          <input type="text" class="form-input" placeholder="Title *" data-new-title>
-          <input type="text" class="form-input" placeholder="Locator (URL / clause / etc.)" data-new-locator>
+  async function fetchSourceById(id){
+    if (!id) return null;
+    const res = await fetch(`/api/reference-sources/${id}`);
+    if (!res.ok) return null;
+    return await res.json();
+  }
+
+  async function fetchRefById(id){
+    const res = await fetch(`/api/references/${id}`);
+    if (!res.ok) return { _id:id, title:'(missing)', locator:'' };
+    return await res.json();
+  }
+
+  function renderRefs(existingRefs){
+    const body = el('refsBody');
+    if (!existingRefs.length){
+      body.innerHTML = '<div class="dyn-empty">(none)</div>';
+      return;
+    }
+    body.innerHTML = '';
+    existingRefs.forEach((r,idx)=>{
+      const div = document.createElement('div');
+      div.className = 'dyn-item';
+      div.setAttribute('data-existing-id', r._id);
+      div.innerHTML = `
+        <div class="dyn-num">${idx+1}</div>
+        <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div><input value="${(r.title||'').replaceAll('"','&quot;')}" disabled></div>
+          <div><input value="${(r.locator||'').replaceAll('"','&quot;')}" disabled></div>
         </div>
-        <button type="button" class="dynamic-item-remove" title="Remove">✕</button>
+        <button type="button" class="dyn-remove">Remove</button>
       `;
-      row.querySelector('.dynamic-item-remove').addEventListener('click', () => {
-        row.remove();
-        if (body.querySelectorAll('.dynamic-item').length === 0) {
-          body.innerHTML = `<div class="dynamic-list-empty">No references</div>`;
-        } else {
-          renumberRefRows();
-        }
+      div.querySelector('.dyn-remove').addEventListener('click', ()=>{
+        div.remove();
+        // renumber
+        [...body.querySelectorAll('.dyn-item')].forEach((x,i)=> x.querySelector('.dyn-num').textContent = String(i+1));
+        if (!body.querySelectorAll('.dyn-item').length) body.innerHTML = '<div class="dyn-empty">(none)</div>';
       });
-      body.appendChild(row);
-      renumberRefRows();
-    }
+      body.appendChild(div);
+    });
+  }
 
-    async function ensureUpdateReferenceSourceId() {
-      const sel = (document.getElementById('u_refSourceSelect')?.value || '').trim();
-      if (!sel) return undefined;            // keep (omit field)
-      if (sel === '__none__') return null;   // set none
-      if (sel !== '__new__') return sel;     // existing id
+  function addNewRefRow(){
+    const body = el('refsBody');
+    if (body.querySelector('.dyn-empty')) body.innerHTML = '';
+    const idx = body.querySelectorAll('.dyn-item').length + 1;
+    const div = document.createElement('div');
+    div.className = 'dyn-item';
+    div.setAttribute('data-new-row','1');
+    div.innerHTML = `
+      <div class="dyn-num">${idx}</div>
+      <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div><input data-new-title placeholder="title (required)"></div>
+        <div><input data-new-locator placeholder="locator (optional)"></div>
+      </div>
+      <button type="button" class="dyn-remove">Remove</button>
+    `;
+    div.querySelector('.dyn-remove').addEventListener('click', ()=>{
+      div.remove();
+      [...body.querySelectorAll('.dyn-item')].forEach((x,i)=> x.querySelector('.dyn-num').textContent = String(i+1));
+      if (!body.querySelectorAll('.dyn-item').length) body.innerHTML = '<div class="dyn-empty">(none)</div>';
+    });
+    body.appendChild(div);
+  }
 
-      const name = (document.getElementById('u_newRefSourceName')?.value || '').trim();
-      const desc = (document.getElementById('u_newRefSourceDesc')?.value || '').trim();
-      if (!name) {
-        showToast('ReferenceSource: name is required for new source', 'error');
-        throw new Error('refsource name required');
-      }
-
-      const res = await fetch('/api/reference-sources', {
+  async function createNewReferencesFromRows(){
+    const rows = [...document.querySelectorAll('#refsBody .dyn-item[data-new-row="1"]')];
+    const ids = [];
+    for (const r of rows){
+      const title = (r.querySelector('[data-new-title]')?.value||'').trim();
+      const locator = (r.querySelector('[data-new-locator]')?.value||'').trim() || null;
+      if (!title) continue;
+      const res = await fetch('/api/references', {
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify({ name, description: desc || null })
+        body: JSON.stringify({ title, locator })
       });
-      if (!res.ok) {
+      if (!res.ok){
         const t = await res.text();
-        showToast(`ReferenceSource create failed: ${res.status} ${t}`, 'error');
-        throw new Error('refsource create failed');
+        showToast(`Reference create failed: ${res.status} ${t}`, 'error');
+        throw new Error('reference create failed');
       }
       const created = await res.json();
-      return created._id;
+      ids.push(created._id);
+    }
+    return ids;
+  }
+
+  async function ensureReferenceSourceId(){
+    const sel = el('refSourceSelect');
+    const v = (sel.value||'').trim();
+    if (!v) return undefined; // keep
+    if (v === '__none__') return null;
+    if (v !== '__new__') return v;
+
+    const name = (el('newRefSourceName').value||'').trim();
+    const description = (el('newRefSourceDesc').value||'').trim() || null;
+    if (!name){ showToast('New Source Name is required.', 'error'); throw new Error('missing source name'); }
+
+    const res = await fetch('/api/reference-sources', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({ name, description })
+    });
+    if (!res.ok){
+      const t = await res.text();
+      showToast(`Reference source create failed: ${res.status} ${t}`, 'error');
+      throw new Error('source create failed');
+    }
+    const created = await res.json();
+    await loadReferenceSources();
+    el('refSourceSelect').value = created._id;
+    return created._id;
+  }
+
+  function buildManagementInfo(){
+    const statusFallback = (el('itemStatus').value || c.itemStatus || 'Draft');
+    const mi = {
+      proposalType: (el('mi_proposalType').value||'').trim() || null,
+      submittingOrganisation: (el('mi_submittingOrganisation').value||'').trim() || null,
+      proposedChange: (el('mi_proposedChange').value||'').trim() || null,
+      dateProposed: (el('mi_dateProposed').value||'').trim() || null,
+      dateAccepted: (el('mi_dateAccepted').value||'').trim() || null,
+      proposalStatus: (el('mi_proposalStatus').value||'').trim() || statusFallback,
+      controlBodyNotes: []
+    };
+    if (!mi.proposalType || !mi.submittingOrganisation || !mi.proposedChange || !mi.dateProposed){
+      showToast('ManagementInfo required fields missing.', 'error');
+      return null;
+    }
+    return mi;
+  }
+
+  function conceptPatch(){
+    const st = (el('itemStatus').value||'').trim();
+    const patch = {
+      name: (el('name').value||'').trim(),
+      camelCase: (el('camelCase').value||'').trim() || null,
+      alias: splitAlias(el('alias').value),
+      definition: (el('definition').value||'').trim() || null,
+      remarks: (el('remarks').value||'').trim() || null,
+      definitionSource: (el('definitionSource').value||'').trim() || null,
+      reference: (el('reference').value||'').trim() || null,
+      similarityToSource: (el('similarityToSource').value||'').trim() || null,
+      proposedChange: (el('proposedChange').value||'').trim() || null,
+      justification: (el('justification').value||'').trim() || null,
+    };
+    if (st) patch.itemStatus = st;
+    return patch;
+  }
+
+  function typedPatch(){
+    const kind = item.kind;
+    if (kind === 'S100_CD_Feature'){
+      const v = (el('featureUseType').value||'').trim();
+      return v ? { featureUseType: v } : {};
+    }
+    if (kind === 'S100_CD_EnumeratedValue'){
+      const v = (el('numericCode').value||'').trim();
+      return v ? { numericCode: v } : {};
+    }
+    if (kind === 'S100_CD_SimpleAttribute'){
+      const vt = (el('valueType').value||'').trim();
+      const qs = (el('quantitySpecification').value||'').trim();
+      const out = {};
+      if (vt) out.valueType = vt;
+      if (qs === '__none__') out.quantitySpecification = null;
+      else if (qs) out.quantitySpecification = qs;
+      return out;
+    }
+    return {};
+  }
+
+  window.addEventListener('load', async ()=>{
+    // prefill concept
+    el('name').value = c.name || '';
+    el('camelCase').value = c.camelCase || '';
+    el('alias').value = (c.alias || []).join(', ');
+    el('definition').value = c.definition || '';
+    el('remarks').value = c.remarks || '';
+    el('definitionSource').value = c.definitionSource || '';
+    el('reference').value = c.reference || '';
+    el('similarityToSource').value = c.similarityToSource || '';
+    el('proposedChange').value = c.proposedChange || '';
+    el('justification').value = c.justification || '';
+
+    // status default keep
+    el('itemStatus').value = '';
+
+    // typed
+    typedMode();
+
+    // ManagementInfo defaults
+    const today = new Date().toISOString().slice(0,10);
+    el('mi_dateProposed').value = today;
+    el('mi_proposalStatus').value = c.itemStatus || 'Draft';
+
+    // reference sources
+    await loadReferenceSources();
+    if (item.referenceSourceId){
+      const src = await fetchSourceById(item.referenceSourceId);
+      el('currentRefSourceHint').textContent = src ? `Current: ${src.name}` : `Current: ${item.referenceSourceId}`;
+    } else {
+      el('currentRefSourceHint').textContent = 'Current: (none)';
     }
 
-    async function createNewReferencesFromRows() {
-      const body = document.getElementById('u_refsBody');
-      if (!body) return [];
-      const rows = Array.from(body.querySelectorAll('.dynamic-item[data-new-row]'));
-      const ids = [];
+    // references
+    const ids = Array.isArray(item.referenceIds) ? item.referenceIds : [];
+    const refs = [];
+    for (const id of ids) refs.push(await fetchRefById(id));
+    renderRefs(refs);
 
-      for (const r of rows) {
-        const title = (r.querySelector('[data-new-title]')?.value || '').trim();
-        const locator = (r.querySelector('[data-new-locator]')?.value || '').trim();
-        if (!title) continue;
+    el('addRefBtn').addEventListener('click', addNewRefRow);
+  });
 
-        const res = await fetch('/api/references', {
-          method:'POST',
-          headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body: JSON.stringify({ title, locator: locator || null })
-        });
-        if (!res.ok) {
-          const t = await res.text();
-          showToast(`Reference create failed: ${res.status} ${t}`, 'error');
-          throw new Error('reference create failed');
-        }
-        const created = await res.json();
-        ids.push(created._id);
-      }
-      return ids;
+  el('editForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+
+    const mi = buildManagementInfo();
+    if (!mi) return;
+
+    // references
+    let finalReferenceIds = [];
+    try{
+      const keptExistingIds = [...document.querySelectorAll('#refsBody .dyn-item[data-existing-id]')].map(x=>x.getAttribute('data-existing-id'));
+      const newIds = await createNewReferencesFromRows();
+      finalReferenceIds = [...keptExistingIds, ...newIds];
+    }catch(e){
+      return;
     }
 
+    // ref source
+    let refSourceId;
+    try{
+      refSourceId = await ensureReferenceSourceId();
+    }catch(e){
+      return;
+    }
 
-    // prefill
-    window.addEventListener('load', async () => {
-      document.querySelector('[name="name"]').value = item.name || '';
-      document.querySelector('[name="camelCase"]').value = item.camelCase || '';
-      document.querySelector('[name="alias"]').value = (item.alias || []).join(', ');
-      document.querySelector('[name="definition"]').value = item.definition || '';
-      document.querySelector('[name="remarks"]').value = item.remarks || '';
-      document.querySelector('[name="definitionSource"]').value = item.definitionSource || '';
-      document.querySelector('[name="reference"]').value = item.reference || '';
-      document.querySelector('[name="similarityToSource"]').value = item.similarityToSource || '';
-      document.querySelector('[name="proposedChange"]').value = item.proposedChange || '';
-      document.querySelector('[name="justification"]').value = item.justification || '';
+    const payload = {
+      concept: conceptPatch(),
+      managementInfo: mi,
+      referenceIds: finalReferenceIds,
+      ...(refSourceId !== undefined ? { referenceSourceId: refSourceId } : {}),
+      ...typedPatch(),
+    };
 
-      // dateProposed default today
-      const dp = document.querySelector('[name="mi_dateProposed"]');
-      const today = new Date();
-      dp.value = today.toISOString().slice(0,10);
-
-      // proposalStatus default = itemStatus
-      document.querySelector('[name="mi_proposalStatus"]').value = item.itemStatus || 'Draft';
-
-      // Load references / sources
-      await loadUpdateReferenceSources();
-      if (currentReferenceSourceId) {
-        const src = await fetchSourceById(currentReferenceSourceId);
-        const hint = document.getElementById('u_currentRefSourceHint');
-        if (hint) hint.textContent = src ? `Current: ${src.name}` : `Current: ${currentReferenceSourceId}`;
-      }
-
-      // Load existing references
-      const ids = Array.isArray(item.referenceIds) ? item.referenceIds : [];
-      currentRefObjects = [];
-      for (const id of ids) {
-        currentRefObjects.push(await fetchRefById(id));
-      }
-      renderExistingRefs();
-
-      // Add-row button
-      const btn = document.getElementById('u_addRefRowBtn');
-      if (btn) btn.addEventListener('click', addUpdateRefRow);
-
+    const res = await fetch(`/api/dd/items/${item._id}`, {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(payload)
     });
 
-    document.getElementById('cancelBtn').addEventListener('click', () => {
-      window.location.href = `/ui/dd/${item._id}`;
-    });
+    if (!res.ok){
+      const t = await res.text();
+      showToast(`Save failed: ${res.status} ${t}`, 'error');
+      return;
+    }
 
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const name = (document.querySelector('[name="name"]').value || '').trim();
-      if (!name) { showToast('Name is required', 'error'); return; }
-
-      const aliasRaw = (document.querySelector('[name="alias"]').value || '').trim();
-      const alias = aliasRaw ? aliasRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
-
-      const itemStatusSel = (document.querySelector('[name="itemStatus"]').value || '').trim();
-      const itemStatusEffective = itemStatusSel || (item.itemStatus || 'Draft');
-
-      // ManagementInfo payload (required)
-      const mi = {
-        proposalType: (document.querySelector('[name="mi_proposalType"]').value || '').trim() || null,
-        submittingOrganisation: (document.querySelector('[name="mi_submittingOrganisation"]').value || '').trim() || null,
-        proposedChange: (document.querySelector('[name="mi_proposedChange"]').value || '').trim() || null,
-        dateProposed: (document.querySelector('[name="mi_dateProposed"]').value || '').trim() || null,
-        dateAccepted: (document.querySelector('[name="mi_dateAccepted"]').value || '').trim() || null,
-        proposalStatus: (document.querySelector('[name="mi_proposalStatus"]').value || '').trim() || itemStatusEffective,
-        controlBodyNotes: []
-      };
-
-      if (!mi.proposalType || !mi.submittingOrganisation || !mi.proposedChange || !mi.dateProposed) {
-        showToast('ManagementInfo: required fields missing', 'error');
-        return;
-      }
-
-      // Resolve References (Update)
-      let finalReferenceIds = [];
-      try {
-        const keptExistingIds = Array.from(document.querySelectorAll('#u_refsBody .dynamic-item[data-existing-id]')).map(el => el.getAttribute('data-existing-id'));
-        const newIds = await createNewReferencesFromRows();
-        finalReferenceIds = [...keptExistingIds, ...newIds];
-      } catch (e) {
-        return;
-      }
-
-      let newSourceId;
-      try {
-        newSourceId = await ensureUpdateReferenceSourceId();
-      } catch (e) {
-        return;
-      }
-
-      const payload = {
-        name,
-        camelCase: (document.querySelector('[name="camelCase"]').value || '').trim() || null,
-        alias,
-        definition: (document.querySelector('[name="definition"]').value || '').trim() || null,
-        remarks: (document.querySelector('[name="remarks"]').value || '').trim() || null,
-        itemStatus: itemStatusSel || null,
-
-        definitionSource: (document.querySelector('[name="definitionSource"]').value || '').trim() || null,
-        reference: (document.querySelector('[name="reference"]').value || '').trim() || null,
-        similarityToSource: (document.querySelector('[name="similarityToSource"]').value || '').trim() || null,
-        proposedChange: (document.querySelector('[name="proposedChange"]').value || '').trim() || null,
-        justification: (document.querySelector('[name="justification"]').value || '').trim() || null,
-
-        // ✅ 핵심: append 할 managementInfo 1개
-        managementInfo: mi,
-
-        // relations (replace)
-        referenceIds: finalReferenceIds,
-        ...(newSourceId !== undefined ? { referenceSourceId: newSourceId } : {})
-      };
-
-      const res = await fetch(`/api/dd/items/${item._id}`, {
-        method: 'PATCH',
-        headers: {'Content-Type':'application/json', 'Accept':'application/json'},
-        body: JSON.stringify(payload)
-      });
-
-      if (!res.ok) {
-        const t = await res.text();
-        showToast(`PATCH failed: ${res.status} ${t}`, 'error');
-        return;
-      }
-
-      showToast('Saved!', 'success');
-      setTimeout(() => window.location.href = `/ui/dd/${item._id}`, 600);
-    });
-  </script>
-</body>
-</html>
+    showToast('Saved!', 'success');
+    setTimeout(()=>{ window.location.href = `/ui/dd/${item._id}`; }, 450);
+  });
+</script>
+{% endblock %}

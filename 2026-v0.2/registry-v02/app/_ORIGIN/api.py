@@ -6,12 +6,22 @@ from typing import Any, Dict, Optional, List
 
 from fastapi import APIRouter, HTTPException, Query
 from bson import ObjectId
+from pymongo import ReturnDocument
 
-from .db import COLL_MGMT_INFO, get_db, COLL_REGISTERS, COLL_ITEMS, COLL_REF_SOURCES, COLL_REFERENCES
+from .db import (
+    COLL_MGMT_INFO,
+    COLL_COUNTERS,
+    get_db,
+    COLL_REGISTERS,
+    COLL_ITEMS,
+    COLL_REF_SOURCES,
+    COLL_REFERENCES,
+)
 from .models import (
     RegisterCreate,
     RegisterItemCreate,
     RegisterItemPatch,
+    ConvertFromConceptPayload,
     ReferenceCreate,
     ReferenceSourceCreate,
 )
@@ -64,21 +74,39 @@ def _as_utc_dt(v):
     return v
 
 
+async def _next_item_identifier(db, register_oid: ObjectId) -> str:
+    """registerId 단위로 itemIdentifier를 순차 증가시키고, string으로 반환."""
+    now = _now()
+    key = {"registerId": register_oid, "name": "itemIdentifier"}
+    doc = await db[COLL_COUNTERS].find_one_and_update(
+        key,
+        {"$inc": {"seq": 1}, "$setOnInsert": {"createdAt": now}},
+        upsert=True,
+        return_document=ReturnDocument.AFTER,
+    )
+    seq = doc.get("seq") if isinstance(doc, dict) else None
+    if not seq:
+        # fallback (매우 드문 케이스)
+        doc2 = await db[COLL_COUNTERS].find_one(key)
+        seq = (doc2 or {}).get("seq") or 1
+    return str(seq)
+
+
+def _stringify_oid_any(x):
+    if isinstance(x, ObjectId):
+        return str(x)
+    if isinstance(x, list):
+        return [_stringify_oid_any(v) for v in x]
+    if isinstance(x, dict):
+        return {k: _stringify_oid_any(v) for k, v in x.items()}
+    return x
+
+
 def _dump_doc(doc: dict) -> dict:
-    """Convert Mongo doc to JSON-safe dict (ObjectId -> str)."""
+    """Convert Mongo doc to JSON-safe dict (ObjectId -> str, recursive)."""
     if not doc:
         return doc
-    out = dict(doc)
-    if isinstance(out.get("_id"), ObjectId):
-        out["_id"] = str(out["_id"])
-    if isinstance(out.get("registerId"), ObjectId):
-        out["registerId"] = str(out["registerId"])
-    for k in ["managementInfoIds", "referenceIds"]:
-        if k in out and isinstance(out[k], list):
-            out[k] = [str(x) if isinstance(x, ObjectId) else x for x in out[k]]
-    if isinstance(out.get("referenceSourceId"), ObjectId):
-        out["referenceSourceId"] = str(out["referenceSourceId"])
-    return out
+    return _stringify_oid_any(dict(doc))
 
 
 def _sort_field(sort_by: str, allowed: set[str], default: str) -> str:
@@ -154,8 +182,177 @@ async def get_register(register_id: str):
 
 
 # -------------------------
-# DD Items
+# DD Items (S-100 Part 2a 스타일: kind + concept + (typed body))
 # -------------------------
+
+_KIND_ALIASES: Dict[str, str] = {
+    "concept": "S100_Concept",
+    "s100_concept": "S100_Concept",
+    "feature": "S100_CD_Feature",
+    "information": "S100_CD_Information",
+    "enumeratedvalue": "S100_CD_EnumeratedValue",
+    "enumeratedValue": "S100_CD_EnumeratedValue",
+    "simpleattribute": "S100_CD_SimpleAttribute",
+    "simpleAttribute": "S100_CD_SimpleAttribute",
+    "complexattribute": "S100_CD_ComplexAttribute",
+    "complexAttribute": "S100_CD_ComplexAttribute",
+}
+
+
+def _normalize_kind(v: Optional[str]) -> Optional[str]:
+    if not v:
+        return None
+    vv = v.strip()
+    if not vv:
+        return None
+    return _KIND_ALIASES.get(vv, _KIND_ALIASES.get(vv.lower(), vv))
+
+
+def _build_typed_body(kind: str, payload: dict) -> Dict[str, Any]:
+    """kind에 따라 typed body를 구성.
+
+    ⚠️ 모든 참조는 _id(ObjectId) 기반으로 저장한다.
+    - Feature/Information: distinctionIds: [ObjectId]
+    - EnumeratedValue: parentSimpleAttributeId: ObjectId (필수, 서버 검증)
+    - ComplexAttribute: subAttributes[].attributeId: ObjectId
+    """
+    if kind == "S100_CD_Feature":
+        return {
+            "featureUseType": payload.get("featureUseType") or "meta",
+            "distinctionIds": [_oid(str(x)) for x in (payload.get("distinctionIds") or [])],
+        }
+
+    if kind == "S100_CD_Information":
+        return {
+            "distinctionIds": [_oid(str(x)) for x in (payload.get("distinctionIds") or [])],
+        }
+
+    if kind == "S100_CD_EnumeratedValue":
+        parent = payload.get("parentSimpleAttributeId")
+        return {
+            "numericCode": payload.get("numericCode") or "",
+            "parentSimpleAttributeId": _oid(str(parent)) if parent else None,
+        }
+
+    if kind == "S100_CD_SimpleAttribute":
+        return {
+            "valueType": payload.get("valueType") or "text",
+            "quantitySpecification": payload.get("quantitySpecification"),
+            "attributeConstraints": payload.get("attributeConstraints"),
+        }
+
+    if kind == "S100_CD_ComplexAttribute":
+        subs_in = payload.get("subAttributes") or []
+        subs_out: List[dict] = []
+        for s in subs_in:
+            if not isinstance(s, dict):
+                continue
+            aid = s.get("attributeId")
+            mult = s.get("multiplicity") or {}
+            subs_out.append(
+                {
+                    "attributeId": _oid(str(aid)) if aid else None,
+                    "multiplicity": mult,
+                    "sequential": s.get("sequential", "false"),
+                }
+            )
+        return {"subAttributes": subs_out}
+
+    # concept에는 body 없음
+    return {}
+
+
+async def _validate_typed_relations(db, kind: str, body: dict, *, partial: bool = False) -> None:
+    """kind별 연관관계 규칙 검증.
+
+    partial=True이면, payload에 포함된 필드만 선택적으로 검증한다(패치용).
+    """
+    # Feature / Information: distinctionIds 0..*
+    if kind in {"S100_CD_Feature", "S100_CD_Information"}:
+        if (not partial) or ("distinctionIds" in body):
+            ids = body.get("distinctionIds") or []
+            if ids:
+                oids = [_oid(str(x)) for x in ids]
+                docs = await db[COLL_ITEMS].find({"_id": {"$in": oids}}).to_list(length=len(oids))
+                if len({str(d["_id"]) for d in docs}) != len({str(o) for o in oids}):
+                    raise HTTPException(status_code=422, detail="distinctionIds contains missing items")
+                wrong = [str(d["_id"]) for d in docs if d.get("kind") != kind]
+                if wrong:
+                    raise HTTPException(status_code=422, detail=f"distinctionIds must reference same kind ({kind})")
+
+    # EnumeratedValue: 반드시 1개의 SimpleAttribute에 종속
+    if kind == "S100_CD_EnumeratedValue":
+        if (not partial) or ("parentSimpleAttributeId" in body):
+            parent = body.get("parentSimpleAttributeId")
+            if not parent:
+                raise HTTPException(status_code=422, detail="parentSimpleAttributeId is required for S100_CD_EnumeratedValue")
+            parent_doc = await db[COLL_ITEMS].find_one({"_id": _oid(str(parent))})
+            if not parent_doc:
+                raise HTTPException(status_code=422, detail="parentSimpleAttributeId not found")
+            if parent_doc.get("kind") != "S100_CD_SimpleAttribute":
+                raise HTTPException(status_code=422, detail="parentSimpleAttributeId must reference S100_CD_SimpleAttribute")
+            vt = ((parent_doc.get("S100_CD_SimpleAttribute") or {}).get("valueType")) or ""
+            if vt not in {"enumeration", "S100_CodeList"}:
+                raise HTTPException(
+                    status_code=422,
+                    detail="parent SimpleAttribute valueType must be 'enumeration' or 'S100_CodeList'",
+                )
+
+    # ComplexAttribute: subAttributes 1..* (SimpleAttribute or ComplexAttribute)
+    if kind == "S100_CD_ComplexAttribute":
+        if (not partial) or ("subAttributes" in body):
+            subs = body.get("subAttributes")
+            if not subs or not isinstance(subs, list) or len(subs) < 1:
+                raise HTTPException(status_code=422, detail="subAttributes must have at least 1 item for S100_CD_ComplexAttribute")
+
+            attr_oids: List[ObjectId] = []
+            for s in subs:
+                if not isinstance(s, dict):
+                    raise HTTPException(status_code=422, detail="subAttributes items must be objects")
+                aid = s.get("attributeId")
+                if not aid:
+                    raise HTTPException(status_code=422, detail="subAttributes.attributeId is required")
+                attr_oids.append(_oid(str(aid)))
+
+                # multiplicity logical check (best-effort)
+                mult = s.get("multiplicity") or {}
+                lower = mult.get("lower")
+                upper = mult.get("upper")
+                infinite = mult.get("infinite")
+                try:
+                    if lower is not None and upper is not None and str(upper).isdigit() and str(lower).isdigit():
+                        if int(lower) > int(upper):
+                            raise HTTPException(status_code=422, detail="multiplicity.lower must be <= multiplicity.upper")
+                except HTTPException:
+                    raise
+                except Exception:
+                    # 느슨하게: 숫자 변환 실패는 여기서 막지 않음
+                    pass
+
+                if infinite is not None and str(infinite).lower() == "true":
+                    # infinite=true면 upper는 보통 null/미사용 (강제는 API에서 하지 않음)
+                    pass
+
+            docs = await db[COLL_ITEMS].find({"_id": {"$in": attr_oids}}).to_list(length=len(attr_oids))
+            if len({str(d["_id"]) for d in docs}) != len({str(o) for o in attr_oids}):
+                raise HTTPException(status_code=422, detail="subAttributes contains missing attribute items")
+
+            for d in docs:
+                if d.get("kind") not in {"S100_CD_SimpleAttribute", "S100_CD_ComplexAttribute"}:
+                    raise HTTPException(status_code=422, detail="subAttributes.attributeId must reference SimpleAttribute or ComplexAttribute")
+
+def _normalize_kinds(kind: Optional[str]) -> list[str]:
+    if not kind:
+        return []
+    parts = [k.strip() for k in kind.split(",") if k.strip()]
+    out = []
+    for p in parts:
+        nk = _normalize_kind(p)
+        if nk:
+            out.append(nk)
+    return out
+
+
 @router.get("/dd/items")
 async def list_dd_items(
     page: int = Query(1, ge=1),
@@ -173,21 +370,35 @@ async def list_dd_items(
     flt: Dict[str, Any] = {}
     if registerId:
         flt["registerId"] = _oid(registerId)
-    if kind:
-        flt["kind"] = kind
+
+    # 기본: Data Dictionary 목록에서는 Concept-only 제외
+    kinds = _normalize_kinds(kind)
+    if kinds:
+        flt["kind"] = {"$in": kinds} if len(kinds) > 1 else kinds[0]
+    else:
+        flt["kind"] = {"$ne": "S100_Concept"}
+
     if status:
-        flt["itemStatus"] = status
+        flt["concept.itemStatus"] = status
+
     if q:
         if searchBy == "itemIdentifier":
-            try:
-                flt["itemIdentifier"] = int(q)
-            except Exception:
-                flt["itemIdentifier"] = -999999999
+            flt["concept.itemIdentifier"] = str(q).strip()
         else:
-            flt["name"] = {"$regex": q, "$options": "i"}
+            flt["concept.name"] = {"$regex": q, "$options": "i"}
 
-    allowed = {"updatedAt", "createdAt", "name", "itemIdentifier", "itemStatus", "kind"}
-    sort_by = _sort_field(sortBy, allowed, "updatedAt")
+    # sortBy 호환
+    sort_map = {
+        "itemIdentifier": "concept.itemIdentifier",
+        "name": "concept.name",
+        "itemStatus": "concept.itemStatus",
+        "kind": "kind",
+        "createdAt": "createdAt",
+        "updatedAt": "updatedAt",
+    }
+    sort_field = sort_map.get(sortBy, sortBy)
+    allowed = {"concept.itemIdentifier", "concept.name", "concept.itemStatus", "kind", "createdAt", "updatedAt"}
+    sort_by = _sort_field(sort_field, allowed, "updatedAt")
     sort_dir = 1 if sortOrder.lower() == "asc" else -1
 
     total = await db[COLL_ITEMS].count_documents(flt)
@@ -204,39 +415,68 @@ async def list_dd_items(
 
 @router.post("/dd/items", status_code=201)
 async def create_dd_item(payload: RegisterItemCreate):
-    """Create item + (필수) managementInfos 1..* 먼저 insert 후, 그 id들을 item에 연결."""
+    """신규 RegisterItem 생성.
+
+    - itemIdentifier는 서버가 registerId 단위로 순차 자동할당
+    - doc 형태: {kind, concept{...}, <typed body>, managementInfoIds, referenceIds, referenceSourceId}
+    """
     db = get_db()
     now = _now()
 
-    doc = payload.model_dump(by_alias=True, exclude_none=True)
+    body = payload.model_dump(by_alias=True, exclude_none=True)
+    register_oid = _oid(str(body["registerId"]))
 
-    # registerId -> ObjectId
-    doc["registerId"] = _oid(str(doc["registerId"]))
+    # 1) managementInfos -> managementInfoIds
+    mgmt_infos = body.pop("managementInfos", [])
+    if not mgmt_infos:
+        raise HTTPException(status_code=422, detail="managementInfos must have at least 1 item")
 
-    # 1) ✅ managementInfos 먼저 저장해서 ids 만들기
-    mgmt_infos = doc.pop("managementInfos", [])
-    mgmt_docs = []
+    mgmt_docs: List[dict] = []
     for mi in mgmt_infos:
         mi["createdAt"] = now
         mi["updatedAt"] = now
-        # date coercion
         mi["dateProposed"] = _as_utc_dt(mi.get("dateProposed"))
         mi["dateAccepted"] = _as_utc_dt(mi.get("dateAccepted"))
+        mi["dateAmended"] = _as_utc_dt(mi.get("dateAmended"))
         mgmt_docs.append(mi)
 
-    if not mgmt_docs:
-        raise HTTPException(status_code=422, detail="managementInfos must have at least 1 item")
-
     res_mgmt = await db[COLL_MGMT_INFO].insert_many(mgmt_docs)
-    doc["managementInfoIds"] = res_mgmt.inserted_ids  # ObjectId list
+    mgmt_ids = res_mgmt.inserted_ids
 
-    # 2) relations ids -> ObjectId list
-    doc["referenceIds"] = [_oid(str(x)) for x in doc.get("referenceIds", [])]
-    if doc.get("referenceSourceId"):
-        doc["referenceSourceId"] = _oid(str(doc["referenceSourceId"]))
+    # 2) itemIdentifier 자동 할당
+    item_identifier = await _next_item_identifier(db, register_oid)
 
-    doc["createdAt"] = now
-    doc["updatedAt"] = now
+    # 3) concept 구성
+    concept_in = body.get("concept") or {}
+    concept_doc = dict(concept_in)
+    concept_doc["itemIdentifier"] = item_identifier
+
+    # 4) typed body
+    kind_val = _normalize_kind(body.get("kind")) or "S100_Concept"
+
+    # ✅ kind별 연관관계/종속 규칙 검증
+    await _validate_typed_relations(db, kind_val, body, partial=False)
+
+    typed_body = _build_typed_body(kind_val, body)
+
+    doc: Dict[str, Any] = {
+        "registerId": register_oid,
+        "kind": kind_val,
+        "concept": concept_doc,
+        "createdAt": now,
+        "updatedAt": now,
+        "managementInfoIds": mgmt_ids,
+        "referenceIds": [_oid(str(x)) for x in body.get("referenceIds", [])],
+        "referenceSourceId": _oid(str(body["referenceSourceId"])) if body.get("referenceSourceId") else None,
+    }
+
+    # typed body는 kind 이름 그대로 key로 넣는다 (요청 스키마)
+    if kind_val != "S100_Concept":
+        doc[kind_val] = typed_body
+
+    # None 정리
+    if doc.get("referenceSourceId") is None:
+        doc.pop("referenceSourceId", None)
 
     try:
         res = await db[COLL_ITEMS].insert_one(doc)
@@ -258,10 +498,11 @@ async def get_dd_item(item_id: str):
 
 @router.patch("/dd/items/{item_id}")
 async def patch_dd_item(item_id: str, payload: RegisterItemPatch):
-    """
-    ✅ Update policy (MVP):
-    - item 필드들은 부분 수정 가능
-    - managementInfo는 기존 레코드를 수정하지 않고, 항상 '새 레코드'를 생성하여 managementInfoIds에 append
+    """부분 수정 + managementInfo 1개 누적.
+
+    주의:
+    - itemIdentifier는 수정 불가
+    - kind 변경은 별도 convert API로만 허용
     """
     db = get_db()
     now = _now()
@@ -271,7 +512,6 @@ async def patch_dd_item(item_id: str, payload: RegisterItemPatch):
         raise HTTPException(status_code=404, detail="Item not found")
 
     body = payload.model_dump(by_alias=True, exclude_none=True)
-
     mgmt = body.pop("managementInfo", None)
     if not mgmt:
         raise HTTPException(status_code=422, detail="managementInfo is required")
@@ -280,11 +520,19 @@ async def patch_dd_item(item_id: str, payload: RegisterItemPatch):
     mgmt["updatedAt"] = now
     mgmt["dateProposed"] = _as_utc_dt(mgmt.get("dateProposed"))
     mgmt["dateAccepted"] = _as_utc_dt(mgmt.get("dateAccepted"))
-
+    mgmt["dateAmended"] = _as_utc_dt(mgmt.get("dateAmended"))
     res_mgmt = await db[COLL_MGMT_INFO].insert_one(mgmt)
     new_mgmt_id = res_mgmt.inserted_id
 
-    updates: Dict[str, Any] = {}
+    updates: Dict[str, Any] = {"updatedAt": now}
+
+    # concept patch (dict로 받음)
+    if "concept" in body:
+        cpatch = body.get("concept") or {}
+        for k, v in cpatch.items():
+            if k == "itemIdentifier":
+                continue
+            updates[f"concept.{k}"] = v
 
     # relations
     if "referenceIds" in body:
@@ -292,36 +540,106 @@ async def patch_dd_item(item_id: str, payload: RegisterItemPatch):
     if "referenceSourceId" in body:
         updates["referenceSourceId"] = _oid(str(body["referenceSourceId"])) if body.get("referenceSourceId") else None
 
-    # item fields
-    for k in [
-        "name",
-        "definition",
-        "remarks",
-        "itemStatus",
-        "alias",
-        "camelCase",
-        "definitionSource",
-        "reference",
-        "similarityToSource",
-        "justification",
-        "proposedChange",
-    ]:
-        if k in body:
-            updates[k] = body[k]
+    # typed patch (kind에 맞는 subdoc에만 기록)
+    kind_val = existing.get("kind")
+    if kind_val and kind_val != "S100_Concept":
+        # ✅ kind별 연관관계/종속 규칙 검증 (partial)
+        await _validate_typed_relations(db, kind_val, body, partial=True)
 
-    updates["updatedAt"] = now
+        if kind_val == "S100_CD_Feature":
+            if "featureUseType" in body:
+                updates[f"{kind_val}.featureUseType"] = body.get("featureUseType")
+            if "distinctionIds" in body:
+                updates[f"{kind_val}.distinctionIds"] = [_oid(str(x)) for x in (body.get("distinctionIds") or [])]
 
-    update_doc = {
-        "$set": updates,
-        "$push": {"managementInfoIds": new_mgmt_id},
-    }
+        elif kind_val == "S100_CD_Information":
+            if "distinctionIds" in body:
+                updates[f"{kind_val}.distinctionIds"] = [_oid(str(x)) for x in (body.get("distinctionIds") or [])]
+
+        elif kind_val == "S100_CD_EnumeratedValue":
+            if "numericCode" in body:
+                updates[f"{kind_val}.numericCode"] = body.get("numericCode")
+            if "parentSimpleAttributeId" in body:
+                updates[f"{kind_val}.parentSimpleAttributeId"] = _oid(str(body.get("parentSimpleAttributeId")))
+
+        elif kind_val == "S100_CD_SimpleAttribute":
+            if "valueType" in body:
+                updates[f"{kind_val}.valueType"] = body.get("valueType")
+            if "quantitySpecification" in body:
+                updates[f"{kind_val}.quantitySpecification"] = body.get("quantitySpecification")
+            if "attributeConstraints" in body:
+                updates[f"{kind_val}.attributeConstraints"] = body.get("attributeConstraints")
+
+        elif kind_val == "S100_CD_ComplexAttribute":
+            if "subAttributes" in body:
+                subs_in = body.get("subAttributes") or []
+                subs_out: List[dict] = []
+                for s in subs_in:
+                    if not isinstance(s, dict):
+                        continue
+                    aid = s.get("attributeId")
+                    subs_out.append(
+                        {
+                            "attributeId": _oid(str(aid)) if aid else None,
+                            "multiplicity": s.get("multiplicity") or {},
+                            "sequential": s.get("sequential", "false"),
+                        }
+                    )
+                updates[f"{kind_val}.subAttributes"] = subs_out
+
+    update_doc = {"$set": updates, "$push": {"managementInfoIds": new_mgmt_id}}
 
     updated = await db[COLL_ITEMS].find_one_and_update(
         {"_id": _oid(item_id)},
         update_doc,
-        return_document=True,
+        return_document=ReturnDocument.AFTER,
     )
+    return _dump_doc(updated)
 
+
+@router.patch("/dd/items/{item_id}/convert")
+async def convert_concept_to_typed(item_id: str, payload: ConvertFromConceptPayload):
+    """S100_Concept -> typed(kind 변경 + typed body 추가)"""
+    db = get_db()
+    now = _now()
+
+    existing = await db[COLL_ITEMS].find_one({"_id": _oid(item_id)})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Item not found")
+    if existing.get("kind") != "S100_Concept":
+        raise HTTPException(status_code=400, detail="Only S100_Concept can be converted")
+
+    body = payload.model_dump(by_alias=True, exclude_none=True)
+    kind_val = body.get("kind")
+
+    # ✅ kind별 연관관계/종속 규칙 검증
+    await _validate_typed_relations(db, kind_val, body, partial=False)
+
+    # 관리이력 추가
+    mgmt = body.get("managementInfo") or {}
+    mgmt["createdAt"] = now
+    mgmt["updatedAt"] = now
+    mgmt["dateProposed"] = _as_utc_dt(mgmt.get("dateProposed"))
+    mgmt["dateAccepted"] = _as_utc_dt(mgmt.get("dateAccepted"))
+    mgmt["dateAmended"] = _as_utc_dt(mgmt.get("dateAmended"))
+    res_mgmt = await db[COLL_MGMT_INFO].insert_one(mgmt)
+
+    typed_body = _build_typed_body(kind_val, body)
+
+    update = {
+        "$set": {
+            "kind": kind_val,
+            kind_val: typed_body,
+            "updatedAt": now,
+        },
+        "$push": {"managementInfoIds": res_mgmt.inserted_id},
+    }
+
+    updated = await db[COLL_ITEMS].find_one_and_update(
+        {"_id": _oid(item_id)},
+        update,
+        return_document=ReturnDocument.AFTER,
+    )
     return _dump_doc(updated)
 # -------------------------
 # Reference Sources
