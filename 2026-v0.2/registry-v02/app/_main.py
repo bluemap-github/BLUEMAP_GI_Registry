@@ -38,10 +38,22 @@ def _is_objectid_hex(s: str) -> bool:
 
 
 def _normalize_item(doc: dict) -> dict:
-    """Jinja/JS에서 사용하기 편하도록 ObjectId들을 문자열로 변환 (recursive)."""
+    """Jinja/JS에서 사용하기 편하도록 ObjectId들을 문자열로 변환."""
     if not doc:
         return doc
-    return _stringify_oid_any(dict(doc))
+
+    if isinstance(doc.get("_id"), ObjectId):
+        doc["_id"] = str(doc["_id"])
+
+    for k in ["registerId", "referenceSourceId"]:
+        if isinstance(doc.get(k), ObjectId):
+            doc[k] = str(doc[k])
+
+    for k in ["managementInfoIds", "referenceIds"]:
+        if isinstance(doc.get(k), list):
+            doc[k] = [str(x) if isinstance(x, ObjectId) else x for x in doc[k]]
+
+    return doc
 
 
 async def _resolve_item_doc(item_id: str) -> dict:
@@ -251,59 +263,6 @@ async def ui_dd_detail(request: Request, item_id: str, type: str = ""):
         by_id = {str(x["_id"]): x for x in ref_list}
         references = [by_id.get(str(rid)) for rid in doc["referenceIds"] if by_id.get(str(rid))]
 
-    # ✅ typed relations (distinction / parent / subAttributes / enum-children)
-    kind_val = doc.get("kind") or ""
-    distinctions = []
-    parent_attribute = None
-    enumerated_values = []
-    sub_attributes = []
-
-    # Feature / Information: distinctionIds -> items
-    if kind_val in {"S100_CD_Feature", "S100_CD_Information"}:
-        t = doc.get(kind_val) or {}
-        ids = t.get("distinctionIds") or []
-        if ids:
-            d_list = [x async for x in db[COLL_ITEMS].find({"_id": {"$in": ids}})]
-            by_id = {str(x["_id"]): x for x in d_list}
-            distinctions = [by_id.get(str(oid)) for oid in ids if by_id.get(str(oid))]
-
-    # EnumeratedValue: parentSimpleAttributeId -> item
-    if kind_val == "S100_CD_EnumeratedValue":
-        t = doc.get(kind_val) or {}
-        pid = t.get("parentSimpleAttributeId")
-        if pid:
-            parent_attribute = await db[COLL_ITEMS].find_one({"_id": pid})
-
-    # SimpleAttribute: children EnumeratedValue (0..*)
-    if kind_val == "S100_CD_SimpleAttribute":
-        enumerated_values = [
-            x async for x in db[COLL_ITEMS].find(
-                {
-                    "kind": "S100_CD_EnumeratedValue",
-                    "S100_CD_EnumeratedValue.parentSimpleAttributeId": doc["_id"],
-                }
-            ).sort("S100_CD_EnumeratedValue.numericCode", 1)
-        ]
-
-    # ComplexAttribute: subAttributes usage -> referenced attribute docs
-    if kind_val == "S100_CD_ComplexAttribute":
-        t = doc.get(kind_val) or {}
-        subs = t.get("subAttributes") or []
-        attr_ids = [s.get("attributeId") for s in subs if isinstance(s, dict) and s.get("attributeId")]
-        if attr_ids:
-            a_list = [x async for x in db[COLL_ITEMS].find({"_id": {"$in": attr_ids}})]
-            by_id = {str(x["_id"]): x for x in a_list}
-            for s in subs:
-                if not isinstance(s, dict):
-                    continue
-                oid = s.get("attributeId")
-                sub_attributes.append(
-                    {
-                        "usage": s,
-                        "attribute": by_id.get(str(oid)) if oid else None,
-                    }
-                )
-
     # item normalize + JSON safe
     doc = _normalize_item(doc)
     doc = jsonable_encoder(doc)
@@ -321,10 +280,6 @@ async def ui_dd_detail(request: Request, item_id: str, type: str = ""):
             "mgmt_infos": mgmt_infos,
             "reference_source": reference_source,
             "references": references,
-            "distinctions": jsonable_encoder(_stringify_oid_any(distinctions)),
-            "parent_attribute": jsonable_encoder(_stringify_oid_any(parent_attribute)),
-            "enumerated_values": jsonable_encoder(_stringify_oid_any(enumerated_values)),
-            "sub_attributes": jsonable_encoder(_stringify_oid_any(sub_attributes)),
         },
     )
 

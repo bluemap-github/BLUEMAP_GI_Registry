@@ -1,0 +1,196 @@
+
+## S100_CD_Feature
+{
+  _id : ObjId, 
+  kind : "S100_CD_Feature"
+  concept : {
+    itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+    name: string
+    definition: string
+    remarks: string
+    itemStatus: (enumeration)
+    alias: string[]
+    camelCase: string
+    definitionSource: string
+    reference: string
+    similarityToSource: string
+    justification: string
+    proposedChange: string
+  }, 
+  S100_CD_Feature : {
+    featureUseType : "- geographic
+                      - meta
+                      - cartographic
+                      - theme 중에 택일 (enumeration)",
+    distinction : [ObjId] // S100_CD_Feature의 _id 참조 배열
+  }
+
+}
+
+## S100_CD_Information
+{
+  _id : ObjId, 
+  kind : "S100_CD_Information"
+  concept : {
+    itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+    name: string
+    definition: string
+    remarks: string
+    itemStatus: (enumeration)
+    alias: string[]
+    camelCase: string
+    definitionSource: string
+    reference: string
+    similarityToSource: string
+    justification: string
+    proposedChange: string
+  }, 
+  S100_CD_Information : {
+    distinction : [ObjId] // S100_CD_Information의 _id 참조 배열
+  }
+}
+
+## S100_CD_EnumeratedValue
+{
+  _id : ObjId, 
+  kind : "S100_CD_EnumeratedValue"
+  concept : {
+    itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+    name: string
+    definition: string
+    remarks: string
+    itemStatus: (enumeration)
+    alias: string[]
+    camelCase: string
+    definitionSource: string
+    reference: string
+    similarityToSource: string
+    justification: string
+    proposedChange: string
+  }, 
+  S100_CD_EnumeratedValue : {
+    numericCode : string
+  }
+}
+
+
+## S100_CD_SimpleAttribute
+{
+  _id : ObjId, 
+  kind : "S100_CD_SimpleAttribute"
+  concept : {
+    itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+    name: string
+    definition: string
+    remarks: string
+    itemStatus: (enumeration)
+    alias: string[]
+    camelCase: string
+    definitionSource: string
+    reference: string
+    similarityToSource: string
+    justification: string
+    proposedChange: string
+  }, 
+  S100_CD_SimpleAttribute : {
+    valueType : " - geographic
+                  - boolean
+                  - enumeration
+                  - integer
+                  - real
+                  - date
+                  - text
+                  - time
+                  - dateTime
+                  - URI
+                  - URL
+                  - URN
+                  - S100_CodeList
+                  - S100_TruncatedDate 중에 택일 (enumeration)",
+    quantitySpecification : " - angularVelocity
+                              - area
+                              - density
+                              - duration
+                              - frequency
+                              - length
+                              - mass
+                              - planeAngle
+                              - power
+                              - pressure
+                              - salinity
+                              - speed
+                              - temperature
+                              - volume
+                              - weight
+                              - otherQuantity 중에 택일 (enumeration)", 
+    S100_CD_AttributeConstraints : { //단순 속성(SimpleAttribute)이 가질 수 있는 값의 범위를 제한하기 위한 복합 속성으로 봐도 됨
+      stringLength : string, 
+      textPattern : string, 
+      range : string, 
+      precision : string, 
+    }          
+  }
+}
+
+## S100_CD_ComplexAttribute
+
+{
+  _id : ObjId, 
+  kind : "S100_CD_ComplexAttribute"
+  concept : {
+    itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+    name: string
+    definition: string
+    remarks: string
+    itemStatus: (enumeration)
+    alias: string[]
+    camelCase: string
+    definitionSource: string
+    reference: string
+    similarityToSource: string
+    justification: string
+    proposedChange: string
+  }, 
+  S100_CD_ComplexAttribute : {
+    "subAttributes": [
+      {
+        "attributeIdentifier": "string", // 하위 속성의 camelCase 혹은 ID 참조
+        "multiplicity": {
+          "lower": 1,                // 최소 발생 횟수 (S100_Multiplicity)
+          "upper": 1,                // 최대 발생 횟수 (null일 경우 무한대)
+          "infinite": false          // 무한대 여부 [2, 3]
+        },
+        "sequential": false          // 하위 속성 간 순서의 중요성 여부 [4]
+      },
+      {
+        "attributeIdentifier": "otherAttributeCode",
+        "multiplicity": {
+          "lower": 0,
+          "upper": null,
+          "infinite": true
+        },
+        "sequential": true           // 동일 속성이 여러 개일 때 순서가 의미 있음 [4]
+      }
+    ]
+  }
+}
+
+## S100_Concept
+{
+  _id : ObjId, 
+  kind : "S100_Concept"
+  concept : {
+    itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+    name: string
+    definition: string
+    remarks: string
+    itemStatus: (enumeration)
+    alias: string[]
+    camelCase: string
+    definitionSource: string
+    reference: string
+    similarityToSource: string
+    justification: string
+    proposedChange: string
+  }
+}

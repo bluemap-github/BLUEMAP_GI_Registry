@@ -92,21 +92,23 @@ async def _next_item_identifier(db, register_oid: ObjectId) -> str:
     return str(seq)
 
 
-def _stringify_oid_any(x):
-    if isinstance(x, ObjectId):
-        return str(x)
-    if isinstance(x, list):
-        return [_stringify_oid_any(v) for v in x]
-    if isinstance(x, dict):
-        return {k: _stringify_oid_any(v) for k, v in x.items()}
-    return x
-
-
 def _dump_doc(doc: dict) -> dict:
-    """Convert Mongo doc to JSON-safe dict (ObjectId -> str, recursive)."""
+    """Convert Mongo doc to JSON-safe dict (ObjectId -> str)."""
     if not doc:
         return doc
-    return _stringify_oid_any(dict(doc))
+    out = dict(doc)
+    if isinstance(out.get("_id"), ObjectId):
+        out["_id"] = str(out["_id"])
+    if isinstance(out.get("registerId"), ObjectId):
+        out["registerId"] = str(out["registerId"])
+    for k in ["managementInfoIds", "referenceIds"]:
+        if k in out and isinstance(out[k], list):
+            out[k] = [str(x) if isinstance(x, ObjectId) else x for x in out[k]]
+    if isinstance(out.get("referenceSourceId"), ObjectId):
+        out["referenceSourceId"] = str(out["referenceSourceId"])
+
+    # concept/itemIdentifier는 string 저장
+    return out
 
 
 def _sort_field(sort_by: str, allowed: set[str], default: str) -> str:
@@ -209,148 +211,20 @@ def _normalize_kind(v: Optional[str]) -> Optional[str]:
 
 
 def _build_typed_body(kind: str, payload: dict) -> Dict[str, Any]:
-    """kind에 따라 typed body를 구성.
-
-    ⚠️ 모든 참조는 _id(ObjectId) 기반으로 저장한다.
-    - Feature/Information: distinctionIds: [ObjectId]
-    - EnumeratedValue: parentSimpleAttributeId: ObjectId (필수, 서버 검증)
-    - ComplexAttribute: subAttributes[].attributeId: ObjectId
-    """
+    """kind에 따라 typed body를 구성."""
     if kind == "S100_CD_Feature":
-        return {
-            "featureUseType": payload.get("featureUseType") or "meta",
-            "distinctionIds": [_oid(str(x)) for x in (payload.get("distinctionIds") or [])],
-        }
-
-    if kind == "S100_CD_Information":
-        return {
-            "distinctionIds": [_oid(str(x)) for x in (payload.get("distinctionIds") or [])],
-        }
-
+        return {"featureUseType": payload.get("featureUseType") or "meta"}
     if kind == "S100_CD_EnumeratedValue":
-        parent = payload.get("parentSimpleAttributeId")
-        return {
-            "numericCode": payload.get("numericCode") or "",
-            "parentSimpleAttributeId": _oid(str(parent)) if parent else None,
-        }
-
+        return {"numericCode": payload.get("numericCode") or ""}
     if kind == "S100_CD_SimpleAttribute":
         return {
             "valueType": payload.get("valueType") or "text",
             "quantitySpecification": payload.get("quantitySpecification"),
-            "attributeConstraints": payload.get("attributeConstraints"),
         }
-
-    if kind == "S100_CD_ComplexAttribute":
-        subs_in = payload.get("subAttributes") or []
-        subs_out: List[dict] = []
-        for s in subs_in:
-            if not isinstance(s, dict):
-                continue
-            aid = s.get("attributeId")
-            mult = s.get("multiplicity") or {}
-            subs_out.append(
-                {
-                    "attributeId": _oid(str(aid)) if aid else None,
-                    "multiplicity": mult,
-                    "sequential": s.get("sequential", "false"),
-                }
-            )
-        return {"subAttributes": subs_out}
-
+    if kind in {"S100_CD_Information", "S100_CD_ComplexAttribute"}:
+        return {}
     # concept에는 body 없음
     return {}
-
-
-async def _validate_typed_relations(db, kind: str, body: dict, *, partial: bool = False) -> None:
-    """kind별 연관관계 규칙 검증.
-
-    partial=True이면, payload에 포함된 필드만 선택적으로 검증한다(패치용).
-    """
-    # Feature / Information: distinctionIds 0..*
-    if kind in {"S100_CD_Feature", "S100_CD_Information"}:
-        if (not partial) or ("distinctionIds" in body):
-            ids = body.get("distinctionIds") or []
-            if ids:
-                oids = [_oid(str(x)) for x in ids]
-                docs = await db[COLL_ITEMS].find({"_id": {"$in": oids}}).to_list(length=len(oids))
-                if len({str(d["_id"]) for d in docs}) != len({str(o) for o in oids}):
-                    raise HTTPException(status_code=422, detail="distinctionIds contains missing items")
-                wrong = [str(d["_id"]) for d in docs if d.get("kind") != kind]
-                if wrong:
-                    raise HTTPException(status_code=422, detail=f"distinctionIds must reference same kind ({kind})")
-
-    # EnumeratedValue: 반드시 1개의 SimpleAttribute에 종속
-    if kind == "S100_CD_EnumeratedValue":
-        if (not partial) or ("parentSimpleAttributeId" in body):
-            parent = body.get("parentSimpleAttributeId")
-            if not parent:
-                raise HTTPException(status_code=422, detail="parentSimpleAttributeId is required for S100_CD_EnumeratedValue")
-            parent_doc = await db[COLL_ITEMS].find_one({"_id": _oid(str(parent))})
-            if not parent_doc:
-                raise HTTPException(status_code=422, detail="parentSimpleAttributeId not found")
-            if parent_doc.get("kind") != "S100_CD_SimpleAttribute":
-                raise HTTPException(status_code=422, detail="parentSimpleAttributeId must reference S100_CD_SimpleAttribute")
-            vt = ((parent_doc.get("S100_CD_SimpleAttribute") or {}).get("valueType")) or ""
-            if vt not in {"enumeration", "S100_CodeList"}:
-                raise HTTPException(
-                    status_code=422,
-                    detail="parent SimpleAttribute valueType must be 'enumeration' or 'S100_CodeList'",
-                )
-
-    # ComplexAttribute: subAttributes 1..* (SimpleAttribute or ComplexAttribute)
-    if kind == "S100_CD_ComplexAttribute":
-        if (not partial) or ("subAttributes" in body):
-            subs = body.get("subAttributes")
-            if not subs or not isinstance(subs, list) or len(subs) < 1:
-                raise HTTPException(status_code=422, detail="subAttributes must have at least 1 item for S100_CD_ComplexAttribute")
-
-            attr_oids: List[ObjectId] = []
-            for s in subs:
-                if not isinstance(s, dict):
-                    raise HTTPException(status_code=422, detail="subAttributes items must be objects")
-                aid = s.get("attributeId")
-                if not aid:
-                    raise HTTPException(status_code=422, detail="subAttributes.attributeId is required")
-                attr_oids.append(_oid(str(aid)))
-
-                # multiplicity logical check (best-effort)
-                mult = s.get("multiplicity") or {}
-                lower = mult.get("lower")
-                upper = mult.get("upper")
-                infinite = mult.get("infinite")
-                try:
-                    if lower is not None and upper is not None and str(upper).isdigit() and str(lower).isdigit():
-                        if int(lower) > int(upper):
-                            raise HTTPException(status_code=422, detail="multiplicity.lower must be <= multiplicity.upper")
-                except HTTPException:
-                    raise
-                except Exception:
-                    # 느슨하게: 숫자 변환 실패는 여기서 막지 않음
-                    pass
-
-                if infinite is not None and str(infinite).lower() == "true":
-                    # infinite=true면 upper는 보통 null/미사용 (강제는 API에서 하지 않음)
-                    pass
-
-            docs = await db[COLL_ITEMS].find({"_id": {"$in": attr_oids}}).to_list(length=len(attr_oids))
-            if len({str(d["_id"]) for d in docs}) != len({str(o) for o in attr_oids}):
-                raise HTTPException(status_code=422, detail="subAttributes contains missing attribute items")
-
-            for d in docs:
-                if d.get("kind") not in {"S100_CD_SimpleAttribute", "S100_CD_ComplexAttribute"}:
-                    raise HTTPException(status_code=422, detail="subAttributes.attributeId must reference SimpleAttribute or ComplexAttribute")
-
-def _normalize_kinds(kind: Optional[str]) -> list[str]:
-    if not kind:
-        return []
-    parts = [k.strip() for k in kind.split(",") if k.strip()]
-    out = []
-    for p in parts:
-        nk = _normalize_kind(p)
-        if nk:
-            out.append(nk)
-    return out
 
 
 @router.get("/dd/items")
@@ -372,9 +246,9 @@ async def list_dd_items(
         flt["registerId"] = _oid(registerId)
 
     # 기본: Data Dictionary 목록에서는 Concept-only 제외
-    kinds = _normalize_kinds(kind)
-    if kinds:
-        flt["kind"] = {"$in": kinds} if len(kinds) > 1 else kinds[0]
+    normalized_kind = _normalize_kind(kind)
+    if normalized_kind:
+        flt["kind"] = normalized_kind
     else:
         flt["kind"] = {"$ne": "S100_Concept"}
 
@@ -453,10 +327,6 @@ async def create_dd_item(payload: RegisterItemCreate):
 
     # 4) typed body
     kind_val = _normalize_kind(body.get("kind")) or "S100_Concept"
-
-    # ✅ kind별 연관관계/종속 규칙 검증
-    await _validate_typed_relations(db, kind_val, body, partial=False)
-
     typed_body = _build_typed_body(kind_val, body)
 
     doc: Dict[str, Any] = {
@@ -543,49 +413,15 @@ async def patch_dd_item(item_id: str, payload: RegisterItemPatch):
     # typed patch (kind에 맞는 subdoc에만 기록)
     kind_val = existing.get("kind")
     if kind_val and kind_val != "S100_Concept":
-        # ✅ kind별 연관관계/종속 규칙 검증 (partial)
-        await _validate_typed_relations(db, kind_val, body, partial=True)
-
-        if kind_val == "S100_CD_Feature":
-            if "featureUseType" in body:
-                updates[f"{kind_val}.featureUseType"] = body.get("featureUseType")
-            if "distinctionIds" in body:
-                updates[f"{kind_val}.distinctionIds"] = [_oid(str(x)) for x in (body.get("distinctionIds") or [])]
-
-        elif kind_val == "S100_CD_Information":
-            if "distinctionIds" in body:
-                updates[f"{kind_val}.distinctionIds"] = [_oid(str(x)) for x in (body.get("distinctionIds") or [])]
-
-        elif kind_val == "S100_CD_EnumeratedValue":
-            if "numericCode" in body:
-                updates[f"{kind_val}.numericCode"] = body.get("numericCode")
-            if "parentSimpleAttributeId" in body:
-                updates[f"{kind_val}.parentSimpleAttributeId"] = _oid(str(body.get("parentSimpleAttributeId")))
-
-        elif kind_val == "S100_CD_SimpleAttribute":
+        if "featureUseType" in body and kind_val == "S100_CD_Feature":
+            updates[f"{kind_val}.featureUseType"] = body.get("featureUseType")
+        if "numericCode" in body and kind_val == "S100_CD_EnumeratedValue":
+            updates[f"{kind_val}.numericCode"] = body.get("numericCode")
+        if kind_val == "S100_CD_SimpleAttribute":
             if "valueType" in body:
                 updates[f"{kind_val}.valueType"] = body.get("valueType")
             if "quantitySpecification" in body:
                 updates[f"{kind_val}.quantitySpecification"] = body.get("quantitySpecification")
-            if "attributeConstraints" in body:
-                updates[f"{kind_val}.attributeConstraints"] = body.get("attributeConstraints")
-
-        elif kind_val == "S100_CD_ComplexAttribute":
-            if "subAttributes" in body:
-                subs_in = body.get("subAttributes") or []
-                subs_out: List[dict] = []
-                for s in subs_in:
-                    if not isinstance(s, dict):
-                        continue
-                    aid = s.get("attributeId")
-                    subs_out.append(
-                        {
-                            "attributeId": _oid(str(aid)) if aid else None,
-                            "multiplicity": s.get("multiplicity") or {},
-                            "sequential": s.get("sequential", "false"),
-                        }
-                    )
-                updates[f"{kind_val}.subAttributes"] = subs_out
 
     update_doc = {"$set": updates, "$push": {"managementInfoIds": new_mgmt_id}}
 
@@ -611,9 +447,6 @@ async def convert_concept_to_typed(item_id: str, payload: ConvertFromConceptPayl
 
     body = payload.model_dump(by_alias=True, exclude_none=True)
     kind_val = body.get("kind")
-
-    # ✅ kind별 연관관계/종속 규칙 검증
-    await _validate_typed_relations(db, kind_val, body, partial=False)
 
     # 관리이력 추가
     mgmt = body.get("managementInfo") or {}

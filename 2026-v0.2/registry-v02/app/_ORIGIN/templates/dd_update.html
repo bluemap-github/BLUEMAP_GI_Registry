@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Item #{{ item.itemIdentifier }}</title>
+  <style>
+    /* ✅ dd_new.html 스타일을 최대한 재사용(간단화 버전) */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --primary:#2563eb; --primary-hover:#1d4ed8; --bg:#f8fafc; --card-bg:#fff;
+      --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0;
+      --success:#10b981; --warning:#f59e0b; --danger:#ef4444; --radius:8px;
+    }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    .container { max-width:1000px; margin:0 auto; padding:24px; }
+    .breadcrumb { display:flex; gap:8px; font-size:14px; color:var(--text-muted); margin-bottom:16px; }
+    .breadcrumb a { color:var(--text-muted); text-decoration:none; }
+    .breadcrumb a:hover { color:var(--primary); }
+    .breadcrumb .current { color:var(--primary); font-weight:500; }
+    .page-title { font-size:28px; font-weight:700; }
+    .page-subtitle { font-size:14px; color:var(--text-muted); margin-top:4px; }
+    .card { background:var(--card-bg); border-radius:var(--radius); border:1px solid var(--border); margin-bottom:24px; overflow:hidden; }
+    .card-header { padding:16px 24px; background:var(--bg); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .card-title { font-size:16px; font-weight:600; color:var(--text); }
+    .card-body { padding:24px; }
+    .form-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+    .form-group { display:flex; flex-direction:column; gap:6px; }
+    .full-width { grid-column:1/-1; }
+    .form-label { font-size:14px; font-weight:500; }
+    .required { color:var(--danger); }
+    .form-input,.form-select,.form-textarea {
+      padding:10px 14px; border:1px solid var(--border); border-radius:var(--radius); font-size:14px; background:var(--card-bg);
+    }
+    .form-textarea { min-height:100px; resize:vertical; }
+    .hint { font-size:12px; color:var(--text-muted); }
+    .divider { height:1px; background:var(--border); margin:20px 0; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 20px; font-size:14px; font-weight:500;
+      border-radius:var(--radius); border:none; cursor:pointer; transition:all .2s; }
+    .btn-primary { background:var(--primary); color:white; }
+    .btn-primary:hover { background:var(--primary-hover); }
+    .btn-secondary { background:var(--bg); color:var(--text); border:1px solid var(--border); }
+    .btn-secondary:hover { background:var(--border); }
+    .actions { display:flex; justify-content:space-between; gap:12px; padding:20px 0; }
+    .toast {
+      position:fixed; bottom:24px; right:24px; background:var(--text); color:white; padding:14px 20px; border-radius:var(--radius);
+      font-size:14px; transform:translateY(100px); opacity:0; transition:all .3s ease; z-index:1000;
+    }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast.success { background:var(--success); }
+    .toast.error { background:var(--danger); }
+    @media (max-width:768px){ .container{padding:16px;} .form-grid{grid-template-columns:1fr;} .page-title{font-size:24px;} .actions{flex-direction:column;} }
+  
+    /* Dynamic List (References) */
+    .dynamic-list { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .dynamic-list-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--bg); border-bottom:1px solid var(--border); }
+    .dynamic-list-title { font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; }
+    .dynamic-list-body { max-height:320px; overflow-y:auto; }
+    .dynamic-list-empty { padding:18px 16px; color:var(--text-muted); font-size:13px; text-align:center; }
+    .dynamic-item { display:flex; align-items:flex-start; gap:12px; padding:12px 16px; border-bottom:1px solid var(--border); }
+    .dynamic-item:last-child { border-bottom:none; }
+    .dynamic-item-number { width:22px; height:22px; border-radius:50%; background:var(--primary); color:white; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    .dynamic-item-input { flex:1; }
+    .dynamic-item-remove { background:none; border:none; cursor:pointer; color:var(--danger); font-weight:700; padding:6px; border-radius:6px; }
+    .dynamic-item-remove:hover { background:rgba(239,68,68,.08); }
+
+    .btn-sm { padding:6px 10px; font-size:12px; }
+    .btn-ghost { background:transparent; border:1px solid var(--border); color:var(--text); }
+    .btn-ghost:hover { border-color:var(--primary); color:var(--primary); }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <nav class="breadcrumb">
+        <a href="/">Home</a><span>/</span>
+        <a href="/ui/registers">GI Registers</a><span>/</span>
+        <a href="/ui/dd">Data Dictionary Register</a><span>/</span>
+        <a href="/ui/dd/{{ item._id }}">Item #{{ item.itemIdentifier }}</a><span>/</span>
+        <span class="current">Edit</span>
+      </nav>
+      <div>
+        <div class="page-title">Edit Item #{{ item.itemIdentifier }}</div>
+        <div class="page-subtitle">PATCH로 수정하며, 수정 이력은 Management Information을 새로 생성해 누적합니다.</div>
+      </div>
+    </header>
+
+    <form id="editForm">
+      <!-- Basic -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">Basic Info</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">_id</label>
+              <input class="form-input" value="{{ item._id }}" disabled>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Register ID</label>
+              <input class="form-input" value="{{ item.registerId }}" disabled>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Kind</label>
+              <input class="form-input" value="{{ item.kind }}" disabled>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Item Identifier</label>
+              <input class="form-input" value="{{ item.itemIdentifier }}" disabled>
+              <div class="hint">itemIdentifier는 여기선 변경하지 않는 것을 권장</div>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Name <span class="required">*</span></label>
+              <input class="form-input" name="name" required>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">CamelCase</label>
+              <input class="form-input" name="camelCase">
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Alias (comma separated)</label>
+              <input class="form-input" name="alias">
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Definition</label>
+              <textarea class="form-textarea" name="definition"></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Remarks</label>
+              <textarea class="form-textarea" name="remarks"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Item Status</label>
+              <select class="form-select" name="itemStatus">
+                <option value="">(keep)</option>
+                <option value="Draft">Draft</option>
+                <option value="Pending">Pending</option>
+                <option value="Valid">Valid</option>
+                <option value="Deprecated">Deprecated</option>
+                <option value="Retired">Retired</option>
+              </select>
+              <div class="hint">선택하지 않으면 기존 상태 유지</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Definition Source</label>
+              <input class="form-input" name="definitionSource">
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Reference</label>
+              <input class="form-input" name="reference">
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Similarity To Source</label>
+              <input class="form-input" name="similarityToSource">
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Proposed Change (latest)</label>
+              <textarea class="form-textarea" name="proposedChange"></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">Justification (latest)</label>
+              <textarea class="form-textarea" name="justification"></textarea>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      
+      <!-- References / ReferenceSource -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">References & Reference Source</div></div>
+        <div class="card-body">
+          <div class="hint">
+            Reference(0..*) / ReferenceSource(0..1)는 아이템 생성 이후에도 Clarification 또는 Supersession 절차를 통해 추가/변경될 수 있습니다.
+            (본 UI는 MVP로, 변경은 PATCH + ManagementInfo append로 기록됩니다.)
+          </div>
+          <div class="divider"></div>
+
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Reference Source (0..1)</label>
+              <select class="form-select" id="u_refSourceSelect">
+                <option value="">(keep)</option>
+                <option value="__none__">(set none)</option>
+                <option value="__new__">+ Create new…</option>
+              </select>
+              <div class="hint" id="u_currentRefSourceHint"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">New Source Name</label>
+              <input class="form-input" id="u_newRefSourceName" placeholder="e.g., S-101 Ed. X.Y">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">New Source Description</label>
+              <input class="form-input" id="u_newRefSourceDesc" placeholder="Optional">
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">References (0..*)</label>
+
+              <div class="dynamic-list" id="u_refsList">
+                <div class="dynamic-list-header">
+                  <span class="dynamic-list-title">References</span>
+                  <button type="button" class="btn btn-ghost btn-sm" id="u_addRefRowBtn">+ Add</button>
+                </div>
+                <div class="dynamic-list-body" id="u_refsBody">
+                  <div class="dynamic-list-empty">Loading…</div>
+                </div>
+              </div>
+
+              <div class="hint">기존 reference는 유지/삭제 가능, 새 reference는 title/locator로 추가됩니다.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ManagementInfo (append) -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">Management Information (append)</div></div>
+        <div class="card-body">
+          <div class="hint">이 수정 작업 자체를 설명하는 Management Information을 1개 반드시 작성합니다. (기존 레코드 수정 X, 새 레코드 생성 후 누적)</div>
+          <div class="divider"></div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">proposalType <span class="required">*</span></label>
+              <select class="form-select" name="mi_proposalType" required>
+                <option value="Clarification">Clarification</option>
+                <option value="Addition">Addition</option>
+                <option value="Supersession">Supersession</option>
+                <option value="Retirement">Retirement</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">submittingOrganisation <span class="required">*</span></label>
+              <input class="form-input" name="mi_submittingOrganisation" required placeholder="e.g., DCB / Sponsor / Org">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">dateProposed <span class="required">*</span></label>
+              <input class="form-input" type="date" name="mi_dateProposed" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">dateAccepted</label>
+              <input class="form-input" type="date" name="mi_dateAccepted">
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">proposedChange <span class="required">*</span></label>
+              <textarea class="form-textarea" name="mi_proposedChange" required placeholder="이번 수정/상태변경에 대한 설명"></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">proposalStatus</label>
+              <input class="form-input" name="mi_proposalStatus" placeholder="보통 itemStatus와 동일하게(예: Draft/Pending/Valid)">
+              <div class="hint">비우면 서버로 itemStatus 또는 기존 itemStatus를 따라가게(프론트에서 채워줌)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save (PATCH)</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast"><span id="toastMessage">OK</span></div>
+
+  <script>
+    const item = {{ item | tojson }};
+
+    function showToast(message, type='success') {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toastMessage');
+      toast.className = 'toast ' + (type || 'success');
+      msg.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+
+    // References state
+    let currentRefObjects = [];
+    let currentReferenceSourceId = item.referenceSourceId || null;
+
+    async function loadUpdateReferenceSources() {
+      const sel = document.getElementById('u_refSourceSelect');
+      if (!sel) return;
+      try {
+        const res = await fetch('/api/reference-sources?limit=200&sortBy=name&sortOrder=asc', { headers:{'Accept':'application/json'}});
+        if (!res.ok) return;
+        const data = await res.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        const opts = items.map(x => `<option value="${x._id}">${x.name}</option>`).join('');
+        sel.innerHTML = `<option value="">(keep)</option><option value="__none__">(set none)</option><option value="__new__">+ Create new…</option>` + opts;
+      } catch(e) {}
+    }
+
+    async function fetchRefById(id) {
+      const res = await fetch(`/api/references/${id}`, { headers:{'Accept':'application/json'}});
+      if (!res.ok) return { _id: id, title: '(not found)', locator: null };
+      return await res.json();
+    }
+
+    async function fetchSourceById(id) {
+      const res = await fetch(`/api/reference-sources/${id}`, { headers:{'Accept':'application/json'}});
+      if (!res.ok) return null;
+      return await res.json();
+    }
+
+    function renumberRefRows() {
+      document.querySelectorAll('#u_refsBody .dynamic-item-number').forEach((el, i) => {
+        el.textContent = String(i + 1);
+      });
+    }
+
+    function renderExistingRefs() {
+      const body = document.getElementById('u_refsBody');
+      if (!body) return;
+
+      if (!currentRefObjects.length) {
+        body.innerHTML = `<div class="dynamic-list-empty">No references</div>`;
+        return;
+      }
+
+      body.innerHTML = currentRefObjects.map((r, idx) => `
+        <div class="dynamic-item" data-existing-id="${r._id}">
+          <span class="dynamic-item-number">${idx + 1}</span>
+          <div class="dynamic-item-input">
+            <input class="form-input" value="${(r.title || '').replace(/"/g,'&quot;')}" disabled>
+            <div class="hint">${r.locator ? r.locator : ''}</div>
+          </div>
+          <button type="button" class="dynamic-item-remove" title="Remove">✕</button>
+        </div>
+      `).join('');
+
+      body.querySelectorAll('.dynamic-item[data-existing-id] .dynamic-item-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const row = btn.closest('.dynamic-item');
+          const id = row.getAttribute('data-existing-id');
+          currentRefObjects = currentRefObjects.filter(x => x._id !== id);
+          row.remove();
+          if (currentRefObjects.length === 0 && body.querySelectorAll('.dynamic-item').length === 0) {
+            body.innerHTML = `<div class="dynamic-list-empty">No references</div>`;
+          } else {
+            renumberRefRows();
+          }
+        });
+      });
+    }
+
+    function addUpdateRefRow() {
+      const body = document.getElementById('u_refsBody');
+      if (!body) return;
+      const empty = body.querySelector('.dynamic-list-empty');
+      if (empty) empty.remove();
+
+      const row = document.createElement('div');
+      row.className = 'dynamic-item';
+      row.setAttribute('data-new-row', '1');
+      row.innerHTML = `
+        <span class="dynamic-item-number">?</span>
+        <div class="dynamic-item-input" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <input type="text" class="form-input" placeholder="Title *" data-new-title>
+          <input type="text" class="form-input" placeholder="Locator (URL / clause / etc.)" data-new-locator>
+        </div>
+        <button type="button" class="dynamic-item-remove" title="Remove">✕</button>
+      `;
+      row.querySelector('.dynamic-item-remove').addEventListener('click', () => {
+        row.remove();
+        if (body.querySelectorAll('.dynamic-item').length === 0) {
+          body.innerHTML = `<div class="dynamic-list-empty">No references</div>`;
+        } else {
+          renumberRefRows();
+        }
+      });
+      body.appendChild(row);
+      renumberRefRows();
+    }
+
+    async function ensureUpdateReferenceSourceId() {
+      const sel = (document.getElementById('u_refSourceSelect')?.value || '').trim();
+      if (!sel) return undefined;            // keep (omit field)
+      if (sel === '__none__') return null;   // set none
+      if (sel !== '__new__') return sel;     // existing id
+
+      const name = (document.getElementById('u_newRefSourceName')?.value || '').trim();
+      const desc = (document.getElementById('u_newRefSourceDesc')?.value || '').trim();
+      if (!name) {
+        showToast('ReferenceSource: name is required for new source', 'error');
+        throw new Error('refsource name required');
+      }
+
+      const res = await fetch('/api/reference-sources', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({ name, description: desc || null })
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        showToast(`ReferenceSource create failed: ${res.status} ${t}`, 'error');
+        throw new Error('refsource create failed');
+      }
+      const created = await res.json();
+      return created._id;
+    }
+
+    async function createNewReferencesFromRows() {
+      const body = document.getElementById('u_refsBody');
+      if (!body) return [];
+      const rows = Array.from(body.querySelectorAll('.dynamic-item[data-new-row]'));
+      const ids = [];
+
+      for (const r of rows) {
+        const title = (r.querySelector('[data-new-title]')?.value || '').trim();
+        const locator = (r.querySelector('[data-new-locator]')?.value || '').trim();
+        if (!title) continue;
+
+        const res = await fetch('/api/references', {
+          method:'POST',
+          headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body: JSON.stringify({ title, locator: locator || null })
+        });
+        if (!res.ok) {
+          const t = await res.text();
+          showToast(`Reference create failed: ${res.status} ${t}`, 'error');
+          throw new Error('reference create failed');
+        }
+        const created = await res.json();
+        ids.push(created._id);
+      }
+      return ids;
+    }
+
+
+    // prefill
+    window.addEventListener('load', async () => {
+      document.querySelector('[name="name"]').value = item.name || '';
+      document.querySelector('[name="camelCase"]').value = item.camelCase || '';
+      document.querySelector('[name="alias"]').value = (item.alias || []).join(', ');
+      document.querySelector('[name="definition"]').value = item.definition || '';
+      document.querySelector('[name="remarks"]').value = item.remarks || '';
+      document.querySelector('[name="definitionSource"]').value = item.definitionSource || '';
+      document.querySelector('[name="reference"]').value = item.reference || '';
+      document.querySelector('[name="similarityToSource"]').value = item.similarityToSource || '';
+      document.querySelector('[name="proposedChange"]').value = item.proposedChange || '';
+      document.querySelector('[name="justification"]').value = item.justification || '';
+
+      // dateProposed default today
+      const dp = document.querySelector('[name="mi_dateProposed"]');
+      const today = new Date();
+      dp.value = today.toISOString().slice(0,10);
+
+      // proposalStatus default = itemStatus
+      document.querySelector('[name="mi_proposalStatus"]').value = item.itemStatus || 'Draft';
+
+      // Load references / sources
+      await loadUpdateReferenceSources();
+      if (currentReferenceSourceId) {
+        const src = await fetchSourceById(currentReferenceSourceId);
+        const hint = document.getElementById('u_currentRefSourceHint');
+        if (hint) hint.textContent = src ? `Current: ${src.name}` : `Current: ${currentReferenceSourceId}`;
+      }
+
+      // Load existing references
+      const ids = Array.isArray(item.referenceIds) ? item.referenceIds : [];
+      currentRefObjects = [];
+      for (const id of ids) {
+        currentRefObjects.push(await fetchRefById(id));
+      }
+      renderExistingRefs();
+
+      // Add-row button
+      const btn = document.getElementById('u_addRefRowBtn');
+      if (btn) btn.addEventListener('click', addUpdateRefRow);
+
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      window.location.href = `/ui/dd/${item._id}`;
+    });
+
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = (document.querySelector('[name="name"]').value || '').trim();
+      if (!name) { showToast('Name is required', 'error'); return; }
+
+      const aliasRaw = (document.querySelector('[name="alias"]').value || '').trim();
+      const alias = aliasRaw ? aliasRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+      const itemStatusSel = (document.querySelector('[name="itemStatus"]').value || '').trim();
+      const itemStatusEffective = itemStatusSel || (item.itemStatus || 'Draft');
+
+      // ManagementInfo payload (required)
+      const mi = {
+        proposalType: (document.querySelector('[name="mi_proposalType"]').value || '').trim() || null,
+        submittingOrganisation: (document.querySelector('[name="mi_submittingOrganisation"]').value || '').trim() || null,
+        proposedChange: (document.querySelector('[name="mi_proposedChange"]').value || '').trim() || null,
+        dateProposed: (document.querySelector('[name="mi_dateProposed"]').value || '').trim() || null,
+        dateAccepted: (document.querySelector('[name="mi_dateAccepted"]').value || '').trim() || null,
+        proposalStatus: (document.querySelector('[name="mi_proposalStatus"]').value || '').trim() || itemStatusEffective,
+        controlBodyNotes: []
+      };
+
+      if (!mi.proposalType || !mi.submittingOrganisation || !mi.proposedChange || !mi.dateProposed) {
+        showToast('ManagementInfo: required fields missing', 'error');
+        return;
+      }
+
+      // Resolve References (Update)
+      let finalReferenceIds = [];
+      try {
+        const keptExistingIds = Array.from(document.querySelectorAll('#u_refsBody .dynamic-item[data-existing-id]')).map(el => el.getAttribute('data-existing-id'));
+        const newIds = await createNewReferencesFromRows();
+        finalReferenceIds = [...keptExistingIds, ...newIds];
+      } catch (e) {
+        return;
+      }
+
+      let newSourceId;
+      try {
+        newSourceId = await ensureUpdateReferenceSourceId();
+      } catch (e) {
+        return;
+      }
+
+      const payload = {
+        name,
+        camelCase: (document.querySelector('[name="camelCase"]').value || '').trim() || null,
+        alias,
+        definition: (document.querySelector('[name="definition"]').value || '').trim() || null,
+        remarks: (document.querySelector('[name="remarks"]').value || '').trim() || null,
+        itemStatus: itemStatusSel || null,
+
+        definitionSource: (document.querySelector('[name="definitionSource"]').value || '').trim() || null,
+        reference: (document.querySelector('[name="reference"]').value || '').trim() || null,
+        similarityToSource: (document.querySelector('[name="similarityToSource"]').value || '').trim() || null,
+        proposedChange: (document.querySelector('[name="proposedChange"]').value || '').trim() || null,
+        justification: (document.querySelector('[name="justification"]').value || '').trim() || null,
+
+        // ✅ 핵심: append 할 managementInfo 1개
+        managementInfo: mi,
+
+        // relations (replace)
+        referenceIds: finalReferenceIds,
+        ...(newSourceId !== undefined ? { referenceSourceId: newSourceId } : {})
+      };
+
+      const res = await fetch(`/api/dd/items/${item._id}`, {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json', 'Accept':'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const t = await res.text();
+        showToast(`PATCH failed: ${res.status} ${t}`, 'error');
+        return;
+      }
+
+      showToast('Saved!', 'success');
+      setTimeout(() => window.location.href = `/ui/dd/${item._id}`, 600);
+    });
+  </script>
+</body>
+</html>

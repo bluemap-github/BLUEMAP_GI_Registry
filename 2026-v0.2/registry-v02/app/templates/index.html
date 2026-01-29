@@ -1,41 +1,416 @@
-<!doctype html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FastAPI Mini</title>
-  <link rel="stylesheet" href="/static/style.css" />
-</head>
-<body>
-  <main class="wrap">
-    <h1>FastAPI + Jinja 템플릿 xptmxm</h1>
-    <p class="msg">{{ message }}</p>
+{% extends "base.html" %}
 
-    <section class="card">
-      <h2>폼 POST 테스트</h2>
-      <form method="post" action="/submit">
-        <input name="name" placeholder="이름 입력" />
-        <button type="submit">보내기</button>
-      </form>
-    </section>
+{% block title %}BLUEMAP GI Registry{% endblock %}
 
-    <section class="card">
-      <h2>API 테스트</h2>
-      <ul>
-        <li>GET <code>/api/ping</code></li>
-        <li>POST <code>/api/echo</code> (JSON body)</li>
-      </ul>
-      <pre id="out"></pre>
-      <button id="btn">/api/ping 호출</button>
-    </section>
-  </main>
+{% block extra_styles %}
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg: #f8fafc;
+    --card-bg: #fff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --info: #06b6d4;
+    --danger: #ef4444;
+    --radius: 8px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
 
-  <script>
-    const out = document.getElementById("out");
-    document.getElementById("btn").addEventListener("click", async () => {
-      const res = await fetch("/api/ping");
-      out.textContent = JSON.stringify(await res.json(), null, 2);
-    });
-  </script>
-</body>
-</html>
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #0ea5e9 100%);
+    padding: 80px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .hero-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Container */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  /* Section Header */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .view-all-link:hover {
+    color: var(--primary-hover);
+  }
+  .view-all-link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Table Section */
+  .table-section {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .table-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .table-info {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .table-container {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 600;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tbody tr:hover {
+    background: rgba(37, 99, 235, 0.04);
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .truncate {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .item-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .item-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+  }
+  .kind-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--primary);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge.draft {
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--info);
+  }
+  .badge.valid {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+  }
+  .badge.pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--warning);
+  }
+  .badge.deprecated {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+  }
+  .empty-state {
+    padding: 48px 16px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .empty-state h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 48px 16px; }
+    .hero-title { font-size: 32px; }
+    .hero-subtitle { font-size: 16px; }
+    .container { padding: 24px 16px; }
+    .section-title { font-size: 20px; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+</style>
+
+<script>
+  window.__INDEX_INITIAL__ = {
+    items: {{ initial_items_json | safe }}
+  };
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">BLUEMAP GI Registry</h1>
+    <p class="hero-subtitle">Geographic Information Registry for standardized data management</p>
+  </div>
+</section>
+
+<!-- Recently Added Section -->
+<div class="container">
+  <header class="section-header">
+    <h2 class="section-title">Recently Added</h2>
+    <a href="/ui/dd/list" class="view-all-link">
+      View All
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </a>
+  </header>
+
+  <section class="table-section">
+    <div class="table-header">
+      <div class="table-info">
+        Showing latest <strong>20</strong> items
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Name</th>
+            <th>Camelcase</th>
+            <th>Definition</th>
+            <th>Kind</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr>
+            <td colspan="7">
+              <div class="empty-state">
+                <h3>Loading...</h3>
+                <p>Fetching recent items</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Helpers
+  function escapeHtml(s) {
+    const str = String(s ?? "");
+    return str
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function getStatusClass(status) {
+    const s = String(status || "").toLowerCase();
+    if (s === "draft") return "draft";
+    if (s === "valid") return "valid";
+    if (s === "pending") return "pending";
+    if (s === "deprecated") return "deprecated";
+    return "draft";
+  }
+
+  function normalizeItem(raw) {
+    const id = raw._id ?? raw.id ?? raw.itemIdentifier;
+    const c = raw.concept || {};
+    return {
+      id,
+      itemIdentifier: c.itemIdentifier ?? '',
+      name: c.name ?? '',
+      camelCase: c.camelCase ?? c.camelcase ?? '',
+      definition: c.definition ?? '',
+      kind: raw.kind ?? '',
+      status: c.itemStatus ?? '',
+      date: raw.updatedAt ?? raw.createdAt ?? null,
+    };
+  }
+
+  function formatDate(val) {
+    if (!val) return "";
+    const d = new Date(val);
+    if (isNaN(d.getTime())) return String(val);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function formatKind(kind) {
+    if (!kind) return "";
+    return kind.replace("S100_CD_", "").replace(/([A-Z])/g, " $1").trim();
+  }
+
+  // Fetch and render
+  async function fetchRecentItems() {
+    try {
+      const res = await fetch("/api/dd/items?limit=20&sortBy=updatedAt&sortOrder=desc", {
+        headers: { "Accept": "application/json" }
+      });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      const data = await res.json();
+      return Array.isArray(data.items) ? data.items.map(normalizeItem) : [];
+    } catch (err) {
+      console.error("Failed to fetch items:", err);
+      return [];
+    }
+  }
+
+  function renderTable(items) {
+    const tbody = document.getElementById("table-body");
+    if (!tbody) return;
+
+    if (!items || items.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7">
+            <div class="empty-state">
+              <h3>No items found</h3>
+              <p>There are no recently added items</p>
+            </div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+      tbody.innerHTML = items.map(item => `
+        <tr class="clickable-row" data-href="/ui/dd/${escapeHtml(item.id)}">
+          <td>${escapeHtml(item.itemIdentifier)}</td>
+          <td>
+            <a href="/ui/dd/${escapeHtml(item.id)}" class="item-link">
+              ${escapeHtml(item.name)}
+            </a>
+          </td>
+          <td>${escapeHtml(item.camelCase)}</td>
+          <td class="truncate" title="${escapeHtml(item.definition)}">${escapeHtml(item.definition)}</td>
+          <td><span class="kind-tag">${escapeHtml(formatKind(item.kind))}</span></td>
+          <td><span class="badge ${getStatusClass(item.status)}">${escapeHtml(item.status)}</span></td>
+          <td>${escapeHtml(formatDate(item.date))}</td>
+        </tr>
+      `).join("");
+
+      tbody.addEventListener('click', (e) => {
+        // 링크/버튼/입력요소 클릭은 기존 동작 유지
+        if (e.target.closest('a, button, input, textarea, select, label')) return;
+
+        const tr = e.target.closest('tr[data-href]');
+        if (!tr) return;
+
+        // 드래그로 텍스트 선택 중이면 이동하지 않음
+        const sel = window.getSelection?.();
+        if (sel && sel.toString().length > 0) return;
+
+        window.location.href = tr.dataset.href;
+      });
+  }
+
+  // Initialize
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Try to use initial data if available
+    const initialItems = window.__INDEX_INITIAL__?.items;
+    if (initialItems && initialItems.length > 0) {
+      renderTable(initialItems.map(normalizeItem));
+    } else {
+      // Fetch from API
+      const items = await fetchRecentItems();
+      renderTable(items);
+    }
+  });
+</script>
+{% endblock %}
