@@ -1,0 +1,221 @@
+### S100_RE_RegisterItem
+
+### S100_PR_Registerltem // 이게 기본 구조. 모든 PR 개체는 이 구조를 포함해야 함
+{
+    _id : ObjId, 
+    kind : "S100_CD_Feature"
+    concept : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+}
+
+### S100_PR_Visualltem // 중간객체임 !!! 
+
+{
+    _id : ObjId, 
+    kind : "S100_CD_Feature"
+    concept : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    (S100_PR_Symbol, S100_PR_LineStyle, S100_PR_AreaFill, S100_PR_Pixmap) : {
+        itemDetail : string, // Blob인데 저장경로 string으로 들어올거임
+        previewlmage : string, // Blob인데 저장경로 string으로 들어올거임
+        engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
+        previewType : (enumeration),
+        engineeringImage Type : (enumeration)
+    }
+}
+
+
+### S100_PR_Symbol
+{
+    _id : ObjId, 
+    kind : "S100_CD_Feature"
+    concept : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_Symbol : {
+        itemDetail : string, // Blob인데 저장경로 string으로 들어올거임
+        previewlmage : string, // Blob인데 저장경로 string으로 들어올거임
+        engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
+        previewType : (enumeration),
+        engineeringImage Type : (enumeration)
+        // 심볼 고유속성, 연관관계 없이 끝
+    }
+}
+### S100_PR_LineStyle
+{
+    _id : ObjId, 
+    kind : "S100_CD_Feature"
+    concept : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_LineStyle : {
+        itemDetail : string, // Blob인데 저장경로 string으로 들어올거임
+        previewlmage : string, // Blob인데 저장경로 string으로 들어올거임
+        engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
+        previewType : (enumeration),
+        engineeringImage Type : (enumeration),
+        symbol : [] // S100_PR_Symbol의 ObjId 배열
+    }
+}
+
+### S100_PR_AreaFill
+
+{
+    _id : ObjId, 
+    kind : "S100_CD_Feature"
+    concept : {
+        itemIdentifier: Integer (하지만 아래 3번 규칙에 따라 “string으로 저장”이 원칙이면 string 처리)
+        name: string
+        definition: string
+        remarks: string
+        itemStatus: (enumeration)
+        alias: string[]
+        camelCase: string
+        definitionSource: string
+        reference: string
+        similarityToSource: string
+        justification: string
+        proposedChange: string
+    }, 
+    xmlID : string,
+    description : [ // 원래는 S100_PR_NationalLanguageString 인데 그냥 복합 속성으로 표현
+        {
+            text : string,
+            language : string
+        }, // 이게 배열로 여러개 올 수 있음
+    ],
+    S100_PR_AreaFill : {
+        itemDetail : string, // Blob인데 저장경로 string으로 들어올거임
+        previewlmage : string, // Blob인데 저장경로 string으로 들어올거임
+        engineeringImage : string, // Blob인데 저장경로 string으로 들어올거임
+        previewType : (enumeration),
+        engineeringImage Type : (enumeration)
+        // areafil의 고유속성, 연관관계 없이 끝
+    }
+}
+
+### S100_PR_Pixmap
+
+
+
+### S100_PR_DisplayMode
+
+### S100_PR_ViewingGroupLayer
+
+### S100_PR_ViewingGroup
+
+### S100_PR_AlertHighlight
+
+### S100_PR_AlertMessage
+
+### S100_PR_ColourToken
+
+### S100_PR_ColourPalette
+
+### S100_PR_Alert
+
+### S100_PR_AlertInfo
+
+### S100_PR_AlertPriority
+
+### S100_PR_Paletteltem
+
+### S100_PR_ColourValue
+
+### S100_PR_CIEValue
+
+### S100_PR_SRGBValue
+
+### S100_PR_Font
+
+### S100_PR_ContextParameter
+
+### S100_PR_DrawingPriority
+
+### S100_PR_DisplayPlane
+
+### S100_PR_ItemSchema
+
+### S100_PR_SymbolSchema
+
+### S100_PR_LineStyleSchema
+
+### S100_PR_AreaFillSchema
+
+### S100_PR_PixmapSchema
+
+### S100_PR_ColourProfileSchema

@@ -1,269 +1,167 @@
-## S100_PR_RegisterItem
-{
-  _id: ObjId,
-  kind: "S100_PR_RegisterItem",
+### S100_RE_RegisterItem
 
-  S100_PR_RegisterItem: {
-    xmlID: string,
-    description: S100_PR_NationalLanguageString[] // 0..*
-  }
-}
+- itemIdentifier: Integer
+- name: CharacterString
+- definition: CharacterString [0..1]
+- remarks: CharacterString [0..1]
+- itemStatus: S100_RE_ItemStatus
+- alias: CharacterString [0..*]
+- camelCase: CharacterString [0..1]
+- definitionSource: CharacterString [0..1]
+- reference: CharacterString [0..1]
+- similarityToSource: CharacterString [0..1]
+- justification: CharacterString [0..1]
+- proposedChange: CharacterString [0..1]
 
-## S100_PR_NationalLanguageString
-{
-  text: string,
-  language: string // 0..1
-}
+### S100_PR_Registerltem
 
-## S100_PR_VisualItem
-{
-  _id: ObjId,
-  kind: "S100_PR_VisualItem",
+- xmlID: CharacterString
+- description: S100_PR_NationalLanguageString [0 ..* ]
 
-  S100_PR_RegisterItem: {
-    xmlID: string,
-    description: S100_PR_NationalLanguageString[]
-  },
+### S100_PR_NationalLanguageString
 
-  S100_PR_VisualItem: {
-    itemDetail: BlobRef,          // 0..1
-    previewImage: BlobRef,        // 0..1
-    engineeringImage: BlobRef,    // 0..1
-    previewType: "jpg"|"png"|"tif",           // 0..1 (S100_PR_ImageType)
-    engineeringImageType: "jpg"|"png"|"tif"   // 0..1 (S100_PR_ImageType)
-  }
-}
+- text: CharacterString
+- language: CharacterString [0 .. 1]
 
-## S100_PR_Symbol
-{
-  _id: ObjId,
-  kind: "S100_PR_Symbol",
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] }
-}
+### S100_PR_Visualltem
 
-## S100_PR_LineStyle
-{
-  _id: ObjId,
-  kind: "S100_PR_LineStyle",
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] }
-}
+- itemDetail: Blob [0 .. 1]
+- previewlmage: Blob [0 .. 1]
+- engineeringImage: Blob [0 .. 1]
+- previewType: S100_PR_ImageType [0 .. 1]
+- engineeringImage Type: S100_PR_ImageType [0 .. 1]
 
-## S100_PR_AreaFill
-{
-  _id: ObjId,
-  kind: "S100_PR_AreaFill",
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] }
-}
+### S100_PR_Symbol
 
-## S100_PR_Pixmap
-{
-  _id: ObjId,
-  kind: "S100_PR_Pixmap",
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] }
-}
+### S100_PR_LineStyle
 
-## S100_PR_ItemSchema
-{
-  _id: ObjId,
-  kind: "S100_PR_ItemSchema",
+### S100_PR_AreaFill
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+### S100_PR_Pixmap
 
-  S100_PR_ItemSchema: {
-    xmlSchema: BlobRef // 필수
-  }
-}
+### S100_PR_DisplayMode
 
-## S100_PR_SymbolSchema
-{
-  _id: ObjId,
-  kind: "S100_PR_SymbolSchema",
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
-  S100_PR_ItemSchema: { xmlSchema: BlobRef }
-}
+### S100_PR_ViewingGroupLayer
 
-## S100_PR_LineStyleSchema
-{ ... same pattern ... }
+### S100_PR_ViewingGroup
 
-## S100_PR_AreaFillSchema
-{ ... same pattern ... }
+- foundationMode: Boolean [0 .. 1]
 
-## S100_PR_PixmapSchema
-{ ... same pattern ... }
+### S100_PR_AlertHighlight
 
-## S100_PR_ColourProfileSchema
-{ ... same pattern ... }
+- optional: Boolean [0 .. 1]
+- style: S100_PR_HighlightStyle [0 .. 1]
 
+### S100_PR_AlertMessage
 
-## S100_PR_DisplayMode
-{
-  _id: ObjId,
-  kind: "S100_PR_DisplayMode",
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] }
-}
+- text: S100_PR_NationalLanguageString [1 ..* ]
+- icon: S100_PR_Symbol [0 .. 1]
 
-## S100_PR_ViewingGroupLayer
-{
-  _id: ObjId,
-  kind: "S100_PR_ViewingGroupLayer",
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] }
-}
+### S100_PR_ColourToken
 
-## S100_PR_ColourPalette
-{
-  _id: ObjId,
-  kind: "S100_PR_ColourPalette",
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] }
-}
+- token: CharacterString
 
-## S100_PR_DisplayPlane
-{
-  _id: ObjId,
-  kind: "S100_PR_DisplayPlane",
+### S100_PR_ColourPalette
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+### S100_PR_Alert
 
-  S100_PR_DisplayPlane: {
-    order: string // 원래 Integer
-  }
-}
+- routeMonitor: S100_PR_AlertInfo [0 ..* ]
+- routePlan: S100_PR_AlertInfo [0 ..* ]
 
-## S100_PR_ViewingGroup
-{
-  _id: ObjId,
-  kind: "S100_PR_ViewingGroup",
+### S100_PR_AlertInfo
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+- priority: S100_PR_AlertPriority [1 ..* ]
 
-  S100_PR_ViewingGroup: {
-    foundationMode: boolean // 0..1
-  }
-}
+### S100_PR_AlertPriority
 
-## S100_PR_Font
-{
-  _id: ObjId,
-  kind: "S100_PR_Font",
+- priority: S100_PR_AlertPriorityType
+- default: Boolean [0 .. 1]
+- optional: Boolean [0 .. 1]
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+### S100_PR_Paletteltem
 
-  S100_PR_Font: {
-    fontFile: BlobRef,
-    fontType: "ttf" // S100_PR_FontType
-  }
-}
+- transparency: Real [0 .. 1]
+- colour: S100_PR_ColourValue [1..1]
+- palette: S100_PR_ColourPalette [1 ..* ]
 
-## S100_PR_ContextParameter
-{
-  _id: ObjId,
-  kind: "S100_PR_ContextParameter",
+### S100_PR_ColourValue
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+- sRGB: S100_PR_SRGBValue [0 .. 1]
+- cie: S100_PR_CIEValue [0 .. 1]
 
-  S100_PR_ContextParameter: {
-    parameterType: "boolean"|"integer"|"double"|"string"|"date", // S100_PR_ParameterType
-    defaultValue: string // 0..1
-  }
-}
+### S100_PR_CIEValue
 
-## S100_PR_DrawingPriority
-{
-  _id: ObjId,
-  kind: "S100_PR_DrawingPriority",
+- x : Real
+- y : Real
+- z : Real
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+### S100_PR_SRGBValue
 
-  S100_PR_DrawingPriority: {
-    priority: string // 원래 Integer
-  }
-}
+- red: Integer
+- green: Integer
+- blue: Integer
 
-## S100_PR_Alert
-{
-  _id: ObjId,
-  kind: "S100_PR_Alert",
+### S100_PR_Font
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+- fontFile: Blob
+- fontType: S100_PR_FontType
 
-  S100_PR_Alert: {
-    routeMonitor: S100_PR_AlertInfo[], // 0..*
-    routePlan: S100_PR_AlertInfo[]     // 0..*
-  }
-}
+### S100_PR_ContextParameter
 
-## S100_PR_AlertInfo
-{
-  priority: S100_PR_AlertPriority[] // 1..*  (원문 그대로 반영)
-}
+- parameterType: S100_PR_ParameterType
+- defaultValue: CharacterString [0 .. 1]
 
-## S100_PR_AlertPriority
-{
-  priority: "alarm"|"warning"|"caution"|"indication", // S100_PR_AlertPriorityType
-  default: boolean,  // 0..1
-  optional: boolean  // 0..1
-}
+### S100_PR_DrawingPriority
 
-## S100_PR_AlertMessage
-{
-  text: S100_PR_NationalLanguageString[], // 1..*
-  icon: string // 0..1  (연관관계 없으니 symbol의 xmlID 같은 식별자 문자열로 저장 추천)
-}
+- priority: Integer
 
-## S100_PR_AlertHighlight
-{
-  optional: boolean, // 0..1
-  style: "AlarmHighlight"|"CautionHighlight" // 0..1 (S100_PR_HighlightStyle)
-}
+### S100_PR_DisplayPlane
 
-## S100_PR_ColourToken
-{
-  _id: ObjId,
-  kind: "S100_PR_ColourToken",
+- order: Integer
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+### S100_PR_ItemSchema
 
-  S100_PR_ColourToken: {
-    token: string
-  }
-}
+- xmlSchema: Blob
 
-## S100_PR_PaletteItem
-{
-  _id: ObjId,
-  kind: "S100_PR_PaletteItem",
+### S100_PR_SymbolSchema
 
-  S100_PR_RegisterItem: { xmlID: string, description: S100_PR_NationalLanguageString[] },
+### S100_PR_LineStyleSchema
 
-  S100_PR_PaletteItem: {
-    transparency: string,       // 원래 Real, 0..1
-    colour: S100_PR_ColourValue,
-    palette: S100_PR_ColourPalette[] // 1..* (연관관계 없으니 내장 배열로)
-  }
-}
+### S100_PR_AreaFillSchema
 
-## S100_PR_ColourValue
-{
-  sRGB: S100_PR_SRGBValue, // 0..1
-  cie: S100_PR_CIEValue    // 0..1
-}
+### S100_PR_PixmapSchema
 
-## S100_PR_SRGBValue
-{
-  red: string,   // 원래 Integer
-  green: string, // 원래 Integer
-  blue: string   // 원래 Integer
-}
-
-## S100_PR_CIEValue
-{
-  x: string, // 원래 Real
-  y: string, // 원래 Real
-  z: string  // 원래 Real
-}
+### S100_PR_ColourProfileSchema
 
 
+# Enumerations
 
+## (enumeration) S100_PR_Parameter Type
 
+- boolean
+- intege
+- double
+- string
+- date
 
+## (enumeration) S100_PR_Image Type
 
+- jpg
+- png
+- tif
 
+## (enumeration) S100_PR_AlertPriority Type
+
+- alarm
+- warning
+- caution
+- indication
+
+## (enumeration) S100_PR_FontType
+
+- ttf
+
+## (enumeration) S100_PR_HighlightStyle
+
+- AlarmHighlight
+- CautionHighlight
