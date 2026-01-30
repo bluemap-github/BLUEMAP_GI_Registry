@@ -272,25 +272,13 @@
             <div class="grid">
               <div>
                 <label>Register <span class="req">*</span></label>
-                <div class="multi-select-container" data-target="registerId" data-single="true">
-                  <div class="multi-select-chips empty" tabindex="0"></div>
-                  <div class="multi-select-dropdown">
-                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                    <div class="multi-select-options"></div>
-                  </div>
-                </div>
-                <select id="registerId" required style="display:none"></select>
+                <select id="registerId" required>
+                  <option value="">(select)</option>
+                </select>
               </div>
               <div>
                 <label>Kind <span class="req">*</span></label>
-                <div class="multi-select-container" data-target="kind" data-single="true">
-                  <div class="multi-select-chips empty" tabindex="0"></div>
-                  <div class="multi-select-dropdown">
-                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                    <div class="multi-select-options"></div>
-                  </div>
-                </div>
-                <select id="kind" required style="display:none">
+                <select id="kind" required>
                   <option value="S100_PR_Symbol">S100_PR_Symbol</option>
                   <option value="S100_PR_LineStyle">S100_PR_LineStyle</option>
                   <option value="S100_PR_AreaFill">S100_PR_AreaFill</option>
@@ -567,14 +555,7 @@
               <div class="grid" style="margin-top:12px;">
                 <div>
                   <label>Style</label>
-                  <div class="multi-select-container" data-target="ah_style" data-single="true">
-                    <div class="multi-select-chips empty" tabindex="0"></div>
-                    <div class="multi-select-dropdown">
-                      <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                      <div class="multi-select-options"></div>
-                    </div>
-                  </div>
-                  <select id="ah_style" style="display:none">
+                  <select id="ah_style">
                     <option value="AlarmHighlight">AlarmHighlight</option>
                     <option value="CautionHighlight">CautionHighlight</option>
                   </select>
@@ -677,14 +658,8 @@
               </div>
               <div>
                 <label>previewType</label>
-                <div class="multi-select-container" data-target="kb_previewType" data-single="true">
-                  <div class="multi-select-chips empty" tabindex="0"></div>
-                  <div class="multi-select-dropdown">
-                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                    <div class="multi-select-options"></div>
-                  </div>
-                </div>
-                <select id="kb_previewType" style="display:none">
+                <select id="kb_previewType">
+                  <option value="">(none)</option>
                   <option value="jpg">jpg</option>
                   <option value="png">png</option>
                   <option value="tif">tif</option>
@@ -692,14 +667,8 @@
               </div>
               <div>
                 <label>engineeringImageType</label>
-                <div class="multi-select-container" data-target="kb_engineeringImageType" data-single="true">
-                  <div class="multi-select-chips empty" tabindex="0"></div>
-                  <div class="multi-select-dropdown">
-                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                    <div class="multi-select-options"></div>
-                  </div>
-                </div>
-                <select id="kb_engineeringImageType" style="display:none">
+                <select id="kb_engineeringImageType">
+                  <option value="">(none)</option>
                   <option value="jpg">jpg</option>
                   <option value="png">png</option>
                   <option value="tif">tif</option>
@@ -713,14 +682,7 @@
             <div class="grid">
               <div>
                 <label>schemaKind</label>
-                <div class="multi-select-container" data-target="kb_schemaKind" data-single="true">
-                  <div class="multi-select-chips empty" tabindex="0"></div>
-                  <div class="multi-select-dropdown">
-                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                    <div class="multi-select-options"></div>
-                  </div>
-                </div>
-                <select id="kb_schemaKind" style="display:none">
+                <select id="kb_schemaKind">
                   <option value="S100_PR_SymbolSchema">S100_PR_SymbolSchema</option>
                   <option value="S100_PR_LineStyleSchema">S100_PR_LineStyleSchema</option>
                   <option value="S100_PR_AreaFillSchema">S100_PR_AreaFillSchema</option>
@@ -811,14 +773,7 @@
             <div class="grid">
               <div>
                 <label>parameterType</label>
-                <div class="multi-select-container" data-target="kb_cp_type" data-single="true">
-                  <div class="multi-select-chips empty" tabindex="0"></div>
-                  <div class="multi-select-dropdown">
-                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                    <div class="multi-select-options"></div>
-                  </div>
-                </div>
-                <select id="kb_cp_type" style="display:none">
+                <select id="kb_cp_type">
                   <option value="boolean">boolean</option>
                   <option value="integer">integer</option>
                   <option value="double">double</option>
@@ -913,14 +868,8 @@
             <div class="grid">
               <div style="grid-column:1/-1;">
                 <label>Reference Source (0..1)</label>
-                <div class="multi-select-container" data-target="refSourceSelect" data-single="true">
-                  <div class="multi-select-chips empty" tabindex="0"></div>
-                  <div class="multi-select-dropdown">
-                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                    <div class="multi-select-options"></div>
-                  </div>
-                </div>
-                <select id="refSourceSelect" style="display:none">
+                <select id="refSourceSelect">
+                  <option value="">(none)</option>
                   <option value="__new__">+ Create new...</option>
                 </select>
                 <div class="hint" id="currentRefSourceHint"></div>
@@ -1013,8 +962,8 @@
 
   function validateStep(step) {
     if (step === 1) {
-      const registerId = singleSelectedValue(document.getElementById('registerId'));
-      const kind = singleSelectedValue(document.getElementById('kind'));
+      const registerId = document.getElementById('registerId').value;
+      const kind = document.getElementById('kind').value;
       if (!registerId) {
         showToast('Register를 선택하세요.', 'error');
         return false;
@@ -1136,21 +1085,12 @@
       const res = await fetch('/api/reference-sources?limit=200');
       const j = await res.json();
       const sel = document.getElementById('refSourceSelect');
-      sel.innerHTML = '';
-      // Add "Create new" option first
-      const newOpt = document.createElement('option');
-      newOpt.value = '__new__';
-      newOpt.textContent = '+ Create new...';
-      sel.appendChild(newOpt);
       (j.items || []).forEach(src => {
         const opt = document.createElement('option');
         opt.value = src._id;
         opt.textContent = src.name || src._id;
-        opt.selected = false;
         sel.appendChild(opt);
       });
-      sel.selectedIndex = -1;
-      refreshAllMultiSelects();
     } catch (e) {
       console.error('Failed to load reference sources:', e);
     }
@@ -1297,19 +1237,6 @@
     return Array.from(sel.selectedOptions || []).map(o => o.value).filter(Boolean);
   }
 
-  function singleSelectedValue(sel) {
-    const vals = selectedValues(sel);
-    return vals.length > 0 ? vals[0] : null;
-  }
-
-  // Helper to set value in hidden select and refresh UI
-  function setSelectValue(sel, value) {
-    Array.from(sel.options).forEach(o => {
-      o.selected = (o.value === value);
-    });
-    refreshAllMultiSelects();
-  }
-  
   function parseJsonField(id, fallback) {
     const raw = document.getElementById(id).value.trim();
     if (!raw) return fallback;
@@ -1348,17 +1275,13 @@
 
   async function loadRegisters() {
     const sel = document.getElementById('registerId');
-    sel.innerHTML = '';
     const j = await fetchJson('/api/registers?limit=200');
     (j.items || []).forEach(r => {
       const opt = document.createElement('option');
       opt.value = r._id;
       opt.textContent = `${r.name} (${r._id})`;
-      opt.selected = false;
       sel.appendChild(opt);
     });
-    sel.selectedIndex = -1;
-    refreshAllMultiSelects();
   }
 
   // loadReferences 함수는 Step 3에서 직접 Reference를 추가하는 방식으로 대체됨
@@ -1862,12 +1785,12 @@ function setKindBodyVisibility(kind){
       out.itemDetail = document.getElementById('kb_itemDetail').value.trim() || null;
       out.previewImage = document.getElementById('kb_previewImage').value.trim() || null;
       out.engineeringImage = document.getElementById('kb_engineeringImage').value.trim() || null;
-      out.previewType = singleSelectedValue(document.getElementById('kb_previewType')) || null;
-      out.engineeringImageType = singleSelectedValue(document.getElementById('kb_engineeringImageType')) || null;
+      out.previewType = document.getElementById('kb_previewType').value || null;
+      out.engineeringImageType = document.getElementById('kb_engineeringImageType').value || null;
     }
 
     if (kind === 'S100_PR_ItemSchema') {
-      out.schemaKind = singleSelectedValue(document.getElementById('kb_schemaKind'));
+      out.schemaKind = document.getElementById('kb_schemaKind').value;
       out.xmlSchema = document.getElementById('kb_xmlSchema').value.trim() || null;
     }
 
@@ -1901,7 +1824,7 @@ function setKindBodyVisibility(kind){
     }
 
     if (kind === 'S100_PR_ContextParameter') {
-      out.parameterType = singleSelectedValue(document.getElementById('kb_cp_type'));
+      out.parameterType = document.getElementById('kb_cp_type').value;
       out.defaultValue = document.getElementById('kb_cp_default').value.trim() || '';
     }
 
@@ -1986,7 +1909,7 @@ function setKindBodyVisibility(kind){
     }
     if (kind === 'S100_PR_AlertHighlight') {
       out.optional = !!document.getElementById('ah_optional').checked;
-      out.style = singleSelectedValue(document.getElementById('ah_style'));
+      out.style = document.getElementById('ah_style').value;
     }
     if (kind === 'S100_PR_ColourToken') {
       out.token = document.getElementById('ct_token').value.trim() || out.token || '';
@@ -2085,11 +2008,11 @@ function setKindBodyVisibility(kind){
       document.getElementById('kb_itemDetail').value = 's3://bucket/path/itemDetail.bin';
       document.getElementById('kb_previewImage').value = 's3://bucket/path/preview.png';
       document.getElementById('kb_engineeringImage').value = 's3://bucket/path/engineering.png';
-      setSelectValue(document.getElementById('kb_previewType'), 'png');
-      setSelectValue(document.getElementById('kb_engineeringImageType'), 'png');
+      document.getElementById('kb_previewType').value = 'png';
+      document.getElementById('kb_engineeringImageType').value = 'png';
     }
     if (kind === 'S100_PR_ItemSchema') {
-      setSelectValue(document.getElementById('kb_schemaKind'), 'S100_PR_SymbolSchema');
+      document.getElementById('kb_schemaKind').value = 'S100_PR_SymbolSchema';
       document.getElementById('kb_xmlSchema').value = 's3://bucket/path/schema.xsd';
     }
     if (kind === 'S100_PR_ViewingGroup') {
@@ -2113,7 +2036,7 @@ function setKindBodyVisibility(kind){
       document.getElementById('kb_pi_z').value = '0';
     }
     if (kind === 'S100_PR_ContextParameter') {
-      setSelectValue(document.getElementById('kb_cp_type'), 'string');
+      document.getElementById('kb_cp_type').value = 'string';
       document.getElementById('kb_cp_default').value = 'sample';
     }
     if (kind === 'S100_PR_DrawingPriority') {
@@ -2138,7 +2061,7 @@ function setKindBodyVisibility(kind){
     try {
       await refreshAllOptionLists();
 
-      const registerId = singleSelectedValue(document.getElementById('registerId')) || '';
+      const registerId = document.getElementById('registerId').value.trim();
       if (!registerId) {
         banner.textContent = 'Sample filled. (Select a register to load options.)';
         banner.style.display = 'block';
@@ -2160,7 +2083,7 @@ function setKindBodyVisibility(kind){
       }
       if (kind === 'S100_PR_AlertHighlight') {
         document.getElementById('ah_optional').checked = false;
-        setSelectValue(document.getElementById('ah_style'), 'AlarmHighlight');
+        document.getElementById('ah_style').value = 'AlarmHighlight';
       }
       if (kind === 'S100_PR_ViewingGroup') {
         document.getElementById('foundationMode').checked = false;
@@ -2174,16 +2097,10 @@ function setKindBodyVisibility(kind){
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
-    // Initialize multi-select UI for static options first
-    refreshAllMultiSelects();
-
     await loadRegisters();
     await loadReferenceSources();
   
-    // Refresh multi-selects after dynamic options are loaded
-    refreshAllMultiSelects();
-
-    const kind = singleSelectedValue(document.getElementById('kind'));
+    const kind = document.getElementById('kind').value;
     setRelVisibility(kind);
     setKindBodyVisibility(kind);
     setFileUploadVisibility(kind);
@@ -2201,8 +2118,7 @@ function setKindBodyVisibility(kind){
     if (refSourceSelect) {
       refSourceSelect.addEventListener('change', function() {
         const newSourceFields = document.getElementById('newSourceFields');
-        const val = singleSelectedValue(this);
-        if (val === '__new__') {
+        if (this.value === '__new__') {
           newSourceFields.classList.add('show');
         } else {
           newSourceFields.classList.remove('show');
@@ -2233,7 +2149,7 @@ function setKindBodyVisibility(kind){
     });
 
 document.getElementById('kind').addEventListener('change', async () => {
-  const k = singleSelectedValue(document.getElementById('kind'));
+  const k = document.getElementById('kind').value;
   setRelVisibility(k);
   setKindBodyVisibility(k);
   setFileUploadVisibility(k);
@@ -2250,8 +2166,8 @@ document.getElementById('kind').addEventListener('change', async () => {
     e.preventDefault();
 
     try {
-      const registerId = singleSelectedValue(document.getElementById('registerId')) || '';
-      const kind = singleSelectedValue(document.getElementById('kind')) || '';
+      const registerId = document.getElementById('registerId').value.trim();
+      const kind = document.getElementById('kind').value.trim();
 
   if (!registerId) {
   showToast('Register is required.', 'error');
@@ -2315,13 +2231,13 @@ document.getElementById('kind').addEventListener('change', async () => {
         // References 처리
         referenceSourceId: (() => {
           const sel = document.getElementById('refSourceSelect');
-          const val = singleSelectedValue(sel);
+          const val = sel.value;
           if (!val || val === '__new__') return null;
           return val;
         })(),
         newReferenceSource: (() => {
           const sel = document.getElementById('refSourceSelect');
-          if (singleSelectedValue(sel) !== '__new__') return null;
+          if (sel.value !== '__new__') return null;
           const name = document.getElementById('newRefSourceName').value.trim();
           const desc = document.getElementById('newRefSourceDesc').value.trim();
           if (!name) return null;
