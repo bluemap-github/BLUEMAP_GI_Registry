@@ -129,6 +129,13 @@
   <section class="filter-section">
     <div class="filter-row">
       <div class="filter-group">
+        <label for="register-filter">Register</label>
+        <select id="register-filter">
+          <option value="" selected>All Registers</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
         <label for="status-filter">Status</label>
         <select id="status-filter">
           <option value="" selected>All Status</option>
@@ -236,10 +243,34 @@
     const rpp = document.getElementById("rows-per-page");
     if (rpp && rpp.value) rowsPerPage = parseInt(rpp.value, 10) || 20;
 
+    loadRegisters();
     setupStatCardListeners();
     setupSearchEnterListener();
     renderTable();
   });
+
+  async function loadRegisters() {
+    const sel = document.getElementById("register-filter");
+    if (!sel) return;
+    try {
+      const res = await fetch("/api/registers?limit=200");
+      const data = await res.json();
+      const items = data.items || [];
+      for (const r of items) {
+        const opt = document.createElement("option");
+        opt.value = r._id || r.id;
+        opt.textContent = r.name || r._id || r.id;
+        sel.appendChild(opt);
+      }
+      // 레지스터 선택 변경 시 자동 필터링
+      sel.addEventListener("change", () => {
+        currentPage = 1;
+        fetchAndRender();
+      });
+    } catch (e) {
+      console.error("Failed to load registers:", e);
+    }
+  }
 
   // Helpers
   function escapeHtml(s) {
@@ -286,14 +317,15 @@
   }
 
   function getFiltersFromUI() {
+    const registerId = document.getElementById("register-filter")?.value || "";
     const status = document.getElementById("status-filter")?.value || "";
     const searchBy = document.getElementById("category-filter")?.value || "name";
     const q = document.getElementById("search-input")?.value?.trim() || "";
-    return { status, searchBy, q };
+    return { registerId, status, searchBy, q };
   }
 
   function buildQueryParams() {
-    const { status, searchBy, q } = getFiltersFromUI();
+    const { registerId, status, searchBy, q } = getFiltersFromUI();
     const params = new URLSearchParams();
 
     params.set("page", String(currentPage));
@@ -301,6 +333,7 @@
     params.set("sortBy", sortColumn);
     params.set("sortOrder", sortDirection);
 
+    if (registerId) params.set("registerId", registerId);
     if (status) params.set("status", status);
     if (q) {
       params.set("q", q);
@@ -371,10 +404,12 @@
   }
 
   function resetFilters() {
+    const r = document.getElementById("register-filter");
     const s = document.getElementById("status-filter");
     const c = document.getElementById("category-filter");
     const q = document.getElementById("search-input");
 
+    if (r) r.value = "";
     if (s) s.value = "";
     if (c) c.value = "name";
     if (q) q.value = "";

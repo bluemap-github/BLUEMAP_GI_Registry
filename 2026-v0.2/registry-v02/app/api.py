@@ -327,7 +327,7 @@ async def _validate_typed_relations(db, kind: str, body: dict, *, partial: bool 
                 if wrong:
                     raise HTTPException(status_code=422, detail=f"distinctionIds must reference same kind ({kind})")
 
-    # EnumeratedValue: 반드시 1개의 SimpleAttribute에 종속
+    # EnumeratedValue: 반��시 1개의 SimpleAttribute에 종속
     if kind == "S100_CD_EnumeratedValue":
         if (not partial) or ("parentSimpleAttributeId" in body):
             parent = body.get("parentSimpleAttributeId")

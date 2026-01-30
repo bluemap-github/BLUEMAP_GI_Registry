@@ -47,7 +47,7 @@
   .hero-content {
     position: relative;
     z-index: 1;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
   }
   .hero-title {
@@ -60,7 +60,7 @@
   .hero-subtitle {
     font-size: 18px;
     color: rgba(255, 255, 255, 0.85);
-    max-width: 600px;
+    max-width: 900px;
     margin: 0 auto;
   }
 
@@ -312,6 +312,23 @@
     background: rgba(37, 99, 235, 0.08);
     color: var(--primary);
   }
+  .type-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .type-tag.type-dd {
+    background: rgba(6, 182, 212, 0.12);
+    color: var(--info);
+  }
+  .type-tag.type-pr {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--success);
+  }
   .badge {
     display: inline-flex;
     align-items: center;
@@ -369,8 +386,8 @@
 <!-- Hero Section -->
 <section class="hero">
   <div class="hero-content">
-    <h1 class="hero-title">BLUEMAP GI Registry</h1>
-    <p class="hero-subtitle">Geographic Information Registry for standardized data management</p>
+    <h1 class="hero-title">S-100 GI Registry</h1>
+    <p class="hero-subtitle">GI Registry(IHO Geospatial Information Registry)는 S-100 기반 해양·수로 분야의 표준 용어 및 데이터 항목(예: Feature, Attribute, Portrayal 등)을 등록·관리하는 역할을 수행합니다.</p>
   </div>
 </section>
 
@@ -463,6 +480,7 @@
       <table>
         <thead>
           <tr>
+            <th>Type</th>
             <th>Item ID</th>
             <th>Name</th>
             <th>Camelcase</th>
@@ -472,9 +490,9 @@
             <th>Date</th>
           </tr>
         </thead>
-        <tbody id="table-body">
+<tbody id="table-body">
           <tr>
-            <td colspan="7">
+            <td colspan="8">
               <div class="empty-state">
                 <h3>Loading...</h3>
                 <p>Fetching recent items</p>
@@ -510,9 +528,10 @@
     return "draft";
   }
 
-  function normalizeItem(raw) {
+  function normalizeItem(raw, type = 'dd') {
     const id = raw._id ?? raw.id ?? raw.itemIdentifier;
-    const c = raw.concept || {};
+    // DD는 concept, PR은 prItem에서 데이터를 가져옴
+    const c = type === 'pr' ? (raw.prItem || {}) : (raw.concept || {});
     return {
       id,
       itemIdentifier: c.itemIdentifier ?? '',
@@ -522,6 +541,7 @@
       kind: raw.kind ?? '',
       status: c.itemStatus ?? '',
       date: raw.updatedAt ?? raw.createdAt ?? null,
+      type, // 'dd' or 'pr'
     };
   }
 
@@ -543,12 +563,31 @@
   // Fetch and render
   async function fetchRecentItems() {
     try {
-      const res = await fetch("/api/dd/items?limit=20&sortBy=updatedAt&sortOrder=desc", {
-        headers: { "Accept": "application/json" }
+      // DD와 PR 아이템을 병렬로 가져옴
+      const [ddRes, prRes] = await Promise.all([
+        fetch("/api/dd/items?limit=50&sortBy=updatedAt&sortOrder=desc", {
+          headers: { "Accept": "application/json" }
+        }),
+        fetch("/api/pr/items?limit=50&sortBy=updatedAt&sortOrder=desc", {
+          headers: { "Accept": "application/json" }
+        })
+      ]);
+
+      const ddData = ddRes.ok ? await ddRes.json() : { items: [] };
+      const prData = prRes.ok ? await prRes.json() : { items: [] };
+
+      const ddItems = Array.isArray(ddData.items) ? ddData.items.map(item => normalizeItem(item, 'dd')) : [];
+      const prItems = Array.isArray(prData.items) ? prData.items.map(item => normalizeItem(item, 'pr')) : [];
+
+      // 모든 아이템을 합친 후 날짜순 정렬하여 최신 20개만 반환
+      const allItems = [...ddItems, ...prItems];
+      allItems.sort((a, b) => {
+        const dateA = a.date ? new Date(a.date).getTime() : 0;
+        const dateB = b.date ? new Date(b.date).getTime() : 0;
+        return dateB - dateA;
       });
-      if (!res.ok) throw new Error(`API error ${res.status}`);
-      const data = await res.json();
-      return Array.isArray(data.items) ? data.items.map(normalizeItem) : [];
+
+      return allItems.slice(0, 20);
     } catch (err) {
       console.error("Failed to fetch items:", err);
       return [];
@@ -562,7 +601,7 @@
     if (!items || items.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7">
+          <td colspan="8">
             <div class="empty-state">
               <h3>No items found</h3>
               <p>There are no recently added items</p>
@@ -573,11 +612,18 @@
       return;
     }
 
-      tbody.innerHTML = items.map(item => `
-        <tr class="clickable-row" data-href="/ui/dd/${escapeHtml(item.id)}">
+      tbody.innerHTML = items.map(item => {
+        const itemType = item.type || 'dd';
+        const detailUrl = `/ui/${itemType}/${escapeHtml(item.id)}`;
+        const typeLabel = itemType === 'pr' ? 'Portrayal' : 'Data Dictionary';
+        const typeClass = itemType === 'pr' ? 'type-pr' : 'type-dd';
+
+        return `
+        <tr class="clickable-row" data-href="${detailUrl}">
+          <td><span class="type-tag ${typeClass}">${typeLabel}</span></td>
           <td>${escapeHtml(item.itemIdentifier)}</td>
           <td>
-            <a href="/ui/dd/${escapeHtml(item.id)}" class="item-link">
+            <a href="${detailUrl}" class="item-link">
               ${escapeHtml(item.name)}
             </a>
           </td>
@@ -587,7 +633,7 @@
           <td><span class="badge ${getStatusClass(item.status)}">${escapeHtml(item.status)}</span></td>
           <td>${escapeHtml(formatDate(item.date))}</td>
         </tr>
-      `).join("");
+      `}).join("");
 
       tbody.addEventListener('click', (e) => {
         // 링크/버튼/입력요소 클릭은 기존 동작 유지
@@ -604,17 +650,42 @@
       });
   }
 
+  // Fetch counts for stat cards
+  async function fetchCounts() {
+    try {
+      const [registersRes, conceptsRes, ddRes, prRes] = await Promise.all([
+        fetch("/api/registers?limit=1"),
+        fetch("/api/dd/items?kind=concept&limit=1"),
+        fetch("/api/dd/items?limit=1"),
+        fetch("/api/pr/items?limit=1")
+      ]);
+
+      const registersData = registersRes.ok ? await registersRes.json() : { total: 0 };
+      const conceptsData = conceptsRes.ok ? await conceptsRes.json() : { total: 0 };
+      const ddData = ddRes.ok ? await ddRes.json() : { total: 0 };
+      const prData = prRes.ok ? await prRes.json() : { total: 0 };
+
+      // Update count elements
+      const countRegisters = document.getElementById("count-registers");
+      const countConcepts = document.getElementById("count-concepts");
+      const countDd = document.getElementById("count-dd");
+      const countPr = document.getElementById("count-pr");
+
+      if (countRegisters) countRegisters.textContent = registersData.total ?? 0;
+      if (countConcepts) countConcepts.textContent = conceptsData.total ?? 0;
+      if (countDd) countDd.textContent = ddData.total ?? 0;
+      if (countPr) countPr.textContent = prData.total ?? 0;
+    } catch (err) {
+      console.error("Failed to fetch counts:", err);
+    }
+  }
+
   // Initialize
   document.addEventListener("DOMContentLoaded", async () => {
-    // Try to use initial data if available
-    const initialItems = window.__INDEX_INITIAL__?.items;
-    if (initialItems && initialItems.length > 0) {
-      renderTable(initialItems.map(normalizeItem));
-    } else {
-      // Fetch from API
-      const items = await fetchRecentItems();
-      renderTable(items);
-    }
+    // Fetch counts and recent items in parallel
+    fetchCounts();
+    const items = await fetchRecentItems();
+    renderTable(items);
   });
 </script>
 {% endblock %}

@@ -348,9 +348,13 @@
       for (const r of items) {
         const opt = document.createElement('option');
         opt.value = r._id;
-        opt.textContent = `${r.name} (${r._id})`;
+        opt.textContent = r.name || r._id;
         sel.appendChild(opt);
       }
+      // 레지스터 선택 변경 시 자동 필터링
+      sel.addEventListener('change', () => {
+        loadItems();
+      });
     } catch (e) {
       console.error(e);
     }
