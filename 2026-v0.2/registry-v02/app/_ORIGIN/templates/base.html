@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}S-100 Registry{% endblock %}</title>
+  <style>
+    /* ========== NAV TOGGLE STYLES ========== */
+    :root {
+      --nav-bg: #1e293b;
+      --nav-text: #f1f5f9;
+      --nav-hover: #334155;
+      --nav-accent: #3b82f6;
+      --nav-width: 242px;
+      --nav-toggle-size: 44px;
+    }
+
+    .nav-toggle-btn {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      width: var(--nav-toggle-size);
+      height: var(--nav-toggle-size);
+      background: var(--nav-bg);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .nav-toggle-btn:hover {
+      background: var(--nav-hover);
+      transform: scale(1.05);
+    }
+    .nav-toggle-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--nav-text);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .nav-toggle-btn .icon-menu { display: block; }
+    .nav-toggle-btn .icon-close { display: none; }
+    .nav-toggle-btn.active .icon-menu { display: none; }
+    .nav-toggle-btn.active .icon-close { display: block; }
+
+    .nav-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--nav-width);
+      height: 100vh;
+      background: var(--nav-bg);
+      z-index: 1000;
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      padding-top: calc(var(--nav-toggle-size) + 32px);
+      box-shadow: 2px 0 16px rgba(0,0,0,0.2);
+      overflow-y: auto;
+    }
+    .nav-sidebar.open {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .nav-sidebar .nav-header {
+      padding: 0 20px 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 12px;
+    }
+    .nav-sidebar .nav-header h2 {
+      color: var(--nav-text);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-sidebar .nav-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-sidebar .nav-links li {
+      margin: 0;
+    }
+    .nav-sidebar .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s, padding-left 0.2s;
+    }
+    .nav-sidebar .nav-links a:hover {
+      background: var(--nav-hover);
+      padding-left: 26px;
+    }
+    .nav-sidebar .nav-links a.active {
+      background: var(--nav-accent);
+      font-weight: 700;
+    }
+    .nav-sidebar .nav-links a svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .nav-section-title {
+      padding: 16px 20px 8px 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .nav-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Page content padding for toggle button */
+    body {
+      padding-top: 0;
+    }
+    .page-content {
+      padding-top: 76px; /* Space for the toggle button */
+    }
+  </style>
+  {% block extra_styles %}{% endblock %}
+</head>
+<body>
+  <!-- Navigation Toggle Button -->
+  <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Toggle navigation">
+    <svg class="icon-menu" viewBox="0 0 24 24">
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+    <svg class="icon-close" viewBox="0 0 24 24">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <!-- Navigation Sidebar -->
+  <nav class="nav-sidebar" id="navSidebar">
+    <div class="nav-header">
+      <h2>S-100 Registry</h2>
+    </div>
+
+    <ul class="nav-links">
+      <li>
+        <a href="/" {% if active_nav == 'home' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          Home
+        </a>
+      </li>
+    </ul>
+
+    <div class="nav-section-title">Registers</div>
+    <ul class="nav-links">
+      <li>
+        <a href="/ui/registers" {% if active_nav == 'registers' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          GI Registers
+        </a>
+      </li>
+      <li>
+        <a href="/ui/concepts" {% if active_nav == 'concepts' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Concept 
+        </a>
+      </li>
+      <li>
+        <a href="/ui/dd" {% if active_nav == 'dd' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          Data Dictionary
+        </a>
+      </li>
+      <li>
+        <a href="/ui/pr" {% if active_nav == 'pr' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          Portrayal
+        </a>
+      </li>
+    </ul>
+
+    <div class="nav-section-title">Proposals</div>
+    <ul class="nav-links">
+      <li>
+        <a href="/ui/dd/new" {% if active_nav == 'dd_new' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          New Data Dictionary Item
+        </a>
+      </li>
+      <li>
+        <a href="/ui/pr/new" {% if active_nav == 'pr_new' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          New Portrayal Item
+        </a>
+      </li>
+      <li>
+        <a href="/ui/registers/new" {% if active_nav == 'register_new' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+          New Register
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Overlay for mobile -->
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- Page Content -->
+  <div class="page-content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    // Navigation Toggle Logic
+    (function() {
+      const toggleBtn = document.getElementById('navToggleBtn');
+      const sidebar = document.getElementById('navSidebar');
+      const overlay = document.getElementById('navOverlay');
+
+      function openNav() {
+        toggleBtn.classList.add('active');
+        sidebar.classList.add('open');
+        overlay.classList.add('show');
+      }
+
+      function closeNav() {
+        toggleBtn.classList.remove('active');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+
+      function toggleNav() {
+        if (sidebar.classList.contains('open')) {
+          closeNav();
+        } else {
+          openNav();
+        }
+      }
+
+      toggleBtn.addEventListener('click', toggleNav);
+      overlay.addEventListener('click', closeNav);
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+          closeNav();
+        }
+      });
+    })();
+  </script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

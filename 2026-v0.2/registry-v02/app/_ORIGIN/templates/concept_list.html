@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Concept Register{% endblock %}
+
+{% block extra_styles %}
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--primary:#2563eb;--primary-hover:#1d4ed8;--bg:#f8fafc;--card-bg:#fff;--text:#1e293b;--text-muted:#64748b;--border:#e2e8f0;--radius:8px;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  .container{max-width:1200px;margin:0 auto;padding:24px}
+  .page-header{margin-bottom:24px}
+  .breadcrumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-muted);margin-bottom:16px}
+  .breadcrumb a{color:var(--text-muted);text-decoration:none}
+  .breadcrumb a:hover{color:var(--primary)}
+  .breadcrumb .current{color:var(--primary);font-weight:500}
+  .title-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .page-title{font-size:28px;font-weight:700}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text);text-decoration:none;font-weight:600;cursor:pointer}
+  .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn.primary:hover{background:var(--primary-hover)}
+  .btn-success { background:var(--success); color:#fff; }
+  .btn-success:hover { background:#059669; }
+  .grid{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+  @media(max-width:980px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .card-header{padding:14px 18px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .card-title{font-size:16px;font-weight:700}
+  .card-body{padding:14px 18px}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .input, .select{padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#fff}
+  .table{width:100%;border-collapse:collapse}
+  .table th,.table td{padding:12px 10px;border-bottom:1px solid var(--border);text-align:left;font-size:14px}
+  .table th{color:var(--text-muted);font-weight:600;background:var(--bg)}
+  .row-link{color:var(--primary);text-decoration:none;font-weight:600}
+  .muted{color:var(--text-muted)}
+  .badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--border)}
+  .b-success{background:rgba(16,185,129,.12);color:var(--success);border-color:rgba(16,185,129,.25)}
+  .b-warning{background:rgba(245,158,11,.12);color:var(--warning);border-color:rgba(245,158,11,.25)}
+  .b-danger{background:rgba(239,68,68,.12);color:var(--danger);border-color:rgba(239,68,68,.25)}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+  .kv{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+  .kv:last-child{border-bottom:0}
+  .kv .k{color:var(--text-muted);font-size:13px}
+  .kv .v{font-weight:700}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <header class="page-header">
+    <nav class="breadcrumb">
+      <a href="/">Home</a><span>/</span>
+      <span class="current">Concept Register</span>
+    </nav>
+    <div class="title-row">
+      <h1 class="page-title">Concept Register</h1>
+      <a class="btn btn-success" href="/ui/dd/new">New (Concept or DDR Item)</a>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">Concept List</div>
+        <div class="muted">Total: <span id="totalCount">{{ initial_total }}</span></div>
+      </div>
+      <div class="card-body">
+        <div class="filters" style="margin-bottom:12px;">
+          <input id="q" class="input" placeholder="Search by name" style="flex:1;min-width:220px;" />
+          <select id="status" class="select">
+            <option value="">All Status</option>
+            <option value="Draft">Draft</option>
+            <option value="Pending">Pending</option>
+            <option value="Valid">Valid</option>
+            <option value="Deprecated">Deprecated</option>
+            <option value="Retired">Retired</option>
+          </select>
+          <button class="btn" id="searchBtn">Search</button>
+        </div>
+
+        <div style="overflow:auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:110px;">Identifier</th>
+                <th>Name</th>
+                <th style="width:220px;">CamelCase</th>
+                <th style="width:140px;">Status</th>
+                <th style="width:200px;">DDR Bindings</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <div class="card-header"><div class="card-title">DDR Binding Contents</div></div>
+      <div class="card-body">
+        <div class="kv"><div class="k">Feature</div><div class="v">{{ binding_stats.feature }}</div></div>
+        <div class="kv"><div class="k">Information</div><div class="v">{{ binding_stats.information }}</div></div>
+        <div class="kv"><div class="k">Simple Attribute</div><div class="v">{{ binding_stats.simpleAttribute }}</div></div>
+        <div class="kv"><div class="k">Complex Attribute</div><div class="v">{{ binding_stats.complexAttribute }}</div></div>
+        <div class="kv"><div class="k">Enumeration Value</div><div class="v">{{ binding_stats.enumeratedValue }}</div></div>
+        <div class="muted" style="margin-top:10px;font-size:13px;">
+          Concept detail page shows binding links if available.
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const initialItems = {{ initial_items_json | safe }};
+
+  function statusBadge(s){
+    const v=(s||'').toLowerCase();
+    if(['valid','active','approved'].includes(v)) return '<span class="badge b-success">'+(s||'Valid')+'</span>';
+    if(['deprecated','retired','invalid'].includes(v)) return '<span class="badge b-danger">'+(s||'Deprecated')+'</span>';
+    if(['draft','proposed','planned','pending'].includes(v)) return '<span class="badge b-warning">'+(s||'Draft')+'</span>';
+    return '<span class="badge">'+(s||'Unspecified')+'</span>';
+  }
+
+  function bindingText(item){
+    const k = item.kind || '';
+    return k === 'S100_Concept' ? '<span class="muted">Concept only</span>' : k;
+  }
+
+  function render(rows){
+    const tb=document.getElementById('tbody');
+    tb.innerHTML='';
+    rows.forEach(it=>{
+      const tr=document.createElement('tr');
+      const c = it.concept || {};
+      tr.innerHTML = `
+        <td class="mono">${c.itemIdentifier ?? ''}</td>
+        <td><a class="row-link" href="/ui/concepts/${it._id}">${(c.name||'')}</a></td>
+        <td class="mono">${c.camelCase||''}</td>
+        <td>${statusBadge(c.itemStatus)}</td>
+        <td>${bindingText(it)}</td>
+      `;
+      tb.appendChild(tr);
+    });
+  }
+
+  async function fetchConcepts(){
+    const q=document.getElementById('q').value.trim();
+    const status=document.getElementById('status').value;
+    const params=new URLSearchParams();
+    params.set('page','1');
+    params.set('limit','25');
+    params.set('searchBy','name');
+    if(q) params.set('q',q);
+    if(status) params.set('status',status);
+    params.set('kind','concept');
+
+    const res = await fetch('/api/dd/items?'+params.toString(), {headers:{'Accept':'application/json'}});
+    if(!res.ok){
+      render([]);
+      return;
+    }
+    const data=await res.json();
+    document.getElementById('totalCount').textContent = data.total ?? 0;
+    render(data.items||[]);
+  }
+
+  document.getElementById('searchBtn').addEventListener('click', fetchConcepts);
+  document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter') fetchConcepts(); });
+  document.getElementById('status').addEventListener('change', fetchConcepts);
+
+  render(initialItems);
+</script>
+{% endblock %}

@@ -1,16 +1,10 @@
 # app/api.py
 from __future__ import annotations
 
-import os
-import uuid
-import shutil
-import aiofiles
-from pathlib import Path
 from datetime import datetime, timezone, date, time
 from typing import Any, Dict, Optional, List
 
-from fastapi import APIRouter, HTTPException, Query, UploadFile, File, Form
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, HTTPException, Query
 from bson import ObjectId
 from pymongo import ReturnDocument
 
@@ -23,8 +17,6 @@ from .db import (
     COLL_PR_ITEMS,
     COLL_REF_SOURCES,
     COLL_REFERENCES,
-    COLL_PR_FILES,
-    PR_FILES_DIR,
 )
 from .models import (
     RegisterCreate,
@@ -35,7 +27,6 @@ from .models import (
     ReferenceSourceCreate,
     PRRegisterItemCreate,
     PRRegisterItemPatch,
-    PR_FILE_FIELDS_BY_KIND,
 )
 
 UTC = timezone.utc
@@ -1049,218 +1040,3 @@ async def get_reference(ref_id: str):
     if not doc:
         raise HTTPException(status_code=404, detail="Reference not found")
     return _dump_doc(doc)
-
-
-# -------------------------
-# PR File Upload/Download
-# -------------------------
-
-# 허용되는 파일 필드명
-ALLOWED_FILE_FIELDS = {"itemDetail", "previewImage", "engineeringImage", "xmlSchema", "fontFile"}
-
-# 파일 확장자 제한 (보안)
-ALLOWED_EXTENSIONS = {
-    "itemDetail": {".svg", ".xml", ".png", ".jpg", ".jpeg", ".gif", ".tiff", ".tif"},
-    "previewImage": {".png", ".jpg", ".jpeg", ".gif", ".tiff", ".tif"},
-    "engineeringImage": {".png", ".jpg", ".jpeg", ".gif", ".tiff", ".tif"},
-    "xmlSchema": {".xml", ".xsd"},
-    "fontFile": {".ttf", ".otf", ".woff", ".woff2"},
-}
-
-
-def _validate_file_field(kind: str, field_name: str) -> None:
-    """Kind에 해당 파일 필드가 허용되는지 검증"""
-    allowed_fields = PR_FILE_FIELDS_BY_KIND.get(kind, [])
-    if field_name not in allowed_fields:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Field '{field_name}' is not allowed for kind '{kind}'. Allowed: {allowed_fields}"
-        )
-
-
-def _validate_file_extension(field_name: str, filename: str) -> None:
-    """파일 확장자 검증"""
-    ext = Path(filename).suffix.lower()
-    allowed = ALLOWED_EXTENSIONS.get(field_name, set())
-    if ext not in allowed:
-        raise HTTPException(
-            status_code=400,
-            detail=f"File extension '{ext}' is not allowed for field '{field_name}'. Allowed: {allowed}"
-        )
-
-
-def _get_file_dir(pr_item_id: str, field_name: str) -> Path:
-    """파일 저장 디렉토리 경로 반환"""
-    return Path(PR_FILES_DIR) / pr_item_id / field_name
-
-
-@router.post("/pr/items/{item_id}/files/{field_name}", status_code=201)
-async def upload_pr_file(
-    item_id: str,
-    field_name: str,
-    file: UploadFile = File(...),
-):
-    """PR 항목에 파일 업로드.
-    
-    - field_name: itemDetail, previewImage, engineeringImage, xmlSchema, fontFile
-    - 기존 파일이 있으면 덮어씀 (0..1 관계)
-    """
-    db = get_db()
-    
-    # 1) PR item 존재 확인 및 kind 조회
-    pr_doc = await db[COLL_PR_ITEMS].find_one({"_id": _oid(item_id)})
-    if not pr_doc:
-        raise HTTPException(status_code=404, detail="PR item not found")
-    
-    kind = pr_doc.get("kind")
-    
-    # 2) 파일 필드 검증
-    if field_name not in ALLOWED_FILE_FIELDS:
-        raise HTTPException(status_code=400, detail=f"Invalid field name: {field_name}")
-    _validate_file_field(kind, field_name)
-    
-    # 3) 파일 확장자 검증
-    original_name = file.filename or "unknown"
-    _validate_file_extension(field_name, original_name)
-    
-    # 4) 기존 파일 삭제 (0..1 관계이므로)
-    existing = await db[COLL_PR_FILES].find_one({
-        "prItemId": _oid(item_id),
-        "fieldName": field_name,
-    })
-    if existing:
-        # 기존 파일 삭제
-        old_path = _get_file_dir(item_id, field_name) / existing.get("storedName", "")
-        if old_path.exists():
-            old_path.unlink()
-        await db[COLL_PR_FILES].delete_one({"_id": existing["_id"]})
-    
-    # 5) 새 파일 저장
-    ext = Path(original_name).suffix.lower()
-    stored_name = f"{uuid.uuid4().hex}{ext}"
-    file_dir = _get_file_dir(item_id, field_name)
-    file_dir.mkdir(parents=True, exist_ok=True)
-    file_path = file_dir / stored_name
-    
-    # 파일 크기 계산 및 저장
-    content = await file.read()
-    file_size = len(content)
-    
-    async with aiofiles.open(file_path, "wb") as f:
-        await f.write(content)
-    
-    # 6) 메타데이터 저장
-    now = _now()
-    file_doc = {
-        "prItemId": _oid(item_id),
-        "fieldName": field_name,
-        "originalName": original_name,
-        "storedName": stored_name,
-        "mimeType": file.content_type,
-        "size": file_size,
-        "uploadedAt": now,
-        "createdAt": now,
-        "updatedAt": now,
-    }
-    res = await db[COLL_PR_FILES].insert_one(file_doc)
-    
-    # 7) PR item에 파일 참조 업데이트 (files 서브문서에 저장)
-    await db[COLL_PR_ITEMS].update_one(
-        {"_id": _oid(item_id)},
-        {
-            "$set": {
-                f"files.{field_name}": {
-                    "fileId": str(res.inserted_id),
-                    "originalName": original_name,
-                    "mimeType": file.content_type,
-                    "size": file_size,
-                },
-                "updatedAt": now,
-            }
-        }
-    )
-    
-    created = await db[COLL_PR_FILES].find_one({"_id": res.inserted_id})
-    return _dump_doc(created)
-
-
-@router.get("/pr/items/{item_id}/files/{field_name}")
-async def get_pr_file_info(item_id: str, field_name: str):
-    """PR 항목의 특정 필드 파일 메타데이터 조회"""
-    db = get_db()
-    
-    doc = await db[COLL_PR_FILES].find_one({
-        "prItemId": _oid(item_id),
-        "fieldName": field_name,
-    })
-    if not doc:
-        raise HTTPException(status_code=404, detail="File not found")
-    
-    return _dump_doc(doc)
-
-
-@router.get("/pr/items/{item_id}/files/{field_name}/download")
-async def download_pr_file(item_id: str, field_name: str):
-    """PR 항목의 파일 다운로드"""
-    db = get_db()
-    
-    doc = await db[COLL_PR_FILES].find_one({
-        "prItemId": _oid(item_id),
-        "fieldName": field_name,
-    })
-    if not doc:
-        raise HTTPException(status_code=404, detail="File not found")
-    
-    file_path = _get_file_dir(item_id, field_name) / doc.get("storedName", "")
-    if not file_path.exists():
-        raise HTTPException(status_code=404, detail="File not found on disk")
-    
-    return FileResponse(
-        path=str(file_path),
-        filename=doc.get("originalName"),
-        media_type=doc.get("mimeType") or "application/octet-stream",
-    )
-
-
-@router.delete("/pr/items/{item_id}/files/{field_name}")
-async def delete_pr_file(item_id: str, field_name: str):
-    """PR 항목의 파일 삭제"""
-    db = get_db()
-    
-    doc = await db[COLL_PR_FILES].find_one({
-        "prItemId": _oid(item_id),
-        "fieldName": field_name,
-    })
-    if not doc:
-        raise HTTPException(status_code=404, detail="File not found")
-    
-    # 파일 시스템에서 삭제
-    file_path = _get_file_dir(item_id, field_name) / doc.get("storedName", "")
-    if file_path.exists():
-        file_path.unlink()
-    
-    # DB에서 삭제
-    await db[COLL_PR_FILES].delete_one({"_id": doc["_id"]})
-    
-    # PR item에서 파일 참조 제거
-    now = _now()
-    await db[COLL_PR_ITEMS].update_one(
-        {"_id": _oid(item_id)},
-        {
-            "$unset": {f"files.{field_name}": ""},
-            "$set": {"updatedAt": now},
-        }
-    )
-    
-    return {"ok": True, "deleted": field_name}
-
-
-@router.get("/pr/items/{item_id}/files")
-async def list_pr_files(item_id: str):
-    """PR 항목의 모든 파일 목록 조회"""
-    db = get_db()
-    
-    cursor = db[COLL_PR_FILES].find({"prItemId": _oid(item_id)})
-    files = [_dump_doc(x) async for x in cursor]
-    
-    return {"files": files}

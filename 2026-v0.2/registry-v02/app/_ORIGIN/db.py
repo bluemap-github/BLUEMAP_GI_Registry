@@ -19,13 +19,6 @@ COLL_MGMT_INFO = "s100_re_managementinfo"
 # ✅ itemIdentifier 시퀀스 관리
 COLL_COUNTERS = "s100_re_counters"
 
-# ✅ PR 파일 메타데이터 (Blob 저장 정보)
-COLL_PR_FILES = "s100_pr_files"
-
-# 파일 저장 경로 (Docker volume mount 추천)
-import os
-PR_FILES_DIR = os.getenv("PR_FILES_DIR", "/data/pr_files")
-
 _client: AsyncIOMotorClient | None = None
 
 
@@ -65,9 +58,6 @@ async def init_indexes(db: AsyncIOMotorDatabase) -> None:
 
     # ✅ managementinfo: note/search용 인덱스 정도만
     await db[COLL_MGMT_INFO].create_index([("note", 1)])
-
-    # ✅ PR files: prItemId + fieldName 조합으로 빠른 조회
-    await db[COLL_PR_FILES].create_index([("prItemId", 1), ("fieldName", 1)])
 
 
 def attach_db(app: FastAPI) -> None:

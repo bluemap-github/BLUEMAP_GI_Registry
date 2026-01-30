@@ -1,0 +1,620 @@
+{% extends "base.html" %}
+
+{% block title %}BLUEMAP GI Registry{% endblock %}
+
+{% block extra_styles %}
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg: #f8fafc;
+    --card-bg: #fff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --info: #06b6d4;
+    --danger: #ef4444;
+    --radius: 8px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #0ea5e9 100%);
+    padding: 80px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .hero-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Category Cards Section */
+  .category-section {
+    margin-bottom: 32px;
+  }
+  .category-section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .category-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .category-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    padding: 16px 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .category-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--card-accent, var(--primary));
+  }
+  .category-card:hover {
+    border-color: var(--card-accent, var(--primary));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  .category-card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .category-card-count {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--card-accent, var(--primary));
+  }
+
+  /* Card accent colors - Data Repositories */
+  .category-card.registers { --card-accent: #f59e0b; }
+  .category-card.concepts { --card-accent: #8b5cf6; }
+  .category-card.dd { --card-accent: #06b6d4; }
+  .category-card.pr { --card-accent: #10b981; }
+
+  /* Create New Cards - Second Row */
+  .create-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .create-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 2px dashed var(--border);
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .create-card:hover {
+    border-color: var(--card-accent, var(--primary));
+    border-style: solid;
+    background: rgba(37, 99, 235, 0.02);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  .create-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--card-accent, var(--primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .create-card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .create-card-content {
+    flex: 1;
+  }
+  .create-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .create-card-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Create card accent colors */
+  .create-card.new-dd { --card-accent: #06b6d4; }
+  .create-card.new-pr { --card-accent: #10b981; }
+  .create-card.new-register { --card-accent: #f59e0b; }
+
+  @media (max-width: 1200px) {
+    .category-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .create-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .category-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .create-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 480px) {
+    .category-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Container */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  /* Section Header */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .view-all-link:hover {
+    color: var(--primary-hover);
+  }
+  .view-all-link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Table Section */
+  .table-section {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .table-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .table-info {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .table-container {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 600;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tbody tr:hover {
+    background: rgba(37, 99, 235, 0.04);
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .truncate {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .item-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .item-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+  }
+  .kind-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--primary);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge.draft {
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--info);
+  }
+  .badge.valid {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+  }
+  .badge.pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--warning);
+  }
+  .badge.deprecated {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+  }
+  .empty-state {
+    padding: 48px 16px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .empty-state h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 48px 16px; }
+    .hero-title { font-size: 32px; }
+    .hero-subtitle { font-size: 16px; }
+    .container { padding: 24px 16px; }
+    .section-title { font-size: 20px; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+</style>
+
+<script>
+  window.__INDEX_INITIAL__ = {
+    items: {{ initial_items_json | safe }}
+  };
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">BLUEMAP GI Registry</h1>
+    <p class="hero-subtitle">Geographic Information Registry for standardized data management</p>
+  </div>
+</section>
+
+<!-- Category Cards Section -->
+<div class="container">
+  <!-- First Row: Data Repositories -->
+  <div class="category-section">
+    <div class="category-section-label">Data Repositories</div>
+    <section class="category-cards">
+      <a href="/ui/registers" class="category-card registers">
+        <div class="category-card-title">GI Registers</div>
+        <div class="category-card-count" id="count-registers">-</div>
+      </a>
+      <a href="/ui/concepts" class="category-card concepts">
+        <div class="category-card-title">Concepts</div>
+        <div class="category-card-count" id="count-concepts">-</div>
+      </a>
+      <a href="/ui/dd" class="category-card dd">
+        <div class="category-card-title">Data Dictionary</div>
+        <div class="category-card-count" id="count-dd">-</div>
+      </a>
+      <a href="/ui/pr" class="category-card pr">
+        <div class="category-card-title">Portrayal</div>
+        <div class="category-card-count" id="count-pr">-</div>
+      </a>
+    </section>
+  </div>
+
+  <!-- Second Row: Create New Items -->
+  <div class="category-section">
+    <div class="category-section-label">Create New</div>
+    <section class="create-cards">
+      <a href="/ui/dd/new" class="create-card new-dd">
+        <div class="create-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </div>
+        <div class="create-card-content">
+          <div class="create-card-title">New Data Dictionary Item</div>
+          <div class="create-card-desc">Create a new DD entry</div>
+        </div>
+      </a>
+      <a href="/ui/pr/new" class="create-card new-pr">
+        <div class="create-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </div>
+        <div class="create-card-content">
+          <div class="create-card-title">New Portrayal Item</div>
+          <div class="create-card-desc">Create a new PR entry</div>
+        </div>
+      </a>
+      <a href="/ui/registers/new" class="create-card new-register">
+        <div class="create-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </div>
+        <div class="create-card-content">
+          <div class="create-card-title">New Register</div>
+          <div class="create-card-desc">Create a new GI Register</div>
+        </div>
+      </a>
+    </section>
+  </div>
+</div>
+
+<!-- Recently Added Section -->
+<div class="container" style="padding-top: 0;">
+  <header class="section-header">
+    <h2 class="section-title">Recently Added</h2>
+    <a href="/ui/dd" class="view-all-link">
+      View All
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </a>
+  </header>
+
+  <section class="table-section">
+    <div class="table-header">
+      <div class="table-info">
+        Showing latest <strong>20</strong> items
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Name</th>
+            <th>Camelcase</th>
+            <th>Definition</th>
+            <th>Kind</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr>
+            <td colspan="7">
+              <div class="empty-state">
+                <h3>Loading...</h3>
+                <p>Fetching recent items</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Helpers
+  function escapeHtml(s) {
+    const str = String(s ?? "");
+    return str
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function getStatusClass(status) {
+    const s = String(status || "").toLowerCase();
+    if (s === "draft") return "draft";
+    if (s === "valid") return "valid";
+    if (s === "pending") return "pending";
+    if (s === "deprecated") return "deprecated";
+    return "draft";
+  }
+
+  function normalizeItem(raw) {
+    const id = raw._id ?? raw.id ?? raw.itemIdentifier;
+    const c = raw.concept || {};
+    return {
+      id,
+      itemIdentifier: c.itemIdentifier ?? '',
+      name: c.name ?? '',
+      camelCase: c.camelCase ?? c.camelcase ?? '',
+      definition: c.definition ?? '',
+      kind: raw.kind ?? '',
+      status: c.itemStatus ?? '',
+      date: raw.updatedAt ?? raw.createdAt ?? null,
+    };
+  }
+
+  function formatDate(val) {
+    if (!val) return "";
+    const d = new Date(val);
+    if (isNaN(d.getTime())) return String(val);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function formatKind(kind) {
+    if (!kind) return "";
+    return kind.replace("S100_CD_", "").replace(/([A-Z])/g, " $1").trim();
+  }
+
+  // Fetch and render
+  async function fetchRecentItems() {
+    try {
+      const res = await fetch("/api/dd/items?limit=20&sortBy=updatedAt&sortOrder=desc", {
+        headers: { "Accept": "application/json" }
+      });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      const data = await res.json();
+      return Array.isArray(data.items) ? data.items.map(normalizeItem) : [];
+    } catch (err) {
+      console.error("Failed to fetch items:", err);
+      return [];
+    }
+  }
+
+  function renderTable(items) {
+    const tbody = document.getElementById("table-body");
+    if (!tbody) return;
+
+    if (!items || items.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7">
+            <div class="empty-state">
+              <h3>No items found</h3>
+              <p>There are no recently added items</p>
+            </div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+      tbody.innerHTML = items.map(item => `
+        <tr class="clickable-row" data-href="/ui/dd/${escapeHtml(item.id)}">
+          <td>${escapeHtml(item.itemIdentifier)}</td>
+          <td>
+            <a href="/ui/dd/${escapeHtml(item.id)}" class="item-link">
+              ${escapeHtml(item.name)}
+            </a>
+          </td>
+          <td>${escapeHtml(item.camelCase)}</td>
+          <td class="truncate" title="${escapeHtml(item.definition)}">${escapeHtml(item.definition)}</td>
+          <td><span class="kind-tag">${escapeHtml(formatKind(item.kind))}</span></td>
+          <td><span class="badge ${getStatusClass(item.status)}">${escapeHtml(item.status)}</span></td>
+          <td>${escapeHtml(formatDate(item.date))}</td>
+        </tr>
+      `).join("");
+
+      tbody.addEventListener('click', (e) => {
+        // 링크/버튼/입력요소 클릭은 기존 동작 유지
+        if (e.target.closest('a, button, input, textarea, select, label')) return;
+
+        const tr = e.target.closest('tr[data-href]');
+        if (!tr) return;
+
+        // 드래그로 텍스트 선택 중이면 이동하지 않음
+        const sel = window.getSelection?.();
+        if (sel && sel.toString().length > 0) return;
+
+        window.location.href = tr.dataset.href;
+      });
+  }
+
+  // Initialize
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Try to use initial data if available
+    const initialItems = window.__INDEX_INITIAL__?.items;
+    if (initialItems && initialItems.length > 0) {
+      renderTable(initialItems.map(normalizeItem));
+    } else {
+      // Fetch from API
+      const items = await fetchRecentItems();
+      renderTable(items);
+    }
+  });
+</script>
+{% endblock %}

@@ -1,6 +1,15 @@
-fastapi==0.115.6
-uvicorn[standard]==0.30.6
-jinja2==3.1.4
-python-multipart==0.0.9
-motor==3.6.1
-python-dotenv==1.0.1
+# FastAPI + async MongoDB
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.0.0
+motor>=3.3.0
+pymongo>=4.6.0
+
+# Async file I/O for file uploads
+aiofiles>=23.2.0
+
+# BSON/ObjectId handling
+python-multipart>=0.0.6
+
+# Jinja2 templates
+jinja2>=3.1.0

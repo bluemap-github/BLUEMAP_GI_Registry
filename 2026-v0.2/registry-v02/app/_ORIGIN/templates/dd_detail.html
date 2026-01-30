@@ -1,0 +1,507 @@
+{% extends "base.html" %}
+
+{% set c = item.concept or {} %}
+{% block title %}Item #{{ c.itemIdentifier or '-' }}{% endblock %}
+
+{% block extra_styles %}
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--primary:#2563eb;--primary-hover:#1d4ed8;--bg:#f8fafc;--card:#ffffff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:12px}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  .container{max-width:1200px;margin:0 auto;padding:24px}
+  .breadcrumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-bottom:14px}
+  .breadcrumb a{color:var(--muted);text-decoration:none}
+  .breadcrumb a:hover{color:var(--primary)}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .title h1{font-size:28px;font-weight:800}
+  .title .sub{color:var(--muted);font-size:14px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn.primary:hover{background:var(--primary-hover)}
+  .btn.ghost{background:#fff}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .tab{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--muted);font-weight:700;cursor:pointer}
+  .tab.active{color:var(--primary);border-color:rgba(37,99,235,.35);background:rgba(37,99,235,.08)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+  .card-h{padding:12px 16px;border-bottom:1px solid var(--border);background:#fafbff;font-weight:800}
+  .card-b{padding:14px 16px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .row{display:flex;gap:10px}
+  .k{width:180px;color:var(--muted);font-weight:700;font-size:13px}
+  .v{flex:1}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace}
+  .badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid var(--border)}
+  .b-draft{background:rgba(245,158,11,.10);color:#b45309;border-color:rgba(245,158,11,.25)}
+  .b-valid{background:rgba(16,185,129,.10);color:#047857;border-color:rgba(16,185,129,.25)}
+  .b-dep{background:rgba(239,68,68,.10);color:#b91c1c;border-color:rgba(239,68,68,.25)}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left;font-size:14px}
+  th{color:var(--muted);font-weight:800;background:#fafafa}
+  .empty{color:var(--muted);font-size:14px}
+  pre{white-space:pre-wrap;word-break:break-word;background:#0b1020;color:#e5e7eb;padding:12px;border-radius:12px;overflow:auto}
+  .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 24px}
+  @media(max-width:1100px){.info-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:800px){.info-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:500px){.info-grid{grid-template-columns:1fr}}
+  .info-item{display:flex;flex-direction:column;gap:4px}
+  .info-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+  .info-value{font-size:14px;color:var(--text)}
+  .divider{height:1px;background:var(--border);margin:20px 0}
+  .text-fields{display:flex;flex-direction:column;gap:16px}
+  .text-field{display:flex;flex-direction:column;gap:6px}
+  .text-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+  .text-value{font-size:14px;color:var(--text);line-height:1.7;min-height:44px;padding:10px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:8px}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">Home</a><span>/</span>
+    <a href="/ui/dd">Data Dictionary Register</a><span>/</span>
+    <span class="mono">Item #{{ c.itemIdentifier or '-' }}</span>
+  </nav>
+
+  <div class="top">
+    <div class="title">
+      <h1>{{ c.name or '(no name)' }}</h1>
+      <div class="sub">kind: <span class="mono">{{ item.kind }}</span> &middot; _id: <span class="mono">{{ item._id }}</span></div>
+    </div>
+    <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a class="btn ghost" href="/ui/dd">Back to list</a>
+      {% if item.kind == 'S100_Concept' %}
+        <a class="btn" href="/ui/dd/new?fromConceptId={{ item._id }}">Convert</a>
+      {% endif %}
+      <a class="btn primary" href="/ui/dd/{{ item._id }}/edit">Edit</a>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="basic">Basic</button>
+    <button class="tab" data-tab="management">Management</button>
+    <button class="tab" data-tab="refsource">Reference Source</button>
+    <button class="tab" data-tab="refs">References</button>
+  </div>
+
+  <!-- BASIC -->
+  <section class="tab-panel" data-tab="basic">
+    <div class="card">
+      <div class="card-h">Item Details</div>
+      <div class="card-b">
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Item Identifier</div>
+            <div class="info-value mono">{{ c.itemIdentifier or '-' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Name</div>
+            <div class="info-value">{{ c.name or '-' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">CamelCase</div>
+            <div class="info-value mono">{{ c.camelCase or '-' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Status</div>
+            <div class="info-value">
+              {% set st = (c.itemStatus or '')|lower %}
+              {% if st == 'valid' %}<span class="badge b-valid">{{ c.itemStatus }}</span>
+              {% elif st in ['deprecated','retired'] %}<span class="badge b-dep">{{ c.itemStatus }}</span>
+              {% else %}<span class="badge b-draft">{{ c.itemStatus or 'Draft' }}</span>{% endif %}
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Kind</div>
+            <div class="info-value mono">{{ item.kind }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Similarity To Source</div>
+            <div class="info-value">{{ c.similarityToSource or '-' }}</div>
+          </div>
+          {% if item.kind == 'S100_CD_Feature' %}
+            {% set body = item.get(item.kind) or {} %}
+            <div class="info-item">
+              <div class="info-label">Feature Use Type</div>
+              <div class="info-value">{{ body.featureUseType or '-' }}</div>
+            </div>
+          {% elif item.kind == 'S100_CD_EnumeratedValue' %}
+            {% set body = item.get(item.kind) or {} %}
+            <div class="info-item">
+              <div class="info-label">Numeric Code</div>
+              <div class="info-value mono">{{ body.numericCode or '-' }}</div>
+            </div>
+          {% elif item.kind == 'S100_CD_SimpleAttribute' %}
+            {% set body = item.get(item.kind) or {} %}
+            <div class="info-item">
+              <div class="info-label">Value Type</div>
+              <div class="info-value">{{ body.valueType or '-' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Quantity Specification</div>
+              <div class="info-value">{{ body.quantitySpecification or '-' }}</div>
+            </div>
+          {% endif %}
+          <div class="info-item">
+            <div class="info-label">Alias</div>
+            <div class="info-value">{% if c.alias %}{{ c.alias|join(', ') }}{% else %}-{% endif %}</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="text-fields">
+          <div class="text-field">
+            <div class="text-label">Definition</div>
+            <div class="text-value">{{ c.definition or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Remarks</div>
+            <div class="text-value">{{ c.remarks or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Definition Source</div>
+            <div class="text-value">{{ c.definitionSource or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Reference</div>
+            <div class="text-value">{{ c.reference or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Proposed Change</div>
+            <div class="text-value">{{ c.proposedChange or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Justification</div>
+            <div class="text-value">{{ c.justification or '-' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature / Information: distinctionIds -->
+    {% if item.kind in ['S100_CD_Feature', 'S100_CD_Information'] %}
+    <div class="card">
+      <div class="card-h">Related {{ 'Features' if item.kind == 'S100_CD_Feature' else 'Information' }} (distinctions)</div>
+      <div class="card-b">
+        {% if distinctions and distinctions|length > 0 %}
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+            Related {{ 'Feature' if item.kind == 'S100_CD_Feature' else 'Information' }} items. (0..* relationship)
+          </p>
+          <div style="overflow:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:100px;">Identifier</th>
+                  <th>Name</th>
+                  <th style="width:120px;">Status</th>
+                  <th style="width:80px;">Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for d in distinctions %}
+                  {% set dc = d.concept or {} %}
+                  <tr>
+                    <td class="mono">{{ dc.itemIdentifier or '-' }}</td>
+                    <td>{{ dc.name or '-' }}</td>
+                    <td>
+                      {% set dst = (dc.itemStatus or '')|lower %}
+                      {% if dst == 'valid' %}<span class="badge b-valid">{{ dc.itemStatus }}</span>
+                      {% elif dst in ['deprecated','retired'] %}<span class="badge b-dep">{{ dc.itemStatus }}</span>
+                      {% else %}<span class="badge b-draft">{{ dc.itemStatus or 'Draft' }}</span>{% endif %}
+                    </td>
+                    <td><a href="/ui/dd/{{ d._id }}" class="btn" style="padding:4px 8px;font-size:12px;">View</a></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty">No related {{ 'Feature' if item.kind == 'S100_CD_Feature' else 'Information' }} items.</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- EnumeratedValue: parentSimpleAttributeId -->
+    {% if item.kind == 'S100_CD_EnumeratedValue' %}
+    <div class="card">
+      <div class="card-h">Parent Simple Attribute (required)</div>
+      <div class="card-b">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+          EnumeratedValue must belong to a SimpleAttribute.
+        </p>
+        {% if parent_attribute %}
+          {% set pc = parent_attribute.concept or {} %}
+          <div class="info-grid" style="grid-template-columns:repeat(3,1fr);">
+            <div class="info-item">
+              <div class="info-label">Identifier</div>
+              <div class="info-value mono">{{ pc.itemIdentifier or '-' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Name</div>
+              <div class="info-value">{{ pc.name or '-' }}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Value Type</div>
+              {% set pab = parent_attribute.get('S100_CD_SimpleAttribute') or {} %}
+              <div class="info-value">{{ pab.valueType or '-' }}</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <a href="/ui/dd/{{ parent_attribute._id }}" class="btn">View Parent Attribute</a>
+          </div>
+        {% else %}
+          <div class="empty" style="color:#b91c1c;">Parent SimpleAttribute not set. (Required)</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- SimpleAttribute: attributeConstraints + EnumeratedValue children -->
+    {% if item.kind == 'S100_CD_SimpleAttribute' %}
+      {% set sab = item.get('S100_CD_SimpleAttribute') or {} %}
+      {% set ac = sab.attributeConstraints or {} %}
+
+      <div class="card">
+        <div class="card-h">Attribute Constraints (0..1)</div>
+        <div class="card-b">
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+            Constraints for attribute values.
+          </p>
+          {% if ac and (ac.stringLength or ac.textPattern or ac.range or ac.precision) %}
+            <div class="info-grid" style="grid-template-columns:repeat(4,1fr);">
+              <div class="info-item">
+                <div class="info-label">String Length</div>
+                <div class="info-value mono">{{ ac.stringLength or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Text Pattern</div>
+                <div class="info-value mono">{{ ac.textPattern or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Range</div>
+                <div class="info-value mono">{{ ac.range or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Precision</div>
+                <div class="info-value mono">{{ ac.precision or '-' }}</div>
+              </div>
+            </div>
+          {% else %}
+            <div class="empty">No constraints set.</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">Enumerated Values (0..*)</div>
+        <div class="card-b">
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+            Enumerated values for this attribute (valueType: enumeration or S100_CodeList).
+          </p>
+          {% if enumerated_values and enumerated_values|length > 0 %}
+            <div style="overflow:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:100px;">Numeric Code</th>
+                    <th style="width:100px;">Identifier</th>
+                    <th>Name</th>
+                    <th style="width:120px;">Status</th>
+                    <th style="width:80px;">Link</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for ev in enumerated_values %}
+                    {% set evc = ev.concept or {} %}
+                    {% set evb = ev.get('S100_CD_EnumeratedValue') or {} %}
+                    <tr>
+                      <td class="mono">{{ evb.numericCode or '-' }}</td>
+                      <td class="mono">{{ evc.itemIdentifier or '-' }}</td>
+                      <td>{{ evc.name or '-' }}</td>
+                      <td>
+                        {% set evst = (evc.itemStatus or '')|lower %}
+                        {% if evst == 'valid' %}<span class="badge b-valid">{{ evc.itemStatus }}</span>
+                        {% elif evst in ['deprecated','retired'] %}<span class="badge b-dep">{{ evc.itemStatus }}</span>
+                        {% else %}<span class="badge b-draft">{{ evc.itemStatus or 'Draft' }}</span>{% endif %}
+                      </td>
+                      <td><a href="/ui/dd/{{ ev._id }}" class="btn" style="padding:4px 8px;font-size:12px;">View</a></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="empty">No EnumeratedValues linked.</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- ComplexAttribute: subAttributes -->
+    {% if item.kind == 'S100_CD_ComplexAttribute' %}
+    <div class="card">
+      <div class="card-h">Sub Attributes (1..*)</div>
+      <div class="card-b">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+          Sub-attributes contained in this complex attribute. Can reference SimpleAttribute or ComplexAttribute.
+        </p>
+        {% if sub_attributes and sub_attributes|length > 0 %}
+          <div style="overflow:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:60px;">#</th>
+                  <th style="width:100px;">Identifier</th>
+                  <th>Name</th>
+                  <th style="width:150px;">Kind</th>
+                  <th style="width:120px;">Multiplicity</th>
+                  <th style="width:90px;">Sequential</th>
+                  <th style="width:80px;">Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for sa in sub_attributes %}
+                  {% set sau = sa.usage or {} %}
+                  {% set saa = sa.attribute or {} %}
+                  {% set saac = saa.concept or {} %}
+                  {% set mult = sau.multiplicity or {} %}
+                  <tr>
+                    <td class="mono">{{ loop.index }}</td>
+                    <td class="mono">{{ saac.itemIdentifier or '-' }}</td>
+                    <td>{{ saac.name or '(missing)' }}</td>
+                    <td class="mono" style="font-size:12px;">{{ saa.kind or '-' }}</td>
+                    <td class="mono">
+                      {{ mult.lower or '0' }}..{% if mult.infinite == 'true' %}*{% else %}{{ mult.upper or '1' }}{% endif %}
+                    </td>
+                    <td>
+                      {% if sau.sequential == 'true' %}
+                        <span class="badge b-valid">Yes</span>
+                      {% else %}
+                        <span class="badge b-draft">No</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if saa._id %}
+                        <a href="/ui/dd/{{ saa._id }}" class="btn" style="padding:4px 8px;font-size:12px;">View</a>
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty" style="color:#b91c1c;">No sub-attributes. (At least 1 required)</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+  </section>
+
+  <!-- MANAGEMENT -->
+  <section class="tab-panel" data-tab="management" style="display:none;">
+    <div class="card">
+      <div class="card-h">Management Information (history)</div>
+      <div class="card-b">
+        {% if mgmt_infos and mgmt_infos|length > 0 %}
+          <div style="overflow:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:120px;">dateProposed</th>
+                  <th style="width:140px;">proposalType</th>
+                  <th style="width:140px;">proposalStatus</th>
+                  <th style="width:220px;">submittingOrganisation</th>
+                  <th>proposedChange</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for m in mgmt_infos %}
+                  <tr>
+                    <td class="mono">{{ (m.dateProposed or '')[:10] }}</td>
+                    <td>{{ m.proposalType or '-' }}</td>
+                    <td>{{ m.proposalStatus or '-' }}</td>
+                    <td>{{ m.submittingOrganisation or '-' }}</td>
+                    <td>{{ m.proposedChange or '-' }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty">No management info records.</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- REF SOURCE -->
+  <section class="tab-panel" data-tab="refsource" style="display:none;">
+    <div class="card">
+      <div class="card-h">Reference Source (0..1)</div>
+      <div class="card-b">
+        {% if reference_source %}
+          <div class="row"><div class="k">_id</div><div class="v mono">{{ reference_source._id }}</div></div>
+          <div class="row"><div class="k">name</div><div class="v">{{ reference_source.name }}</div></div>
+          <div class="row"><div class="k">description</div><div class="v">{{ reference_source.description or '-' }}</div></div>
+        {% else %}
+          <div class="empty">(none)</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- REFS -->
+  <section class="tab-panel" data-tab="refs" style="display:none;">
+    <div class="card">
+      <div class="card-h">References (0..*)</div>
+      <div class="card-b">
+        {% if references and references|length > 0 %}
+          <div style="overflow:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:80px;">#</th>
+                  <th>title</th>
+                  <th style="width:360px;">locator</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in references %}
+                  <tr>
+                    <td class="mono">{{ loop.index }}</td>
+                    <td>{{ r.title or '-' }}</td>
+                    <td class="mono">{{ r.locator or '-' }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty">No references.</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // tabs
+  const tabs = document.querySelectorAll('#tabs .tab');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    const key = t.getAttribute('data-tab');
+    panels.forEach(p => p.style.display = (p.getAttribute('data-tab')===key) ? '' : 'none');
+  }));
+</script>
+{% endblock %}

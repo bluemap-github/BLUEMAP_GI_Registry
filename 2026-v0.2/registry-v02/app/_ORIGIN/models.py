@@ -369,30 +369,8 @@ class PRRegisterItemPatch(BaseModel):
     # append-only management info
     managementInfo: ManagementInfoCreate
 
-# ---------- 2c) PR File Metadata ----------
-# PR 항목에 첨부된 파일 메타데이터 (Blob 저장용)
-class PRFileMetadata(BaseModel):
-    """PR 항목에 첨부된 파일의 메타데이터"""
-    originalName: str = Field(..., description="원본 파일명")
-    storedName: str = Field(..., description="저장된 파일명 (UUID 기반)")
-    mimeType: Optional[str] = None
-    size: int = Field(..., description="파일 크기 (bytes)")
-    uploadedAt: Optional[datetime] = None
-
-
-# Kind별 파일 필드 정의
-PR_FILE_FIELDS_BY_KIND = {
-    "S100_PR_Symbol": ["itemDetail", "previewImage", "engineeringImage"],
-    "S100_PR_LineStyle": ["itemDetail", "previewImage", "engineeringImage"],
-    "S100_PR_AreaFill": ["itemDetail", "previewImage", "engineeringImage"],
-    "S100_PR_Pixmap": ["itemDetail", "previewImage", "engineeringImage"],
-    "S100_PR_ItemSchema": ["xmlSchema"],
-    "S100_PR_Font": ["fontFile"],
-}
-
-
 # ---------- 3) Reference Sources ----------
-# (현재 UI/API 호환성 위해 MVP 구조 유지)
+# (현재 UI/API 호환��� 위해 MVP 구조 유지)
 class ReferenceSourceCreate(BaseModel):
     name: str
     description: Optional[str] = None

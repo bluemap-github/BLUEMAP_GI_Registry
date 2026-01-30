@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% set c = item.concept or {} %}
+{% block title %}Concept #{{ c.itemIdentifier }}{% endblock %}
+
+{% block extra_styles %}
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--primary:#2563eb;--primary-hover:#1d4ed8;--bg:#f8fafc;--card-bg:#fff;--text:#1e293b;--text-muted:#64748b;--border:#e2e8f0;--radius:8px;--success:#10b981;--warning:#f59e0b;--info:#06b6d4;--danger:#ef4444}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  .container{max-width:1200px;margin:0 auto;padding:24px}
+  .breadcrumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-muted);margin-bottom:16px}
+  .breadcrumb a{color:var(--text-muted);text-decoration:none}
+  .breadcrumb a:hover{color:var(--primary)}
+  .breadcrumb .current{color:var(--primary);font-weight:500}
+  .page-title-wrapper{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
+  .page-title{font-size:28px;font-weight:700}
+  .badge{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--border);background:#fff}
+  .badge-info{color:var(--info);background:rgba(6,182,212,.12);border-color:rgba(6,182,212,.25)}
+  .badge-success{color:var(--success);background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.25)}
+  .badge-warning{color:var(--warning);background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.25)}
+  .badge-danger{color:var(--danger);background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25)}
+  .badge-neutral{color:var(--text-muted);background:rgba(100,116,139,.10);border-color:rgba(100,116,139,.20)}
+
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .card-header{padding:16px 20px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .card-title{font-size:16px;font-weight:800}
+  .card-body{padding:16px 20px}
+
+  .detail-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width: 980px){.detail-list{grid-template-columns:1fr}}
+  .detail-item{padding:10px 12px;border:1px solid var(--border);border-radius:10px}
+  .detail-label{font-size:12px;color:var(--text-muted);margin-bottom:4px}
+  .detail-value{font-weight:600;word-break:break-word}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:13px}
+
+  .link{color:var(--primary);text-decoration:none}
+  .link:hover{text-decoration:underline}
+  .empty{color:var(--text-muted);font-size:13px}
+  .pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--border);font-weight:700;font-size:12px;background:#fff;margin-right:6px;margin-bottom:6px}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">Home</a>
+    <span>/</span>
+    <a href="/ui/registers">GI Registers</a>
+    <span>/</span>
+    <a href="/ui/concepts">Concept Register</a>
+    <span>/</span>
+    <span class="current">Concept #{{ c.itemIdentifier }}</span>
+  </nav>
+
+  <div class="page-title-wrapper">
+    <h1 class="page-title">{{ c.name }}</h1>
+    <span class="badge badge-info">{{ item.kind }}</span>
+  </div>
+
+  {% set _status = (c.itemStatus or '')|lower %}
+  {% if _status in ['valid','active','approved'] %}
+    {% set _status_cls = 'badge-success' %}
+  {% elif _status in ['deprecated','retired','invalid','notvalid'] %}
+    {% set _status_cls = 'badge-danger' %}
+  {% elif _status in ['draft','proposed','planned','processing'] %}
+    {% set _status_cls = 'badge-warning' %}
+  {% else %}
+    {% set _status_cls = 'badge-neutral' %}
+  {% endif %}
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Concept Details</div>
+        <span class="badge {{ _status_cls }}">{{ c.itemStatus or 'Unspecified' }}</span>
+      </div>
+      <div class="card-body">
+        <div class="detail-list">
+          <div class="detail-item"><div class="detail-label">_id</div><div class="detail-value mono">{{ item._id }}</div></div>
+          <div class="detail-item"><div class="detail-label">Register ID</div><div class="detail-value mono">{{ item.registerId }}</div></div>
+          <div class="detail-item"><div class="detail-label">Item Identifier</div><div class="detail-value mono">{{ c.itemIdentifier }}</div></div>
+          <div class="detail-item"><div class="detail-label">CamelCase</div><div class="detail-value mono">{{ c.camelCase or '-' }}</div></div>
+          <div class="detail-item"><div class="detail-label">Alias</div><div class="detail-value">{{ c.alias | join(', ') if c.alias else '-' }}</div></div>
+          <div class="detail-item"><div class="detail-label">Definition</div><div class="detail-value">{{ c.definition or '-' }}</div></div>
+          <div class="detail-item"><div class="detail-label">Remarks</div><div class="detail-value">{{ c.remarks or '-' }}</div></div>
+          <div class="detail-item"><div class="detail-label">Definition Source</div><div class="detail-value">{{ c.definitionSource or '-' }}</div></div>
+          <div class="detail-item"><div class="detail-label">Reference</div><div class="detail-value">{{ c.reference or '-' }}</div></div>
+          <div class="detail-item"><div class="detail-label">Similarity to Source</div><div class="detail-value">{{ c.similarityToSource or '-' }}</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><div class="card-title">Create Data Dictionary Item</div></div>
+        <div class="card-body">
+          {% if current_kind == 'S100_Concept' %}
+            <a class="pill link" href="/ui/dd/new?fromConceptId={{ item._id }}">Convert this Concept...</a>
+          {% else %}
+            <div class="empty">Already typed: {{ current_kind }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Actions</div></div>
+        <div class="card-body">
+          <a class="pill link" href="/ui/dd/{{ item._id }}/edit">Edit</a>
+          <a class="pill link" href="/ui/dd/new">New DD / Concept</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

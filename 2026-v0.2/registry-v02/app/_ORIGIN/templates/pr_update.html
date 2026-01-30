@@ -85,25 +85,6 @@
     /* New Source Fields */
     .new-source-fields{display:none;grid-column:1/-1;}
     .new-source-fields.show{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-    /* File upload styling */
-    .file-section{display:none;grid-column:1/-1;}
-    .file-section.active{display:block}
-    .file-drop{border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbff}
-    .file-drop:hover,.file-drop.dragover{border-color:var(--primary);background:rgba(37,99,235,.04)}
-    .file-drop-icon{font-size:28px;color:var(--muted);margin-bottom:6px}
-    .file-drop-text{font-size:13px;color:var(--muted)}
-    .file-drop-text strong{color:var(--primary);cursor:pointer}
-    .file-current{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
-    .file-current-icon{width:32px;height:32px;background:var(--bg);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:14px}
-    .file-current-info{flex:1;min-width:0}
-    .file-current-name{font-size:13px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .file-current-size{font-size:11px;color:var(--muted)}
-    .file-current-actions{display:flex;gap:6px}
-    .file-pending{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fef9c3;border:1px solid #fcd34d;border-radius:8px;margin-top:8px}
-    .file-pending-icon{font-size:14px}
-    .file-pending-text{flex:1;font-size:12px;color:#92400e}
-    .file-pending-remove{background:none;border:none;color:#92400e;cursor:pointer;font-size:16px;padding:4px}
 </style>
 {% endblock %}
 
@@ -613,75 +594,6 @@
       </div>
     </div>
 
-    <!-- File Upload Card (for file-based kinds) -->
-    <div class="card" id="fileUploadCard" style="display:none;">
-      <div class="card-h">Attached Files</div>
-      <div class="card-b">
-        <div class="grid">
-          <!-- itemDetail file -->
-          <div id="file_itemDetail_section" class="file-section">
-            <label>Item Detail File</label>
-            <div id="file_itemDetail_current"></div>
-            <div class="file-drop" data-target="itemDetail">
-              <div class="file-drop-icon">📁</div>
-              <div class="file-drop-text">Drop new file or <strong>browse</strong> to replace</div>
-            </div>
-            <input type="file" id="file_itemDetail" style="display:none" />
-            <div id="file_itemDetail_pending"></div>
-          </div>
-
-          <!-- previewImage file -->
-          <div id="file_previewImage_section" class="file-section">
-            <label>Preview Image</label>
-            <div id="file_previewImage_current"></div>
-            <div class="file-drop" data-target="previewImage">
-              <div class="file-drop-icon">🖼️</div>
-              <div class="file-drop-text">Drop new file or <strong>browse</strong> to replace</div>
-            </div>
-            <input type="file" id="file_previewImage" style="display:none" />
-            <div id="file_previewImage_pending"></div>
-          </div>
-
-          <!-- engineeringImage file -->
-          <div id="file_engineeringImage_section" class="file-section">
-            <label>Engineering Image</label>
-            <div id="file_engineeringImage_current"></div>
-            <div class="file-drop" data-target="engineeringImage">
-              <div class="file-drop-icon">🖼️</div>
-              <div class="file-drop-text">Drop new file or <strong>browse</strong> to replace</div>
-            </div>
-            <input type="file" id="file_engineeringImage" style="display:none" />
-            <div id="file_engineeringImage_pending"></div>
-          </div>
-
-          <!-- xmlSchema file -->
-          <div id="file_xmlSchema_section" class="file-section">
-            <label>XML Schema</label>
-            <div id="file_xmlSchema_current"></div>
-            <div class="file-drop" data-target="xmlSchema">
-              <div class="file-drop-icon">📄</div>
-              <div class="file-drop-text">Drop new file or <strong>browse</strong> to replace</div>
-            </div>
-            <input type="file" id="file_xmlSchema" style="display:none" />
-            <div id="file_xmlSchema_pending"></div>
-          </div>
-
-          <!-- fontFile file -->
-          <div id="file_fontFile_section" class="file-section">
-            <label>Font File</label>
-            <div id="file_fontFile_current"></div>
-            <div class="file-drop" data-target="fontFile">
-              <div class="file-drop-icon">🔤</div>
-              <div class="file-drop-text">Drop new file or <strong>browse</strong> to replace</div>
-            </div>
-            <input type="file" id="file_fontFile" style="display:none" />
-            <div id="file_fontFile_pending"></div>
-          </div>
-        </div>
-        <div class="hint" style="margin-top:12px;">Upload new files to replace existing ones. Files are uploaded when you save.</div>
-      </div>
-    </div>
-
     <!-- References Card -->
     <div class="card">
       <div class="card-h">References / Reference Source</div>
@@ -797,180 +709,6 @@
     const n = Number(s);
     return Number.isFinite(n) ? n : null;
   }
-
-  // ========== File Upload ==========
-  const FILE_BASED_KINDS = [
-    'S100_PR_Symbol', 'S100_PR_LineStyle', 'S100_PR_AreaFill', 'S100_PR_Pixmap',
-    'S100_PR_ItemSchema', 'S100_PR_Font'
-  ];
-
-  const FILE_FIELDS_BY_KIND = {
-    'S100_PR_Symbol': ['itemDetail', 'previewImage', 'engineeringImage'],
-    'S100_PR_LineStyle': ['itemDetail', 'previewImage', 'engineeringImage'],
-    'S100_PR_AreaFill': ['itemDetail', 'previewImage', 'engineeringImage'],
-    'S100_PR_Pixmap': ['itemDetail', 'previewImage', 'engineeringImage'],
-    'S100_PR_ItemSchema': ['xmlSchema'],
-    'S100_PR_Font': ['fontFile'],
-  };
-
-  const pendingFiles = {}; // fieldName -> File object
-
-  function formatFileSize(bytes) {
-    if (!bytes) return '-';
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-  }
-
-  function setFileUploadVisibility() {
-    const card = el('fileUploadCard');
-    if (!FILE_BASED_KINDS.includes(kind)) {
-      card.style.display = 'none';
-      return;
-    }
-
-    card.style.display = 'block';
-    const fields = FILE_FIELDS_BY_KIND[kind] || [];
-
-    ['itemDetail', 'previewImage', 'engineeringImage', 'xmlSchema', 'fontFile'].forEach(fieldName => {
-      const section = el(`file_${fieldName}_section`);
-      if (section) {
-        section.classList.toggle('active', fields.includes(fieldName));
-      }
-    });
-  }
-
-  async function loadCurrentFiles() {
-    if (!FILE_BASED_KINDS.includes(kind)) return;
-
-    try {
-      const res = await fetch(`/api/pr/items/${item._id}/files`);
-      if (!res.ok) return;
-
-      const data = await res.json();
-      const filesMap = {};
-      (data.files || []).forEach(f => {
-        filesMap[f.fieldName] = f;
-      });
-
-      const fields = FILE_FIELDS_BY_KIND[kind] || [];
-      fields.forEach(fieldName => {
-        const currentEl = el(`file_${fieldName}_current`);
-        if (!currentEl) return;
-
-        const file = filesMap[fieldName];
-        if (file) {
-          const isImage = (file.mimeType || '').startsWith('image/');
-          currentEl.innerHTML = `
-            <div class="file-current">
-              <div class="file-current-icon">${isImage ? '🖼️' : '📄'}</div>
-              <div class="file-current-info">
-                <div class="file-current-name">${file.originalName}</div>
-                <div class="file-current-size">${formatFileSize(file.size)}</div>
-              </div>
-              <div class="file-current-actions">
-                <a class="btn ghost" href="/api/pr/items/${item._id}/files/${fieldName}/download" style="padding:6px 10px;font-size:12px;">Download</a>
-              </div>
-            </div>
-          `;
-        } else {
-          currentEl.innerHTML = '<div style="font-size:13px;color:var(--muted);margin-bottom:8px;">No file uploaded</div>';
-        }
-      });
-    } catch (err) {
-      console.error('Failed to load current files:', err);
-    }
-  }
-
-  function initFileUploadHandlers() {
-    const targets = ['itemDetail', 'previewImage', 'engineeringImage', 'xmlSchema', 'fontFile'];
-
-    targets.forEach(target => {
-      const dropZone = document.querySelector(`.file-drop[data-target="${target}"]`);
-      const fileInput = el('file_' + target);
-
-      if (!dropZone || !fileInput) return;
-
-      dropZone.addEventListener('click', () => fileInput.click());
-
-      dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-      });
-
-      dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('dragover');
-      });
-
-      dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-          handleFileSelect(target, files[0]);
-        }
-      });
-
-      fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-          handleFileSelect(target, e.target.files[0]);
-        }
-      });
-    });
-  }
-
-  function handleFileSelect(target, file) {
-    if (!file) return;
-    pendingFiles[target] = file;
-    renderPendingFile(target, file);
-  }
-
-  function renderPendingFile(target, file) {
-    const pendingEl = el(`file_${target}_pending`);
-    if (!pendingEl) return;
-
-    pendingEl.innerHTML = `
-      <div class="file-pending">
-        <span class="file-pending-icon">📎</span>
-        <span class="file-pending-text">New file: <strong>${file.name}</strong> (${formatFileSize(file.size)}) - will be uploaded on save</span>
-        <button type="button" class="file-pending-remove" onclick="removePendingFile('${target}')">&times;</button>
-      </div>
-    `;
-  }
-
-  function removePendingFile(target) {
-    delete pendingFiles[target];
-    const pendingEl = el(`file_${target}_pending`);
-    if (pendingEl) pendingEl.innerHTML = '';
-  }
-
-  async function uploadPendingFiles() {
-    const results = [];
-    for (const [fieldName, file] of Object.entries(pendingFiles)) {
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        const res = await fetch(`/api/pr/items/${item._id}/files/${fieldName}`, {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!res.ok) {
-          const data = await res.json();
-          throw new Error(data.detail || 'Upload failed');
-        }
-
-        results.push({ fieldName, success: true });
-      } catch (err) {
-        results.push({ fieldName, success: false, error: err.message });
-      }
-    }
-    return results;
-  }
-
-  // Make removePendingFile available globally
-  window.removePendingFile = removePendingFile;
 
   // ========== Multi-Select Chips UI ==========
   function initMultiSelect(container) {
@@ -1776,11 +1514,6 @@
     // Show/hide sections based on kind
     setRelVisibility(kind);
     setKindBodyVisibility(kind);
-    setFileUploadVisibility();
-
-    // Initialize file upload handlers and load current files
-    initFileUploadHandlers();
-    await loadCurrentFiles();
 
     // Load options and reference sources
     await loadReferenceSources();
@@ -1884,20 +1617,7 @@
       return;
     }
 
-    // Upload pending files
-    if (Object.keys(pendingFiles).length > 0) {
-      showToast('Metadata saved. Uploading files...', 'success');
-      const uploadResults = await uploadPendingFiles();
-      const failed = uploadResults.filter(r => !r.success);
-      if (failed.length > 0) {
-        showToast(`Files partially failed: ${failed.map(f => f.fieldName).join(', ')}`, 'error');
-      } else {
-        showToast('Saved with files!', 'success');
-      }
-    } else {
-      showToast('Saved!', 'success');
-    }
-
+    showToast('Saved!', 'success');
     setTimeout(()=>{ window.location.href = `/ui/pr/${item._id}`; }, 450);
   });
 </script>
