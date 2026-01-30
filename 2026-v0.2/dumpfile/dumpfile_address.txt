@@ -1,0 +1,4 @@
+https://crimson-satellite-543159.postman.co/workspace/47034ddf-d0ee-47fa-88c2-57410c32173b/request/20596429-5acc1eee-8dab-48a4-80a9-2a60dd97b1c1
+
+https://registry.iho.int/api/dataDictionary.json?serviceKey=bluemapServiceKey&type=3&numOfRows=3&startNumOfRows=0
+https://registry.iho.int/api/portrayal.json?serviceKey=bluemapServiceKey&type=3&numOfRows=3&startNumOfRows=0

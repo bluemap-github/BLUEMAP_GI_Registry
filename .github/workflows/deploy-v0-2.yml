@@ -25,18 +25,19 @@ jobs:
             PROJECT_ROOT="$HOME/BLUEMAP_GI_Registry"
             DEMO_DIR="$PROJECT_ROOT/2026-v0.2"
             ENV_PATH="$DEMO_DIR/.env_v02"
+            PR_FILES_DIR="$HOME/pr_files"   # 파일 저장 경로 추가
 
             cd "$PROJECT_ROOT"
             git pull origin main
 
-            # ✅ clean 이후에 env 파일 생성 (안 지워짐)
             cat > "$ENV_PATH" <<'EOF'
             ${{ secrets.ENV_02_DEPLOY }}
             EOF
             chmod 600 "$ENV_PATH"
 
+            # 파일 저장 디렉토리 생성 (없으면)
+            mkdir -p "$PR_FILES_DIR"
 
-             # ✅ fastapi는 docker
             cd "$DEMO_DIR/registry-v02"
 
             sudo docker rm -f registry-v02 2>/dev/null || true
@@ -46,4 +47,5 @@ jobs:
               --restart=always \
               --env-file "$ENV_PATH" \
               -p 80:8000 \
+              -v "$PR_FILES_DIR:/data/pr_files" \
               registry-v02:latest
