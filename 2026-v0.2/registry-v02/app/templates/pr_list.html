@@ -3,6 +3,13 @@
 {% block title %}Portrayal Register{% endblock %}
 
 {% block extra_styles %}
+<script>
+  window.__PR_INITIAL__ = {
+    total: {{ initial_total | default(0) }},
+    items: {{ initial_items_json | safe if initial_items_json else '[]' }},
+    stats: {{ initial_stats_json | safe if initial_stats_json else '{}' }}
+  };
+</script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   :root { --primary:#2563eb; --primary-hover:#1d4ed8; --bg:#f8fafc; --card-bg:#fff; --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0; --success:#10b981; --warning:#f59e0b; --info:#06b6d4; --danger:#ef4444; --radius:8px; }
@@ -215,7 +222,10 @@
 
   const VISIBLE_COUNT = 6;
   let selectedKind = '';
-  let kindCounts = {};
+  // 서버에서 주입된 초기 데이터 사용
+  let kindCounts = window.__PR_INITIAL__?.stats || {};
+  let totalItems = window.__PR_INITIAL__?.total || 0;
+  let currentData = window.__PR_INITIAL__?.items || [];
 
   function escapeHtml(s) {
     if (s === null || s === undefined) return '';
@@ -250,7 +260,8 @@
   }
 
   function createKindCard(kind, isActive) {
-    const count = kindCounts[kind.value] ?? 0;
+    // 'All'(빈 문자열)은 totalItems 사용, 그 외는 kindCounts에서 가져옴
+    const count = kind.value === '' ? totalItems : (kindCounts[kind.value] ?? 0);
     const activeClass = isActive ? 'active' : '';
     return `
       <div class="kind-card ${activeClass}" data-kind="${escapeHtml(kind.value)}" style="--card-color:${kind.color}">
@@ -285,14 +296,21 @@
     });
   }
 
-  async function loadKindCounts() {
+  async function loadKindCounts(forceRefresh = false) {
+    // 초기 데이터가 있고 강제 새로고침이 아니면 서버에서 전달받은 데이터 사용
+    if (!forceRefresh && Object.keys(kindCounts).length > 0) {
+      renderKindCards();
+      return;
+    }
+
     try {
       const res = await fetch('/api/pr/items?limit=1000');
       const j = await res.json();
       const items = j.items || [];
       
+      totalItems = items.length;
+      
       // Reset counts
-      kindCounts = { '': items.length };
       KIND_LIST.forEach(k => {
         if (k.value) kindCounts[k.value] = 0;
       });

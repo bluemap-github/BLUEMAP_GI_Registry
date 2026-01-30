@@ -393,39 +393,7 @@
         </div>
       </div>
 
-      <!-- Optional Links (Visual Kinds) Card -->
-      <div class="card" id="optionalLinksCard" style="display:none;">
-        <div class="card-h">Optional Links (Visual Kinds)</div>
-        <div class="card-b">
-          <div class="grid">
-            <div>
-              <label>Item Schema (0..1)</label>
-              <div class="multi-select-container" data-target="itemSchemaSel" data-single="true">
-                <div class="multi-select-chips empty" tabindex="0"></div>
-                <div class="multi-select-dropdown">
-                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                  <div class="multi-select-options"></div>
-                </div>
-              </div>
-              <select id="itemSchemaSel" style="display:none"></select>
-            </div>
-            <div>
-              <label>Colour Token (multi)</label>
-              <div class="multi-select-container" data-target="colourTokenSel">
-                <div class="multi-select-chips empty" tabindex="0"></div>
-                <div class="multi-select-dropdown">
-                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
-                  <div class="multi-select-options"></div>
-                </div>
-              </div>
-              <select id="colourTokenSel" multiple style="display:none"></select>
-            </div>
-          </div>
-          <div class="hint">Visual kinds: Symbol / LineStyle / AreaFill / Pixmap</div>
-        </div>
-      </div>
-
-      <!-- File Upload Card (for file-based kinds) -->
+<!-- File Upload Card (for file-based kinds) -->
       <div class="card" id="fileUploadCard" style="display:none;">
         <div class="card-h">
           <span>File Upload</span>
@@ -496,11 +464,39 @@
         </div>
       </div>
 
-      <!-- Relations Card -->
+<!-- Relations Card -->
       <div class="card">
-        <div class="card-h">Relations (ObjId / ObjId[] fields)</div>
+        <div class="card-h">Relations</div>
         <div class="card-b">
           <div class="grid">
+            <!-- Visual Kinds: Item Schema & Colour Token (Symbol/LineStyle/AreaFill/Pixmap) -->
+            <div id="relVisualLinks" class="rel-section">
+              <div class="grid">
+                <div>
+                  <label>Item Schema (0..1)</label>
+                  <div class="multi-select-container" data-target="itemSchemaSel" data-single="true">
+                    <div class="multi-select-chips empty" tabindex="0"></div>
+                    <div class="multi-select-dropdown">
+                      <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                      <div class="multi-select-options"></div>
+                    </div>
+                  </div>
+                  <select id="itemSchemaSel" style="display:none"></select>
+                </div>
+                <div>
+                  <label>Colour Token (multi)</label>
+                  <div class="multi-select-container" data-target="colourTokenSel">
+                    <div class="multi-select-chips empty" tabindex="0"></div>
+                    <div class="multi-select-dropdown">
+                      <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                      <div class="multi-select-options"></div>
+                    </div>
+                  </div>
+                  <select id="colourTokenSel" multiple style="display:none"></select>
+                </div>
+              </div>
+            </div>
+
             <!-- LineStyle / AreaFill: symbol [0..1] -->
             <div id="relLineArea" class="rel-section">
               <label>Symbol (0..1) - For LineStyle / AreaFill</label>
@@ -630,7 +626,7 @@
               <select id="pi_paletteSel" multiple style="display:none"></select>
             </div>
 
-            <div class="hint" style="grid-column:1/-1;">Relations are shown based on selected Kind.</div>
+            <div class="hint" style="grid-column:1/-1;">Relations (foreign key links) are shown based on selected Kind.</div>
           </div>
         </div>
       </div>
@@ -1672,13 +1668,10 @@
   function setRelVisibility(kind) {
     document.querySelectorAll('.rel-section').forEach(el => el.classList.remove('active'));
     
-    // Optional Links (Visual Kinds) 카드: S100_PR_Symbol, S100_PR_LineStyle, S100_PR_AreaFill, S100_PR_Pixmap 일 때만 표시
-    const optionalLinksCard = document.getElementById('optionalLinksCard');
+    // Visual Kinds: Show relVisualLinks section (Item Schema & Colour Token)
     const visualKinds = ['S100_PR_Symbol', 'S100_PR_LineStyle', 'S100_PR_AreaFill', 'S100_PR_Pixmap'];
     if (visualKinds.includes(kind)) {
-      optionalLinksCard.style.display = 'block';
-    } else {
-      optionalLinksCard.style.display = 'none';
+      document.getElementById('relVisualLinks').classList.add('active');
     }
 
     if (kind === 'S100_PR_LineStyle' || kind === 'S100_PR_AreaFill') {
@@ -1728,9 +1721,12 @@ function setKindBodyVisibility(kind){
     const registerId = document.getElementById('registerId').value.trim();
     const kind = document.getElementById('kind').value.trim();
 
-    // Visual link selects
-    await loadPrItemsToSelect(document.getElementById('itemSchemaSel'), 'S100_PR_ItemSchema', registerId);
-    await loadPrItemsToSelect(document.getElementById('colourTokenSel'), 'S100_PR_ColourToken', registerId);
+    // Visual link selects (only for Visual Kinds)
+    const visualKinds = ['S100_PR_Symbol', 'S100_PR_LineStyle', 'S100_PR_AreaFill', 'S100_PR_Pixmap'];
+    if (visualKinds.includes(kind)) {
+      await loadPrItemsToSelect(document.getElementById('itemSchemaSel'), 'S100_PR_ItemSchema', registerId);
+      await loadPrItemsToSelect(document.getElementById('colourTokenSel'), 'S100_PR_ColourToken', registerId);
+    }
 
     // Kind relations
     if (kind === 'S100_PR_LineStyle' || kind === 'S100_PR_AreaFill') {

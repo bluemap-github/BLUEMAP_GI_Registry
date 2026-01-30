@@ -416,7 +416,68 @@ async def ui_concept_detail(request: Request, item_id: str):
 
 @app.get("/ui/pr", response_class=HTMLResponse)
 async def ui_pr_list(request: Request):
-    return templates.TemplateResponse("pr_list.html", {"request": request})
+    """Portrayal Register 목록: 서버에서 initial_items + initial_stats를 만들어 pr_list.html에 주입"""
+    db = get_db()
+    coll = db[COLL_PR_ITEMS]
+
+    page = 1
+    limit = 20
+    sort_by = "updatedAt"
+    sort_order = -1  # desc
+
+    flt: Dict[str, Any] = {}
+    total = await coll.count_documents(flt)
+
+    cursor = (
+        coll.find(flt)
+        .sort(sort_by, sort_order)
+        .skip((page - 1) * limit)
+        .limit(limit)
+    )
+
+    items = []
+    async for doc in cursor:
+        items.append(_normalize_item(doc))
+
+    # PR Kind별 카운트
+    pr_kind_list = [
+        "S100_PR_Symbol",
+        "S100_PR_LineStyle",
+        "S100_PR_AreaFill",
+        "S100_PR_Pixmap",
+        "S100_PR_ItemSchema",
+        "S100_PR_DisplayMode",
+        "S100_PR_ViewingGroupLayer",
+        "S100_PR_ViewingGroup",
+        "S100_PR_AlertHighlight",
+        "S100_PR_AlertMessage",
+        "S100_PR_ColourToken",
+        "S100_PR_ColourPalette",
+        "S100_PR_Alert",
+        "S100_PR_PaletteItem",
+        "S100_PR_Font",
+        "S100_PR_ContextParameter",
+        "S100_PR_DrawingPriority",
+        "S100_PR_DisplayPlane",
+    ]
+
+    initial_stats = {}
+    for kind in pr_kind_list:
+        initial_stats[kind] = await coll.count_documents({"kind": kind})
+
+    initial_items_json = json.dumps(items, ensure_ascii=False, default=str)
+    initial_stats_json = json.dumps(initial_stats, ensure_ascii=False)
+
+    return templates.TemplateResponse(
+        "pr_list.html",
+        {
+            "request": request,
+            "initial_total": total,
+            "initial_items_json": initial_items_json,
+            "initial_stats": initial_stats,
+            "initial_stats_json": initial_stats_json,
+        },
+    )
 
 
 @app.get("/ui/pr/new", response_class=HTMLResponse)

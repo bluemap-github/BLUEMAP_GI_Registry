@@ -1,170 +1,1624 @@
 {% extends "base.html" %}
 
-{% block title %}Update PR Item{% endblock %}
+{% set pr = item.prItem or {} %}
+{% block title %}Edit PR Item #{{ pr.itemIdentifier or '-' }}{% endblock %}
+
+{% block extra_styles %}
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--primary:#2563eb;--primary-hover:#1d4ed8;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:12px;--danger:#ef4444;--success:#10b981}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    .breadcrumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-bottom:14px;flex-wrap:wrap}
+    .breadcrumb a{color:var(--muted);text-decoration:none}
+    .breadcrumb a:hover{color:var(--primary)}
+    .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+    .title h1{font-size:28px;font-weight:900}
+    .title .sub{font-size:14px;color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+    .card-h{padding:12px 16px;border-bottom:1px solid var(--border);background:#fafbff;font-weight:900}
+    .card-b{padding:14px 16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.container{padding:16px}}
+    label{font-size:13px;color:var(--muted);font-weight:800}
+    .req{color:var(--danger)}
+    input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:14px;background:#fff;color:var(--text)}
+    textarea{min-height:96px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(37,99,235,.7);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+    input:disabled,select:disabled{background:#f5f7fb;color:var(--muted)}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text);font-weight:900;cursor:pointer;text-decoration:none}
+    .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+    .btn.primary:hover{background:var(--primary-hover)}
+    .btn.ghost:hover{border-color:rgba(37,99,235,.35);color:var(--primary)}
+
+    /* Dynamic list sections */
+    .dyn{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .dyn-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg);border-bottom:1px solid var(--border)}
+    .dyn-title{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.4px}
+    .dyn-b{max-height:320px;overflow:auto}
+    .dyn-empty{padding:14px 12px;color:var(--muted);font-size:13px;text-align:center}
+    .dyn-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-bottom:1px solid var(--border)}
+    .dyn-item:last-child{border-bottom:none}
+    .dyn-num{width:22px;height:22px;border-radius:999px;background:var(--primary);color:#fff;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:2px}
+    .dyn-remove{border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.08);color:var(--danger);border-radius:10px;padding:8px 10px;font-weight:900;cursor:pointer;height:38px}
+    .dyn-remove:hover{background:rgba(239,68,68,.14)}
+
+    /* Multi-select chips UI */
+    .multi-select-container{position:relative;z-index:10}
+    .multi-select-container:focus-within{z-index:1000}
+    .multi-select-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;transition:all .15s}
+    .multi-select-chips:hover{border-color:rgba(37,99,235,.4)}
+    .multi-select-chips:focus-within{border-color:rgba(37,99,235,.7);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+    .multi-select-chips.empty::after{content:'Click to select...';color:var(--muted);font-size:13px;padding:2px 0}
+    .chip{display:inline-flex;align-items:center;gap:4px;padding:4px 8px 4px 10px;background:rgba(37,99,235,.1);color:var(--primary);border-radius:6px;font-size:13px;font-weight:600;animation:chipIn .15s ease}
+    @keyframes chipIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+    .chip-remove{display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:transparent;border:none;color:var(--primary);cursor:pointer;font-size:14px;line-height:1;transition:all .15s}
+    .chip-remove:hover{background:rgba(37,99,235,.2);color:var(--primary-hover)}
+    .multi-select-dropdown{position:fixed;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.12);z-index:9999;max-height:240px;overflow:hidden;display:none}
+    .multi-select-dropdown.open{display:block;animation:dropIn .15s ease}
+    @keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    .multi-select-search{padding:10px 12px;border-bottom:1px solid var(--border)}
+    .multi-select-search input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px}
+    .multi-select-search input:focus{outline:none;border-color:var(--primary)}
+    .multi-select-options{max-height:180px;overflow-y:auto}
+    .multi-select-option{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;transition:background .1s;font-size:13px}
+    .multi-select-option:hover{background:rgba(37,99,235,.06)}
+    .multi-select-option.selected{background:rgba(37,99,235,.1);color:var(--primary);font-weight:600}
+    .multi-select-option-check{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+    .multi-select-option.selected .multi-select-option-check{background:var(--primary);border-color:var(--primary);color:#fff}
+    .multi-select-empty{padding:16px 12px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* Relations styling */
+    .rel-section{display:none;grid-column:1/-1;}
+    .rel-section.active{display:block}
+    /* Kind body sections */
+    .kb-section{display:none;grid-column:1/-1;}
+    .kb-section.active{display:block}
+
+    .toast{position:fixed;right:18px;bottom:18px;background:var(--text);color:#fff;padding:12px 14px;border-radius:12px;opacity:0;transform:translateY(12px);transition:all .2s ease;z-index:9999}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.success{background:var(--success)}
+    .toast.error{background:var(--danger)}
+
+    /* New Source Fields */
+    .new-source-fields{display:none;grid-column:1/-1;}
+    .new-source-fields.show{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+</style>
+{% endblock %}
 
 {% block content %}
-<h1>Update PR Item</h1>
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">Home</a><span>/</span>
+    <a href="/ui/pr">Portrayal Register</a><span>/</span>
+    <a href="/ui/pr/{{ item._id }}">Item #{{ pr.itemIdentifier or '-' }}</a><span>/</span>
+    <span>Edit</span>
+  </nav>
 
-<div>
-  <a href="/ui/pr/{{ item._id }}">Back to detail</a> |
-  <a href="/ui/pr">Back to list</a>
+  <div class="top">
+    <div class="title">
+      <h1>Edit: {{ pr.name or '(no name)' }}</h1>
+      <div class="sub">kind: <span style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;">{{ item.kind }}</span> · _id: <span style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;">{{ item._id }}</span></div>
+    </div>
+    <div class="actions">
+      <a class="btn ghost" href="/ui/pr/{{ item._id }}">Cancel</a>
+      <button form="editForm" class="btn primary" type="submit">Save</button>
+    </div>
+  </div>
+
+  <form id="editForm">
+    <!-- PR Item (Common) Card -->
+    <div class="card">
+      <div class="card-h">PR Item (Common)</div>
+      <div class="card-b">
+        <div class="grid">
+          <div>
+            <label>Item Identifier</label>
+            <input value="{{ pr.itemIdentifier or '' }}" disabled />
+            <div class="hint">itemIdentifier는 수정 불가(영구/불변)입니다.</div>
+          </div>
+          <div>
+            <label>Item Status</label>
+            <select id="itemStatus">
+              <option value="">(keep)</option>
+              <option value="Draft">Draft</option>
+              <option value="Pending">Pending</option>
+              <option value="Valid">Valid</option>
+              <option value="Deprecated">Deprecated</option>
+              <option value="Retired">Retired</option>
+            </select>
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Name <span class="req">*</span></label>
+            <input id="name" required />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>CamelCase</label>
+            <input id="camelCase" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Alias (comma separated)</label>
+            <input id="alias" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Definition</label>
+            <textarea id="definition"></textarea>
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Remarks</label>
+            <textarea id="remarks"></textarea>
+          </div>
+
+          <div>
+            <label>Definition Source</label>
+            <input id="definitionSource" />
+          </div>
+          <div>
+            <label>Similarity To Source</label>
+            <input id="similarityToSource" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Reference</label>
+            <input id="reference" />
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Proposed Change</label>
+            <textarea id="proposedChange"></textarea>
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>Justification</label>
+            <textarea id="justification"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top-level PR Fields Card -->
+    <div class="card">
+      <div class="card-h">Top-level PR Fields</div>
+      <div class="card-b">
+        <div class="grid">
+          <div>
+            <label>XML ID</label>
+            <input id="xmlID" placeholder="e.g., S100_PR_Symbol_SAMPLE" />
+          </div>
+          <div style="grid-column:1/-1;">
+            <label>Description</label>
+            <div class="dyn" id="descDyn">
+              <div class="dyn-h">
+                <div class="dyn-title">description items</div>
+                <button class="btn ghost" type="button" id="descAdd">+ Add</button>
+              </div>
+              <div class="dyn-b" id="descList">
+                <div class="dyn-empty">No description items</div>
+              </div>
+            </div>
+            <div class="hint">Each item is {text, language}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Relations Card -->
+    <div class="card" id="relationsCard" style="display:none;">
+      <div class="card-h">Relations</div>
+      <div class="card-b">
+        <div class="grid">
+          <!-- Visual Kinds: Item Schema & Colour Token -->
+          <div id="relVisualLinks" class="rel-section">
+            <div class="grid">
+              <div>
+                <label>Item Schema (0..1)</label>
+                <div class="multi-select-container" data-target="itemSchemaSel" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="itemSchemaSel" style="display:none"></select>
+              </div>
+              <div>
+                <label>Colour Token (multi)</label>
+                <div class="multi-select-container" data-target="colourTokenSel">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="colourTokenSel" multiple style="display:none"></select>
+              </div>
+            </div>
+          </div>
+
+          <!-- LineStyle / AreaFill: symbol [0..1] -->
+          <div id="relLineArea" class="rel-section">
+            <label>Symbol (0..1) - For LineStyle / AreaFill</label>
+            <div class="multi-select-container" data-target="symbolSel" data-single="true">
+              <div class="multi-select-chips empty" tabindex="0"></div>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                <div class="multi-select-options"></div>
+              </div>
+            </div>
+            <select id="symbolSel" style="display:none"></select>
+          </div>
+
+          <!-- ViewingGroupLayer: displayMode[] -->
+          <div id="relViewingGroupLayer" class="rel-section">
+            <label>Display Mode (multi) - For ViewingGroupLayer</label>
+            <div class="multi-select-container" data-target="displayModeSel">
+              <div class="multi-select-chips empty" tabindex="0"></div>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                <div class="multi-select-options"></div>
+              </div>
+            </div>
+            <select id="displayModeSel" multiple style="display:none"></select>
+          </div>
+
+          <!-- ViewingGroup: foundationMode + viewingGroup[] -->
+          <div id="relViewingGroup" class="rel-section">
+            <label style="display:flex;align-items:center;gap:8px;">
+              <input id="foundationMode" type="checkbox" style="width:auto;" />
+              <span>Foundation Mode</span>
+            </label>
+            <div style="margin-top:12px;">
+              <label>Viewing Group Layer (multi)</label>
+              <div class="multi-select-container" data-target="viewingGroupLayerSel">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="viewingGroupLayerSel" multiple style="display:none"></select>
+            </div>
+          </div>
+
+          <!-- AlertHighlight -->
+          <div id="relAlertHighlight" class="rel-section">
+            <label style="display:flex;align-items:center;gap:8px;">
+              <input id="ah_optional" type="checkbox" style="width:auto;" />
+              <span>Optional</span>
+            </label>
+            <div class="grid" style="margin-top:12px;">
+              <div>
+                <label>Style</label>
+                <select id="ah_style">
+                  <option value="AlarmHighlight">AlarmHighlight</option>
+                  <option value="CautionHighlight">CautionHighlight</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:12px;">
+              <label>Viewing Group (multi)</label>
+              <div class="multi-select-container" data-target="ah_viewingGroupSel">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="ah_viewingGroupSel" multiple style="display:none"></select>
+            </div>
+            <div style="margin-top:12px;">
+              <label>Alert Message (0..1)</label>
+              <div class="multi-select-container" data-target="ah_msgSel" data-single="true">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="ah_msgSel" style="display:none"></select>
+            </div>
+          </div>
+
+          <!-- AlertMessage: icon -->
+          <div id="relAlertMessage" class="rel-section">
+            <label>Icon (Symbol) (0..1)</label>
+            <div class="multi-select-container" data-target="iconSel" data-single="true">
+              <div class="multi-select-chips empty" tabindex="0"></div>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                <div class="multi-select-options"></div>
+              </div>
+            </div>
+            <select id="iconSel" style="display:none"></select>
+          </div>
+
+          <!-- ColourToken -->
+          <div id="relColourToken" class="rel-section">
+            <div>
+              <label>Token</label>
+              <input id="ct_token" placeholder="e.g., SAMPLE_TOKEN" />
+            </div>
+            <div style="margin-top:12px;">
+              <label>Value (PaletteItem) (0..1)</label>
+              <div class="multi-select-container" data-target="ct_valueSel" data-single="true">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="ct_valueSel" style="display:none"></select>
+            </div>
+          </div>
+
+          <!-- PaletteItem -->
+          <div id="relPaletteItem" class="rel-section">
+            <label>Palette (ColourPalette) (multi)</label>
+            <div class="multi-select-container" data-target="pi_paletteSel">
+              <div class="multi-select-chips empty" tabindex="0"></div>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                <div class="multi-select-options"></div>
+              </div>
+            </div>
+            <select id="pi_paletteSel" multiple style="display:none"></select>
+          </div>
+
+          <div class="hint" style="grid-column:1/-1;">Relations (foreign key links) are shown based on item Kind.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kind Body Card -->
+    <div class="card" id="kindBodyCard" style="display:none;">
+      <div class="card-h">Kind Body</div>
+      <div class="card-b">
+        <div class="hint" style="margin-bottom:8px;">Kind-specific fields. Relations above will be auto-injected.</div>
+
+        <!-- Visual common (Symbol/LineStyle/AreaFill/Pixmap) -->
+        <div id="kb_visual" class="kb-section">
+          <div class="grid">
+            <div>
+              <label>itemDetail (path)</label>
+              <input id="kb_itemDetail" placeholder="s3://... or file path" />
+            </div>
+            <div>
+              <label>previewImage (path)</label>
+              <input id="kb_previewImage" placeholder="s3://... or file path" />
+            </div>
+            <div>
+              <label>engineeringImage (path)</label>
+              <input id="kb_engineeringImage" placeholder="s3://... or file path" />
+            </div>
+            <div>
+              <label>previewType</label>
+              <select id="kb_previewType">
+                <option value="">(none)</option>
+                <option value="jpg">jpg</option>
+                <option value="png">png</option>
+                <option value="tif">tif</option>
+              </select>
+            </div>
+            <div>
+              <label>engineeringImageType</label>
+              <select id="kb_engineeringImageType">
+                <option value="">(none)</option>
+                <option value="jpg">jpg</option>
+                <option value="png">png</option>
+                <option value="tif">tif</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ItemSchema -->
+        <div id="kb_itemSchema" class="kb-section">
+          <div class="grid">
+            <div>
+              <label>schemaKind</label>
+              <select id="kb_schemaKind">
+                <option value="S100_PR_SymbolSchema">S100_PR_SymbolSchema</option>
+                <option value="S100_PR_LineStyleSchema">S100_PR_LineStyleSchema</option>
+                <option value="S100_PR_AreaFillSchema">S100_PR_AreaFillSchema</option>
+                <option value="S100_PR_PixmapSchema">S100_PR_PixmapSchema</option>
+                <option value="S100_PR_ColourProfileSchema">S100_PR_ColourProfileSchema</option>
+              </select>
+            </div>
+            <div>
+              <label>xmlSchema (path)</label>
+              <input id="kb_xmlSchema" placeholder="s3://... or file path" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ViewingGroup -->
+        <div id="kb_viewingGroup" class="kb-section">
+          <div class="grid">
+            <div>
+              <label style="display:flex;align-items:center;gap:8px;">
+                <input id="kb_foundationMode" type="checkbox" style="width:auto;" />
+                <span>foundationMode</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- AlertMessage -->
+        <div id="kb_alertMessage" class="kb-section">
+          <label>text (NationalLanguageString list)</label>
+          <div class="dyn" id="amTextDyn">
+            <div class="dyn-h">
+              <div class="dyn-title">alert text items</div>
+              <button class="btn ghost" type="button" id="amTextAdd">+ Add</button>
+            </div>
+            <div class="dyn-b" id="amTextList">
+              <div class="dyn-empty">No text items</div>
+            </div>
+          </div>
+          <div class="hint">Each item is {text, language}</div>
+        </div>
+
+        <!-- ColourToken -->
+        <div id="kb_colourToken" class="kb-section">
+          <div class="grid">
+            <div>
+              <label>token</label>
+              <input id="kb_ct_token" placeholder="e.g., DAYWHITE" />
+            </div>
+          </div>
+        </div>
+
+        <!-- PaletteItem -->
+        <div id="kb_paletteItem" class="kb-section">
+          <div class="grid">
+            <div>
+              <label>transparency</label>
+              <input id="kb_pi_transparency" placeholder="0.0" />
+            </div>
+            <div>
+              <label>sRGB red</label>
+              <input id="kb_pi_red" placeholder="0" />
+            </div>
+            <div>
+              <label>sRGB green</label>
+              <input id="kb_pi_green" placeholder="0" />
+            </div>
+            <div>
+              <label>sRGB blue</label>
+              <input id="kb_pi_blue" placeholder="0" />
+            </div>
+            <div>
+              <label>CIE x</label>
+              <input id="kb_pi_x" placeholder="0" />
+            </div>
+            <div>
+              <label>CIE y</label>
+              <input id="kb_pi_y" placeholder="0" />
+            </div>
+            <div>
+              <label>CIE z</label>
+              <input id="kb_pi_z" placeholder="0" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ContextParameter -->
+        <div id="kb_contextParameter" class="kb-section">
+          <div class="grid">
+            <div>
+              <label>parameterType</label>
+              <select id="kb_cp_type">
+                <option value="boolean">boolean</option>
+                <option value="integer">integer</option>
+                <option value="double">double</option>
+                <option value="string">string</option>
+                <option value="date">date</option>
+              </select>
+            </div>
+            <div>
+              <label>defaultValue</label>
+              <input id="kb_cp_default" placeholder="sample" />
+            </div>
+          </div>
+        </div>
+
+        <!-- DrawingPriority -->
+        <div id="kb_drawingPriority" class="kb-section">
+          <div class="grid">
+            <div>
+              <label>priority</label>
+              <input id="kb_dp_priority" placeholder="1" />
+            </div>
+          </div>
+        </div>
+
+        <!-- DisplayPlane -->
+        <div id="kb_displayPlane" class="kb-section">
+          <div class="grid">
+            <div>
+              <label>order</label>
+              <input id="kb_plane_order" placeholder="1" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert -->
+        <div id="kb_alert" class="kb-section">
+          <label>routeMonitor priorities</label>
+          <div class="dyn" id="rmDyn">
+            <div class="dyn-h">
+              <div class="dyn-title">routeMonitor</div>
+              <button class="btn ghost" type="button" id="rmAdd">+ Add</button>
+            </div>
+            <div class="dyn-b" id="rmList">
+              <div class="dyn-empty">No routeMonitor items</div>
+            </div>
+          </div>
+
+          <div style="height:12px;"></div>
+
+          <label>routePlan priorities</label>
+          <div class="dyn" id="rpDyn">
+            <div class="dyn-h">
+              <div class="dyn-title">routePlan</div>
+              <button class="btn ghost" type="button" id="rpAdd">+ Add</button>
+            </div>
+            <div class="dyn-b" id="rpList">
+              <div class="dyn-empty">No routePlan items</div>
+            </div>
+          </div>
+
+          <div class="hint">Each item has priority{priority, default, optional}</div>
+        </div>
+
+        <!-- Font -->
+        <div id="kb_font" class="kb-section">
+          <div class="grid">
+            <div>
+              <label>fontFile (path)</label>
+              <input id="kb_font_file" placeholder="s3://.../font.ttf" />
+            </div>
+            <div>
+              <label>fontType</label>
+              <input id="kb_font_type" value="ttf" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- References Card -->
+    <div class="card">
+      <div class="card-h">References / Reference Source</div>
+      <div class="card-b">
+        <div class="grid">
+          <div style="grid-column:1/-1">
+            <label>Reference Source (0..1)</label>
+            <select id="refSourceSelect">
+              <option value="">(keep)</option>
+              <option value="__none__">(set none)</option>
+              <option value="__new__">+ Create new…</option>
+            </select>
+            <div class="hint" id="currentRefSourceHint"></div>
+          </div>
+          <div id="newSourceFields" class="new-source-fields">
+            <div>
+              <label>New Source Name <span class="req">*</span></label>
+              <input id="newRefSourceName" placeholder="required when creating" />
+            </div>
+            <div>
+              <label>New Source Description</label>
+              <input id="newRefSourceDesc" placeholder="optional" />
+            </div>
+          </div>
+
+          <div style="grid-column:1/-1">
+            <label>References (0..*)</label>
+            <div class="dyn">
+              <div class="dyn-h">
+                <div class="dyn-title">References</div>
+                <button type="button" class="btn ghost" id="addRefBtn">+ Add</button>
+              </div>
+              <div class="dyn-b" id="refsBody">
+                <div class="dyn-empty">Loading…</div>
+              </div>
+            </div>
+            <div class="hint">기존 reference는 삭제 가능, 새 reference는 title/locator로 추가됩니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Management Information Card -->
+    <div class="card">
+      <div class="card-h">Management Information (append) <span style="font-weight:800;color:var(--muted);font-size:12px;">(required)</span></div>
+      <div class="card-b">
+        <div class="grid">
+          <div>
+            <label>proposalType <span class="req">*</span></label>
+            <input id="mi_proposalType" required />
+          </div>
+          <div>
+            <label>submittingOrganisation <span class="req">*</span></label>
+            <input id="mi_submittingOrganisation" required />
+          </div>
+          <div style="grid-column:1/-1">
+            <label>proposedChange <span class="req">*</span></label>
+            <textarea id="mi_proposedChange" required></textarea>
+          </div>
+          <div>
+            <label>dateProposed <span class="req">*</span></label>
+            <input id="mi_dateProposed" type="date" required />
+          </div>
+          <div>
+            <label>dateAccepted</label>
+            <input id="mi_dateAccepted" type="date" />
+          </div>
+          <div>
+            <label>proposalStatus</label>
+            <input id="mi_proposalStatus" placeholder="Draft/Pending/Valid..." />
+          </div>
+        </div>
+        <div class="hint">저장 시 managementInfo 1건이 새로 생성되어 누적됩니다.</div>
+      </div>
+    </div>
+  </form>
+
+  <div id="toast" class="toast"></div>
 </div>
-
-<hr />
-
-<form id="form">
-  <div>
-    <div><b>_id:</b> {{ item._id }}</div>
-    <div><b>registerId:</b> {{ item.registerId }}</div>
-    <div><b>kind:</b> {{ item.kind }}</div>
-    <div><b>itemIdentifier:</b> {{ item.prItem.itemIdentifier }}</div>
-  </div>
-
-  <h2>prItem (editable)</h2>
-  <div>
-    <label>name: <input id="name" /></label><br />
-    <label>definition: <input id="definition" /></label><br />
-    <label>remarks: <input id="remarks" /></label><br />
-    <label>itemStatus: <input id="itemStatus" /></label><br />
-    <label>alias (comma): <input id="alias" /></label><br />
-    <label>camelCase: <input id="camelCase" /></label><br />
-    <label>definitionSource: <input id="definitionSource" /></label><br />
-    <label>reference: <input id="reference" /></label><br />
-    <label>similarityToSource: <input id="similarityToSource" /></label><br />
-    <label>justification: <input id="justification" /></label><br />
-    <label>proposedChange: <input id="proposedChange" /></label><br />
-  </div>
-
-  <h2>Top-level</h2>
-  <div>
-    <label>xmlID: <input id="xmlID" /></label><br />
-    <label>description JSON (array of {text,language}):</label><br />
-    <textarea id="descriptionJson" rows="4" cols="80"></textarea><br />
-  </div>
-
-  <h2>Optional links (Visual kinds)</h2>
-  <div>
-    <label>itemSchema (ObjectId): <input id="itemSchema" /></label><br />
-    <label>colourToken (ObjectId comma): <input id="colourToken" /></label><br />
-  </div>
-
-  <h2>kindBody JSON</h2>
-  <textarea id="kindBodyJson" rows="10" cols="80"></textarea>
-
-  <h2>References</h2>
-  <div>
-    <label>referenceIds (ObjectId comma): <input id="referenceIds" /></label>
-  </div>
-
-  <h2>New ManagementInfo (required)</h2>
-  <div>
-    <label>proposalType: <input id="mi_proposalType" value="Clarification" /></label><br />
-    <label>submittingOrganisation: <input id="mi_submittingOrganisation" /></label><br />
-    <label>proposedChange: <input id="mi_proposedChange" /></label><br />
-    <label>proposalStatus: <input id="mi_proposalStatus" value="Draft" /></label><br />
-    <label>controlBodyNotes (JSON array):</label><br />
-    <textarea id="mi_controlBodyNotes" rows="3" cols="80">[]</textarea><br />
-  </div>
-
-  <hr />
-  <button type="submit">Update</button>
-  <span id="msg"></span>
-</form>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
   const item = {{ item | tojson }};
+  const pr = item.prItem || {};
+  const kind = item.kind;
+  const registerId = item.registerId;
+  const el = (id) => document.getElementById(id);
 
-  function splitCsv(s) {
-    const v = (s || '').trim();
-    if (!v) return [];
-    return v.split(',').map(x => x.trim()).filter(Boolean);
+  function showToast(msg, type='success'){
+    const t = el('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + (type === 'error' ? 'error' : 'success');
+    setTimeout(()=>{ t.className = 'toast'; }, 2200);
   }
 
-  function parseJson(id, fallback) {
-    const raw = document.getElementById(id).value.trim();
-    if (!raw) return fallback;
-    try {
-      return JSON.parse(raw);
-    } catch (e) {
-      throw new Error(`${id} is not valid JSON`);
-    }
+  function splitAlias(s){
+    return (s||'').split(',').map(x=>x.trim()).filter(Boolean);
   }
 
-  // fill form
-  document.getElementById('name').value = item.prItem?.name || '';
-  document.getElementById('definition').value = item.prItem?.definition || '';
-  document.getElementById('remarks').value = item.prItem?.remarks || '';
-  document.getElementById('itemStatus').value = item.prItem?.itemStatus || '';
-  document.getElementById('alias').value = Array.isArray(item.prItem?.alias) ? item.prItem.alias.join(', ') : '';
-  document.getElementById('camelCase').value = item.prItem?.camelCase || '';
-  document.getElementById('definitionSource').value = item.prItem?.definitionSource || '';
-  document.getElementById('reference').value = item.prItem?.reference || '';
-  document.getElementById('similarityToSource').value = item.prItem?.similarityToSource || '';
-  document.getElementById('justification').value = item.prItem?.justification || '';
-  document.getElementById('proposedChange').value = item.prItem?.proposedChange || '';
+  function selectedValues(sel) {
+    return Array.from(sel.selectedOptions || []).map(o => o.value).filter(Boolean);
+  }
 
-  document.getElementById('xmlID').value = item.xmlID || '';
-  document.getElementById('descriptionJson').value = JSON.stringify(item.description || [], null, 2);
+  function singleSelectedValue(selectEl) {
+    const vals = selectedValues(selectEl);
+    return vals.length > 0 ? vals[0] : null;
+  }
 
-  document.getElementById('itemSchema').value = item.itemSchema || '';
-  document.getElementById('colourToken').value = Array.isArray(item.colourToken) ? item.colourToken.join(', ') : '';
+  function numOrNull(v){
+    const s = (v||'').trim();
+    if (!s) return null;
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
 
-  document.getElementById('kindBodyJson').value = JSON.stringify(item[item.kind] || {}, null, 2);
-  document.getElementById('referenceIds').value = Array.isArray(item.referenceIds) ? item.referenceIds.join(', ') : '';
+  // ========== Multi-Select Chips UI ==========
+  function initMultiSelect(container) {
+    const targetId = container.dataset.target;
+    const hiddenSelect = document.getElementById(targetId);
+    if (!hiddenSelect) return;
 
-  document.getElementById('form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById('msg');
-    msg.textContent = '';
+    const chipsEl = container.querySelector('.multi-select-chips');
+    const dropdownEl = container.querySelector('.multi-select-dropdown');
+    const searchInput = container.querySelector('.multi-select-search input');
+    const optionsEl = container.querySelector('.multi-select-options');
 
-    try {
-      const payload = {
-        prItem: {
-          name: document.getElementById('name').value.trim() || null,
-          definition: document.getElementById('definition').value.trim() || null,
-          remarks: document.getElementById('remarks').value.trim() || null,
-          itemStatus: document.getElementById('itemStatus').value.trim() || null,
-          alias: splitCsv(document.getElementById('alias').value),
-          camelCase: document.getElementById('camelCase').value.trim() || null,
-          definitionSource: document.getElementById('definitionSource').value.trim() || null,
-          reference: document.getElementById('reference').value.trim() || null,
-          similarityToSource: document.getElementById('similarityToSource').value.trim() || null,
-          justification: document.getElementById('justification').value.trim() || null,
-          proposedChange: document.getElementById('proposedChange').value.trim() || null,
-        },
-        xmlID: document.getElementById('xmlID').value.trim() || null,
-        description: parseJson('descriptionJson', []),
-        itemSchema: document.getElementById('itemSchema').value.trim() || null,
-        colourToken: splitCsv(document.getElementById('colourToken').value),
-        kindBody: parseJson('kindBodyJson', {}),
-        referenceIds: splitCsv(document.getElementById('referenceIds').value),
-        managementInfo: {
-          proposalType: document.getElementById('mi_proposalType').value.trim() || 'Clarification',
-          submittingOrganisation: document.getElementById('mi_submittingOrganisation').value.trim() || '',
-          proposedChange: document.getElementById('mi_proposedChange').value.trim() || '',
-          dateProposed: new Date().toISOString(),
-          proposalStatus: document.getElementById('mi_proposalStatus').value.trim() || 'Draft',
-          controlBodyNotes: parseJson('mi_controlBodyNotes', []),
-        }
-      };
+    if (!chipsEl || !dropdownEl || !searchInput || !optionsEl) return;
 
-      const res = await fetch('/api/pr/items/' + item._id, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const j = await res.json();
-      if (!res.ok) {
-        msg.textContent = 'Failed: ' + (j.detail || JSON.stringify(j));
+    const isSingle = container.dataset.single === 'true';
+
+    const newChipsEl = chipsEl.cloneNode(true);
+    chipsEl.parentNode.replaceChild(newChipsEl, chipsEl);
+    const chipsElement = newChipsEl;
+
+    function buildOptions(filter = '') {
+      optionsEl.innerHTML = '';
+      const opts = Array.from(hiddenSelect.options);
+      const filtered = opts.filter(o => o.value && o.text.toLowerCase().includes(filter.toLowerCase()));
+      
+      if (filtered.length === 0) {
+        optionsEl.innerHTML = '<div class="multi-select-empty">No options found</div>';
         return;
       }
 
-      window.location.href = '/ui/pr/' + item._id;
-    } catch (err) {
-      msg.textContent = String(err.message || err);
+      filtered.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'multi-select-option' + (opt.selected ? ' selected' : '');
+        div.dataset.value = opt.value;
+        div.innerHTML = `
+          <span class="multi-select-option-check">${opt.selected ? '&#10003;' : ''}</span>
+          <span>${opt.text}</span>
+        `;
+        div.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isSingle) {
+            const wasSelected = opt.selected;
+            Array.from(hiddenSelect.options).forEach(o => o.selected = false);
+            if (!wasSelected) {
+              opt.selected = true;
+            }
+            closeAllDropdowns();
+          } else {
+            opt.selected = !opt.selected;
+          }
+          updateChips();
+          buildOptions(searchInput.value);
+        });
+        optionsEl.appendChild(div);
+      });
     }
+
+    function updateChips() {
+      const selected = Array.from(hiddenSelect.selectedOptions);
+      chipsElement.innerHTML = '';
+      
+      if (selected.length === 0) {
+        chipsElement.classList.add('empty');
+      } else {
+        chipsElement.classList.remove('empty');
+        selected.forEach(opt => {
+          const chip = document.createElement('span');
+          chip.className = 'chip';
+          chip.innerHTML = `
+            <span class="chip-text">${opt.text}</span>
+            <button type="button" class="chip-remove" data-value="${opt.value}">&times;</button>
+          `;
+          chip.querySelector('.chip-remove').addEventListener('click', (e) => {
+            e.stopPropagation();
+            opt.selected = false;
+            updateChips();
+            buildOptions(searchInput.value);
+          });
+          chipsElement.appendChild(chip);
+        });
+      }
+    }
+
+    chipsElement.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdownEl.classList.contains('open');
+      closeAllDropdowns();
+      if (!isOpen) {
+        const rect = chipsElement.getBoundingClientRect();
+        dropdownEl.style.top = (rect.bottom + 4) + 'px';
+        dropdownEl.style.left = rect.left + 'px';
+        dropdownEl.style.width = rect.width + 'px';
+        dropdownEl.classList.add('open');
+        searchInput.value = '';
+        buildOptions();
+        searchInput.focus();
+      }
+    });
+
+    searchInput.addEventListener('input', () => {
+      buildOptions(searchInput.value);
+    });
+
+    dropdownEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    updateChips();
+    
+    container._refresh = () => {
+      buildOptions(searchInput.value);
+      updateChips();
+    };
+  }
+
+  function closeAllDropdowns() {
+    document.querySelectorAll('.multi-select-dropdown.open').forEach(d => d.classList.remove('open'));
+  }
+
+  document.addEventListener('click', closeAllDropdowns);
+
+  function refreshAllMultiSelects() {
+    document.querySelectorAll('.multi-select-container').forEach(container => {
+      initMultiSelect(container);
+    });
+  }
+
+  // ========== Dynamic List Helpers ==========
+  function readLangTextList(listEl){
+    const items = [];
+    listEl.querySelectorAll('[data-row="langtext"]').forEach(r => {
+      const t = r.querySelector('input[data-field="text"]').value.trim();
+      const l = r.querySelector('input[data-field="lang"]').value.trim();
+      if (t || l) items.push({ text: t, language: l });
+    });
+    return items;
+  }
+
+  function addLangTextItem(listEl, textVal='', langVal=''){
+    const empty = listEl.querySelector('.dyn-empty');
+    if (empty) empty.remove();
+
+    const row = document.createElement('div');
+    row.dataset.row = 'langtext';
+    row.style.display = 'grid';
+    row.style.gridTemplateColumns = '2fr 1fr auto';
+    row.style.gap = '8px';
+    row.style.padding = '10px 12px';
+    row.style.borderBottom = '1px solid var(--border)';
+
+    const t = document.createElement('input');
+    t.dataset.field = 'text';
+    t.placeholder = 'text';
+    t.value = textVal;
+
+    const l = document.createElement('input');
+    l.dataset.field = 'lang';
+    l.placeholder = 'language (e.g., en)';
+    l.value = langVal;
+
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'btn ghost';
+    rm.textContent = 'Remove';
+    rm.addEventListener('click', () => {
+      row.remove();
+      if (listEl.children.length === 0) {
+        const e = document.createElement('div');
+        e.className = 'dyn-empty';
+        e.textContent = 'No items';
+        listEl.appendChild(e);
+      }
+    });
+
+    row.appendChild(t);
+    row.appendChild(l);
+    row.appendChild(rm);
+    listEl.appendChild(row);
+  }
+
+  // Alert priority list helpers
+  function addAlertPriorityItem(listEl, init){
+    const empty = listEl.querySelector('.dyn-empty');
+    if (empty) empty.remove();
+
+    const row = document.createElement('div');
+    row.style.display = 'grid';
+    row.style.gridTemplateColumns = '1fr 1fr 1fr auto';
+    row.style.gap = '8px';
+    row.style.padding = '10px 12px';
+    row.style.borderBottom = '1px solid var(--border)';
+
+    const pr = document.createElement('select');
+    ['alarm','warning','caution','indication'].forEach(v=>{
+      const o=document.createElement('option');o.value=v;o.textContent=v;pr.appendChild(o);
+    });
+    pr.value = (init && init.priority) || 'warning';
+
+    const def = document.createElement('select');
+    [{v:'false',t:'default=false'},{v:'true',t:'default=true'}].forEach(x=>{
+      const o=document.createElement('option');o.value=x.v;o.textContent=x.t;def.appendChild(o);
+    });
+    def.value = String((init && init.default) || false);
+
+    const opt = document.createElement('select');
+    [{v:'false',t:'optional=false'},{v:'true',t:'optional=true'}].forEach(x=>{
+      const o=document.createElement('option');o.value=x.v;o.textContent=x.t;opt.appendChild(o);
+    });
+    opt.value = String((init && init.optional) || false);
+
+    const rm = document.createElement('button');
+    rm.type='button';
+    rm.className='btn ghost';
+    rm.textContent='Remove';
+    rm.addEventListener('click', ()=>{
+      row.remove();
+      if (listEl.children.length === 0) {
+        const e=document.createElement('div'); e.className='dyn-empty'; e.textContent='No items';
+        listEl.appendChild(e);
+      }
+    });
+
+    row.appendChild(pr);
+    row.appendChild(def);
+    row.appendChild(opt);
+    row.appendChild(rm);
+    listEl.appendChild(row);
+  }
+
+  function readAlertPriorityList(listEl){
+    const items = [];
+    listEl.querySelectorAll('div').forEach(row=>{
+      const sel = row.querySelectorAll('select');
+      if (sel.length !== 3) return;
+      const priority = sel[0].value;
+      const def = (sel[1].value === 'true');
+      const opt = (sel[2].value === 'true');
+      items.push({ priority: { priority, default: def, optional: opt } });
+    });
+    return items;
+  }
+
+  // ========== API Helpers ==========
+  async function loadReferenceSources(){
+    const sel = el('refSourceSelect');
+    try{
+      const res = await fetch('/api/reference-sources?limit=200&sortBy=name&sortOrder=asc');
+      const j = await res.json();
+      const items = j.items || [];
+      const base = '<option value="">(keep)</option><option value="__none__">(set none)</option><option value="__new__">+ Create new…</option>';
+      sel.innerHTML = base + items.map(s=>`<option value="${s._id}">${s.name}</option>`).join('');
+    }catch(e){
+      console.error(e);
+      sel.innerHTML = '<option value="">(keep)</option>';
+    }
+  }
+
+  async function fetchSourceById(id){
+    if (!id) return null;
+    const res = await fetch(`/api/reference-sources/${id}`);
+    if (!res.ok) return null;
+    return await res.json();
+  }
+
+  async function fetchRefById(id){
+    const res = await fetch(`/api/references/${id}`);
+    if (!res.ok) return { _id:id, title:'(missing)', locator:'' };
+    return await res.json();
+  }
+
+  function optionLabel(it) {
+    const nm = (it.prItem && it.prItem.name) ? it.prItem.name : '(no name)';
+    const idn = (it.prItem && it.prItem.itemIdentifier) ? it.prItem.itemIdentifier : '';
+    const k = it.kind || '';
+    return `${nm}${idn ? ' #' + idn : ''} [${k}] (${it._id})`;
+  }
+
+  async function loadPrItemsToSelect(sel, targetKind, regId) {
+    if (!regId || !sel) return;
+    try {
+      const url = `/api/pr/items?limit=200&kind=${encodeURIComponent(targetKind)}&registerId=${encodeURIComponent(regId)}`;
+      const res = await fetch(url);
+      const j = await res.json();
+      sel.innerHTML = '';
+      (j.items || []).forEach(it => {
+        const opt = document.createElement('option');
+        opt.value = it._id;
+        opt.textContent = optionLabel(it);
+        sel.appendChild(opt);
+      });
+    } catch(e) {
+      console.error('loadPrItemsToSelect error:', e);
+    }
+  }
+
+  // ========== References UI ==========
+  function renderRefs(existingRefs){
+    const body = el('refsBody');
+    if (!existingRefs.length){
+      body.innerHTML = '<div class="dyn-empty">(none)</div>';
+      return;
+    }
+    body.innerHTML = '';
+    existingRefs.forEach((r,idx)=>{
+      const div = document.createElement('div');
+      div.className = 'dyn-item';
+      div.setAttribute('data-existing-id', r._id);
+      div.innerHTML = `
+        <div class="dyn-num">${idx+1}</div>
+        <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div><input value="${(r.title||'').replaceAll('"','&quot;')}" disabled></div>
+          <div><input value="${(r.locator||'').replaceAll('"','&quot;')}" disabled></div>
+        </div>
+        <button type="button" class="dyn-remove">Remove</button>
+      `;
+      div.querySelector('.dyn-remove').addEventListener('click', ()=>{
+        div.remove();
+        [...body.querySelectorAll('.dyn-item')].forEach((x,i)=> x.querySelector('.dyn-num').textContent = String(i+1));
+        if (!body.querySelectorAll('.dyn-item').length) body.innerHTML = '<div class="dyn-empty">(none)</div>';
+      });
+      body.appendChild(div);
+    });
+  }
+
+  function addNewRefRow(){
+    const body = el('refsBody');
+    if (body.querySelector('.dyn-empty')) body.innerHTML = '';
+    const idx = body.querySelectorAll('.dyn-item').length + 1;
+    const div = document.createElement('div');
+    div.className = 'dyn-item';
+    div.setAttribute('data-new-row','1');
+    div.innerHTML = `
+      <div class="dyn-num">${idx}</div>
+      <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div><input data-new-title placeholder="title (required)"></div>
+        <div><input data-new-locator placeholder="locator (optional)"></div>
+      </div>
+      <button type="button" class="dyn-remove">Remove</button>
+    `;
+    div.querySelector('.dyn-remove').addEventListener('click', ()=>{
+      div.remove();
+      [...body.querySelectorAll('.dyn-item')].forEach((x,i)=> x.querySelector('.dyn-num').textContent = String(i+1));
+      if (!body.querySelectorAll('.dyn-item').length) body.innerHTML = '<div class="dyn-empty">(none)</div>';
+    });
+    body.appendChild(div);
+  }
+
+  async function createNewReferencesFromRows(){
+    const rows = [...document.querySelectorAll('#refsBody .dyn-item[data-new-row="1"]')];
+    const ids = [];
+    for (const r of rows){
+      const title = (r.querySelector('[data-new-title]')?.value||'').trim();
+      const locator = (r.querySelector('[data-new-locator]')?.value||'').trim() || null;
+      if (!title) continue;
+      const res = await fetch('/api/references', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({ title, locator })
+      });
+      if (!res.ok){
+        const t = await res.text();
+        showToast(`Reference create failed: ${res.status} ${t}`, 'error');
+        throw new Error('reference create failed');
+      }
+      const created = await res.json();
+      ids.push(created._id);
+    }
+    return ids;
+  }
+
+  async function ensureReferenceSourceId(){
+    const sel = el('refSourceSelect');
+    const v = (sel.value||'').trim();
+    if (!v) return undefined; // keep
+    if (v === '__none__') return null;
+    if (v !== '__new__') return v;
+
+    const name = (el('newRefSourceName').value||'').trim();
+    const description = (el('newRefSourceDesc').value||'').trim() || null;
+    if (!name){ showToast('New Source Name is required.', 'error'); throw new Error('missing source name'); }
+
+    const res = await fetch('/api/reference-sources', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({ name, description })
+    });
+    if (!res.ok){
+      const t = await res.text();
+      showToast(`Reference source create failed: ${res.status} ${t}`, 'error');
+      throw new Error('source create failed');
+    }
+    const created = await res.json();
+    await loadReferenceSources();
+    el('refSourceSelect').value = created._id;
+    return created._id;
+  }
+
+  // ========== Kind Visibility ==========
+  const visualKinds = ['S100_PR_Symbol', 'S100_PR_LineStyle', 'S100_PR_AreaFill', 'S100_PR_Pixmap'];
+
+  function setRelVisibility(k) {
+    document.querySelectorAll('.rel-section').forEach(e => e.classList.remove('active'));
+    
+    let hasRelations = false;
+    
+    if (visualKinds.includes(k)) {
+      el('relVisualLinks').classList.add('active');
+      hasRelations = true;
+    }
+    if (k === 'S100_PR_LineStyle' || k === 'S100_PR_AreaFill') {
+      el('relLineArea').classList.add('active');
+      hasRelations = true;
+    }
+    if (k === 'S100_PR_ViewingGroupLayer') {
+      el('relViewingGroupLayer').classList.add('active');
+      hasRelations = true;
+    }
+    if (k === 'S100_PR_ViewingGroup') {
+      el('relViewingGroup').classList.add('active');
+      hasRelations = true;
+    }
+    if (k === 'S100_PR_AlertHighlight') {
+      el('relAlertHighlight').classList.add('active');
+      hasRelations = true;
+    }
+    if (k === 'S100_PR_AlertMessage') {
+      el('relAlertMessage').classList.add('active');
+      hasRelations = true;
+    }
+    if (k === 'S100_PR_ColourToken') {
+      el('relColourToken').classList.add('active');
+      hasRelations = true;
+    }
+    if (k === 'S100_PR_PaletteItem') {
+      el('relPaletteItem').classList.add('active');
+      hasRelations = true;
+    }
+
+    el('relationsCard').style.display = hasRelations ? '' : 'none';
+  }
+
+  function setKindBodyVisibility(k){
+    document.querySelectorAll('.kb-section').forEach(e => e.classList.remove('active'));
+    
+    let hasKindBody = false;
+
+    if (visualKinds.includes(k)) {
+      el('kb_visual')?.classList.add('active');
+      hasKindBody = true;
+    }
+    if (k === 'S100_PR_ItemSchema') { el('kb_itemSchema')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_ViewingGroup') { el('kb_viewingGroup')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_AlertMessage') { el('kb_alertMessage')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_ColourToken') { el('kb_colourToken')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_PaletteItem') { el('kb_paletteItem')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_ContextParameter') { el('kb_contextParameter')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_DrawingPriority') { el('kb_drawingPriority')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_DisplayPlane') { el('kb_displayPlane')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_Alert') { el('kb_alert')?.classList.add('active'); hasKindBody = true; }
+    if (k === 'S100_PR_Font') { el('kb_font')?.classList.add('active'); hasKindBody = true; }
+
+    el('kindBodyCard').style.display = hasKindBody ? '' : 'none';
+  }
+
+  // ========== Load Relations Options ==========
+  async function loadAllRelationOptions() {
+    if (visualKinds.includes(kind)) {
+      await loadPrItemsToSelect(el('itemSchemaSel'), 'S100_PR_ItemSchema', registerId);
+      await loadPrItemsToSelect(el('colourTokenSel'), 'S100_PR_ColourToken', registerId);
+    }
+    if (kind === 'S100_PR_LineStyle' || kind === 'S100_PR_AreaFill') {
+      await loadPrItemsToSelect(el('symbolSel'), 'S100_PR_Symbol', registerId);
+    }
+    if (kind === 'S100_PR_ViewingGroupLayer') {
+      await loadPrItemsToSelect(el('displayModeSel'), 'S100_PR_DisplayMode', registerId);
+    }
+    if (kind === 'S100_PR_ViewingGroup') {
+      await loadPrItemsToSelect(el('viewingGroupLayerSel'), 'S100_PR_ViewingGroupLayer', registerId);
+    }
+    if (kind === 'S100_PR_AlertHighlight') {
+      await loadPrItemsToSelect(el('ah_viewingGroupSel'), 'S100_PR_ViewingGroup', registerId);
+      await loadPrItemsToSelect(el('ah_msgSel'), 'S100_PR_AlertMessage', registerId);
+    }
+    if (kind === 'S100_PR_AlertMessage') {
+      await loadPrItemsToSelect(el('iconSel'), 'S100_PR_Symbol', registerId);
+    }
+    if (kind === 'S100_PR_ColourToken') {
+      await loadPrItemsToSelect(el('ct_valueSel'), 'S100_PR_PaletteItem', registerId);
+    }
+    if (kind === 'S100_PR_PaletteItem') {
+      await loadPrItemsToSelect(el('pi_paletteSel'), 'S100_PR_ColourPalette', registerId);
+    }
+  }
+
+  // ========== Prefill Relations from existing item ==========
+  function prefillRelations() {
+    // itemSchema (single)
+    if (item.itemSchema) {
+      const sel = el('itemSchemaSel');
+      Array.from(sel.options).forEach(o => { o.selected = (o.value === item.itemSchema); });
+    }
+    // colourToken (multi)
+    if (Array.isArray(item.colourToken)) {
+      const sel = el('colourTokenSel');
+      Array.from(sel.options).forEach(o => { o.selected = item.colourToken.includes(o.value); });
+    }
+    // symbol (single)
+    if (item.symbol) {
+      const sel = el('symbolSel');
+      Array.from(sel.options).forEach(o => { o.selected = (o.value === item.symbol); });
+    }
+    // displayMode (multi)
+    if (Array.isArray(item.displayMode)) {
+      const sel = el('displayModeSel');
+      Array.from(sel.options).forEach(o => { o.selected = item.displayMode.includes(o.value); });
+    }
+    // viewingGroup (multi) - ViewingGroup kind or AlertHighlight
+    if (Array.isArray(item.viewingGroup)) {
+      const selVG = el('viewingGroupLayerSel');
+      const selAH = el('ah_viewingGroupSel');
+      if (kind === 'S100_PR_ViewingGroup' && selVG) {
+        Array.from(selVG.options).forEach(o => { o.selected = item.viewingGroup.includes(o.value); });
+      }
+      if (kind === 'S100_PR_AlertHighlight' && selAH) {
+        Array.from(selAH.options).forEach(o => { o.selected = item.viewingGroup.includes(o.value); });
+      }
+    }
+    // msg (single) for AlertHighlight
+    if (item.msg) {
+      const sel = el('ah_msgSel');
+      if (sel) Array.from(sel.options).forEach(o => { o.selected = (o.value === item.msg); });
+    }
+    // icon (single) for AlertMessage
+    if (item.icon) {
+      const sel = el('iconSel');
+      if (sel) Array.from(sel.options).forEach(o => { o.selected = (o.value === item.icon); });
+    }
+    // value (single) for ColourToken
+    if (item.value) {
+      const sel = el('ct_valueSel');
+      if (sel) Array.from(sel.options).forEach(o => { o.selected = (o.value === item.value); });
+    }
+    // palette (multi) for PaletteItem
+    if (Array.isArray(item.palette)) {
+      const sel = el('pi_paletteSel');
+      if (sel) Array.from(sel.options).forEach(o => { o.selected = item.palette.includes(o.value); });
+    }
+  }
+
+  // ========== Prefill Kind Body ==========
+  function prefillKindBody() {
+    const kb = item[kind] || {};
+
+    if (visualKinds.includes(kind)) {
+      el('kb_itemDetail').value = kb.itemDetail || '';
+      el('kb_previewImage').value = kb.previewImage || '';
+      el('kb_engineeringImage').value = kb.engineeringImage || '';
+      el('kb_previewType').value = kb.previewType || '';
+      el('kb_engineeringImageType').value = kb.engineeringImageType || '';
+    }
+    if (kind === 'S100_PR_ItemSchema') {
+      el('kb_schemaKind').value = kb.schemaKind || 'S100_PR_SymbolSchema';
+      el('kb_xmlSchema').value = kb.xmlSchema || '';
+    }
+    if (kind === 'S100_PR_ViewingGroup') {
+      el('kb_foundationMode').checked = !!kb.foundationMode;
+      el('foundationMode').checked = !!kb.foundationMode;
+    }
+    if (kind === 'S100_PR_AlertMessage') {
+      const list = el('amTextList');
+      list.innerHTML = '';
+      const texts = kb.text || [];
+      if (texts.length === 0) {
+        list.innerHTML = '<div class="dyn-empty">No text items</div>';
+      } else {
+        texts.forEach(t => addLangTextItem(list, t.text || '', t.language || ''));
+      }
+    }
+    if (kind === 'S100_PR_ColourToken') {
+      el('kb_ct_token').value = kb.token || '';
+      el('ct_token').value = kb.token || '';
+    }
+    if (kind === 'S100_PR_PaletteItem') {
+      el('kb_pi_transparency').value = kb.transparency ?? '';
+      const col = kb.colour || {};
+      const srgb = col.sRGBValue || {};
+      const cie = col.cieValue || {};
+      el('kb_pi_red').value = srgb.red ?? '';
+      el('kb_pi_green').value = srgb.green ?? '';
+      el('kb_pi_blue').value = srgb.blue ?? '';
+      el('kb_pi_x').value = cie.x ?? '';
+      el('kb_pi_y').value = cie.y ?? '';
+      el('kb_pi_z').value = cie.z ?? '';
+    }
+    if (kind === 'S100_PR_ContextParameter') {
+      el('kb_cp_type').value = kb.parameterType || 'string';
+      el('kb_cp_default').value = kb.defaultValue || '';
+    }
+    if (kind === 'S100_PR_DrawingPriority') {
+      el('kb_dp_priority').value = kb.priority ?? '';
+    }
+    if (kind === 'S100_PR_DisplayPlane') {
+      el('kb_plane_order').value = kb.order ?? '';
+    }
+    if (kind === 'S100_PR_Alert') {
+      const rmList = el('rmList');
+      const rpList = el('rpList');
+      rmList.innerHTML = '';
+      rpList.innerHTML = '';
+      const rm = kb.routeMonitor || [];
+      const rp = kb.routePlan || [];
+      if (rm.length === 0) rmList.innerHTML = '<div class="dyn-empty">No routeMonitor items</div>';
+      else rm.forEach(x => addAlertPriorityItem(rmList, x.priority || {}));
+      if (rp.length === 0) rpList.innerHTML = '<div class="dyn-empty">No routePlan items</div>';
+      else rp.forEach(x => addAlertPriorityItem(rpList, x.priority || {}));
+    }
+    if (kind === 'S100_PR_Font') {
+      el('kb_font_file').value = kb.fontFile || '';
+      el('kb_font_type').value = kb.fontType || 'ttf';
+    }
+    if (kind === 'S100_PR_AlertHighlight') {
+      const ahKb = item[kind] || {};
+      el('ah_optional').checked = !!ahKb.optional;
+      el('ah_style').value = ahKb.style || 'AlarmHighlight';
+    }
+  }
+
+  // ========== Build payload ==========
+  function buildManagementInfo(){
+    const statusFallback = (el('itemStatus').value || pr.itemStatus || 'Draft');
+    const mi = {
+      proposalType: (el('mi_proposalType').value||'').trim() || null,
+      submittingOrganisation: (el('mi_submittingOrganisation').value||'').trim() || null,
+      proposedChange: (el('mi_proposedChange').value||'').trim() || null,
+      dateProposed: (el('mi_dateProposed').value||'').trim() || null,
+      dateAccepted: (el('mi_dateAccepted').value||'').trim() || null,
+      proposalStatus: (el('mi_proposalStatus').value||'').trim() || statusFallback,
+      controlBodyNotes: []
+    };
+    if (!mi.proposalType || !mi.submittingOrganisation || !mi.proposedChange || !mi.dateProposed){
+      showToast('ManagementInfo required fields missing.', 'error');
+      return null;
+    }
+    return mi;
+  }
+
+  function prItemPatch(){
+    const st = (el('itemStatus').value||'').trim();
+    const patch = {
+      name: (el('name').value||'').trim(),
+      camelCase: (el('camelCase').value||'').trim() || null,
+      alias: splitAlias(el('alias').value),
+      definition: (el('definition').value||'').trim() || null,
+      remarks: (el('remarks').value||'').trim() || null,
+      definitionSource: (el('definitionSource').value||'').trim() || null,
+      reference: (el('reference').value||'').trim() || null,
+      similarityToSource: (el('similarityToSource').value||'').trim() || null,
+      proposedChange: (el('proposedChange').value||'').trim() || null,
+      justification: (el('justification').value||'').trim() || null,
+    };
+    if (st) patch.itemStatus = st;
+    return patch;
+  }
+
+  function buildDescription(){
+    const list = el('descList');
+    return readLangTextList(list);
+  }
+
+  function buildKindBody(){
+    const out = {};
+
+    if (visualKinds.includes(kind)) {
+      out.itemDetail = el('kb_itemDetail').value.trim() || null;
+      out.previewImage = el('kb_previewImage').value.trim() || null;
+      out.engineeringImage = el('kb_engineeringImage').value.trim() || null;
+      out.previewType = el('kb_previewType').value || null;
+      out.engineeringImageType = el('kb_engineeringImageType').value || null;
+    }
+    if (kind === 'S100_PR_ItemSchema') {
+      out.schemaKind = el('kb_schemaKind').value;
+      out.xmlSchema = el('kb_xmlSchema').value.trim() || null;
+    }
+    if (kind === 'S100_PR_ViewingGroup') {
+      out.foundationMode = !!el('kb_foundationMode').checked;
+    }
+    if (kind === 'S100_PR_AlertMessage') {
+      const list = el('amTextList');
+      out.text = readLangTextList(list);
+    }
+    if (kind === 'S100_PR_ColourToken') {
+      out.token = el('kb_ct_token').value.trim() || '';
+    }
+    if (kind === 'S100_PR_PaletteItem') {
+      out.transparency = numOrNull(el('kb_pi_transparency').value) ?? 0.0;
+      out.colour = {
+        cieValue: {
+          x: numOrNull(el('kb_pi_x').value) ?? 0,
+          y: numOrNull(el('kb_pi_y').value) ?? 0,
+          z: numOrNull(el('kb_pi_z').value) ?? 0,
+        },
+        sRGBValue: {
+          red: numOrNull(el('kb_pi_red').value) ?? 0,
+          green: numOrNull(el('kb_pi_green').value) ?? 0,
+          blue: numOrNull(el('kb_pi_blue').value) ?? 0,
+        }
+      };
+    }
+    if (kind === 'S100_PR_ContextParameter') {
+      out.parameterType = el('kb_cp_type').value;
+      out.defaultValue = el('kb_cp_default').value.trim() || '';
+    }
+    if (kind === 'S100_PR_DrawingPriority') {
+      out.priority = numOrNull(el('kb_dp_priority').value) ?? 1;
+    }
+    if (kind === 'S100_PR_DisplayPlane') {
+      out.order = numOrNull(el('kb_plane_order').value) ?? 1;
+    }
+    if (kind === 'S100_PR_Alert') {
+      out.routeMonitor = readAlertPriorityList(el('rmList'));
+      out.routePlan = readAlertPriorityList(el('rpList'));
+    }
+    if (kind === 'S100_PR_Font') {
+      out.fontFile = el('kb_font_file').value.trim() || null;
+      out.fontType = el('kb_font_type').value.trim() || 'ttf';
+    }
+    if (kind === 'S100_PR_AlertHighlight') {
+      out.optional = !!el('ah_optional').checked;
+      out.style = el('ah_style').value;
+    }
+
+    return out;
+  }
+
+  function collectRelations() {
+    const rel = {};
+
+    if (visualKinds.includes(kind)) {
+      rel.itemSchema = singleSelectedValue(el('itemSchemaSel'));
+      rel.colourToken = selectedValues(el('colourTokenSel'));
+    }
+    if (kind === 'S100_PR_LineStyle' || kind === 'S100_PR_AreaFill') {
+      rel.symbol = singleSelectedValue(el('symbolSel'));
+    }
+    if (kind === 'S100_PR_ViewingGroupLayer') {
+      rel.displayMode = selectedValues(el('displayModeSel'));
+    }
+    if (kind === 'S100_PR_ViewingGroup') {
+      rel.viewingGroup = selectedValues(el('viewingGroupLayerSel'));
+    }
+    if (kind === 'S100_PR_AlertHighlight') {
+      rel.viewingGroup = selectedValues(el('ah_viewingGroupSel'));
+      rel.msg = singleSelectedValue(el('ah_msgSel'));
+    }
+    if (kind === 'S100_PR_AlertMessage') {
+      rel.icon = singleSelectedValue(el('iconSel'));
+    }
+    if (kind === 'S100_PR_ColourToken') {
+      rel.value = singleSelectedValue(el('ct_valueSel'));
+    }
+    if (kind === 'S100_PR_PaletteItem') {
+      rel.palette = selectedValues(el('pi_paletteSel'));
+    }
+
+    return rel;
+  }
+
+  // ========== Init ==========
+  window.addEventListener('load', async ()=>{
+    // Prefill prItem
+    el('name').value = pr.name || '';
+    el('camelCase').value = pr.camelCase || '';
+    el('alias').value = (pr.alias || []).join(', ');
+    el('definition').value = pr.definition || '';
+    el('remarks').value = pr.remarks || '';
+    el('definitionSource').value = pr.definitionSource || '';
+    el('reference').value = pr.reference || '';
+    el('similarityToSource').value = pr.similarityToSource || '';
+    el('proposedChange').value = pr.proposedChange || '';
+    el('justification').value = pr.justification || '';
+
+    // xmlID
+    el('xmlID').value = item.xmlID || '';
+
+    // description
+    const descList = el('descList');
+    descList.innerHTML = '';
+    const descriptions = item.description || [];
+    if (descriptions.length === 0) {
+      descList.innerHTML = '<div class="dyn-empty">No description items</div>';
+    } else {
+      descriptions.forEach(d => addLangTextItem(descList, d.text || '', d.language || ''));
+    }
+
+    // status default keep
+    el('itemStatus').value = '';
+
+    // ManagementInfo defaults
+    const today = new Date().toISOString().slice(0,10);
+    el('mi_dateProposed').value = today;
+    el('mi_proposalStatus').value = pr.itemStatus || 'Draft';
+
+    // Show/hide sections based on kind
+    setRelVisibility(kind);
+    setKindBodyVisibility(kind);
+
+    // Load options and reference sources
+    await loadReferenceSources();
+    await loadAllRelationOptions();
+
+    // Prefill relations and kindBody
+    prefillRelations();
+    prefillKindBody();
+
+    // Refresh multi-selects
+    refreshAllMultiSelects();
+
+    // Reference source hint
+    if (item.referenceSourceId){
+      const src = await fetchSourceById(item.referenceSourceId);
+      el('currentRefSourceHint').textContent = src ? `Current: ${src.name}` : `Current: ${item.referenceSourceId}`;
+    } else {
+      el('currentRefSourceHint').textContent = 'Current: (none)';
+    }
+
+    // References
+    const refIds = Array.isArray(item.referenceIds) ? item.referenceIds : [];
+    const refs = [];
+    for (const id of refIds) refs.push(await fetchRefById(id));
+    renderRefs(refs);
+
+    // Event listeners
+    el('addRefBtn').addEventListener('click', addNewRefRow);
+    el('descAdd').addEventListener('click', () => addLangTextItem(el('descList'), '', 'en'));
+    el('amTextAdd')?.addEventListener('click', () => addLangTextItem(el('amTextList'), '', 'en'));
+    el('rmAdd')?.addEventListener('click', () => addAlertPriorityItem(el('rmList'), {priority:'warning', default:true, optional:false}));
+    el('rpAdd')?.addEventListener('click', () => addAlertPriorityItem(el('rpList'), {priority:'caution', default:false, optional:true}));
+
+    // Toggle new source fields
+    el('refSourceSelect').addEventListener('change', function() {
+      const newSourceFields = el('newSourceFields');
+      if (this.value === '__new__') {
+        newSourceFields.classList.add('show');
+      } else {
+        newSourceFields.classList.remove('show');
+      }
+    });
+  });
+
+  // ========== Form Submit ==========
+  el('editForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+
+    const mi = buildManagementInfo();
+    if (!mi) return;
+
+    // References
+    let finalReferenceIds = [];
+    try{
+      const keptExistingIds = [...document.querySelectorAll('#refsBody .dyn-item[data-existing-id]')].map(x=>x.getAttribute('data-existing-id'));
+      const newIds = await createNewReferencesFromRows();
+      finalReferenceIds = [...keptExistingIds, ...newIds];
+    }catch(err){
+      return;
+    }
+
+    // Reference source
+    let refSourceId;
+    try{
+      refSourceId = await ensureReferenceSourceId();
+    }catch(err){
+      return;
+    }
+
+    const relations = collectRelations();
+
+    const payload = {
+      prItem: prItemPatch(),
+      xmlID: el('xmlID').value.trim() || null,
+      description: buildDescription(),
+      kindBody: buildKindBody(),
+      referenceIds: finalReferenceIds,
+      managementInfo: mi,
+      ...(refSourceId !== undefined ? { referenceSourceId: refSourceId } : {}),
+      // Top-level relations
+      ...(relations.itemSchema !== undefined ? { itemSchema: relations.itemSchema } : {}),
+      ...(relations.colourToken !== undefined ? { colourToken: relations.colourToken } : {}),
+      ...(relations.symbol !== undefined ? { symbol: relations.symbol } : {}),
+      ...(relations.displayMode !== undefined ? { displayMode: relations.displayMode } : {}),
+      ...(relations.viewingGroup !== undefined ? { viewingGroup: relations.viewingGroup } : {}),
+      ...(relations.msg !== undefined ? { msg: relations.msg } : {}),
+      ...(relations.icon !== undefined ? { icon: relations.icon } : {}),
+      ...(relations.value !== undefined ? { value: relations.value } : {}),
+      ...(relations.palette !== undefined ? { palette: relations.palette } : {}),
+    };
+
+    const res = await fetch(`/api/pr/items/${item._id}`, {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok){
+      const t = await res.text();
+      showToast(`Save failed: ${res.status} ${t}`, 'error');
+      return;
+    }
+
+    showToast('Saved!', 'success');
+    setTimeout(()=>{ window.location.href = `/ui/pr/${item._id}`; }, 450);
   });
 </script>
 {% endblock %}
