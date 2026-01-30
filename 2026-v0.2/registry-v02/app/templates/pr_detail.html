@@ -1,47 +1,230 @@
 {% extends "base.html" %}
 
-{% block title %}PR Detail{% endblock %}
+{% set pr = item.prItem or {} %}
+{% block title %}PR Item #{{ pr.itemIdentifier or '-' }}{% endblock %}
+
+{% block extra_styles %}
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--primary:#2563eb;--primary-hover:#1d4ed8;--bg:#f8fafc;--card:#ffffff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--radius:12px;--success:#10b981;--warning:#f59e0b;--danger:#ef4444}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  .container{max-width:1200px;margin:0 auto;padding:24px}
+  .breadcrumb{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-bottom:14px}
+  .breadcrumb a{color:var(--muted);text-decoration:none}
+  .breadcrumb a:hover{color:var(--primary)}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .title h1{font-size:28px;font-weight:800}
+  .title .sub{color:var(--muted);font-size:14px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn.primary:hover{background:var(--primary-hover)}
+  .btn.ghost{background:#fff}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .tab{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--muted);font-weight:700;cursor:pointer}
+  .tab.active{color:var(--primary);border-color:rgba(37,99,235,.35);background:rgba(37,99,235,.08)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+  .card-h{padding:12px 16px;border-bottom:1px solid var(--border);background:#fafbff;font-weight:800}
+  .card-b{padding:14px 16px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace}
+  .badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid var(--border)}
+  .b-draft{background:rgba(245,158,11,.10);color:#b45309;border-color:rgba(245,158,11,.25)}
+  .b-valid{background:rgba(16,185,129,.10);color:#047857;border-color:rgba(16,185,129,.25)}
+  .b-dep{background:rgba(239,68,68,.10);color:#b91c1c;border-color:rgba(239,68,68,.25)}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left;font-size:14px}
+  th{color:var(--muted);font-weight:800;background:#fafafa}
+  .empty{color:var(--muted);font-size:14px}
+  pre{white-space:pre-wrap;word-break:break-word;background:#0b1020;color:#e5e7eb;padding:12px;border-radius:12px;overflow:auto;font-size:13px}
+  .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 24px}
+  @media(max-width:1100px){.info-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:800px){.info-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:500px){.info-grid{grid-template-columns:1fr}}
+  .info-item{display:flex;flex-direction:column;gap:4px}
+  .info-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+  .info-value{font-size:14px;color:var(--text)}
+  .divider{height:1px;background:var(--border);margin:20px 0}
+  .text-fields{display:flex;flex-direction:column;gap:16px}
+  .text-field{display:flex;flex-direction:column;gap:6px}
+  .text-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+  .text-value{font-size:14px;color:var(--text);line-height:1.7;min-height:44px;padding:10px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:8px}
+  .link-list{display:flex;flex-wrap:wrap;gap:8px}
+  .link-item{display:inline-flex;align-items:center;padding:6px 12px;border-radius:8px;background:rgba(37,99,235,.06);color:var(--primary);font-size:13px;font-weight:600;text-decoration:none}
+  .link-item:hover{background:rgba(37,99,235,.12)}
+</style>
+{% endblock %}
 
 {% block content %}
-<h1>PR Item Detail</h1>
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">Home</a><span>/</span>
+    <a href="/ui/registers">GI Registers</a><span>/</span>
+    <a href="/ui/pr">Portrayal Register</a><span>/</span>
+    <span class="mono">Item #{{ pr.itemIdentifier or '-' }}</span>
+  </nav>
 
-<div>
-  <a href="/ui/pr">Back to list</a> |
-  <a href="/ui/pr/{{ item._id }}/edit">Edit</a>
+  <div class="top">
+    <div class="title">
+      <h1>{{ pr.name or '(no name)' }}</h1>
+      <div class="sub">kind: <span class="mono">{{ item.kind }}</span> &middot; _id: <span class="mono">{{ item._id }}</span></div>
+    </div>
+    <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a class="btn ghost" href="/ui/pr">Back to list</a>
+      <a class="btn primary" href="/ui/pr/{{ item._id }}/edit">Edit</a>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="basic">Basic</button>
+    <button class="tab" data-tab="relations">Relations</button>
+    <button class="tab" data-tab="management">Management</button>
+    <button class="tab" data-tab="refsource">Reference Source</button>
+    <button class="tab" data-tab="refs">References</button>
+  </div>
+
+  <!-- BASIC (merged: Basic + prItem + Description + Kind Body + Relations) -->
+  <section class="tab-panel" data-tab="basic">
+    <!-- Item Details -->
+    <div class="card">
+      <div class="card-h">Item Details</div>
+      <div class="card-b">
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Item Identifier</div>
+            <div class="info-value mono">{{ pr.itemIdentifier or '-' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Name</div>
+            <div class="info-value">{{ pr.name or '-' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">CamelCase</div>
+            <div class="info-value mono">{{ pr.camelCase or '-' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Status</div>
+            <div class="info-value">
+              {% set st = (pr.itemStatus or '')|lower %}
+              {% if st == 'valid' %}<span class="badge b-valid">{{ pr.itemStatus }}</span>
+              {% elif st in ['deprecated','retired'] %}<span class="badge b-dep">{{ pr.itemStatus }}</span>
+              {% else %}<span class="badge b-draft">{{ pr.itemStatus or 'Draft' }}</span>{% endif %}
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Kind</div>
+            <div class="info-value mono">{{ item.kind }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">xmlID</div>
+            <div class="info-value mono">{{ item.xmlID or '-' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Similarity to Source</div>
+            <div class="info-value">{{ pr.similarityToSource or '-' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Alias</div>
+            <div class="info-value" id="prAlias">-</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="text-fields">
+          <div class="text-field">
+            <div class="text-label">Definition</div>
+            <div class="text-value">{{ pr.definition or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Remarks</div>
+            <div class="text-value">{{ pr.remarks or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Definition Source</div>
+            <div class="text-value">{{ pr.definitionSource or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Reference</div>
+            <div class="text-value">{{ pr.reference or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Proposed Change</div>
+            <div class="text-value">{{ pr.proposedChange or '-' }}</div>
+          </div>
+          <div class="text-field">
+            <div class="text-label">Justification</div>
+            <div class="text-value">{{ pr.justification or '-' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="card">
+      <div class="card-h">Description (PR_NationalLanguageString[])</div>
+      <div class="card-b" id="descriptionBody">
+        <div class="empty">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Kind Body -->
+    <div class="card">
+      <div class="card-h">Kind Body ({{ item.kind }})</div>
+      <div class="card-b">
+        <pre id="preKindBody"></pre>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- RELATIONS (별도 탭) -->
+  <section class="tab-panel" data-tab="relations" style="display:none;">
+    <!-- 공통 연관관계: itemSchema, colourToken -->
+    <div class="card">
+      <div class="card-h">Common Relations</div>
+      <div class="card-b" id="commonRelationsBody">
+        <div class="empty">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Kind별 연관관계 -->
+    <div class="card" id="relationsCard">
+      <div class="card-h">Kind-specific Relations</div>
+      <div class="card-b" id="relationsBody">
+        <div class="empty">Loading...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFERENCE SOURCE -->
+  <section class="tab-panel" data-tab="refsource" style="display:none;">
+    <div class="card">
+      <div class="card-h">Reference Source (0..1)</div>
+      <div class="card-b" id="refSourceBody">
+        <div class="empty">Loading...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANAGEMENT -->
+  <section class="tab-panel" data-tab="management" style="display:none;">
+    <div class="card">
+      <div class="card-h">Management Information</div>
+      <div class="card-b" id="mgmt">
+        <div class="empty">Loading...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFERENCES -->
+  <section class="tab-panel" data-tab="refs" style="display:none;">
+    <div class="card">
+      <div class="card-h">References</div>
+      <div class="card-b" id="refs">
+        <div class="empty">Loading...</div>
+      </div>
+    </div>
+  </section>
 </div>
-
-<hr />
-
-<h2>Basic</h2>
-<ul>
-  <li><b>_id</b>: {{ item._id }}</li>
-  <li><b>registerId</b>: {{ item.registerId }}</li>
-  <li><b>kind</b>: {{ item.kind }}</li>
-  <li><b>createdAt</b>: {{ item.createdAt }}</li>
-  <li><b>updatedAt</b>: {{ item.updatedAt }}</li>
-</ul>
-
-<h2>prItem</h2>
-<pre id="prePrItem"></pre>
-
-<h2>Links</h2>
-<ul>
-  <li><b>itemSchema</b>: <span id="itemSchema"></span></li>
-  <li><b>colourToken</b>: <span id="colourToken"></span></li>
-</ul>
-
-<h2>description</h2>
-<pre id="preDescription"></pre>
-
-<h2>kindBody (stored under kind key)</h2>
-<pre id="preKindBody"></pre>
-
-<h2>Management Infos</h2>
-<div id="mgmt"></div>
-
-<h2>References</h2>
-<div id="refs"></div>
-
 {% endblock %}
 
 {% block extra_scripts %}
@@ -49,36 +232,282 @@
   const item = {{ item | tojson }};
   const mgmtInfos = {{ mgmt_infos | tojson }};
   const references = {{ references | tojson }};
+  const pr = item.prItem || {};
 
   function showJson(id, obj) {
-    document.getElementById(id).textContent = JSON.stringify(obj ?? null, null, 2);
+    const el = document.getElementById(id);
+    if (!obj || (typeof obj === 'object' && Object.keys(obj).length === 0)) {
+      el.textContent = '(empty)';
+      el.style.background = 'var(--bg)';
+      el.style.color = 'var(--muted)';
+    } else {
+      el.textContent = JSON.stringify(obj, null, 2);
+    }
   }
 
-  showJson('prePrItem', item.prItem);
-  showJson('preDescription', item.description);
-  showJson('preKindBody', item[item.kind] || null);
+  // Kind Body (kindBody 또는 item[kind] 키로 저장됨)
+  const kindBody = item.kindBody || item[item.kind] || null;
+  showJson('preKindBody', kindBody);
 
-  document.getElementById('itemSchema').textContent = item.itemSchema || '';
-  document.getElementById('colourToken').textContent = Array.isArray(item.colourToken) ? item.colourToken.join(', ') : '';
+  // prItem alias array
+  const aliasEl = document.getElementById('prAlias');
+  if (pr.alias && pr.alias.length > 0) {
+    aliasEl.textContent = pr.alias.join(', ');
+  } else {
+    aliasEl.textContent = '-';
+  }
 
-  // management infos
+  // Description (PR_NationalLanguageString[])
+  const descBody = document.getElementById('descriptionBody');
+  const descriptions = item.description || [];
+  if (!descriptions || descriptions.length === 0) {
+    descBody.innerHTML = '<div class="empty">No description available.</div>';
+  } else {
+    descBody.innerHTML = `
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:100px;">Language</th>
+              <th>Text</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${descriptions.map(d => `
+              <tr>
+                <td class="mono">${d.language || '-'}</td>
+                <td>${d.text || '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  // Kind별 Relations 정의 (itemSchema, colourToken은 공통으로 별도 표시)
+  const RELATIONS_BY_KIND = {
+    'S100_PR_Symbol': [],  // 공통 연관관계만 있음
+    'S100_PR_LineStyle': [
+      { name: 'symbol', label: 'symbol (0..1)', targetKind: 'S100_PR_Symbol', multiple: false }
+    ],
+    'S100_PR_AreaFill': [
+      { name: 'symbol', label: 'symbol (0..1)', targetKind: 'S100_PR_Symbol', multiple: false }
+    ],
+    'S100_PR_Pixmap': [],  // 공통 연관관계만 있음
+    'S100_PR_ViewingGroupLayer': [
+      { name: 'displayMode', label: 'displayMode (0..*)', targetKind: 'S100_PR_DisplayMode', multiple: true }
+    ],
+    'S100_PR_ViewingGroup': [
+      { name: 'viewingGroup', label: 'viewingGroup (0..*)', targetKind: 'S100_PR_ViewingGroupLayer', multiple: true }
+    ],
+    'S100_PR_AlertHighlight': [
+      { name: 'viewingGroup', label: 'viewingGroup (0..*)', targetKind: 'S100_PR_ViewingGroup', multiple: true },
+      { name: 'msg', label: 'msg (0..1)', targetKind: 'S100_PR_AlertMessage', multiple: false }
+    ],
+    'S100_PR_AlertMessage': [
+      { name: 'icon', label: 'icon (0..1)', targetKind: 'S100_PR_Symbol', multiple: false }
+    ],
+    'S100_PR_ColourToken': [
+      { name: 'value', label: 'value (0..1)', targetKind: 'S100_PR_PaletteItem', multiple: false }
+    ],
+    'S100_PR_PaletteItem': [
+      { name: 'palette', label: 'palette (0..*)', targetKind: 'S100_PR_ColourPalette', multiple: true }
+    ]
+    // 연관관계 없는 Kind: S100_PR_ItemSchema, S100_PR_DisplayMode, S100_PR_ColourPalette,
+    // S100_PR_Alert, S100_PR_Font, S100_PR_ContextParameter, S100_PR_DrawingPriority, S100_PR_DisplayPlane
+  };
+
+  // 공통 Relations 렌더링 (itemSchema, colourToken)
+  const commonRelationsBody = document.getElementById('commonRelationsBody');
+  const commonRels = [
+    { name: 'itemSchema', label: 'itemSchema (0..1)', targetKind: 'S100_PR_ItemSchema', multiple: false },
+    { name: 'colourToken', label: 'colourToken (0..*)', targetKind: 'S100_PR_ColourToken', multiple: true }
+  ];
+
+  let commonHtml = '<div class="info-grid" style="grid-template-columns:1fr 1fr;">';
+  let hasCommonRelations = false;
+
+  commonRels.forEach(rel => {
+    const value = item[rel.name];
+    let valueHtml = '-';
+    
+    if (rel.multiple) {
+      if (Array.isArray(value) && value.length > 0) {
+        hasCommonRelations = true;
+        valueHtml = `<div class="link-list">${value.map(id => 
+          `<a class="link-item" href="/ui/pr/${id}" title="${rel.targetKind}">${id}</a>`
+        ).join('')}</div>`;
+      }
+    } else {
+      if (value) {
+        hasCommonRelations = true;
+        valueHtml = `<a class="link-item" href="/ui/pr/${value}" title="${rel.targetKind}">${value}</a>`;
+      }
+    }
+    
+    commonHtml += `
+      <div class="info-item">
+        <div class="info-label">${rel.label}</div>
+        <div class="info-value">${valueHtml}</div>
+      </div>
+    `;
+  });
+
+  commonHtml += '</div>';
+  commonRelationsBody.innerHTML = hasCommonRelations ? commonHtml : '<div class="empty">No common relations defined.</div>';
+
+  // Kind별 Relations 렌더링
+  const relationsCard = document.getElementById('relationsCard');
+  const relationsBody = document.getElementById('relationsBody');
+  const relDefs = RELATIONS_BY_KIND[item.kind] || [];
+
+  if (relDefs.length === 0) {
+    // 연관관계 없는 Kind면 빈 메시지 표시
+    relationsBody.innerHTML = '<div class="empty">No kind-specific relations for this type.</div>';
+  } else {
+    // 그리드 생성
+    const gridCols = relDefs.length === 1 ? '1fr' : relDefs.length === 2 ? '1fr 1fr' : 'repeat(3, 1fr)';
+    let html = `<div class="info-grid" style="grid-template-columns:${gridCols};">`;
+    
+    relDefs.forEach(rel => {
+      const value = item[rel.name];
+      let valueHtml = '-';
+      
+      if (rel.multiple) {
+        // 0..* (배열)
+        if (Array.isArray(value) && value.length > 0) {
+          valueHtml = `<div class="link-list">${value.map(id => 
+            `<a class="link-item" href="/ui/pr/${id}" title="${rel.targetKind}">${id}</a>`
+          ).join('')}</div>`;
+        }
+      } else {
+        // 0..1 (단일)
+        if (value) {
+          valueHtml = `<a class="link-item" href="/ui/pr/${value}" title="${rel.targetKind}">${value}</a>`;
+        }
+      }
+      
+      html += `
+        <div class="info-item">
+          <div class="info-label">${rel.label}</div>
+          <div class="info-value">${valueHtml}</div>
+        </div>
+      `;
+    });
+    
+    html += '</div>';
+    relationsBody.innerHTML = html;
+  }
+
+  // Reference Source (0..1)
+  const refSourceBody = document.getElementById('refSourceBody');
+  if (item.referenceSourceId) {
+    // API로 reference source 정보 가져오기
+    fetch(`/api/reference-sources/${item.referenceSourceId}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(src => {
+        if (src) {
+          refSourceBody.innerHTML = `
+            <div class="info-grid" style="grid-template-columns:repeat(3,1fr);">
+              <div class="info-item">
+                <div class="info-label">_id</div>
+                <div class="info-value mono">${src._id || '-'}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Name</div>
+                <div class="info-value">${src.name || '-'}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Description</div>
+                <div class="info-value">${src.description || '-'}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          refSourceBody.innerHTML = `<div class="mono">${item.referenceSourceId}</div>`;
+        }
+      })
+      .catch(() => {
+        refSourceBody.innerHTML = `<div class="mono">${item.referenceSourceId}</div>`;
+      });
+  } else {
+    refSourceBody.innerHTML = '<div class="empty">No reference source linked.</div>';
+  }
+
+  // Management Infos
   const mgmtEl = document.getElementById('mgmt');
   if (!mgmtInfos || mgmtInfos.length === 0) {
-    mgmtEl.textContent = '(none)';
+    mgmtEl.innerHTML = '<div class="empty">No management information available.</div>';
   } else {
-    mgmtEl.innerHTML = mgmtInfos.map(mi => {
-      return `<pre>${JSON.stringify(mi, null, 2)}</pre>`;
-    }).join('');
+    mgmtEl.innerHTML = `
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:120px;">Date Proposed</th>
+              <th style="width:140px;">Proposal Type</th>
+              <th style="width:140px;">Proposal Status</th>
+              <th>Submitting Organisation</th>
+              <th>Proposed Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${mgmtInfos.map(m => `
+              <tr>
+                <td class="mono">${m.dateProposed || '-'}</td>
+                <td>${m.proposalType || '-'}</td>
+                <td>${m.proposalStatus || '-'}</td>
+                <td>${m.submittingOrganisation || '-'}</td>
+                <td>${m.proposedChange || '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
   }
 
-  // references
+  // References (title, locator 기반)
   const refEl = document.getElementById('refs');
   if (!references || references.length === 0) {
-    refEl.textContent = '(none)';
+    refEl.innerHTML = '<div class="empty">No references available.</div>';
   } else {
-    refEl.innerHTML = references.map(r => {
-      return `<pre>${JSON.stringify(r, null, 2)}</pre>`;
-    }).join('');
+    refEl.innerHTML = `
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:60px;">#</th>
+              <th>Title</th>
+              <th>Locator</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${references.map((r, idx) => `
+              <tr>
+                <td class="mono">${idx + 1}</td>
+                <td>${r.title || '-'}</td>
+                <td>${r.locator || '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
   }
+
+  // Tab functionality
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const target = tab.dataset.tab;
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.style.display = panel.dataset.tab === target ? 'block' : 'none';
+      });
+    });
+  });
 </script>
 {% endblock %}

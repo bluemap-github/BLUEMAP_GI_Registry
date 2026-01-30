@@ -11,7 +11,7 @@
       --nav-text: #f1f5f9;
       --nav-hover: #334155;
       --nav-accent: #3b82f6;
-      --nav-width: 240px;
+      --nav-width: 242px;
       --nav-toggle-size: 44px;
     }
 
@@ -195,25 +195,37 @@
         </a>
       </li>
       <li>
+        <a href="/ui/concepts" {% if active_nav == 'concepts' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Concept 
+        </a>
+      </li>
+      <li>
         <a href="/ui/dd" {% if active_nav == 'dd' %}class="active"{% endif %}>
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
           Data Dictionary
         </a>
       </li>
       <li>
-        <a href="/ui/concepts" {% if active_nav == 'concepts' %}class="active"{% endif %}>
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-          Concept Register
+        <a href="/ui/pr" {% if active_nav == 'pr' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          Portrayal
         </a>
       </li>
     </ul>
 
-    <div class="nav-section-title">Actions</div>
+    <div class="nav-section-title">Proposals</div>
     <ul class="nav-links">
       <li>
         <a href="/ui/dd/new" {% if active_nav == 'dd_new' %}class="active"{% endif %}>
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          New Item
+          New Data Dictionary Item
+        </a>
+      </li>
+      <li>
+        <a href="/ui/pr/new" {% if active_nav == 'pr_new' %}class="active"{% endif %}>
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          New Portrayal Item
         </a>
       </li>
       <li>

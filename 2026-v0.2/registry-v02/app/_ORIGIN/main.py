@@ -12,7 +12,15 @@ from fastapi.templating import Jinja2Templates
 from fastapi.encoders import jsonable_encoder
 
 from bson import ObjectId
-from .db import attach_db, get_db, COLL_ITEMS, COLL_MGMT_INFO, COLL_REF_SOURCES, COLL_REFERENCES
+from .db import (
+    attach_db,
+    get_db,
+    COLL_ITEMS,
+    COLL_PR_ITEMS,
+    COLL_MGMT_INFO,
+    COLL_REF_SOURCES,
+    COLL_REFERENCES,
+)
 from .api import router as api_router
 
 BASE_DIR = FsPath(__file__).resolve().parent  # .../app
@@ -72,6 +80,34 @@ async def _resolve_item_doc(item_id: str) -> dict:
         return docs[0]
 
     raise HTTPException(status_code=400, detail="Invalid item id")
+
+
+async def _resolve_pr_doc(item_id: str) -> dict:
+    """PR item_id 허용:
+    - Mongo _id(ObjectId 24hex)
+    - prItem.itemIdentifier(숫자 문자열)
+    """
+    db = get_db()
+    coll = db[COLL_PR_ITEMS]
+
+    if _is_objectid_hex(item_id):
+        doc = await coll.find_one({"_id": ObjectId(item_id)})
+        if not doc:
+            raise HTTPException(status_code=404, detail="PR item not found")
+        return doc
+
+    if item_id.isdigit():
+        docs = await coll.find({"prItem.itemIdentifier": str(item_id)}).limit(2).to_list(length=2)
+        if not docs:
+            raise HTTPException(status_code=404, detail="PR item not found")
+        if len(docs) > 1:
+            raise HTTPException(
+                status_code=409,
+                detail="itemIdentifier is ambiguous across registers. Use Mongo _id in URL.",
+            )
+        return docs[0]
+
+    raise HTTPException(status_code=400, detail="Invalid PR item id")
 
 
 # ------------------------
@@ -371,4 +407,62 @@ async def ui_concept_detail(request: Request, item_id: str):
             "reference_source": reference_source,
             "references": references,
         },
+    )
+
+
+# ------------------------
+# Portrayal Register UI
+# ------------------------
+
+@app.get("/ui/pr", response_class=HTMLResponse)
+async def ui_pr_list(request: Request):
+    return templates.TemplateResponse("pr_list.html", {"request": request})
+
+
+@app.get("/ui/pr/new", response_class=HTMLResponse)
+async def ui_pr_new(request: Request):
+    return templates.TemplateResponse("pr_new.html", {"request": request})
+
+
+@app.get("/ui/pr/{item_id}", response_class=HTMLResponse)
+async def ui_pr_detail(request: Request, item_id: str):
+    db = get_db()
+    doc = await _resolve_pr_doc(item_id)
+
+    mgmt_infos = []
+    if doc.get("managementInfoIds"):
+        cur = db[COLL_MGMT_INFO].find({"_id": {"$in": doc["managementInfoIds"]}}).sort("createdAt", 1)
+        mgmt_infos = [x async for x in cur]
+
+    references = []
+    if doc.get("referenceIds"):
+        ref_list = [x async for x in db[COLL_REFERENCES].find({"_id": {"$in": doc["referenceIds"]}})]
+        by_id = {str(x["_id"]): x for x in ref_list}
+        references = [by_id.get(str(rid)) for rid in doc["referenceIds"] if by_id.get(str(rid))]
+
+    doc = _normalize_item(doc)
+    doc = jsonable_encoder(doc)
+    mgmt_infos = jsonable_encoder(_stringify_oid_any(mgmt_infos))
+    references = jsonable_encoder(_stringify_oid_any(references))
+
+    return templates.TemplateResponse(
+        "pr_detail.html",
+        {
+            "request": request,
+            "item_id": item_id,
+            "item": doc,
+            "mgmt_infos": mgmt_infos,
+            "references": references,
+        },
+    )
+
+
+@app.get("/ui/pr/{item_id}/edit", response_class=HTMLResponse)
+async def ui_pr_edit(request: Request, item_id: str):
+    doc = await _resolve_pr_doc(item_id)
+    doc = _normalize_item(doc)
+    doc = jsonable_encoder(doc)
+    return templates.TemplateResponse(
+        "pr_update.html",
+        {"request": request, "item_id": item_id, "item": doc},
     )

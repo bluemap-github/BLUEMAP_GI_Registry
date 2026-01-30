@@ -8,7 +8,7 @@
   :root { --primary:#2563eb; --primary-hover:#1d4ed8; --bg:#f8fafc; --card-bg:#fff; --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0; --success:#10b981; --warning:#f59e0b; --info:#06b6d4; --danger:#ef4444; --radius:8px; }
   body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
   .container { max-width:1400px; margin:0 auto; padding:24px; }
-  .page-header { margin-bottom:24px; }
+  .page-header { margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
   .breadcrumb { display:flex; align-items:center; gap:8px; font-size:14px; color:var(--text-muted); margin-bottom:16px; }
   .breadcrumb a { color:var(--text-muted); text-decoration:none; transition:color .2s; }
   .breadcrumb a:hover { color:var(--primary); }
@@ -39,6 +39,8 @@
   .btn-primary:hover { background:var(--primary-hover); }
   .btn-outline { background:transparent; border-color:var(--border); color:var(--text); }
   .btn-outline:hover { background:var(--bg); border-color:var(--primary); color:var(--primary); }
+  .btn-success { background:var(--success); color:#fff; }
+  .btn-success:hover { background:#059669; }
 
   .table-section { background:var(--card-bg); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
   .table-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:12px; }
@@ -76,14 +78,21 @@
 {% block content %}
 <div class="container">
   <header class="page-header">
-    <nav class="breadcrumb">
-      <a href="/">Home</a>
-      <span>/</span>
-      <a href="/ui/registers">GI Registers</a>
-      <span>/</span>
-      <span class="current">Data Dictionary Register</span>
-    </nav>
-    <h1 class="page-title">Data Dictionary Register</h1>
+    <div>
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <span class="current">Data Dictionary Register</span>
+      </nav>
+      <h1 class="page-title">Data Dictionary Register</h1>
+    </div>
+    <button class="btn btn-success" id="btnNew">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      New DDR Item
+    </button>
   </header>
 
   <!-- Stats Cards -->
@@ -503,6 +512,11 @@
     updateInfo();
     updatePagination();
   }
+
+  
+  document.getElementById('btnNew').addEventListener('click', () => {
+    window.location.href = '/ui/dd/new';
+  });
 
   function exportData() {
     alert("Export feature coming soon (CSV/Excel etc.).");

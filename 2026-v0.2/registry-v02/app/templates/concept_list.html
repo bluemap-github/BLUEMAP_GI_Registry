@@ -18,6 +18,8 @@
   .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text);text-decoration:none;font-weight:600;cursor:pointer}
   .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
   .btn.primary:hover{background:var(--primary-hover)}
+  .btn-success { background:var(--success); color:#fff; }
+  .btn-success:hover { background:#059669; }
   .grid{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
   @media(max-width:980px){.grid{grid-template-columns:1fr}}
   .card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
@@ -48,12 +50,11 @@
   <header class="page-header">
     <nav class="breadcrumb">
       <a href="/">Home</a><span>/</span>
-      <a href="/ui/registers">GI Registers</a><span>/</span>
       <span class="current">Concept Register</span>
     </nav>
     <div class="title-row">
       <h1 class="page-title">Concept Register</h1>
-      <a class="btn primary" href="/ui/dd/new">New (Concept or DDR Item)</a>
+      <a class="btn btn-success" href="/ui/dd/new">New (Concept or DDR Item)</a>
     </div>
   </header>
 

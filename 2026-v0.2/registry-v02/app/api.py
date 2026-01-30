@@ -798,6 +798,35 @@ async def create_pr_item(payload: PRRegisterItemCreate):
     if body.get("colourToken"):
         doc["colourToken"] = [_oid(str(x)) for x in (body.get("colourToken") or [])]
 
+    # Kind별 연관관계 필드 저장 (top-level)
+    # S100_PR_LineStyle, S100_PR_AreaFill: symbol [0..1]
+    if body.get("symbol"):
+        doc["symbol"] = _oid(str(body.get("symbol")))
+
+    # S100_PR_ViewingGroupLayer: displayMode [0..*]
+    if body.get("displayMode"):
+        doc["displayMode"] = [_oid(str(x)) for x in (body.get("displayMode") or [])]
+
+    # S100_PR_ViewingGroup, S100_PR_AlertHighlight: viewingGroup [0..*]
+    if body.get("viewingGroup"):
+        doc["viewingGroup"] = [_oid(str(x)) for x in (body.get("viewingGroup") or [])]
+
+    # S100_PR_AlertHighlight: msg [0..1]
+    if body.get("msg"):
+        doc["msg"] = _oid(str(body.get("msg")))
+
+    # S100_PR_AlertMessage: icon [0..1]
+    if body.get("icon"):
+        doc["icon"] = _oid(str(body.get("icon")))
+
+    # S100_PR_ColourToken: value [0..1]
+    if body.get("value"):
+        doc["value"] = _oid(str(body.get("value")))
+
+    # S100_PR_PaletteItem: palette [0..*]
+    if body.get("palette"):
+        doc["palette"] = [_oid(str(x)) for x in (body.get("palette") or [])]
+
     # kindBody -> subdoc
     kind_body = body.get("kindBody") or None
     if kind_body is not None:
@@ -869,6 +898,22 @@ async def patch_pr_item(item_id: str, payload: PRRegisterItemPatch):
         updates["itemSchema"] = _oid(str(body.get("itemSchema"))) if body.get("itemSchema") else None
     if "colourToken" in body:
         updates["colourToken"] = [_oid(str(x)) for x in (body.get("colourToken") or [])]
+
+    # Kind별 연관관계 필드 패치
+    if "symbol" in body:
+        updates["symbol"] = _oid(str(body.get("symbol"))) if body.get("symbol") else None
+    if "displayMode" in body:
+        updates["displayMode"] = [_oid(str(x)) for x in (body.get("displayMode") or [])]
+    if "viewingGroup" in body:
+        updates["viewingGroup"] = [_oid(str(x)) for x in (body.get("viewingGroup") or [])]
+    if "msg" in body:
+        updates["msg"] = _oid(str(body.get("msg"))) if body.get("msg") else None
+    if "icon" in body:
+        updates["icon"] = _oid(str(body.get("icon"))) if body.get("icon") else None
+    if "value" in body:
+        updates["value"] = _oid(str(body.get("value"))) if body.get("value") else None
+    if "palette" in body:
+        updates["palette"] = [_oid(str(x)) for x in (body.get("palette") or [])]
 
     # kindBody: existing.kind 하위로 저장
     if "kindBody" in body:

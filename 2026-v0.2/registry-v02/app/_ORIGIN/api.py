@@ -14,6 +14,7 @@ from .db import (
     get_db,
     COLL_REGISTERS,
     COLL_ITEMS,
+    COLL_PR_ITEMS,
     COLL_REF_SOURCES,
     COLL_REFERENCES,
 )
@@ -24,6 +25,8 @@ from .models import (
     ConvertFromConceptPayload,
     ReferenceCreate,
     ReferenceSourceCreate,
+    PRRegisterItemCreate,
+    PRRegisterItemPatch,
 )
 
 UTC = timezone.utc
@@ -206,6 +209,41 @@ def _normalize_kind(v: Optional[str]) -> Optional[str]:
     if not vv:
         return None
     return _KIND_ALIASES.get(vv, _KIND_ALIASES.get(vv.lower(), vv))
+
+
+# -------------------------
+# PR kind normalize (MVP)
+# -------------------------
+_PR_KIND_ALIASES: Dict[str, str] = {
+    "symbol": "S100_PR_Symbol",
+    "linestyle": "S100_PR_LineStyle",
+    "areafill": "S100_PR_AreaFill",
+    "pixmap": "S100_PR_Pixmap",
+    "itemschema": "S100_PR_ItemSchema",
+    "displaymode": "S100_PR_DisplayMode",
+    "viewinggrouplayer": "S100_PR_ViewingGroupLayer",
+    "viewinggroup": "S100_PR_ViewingGroup",
+    "alerthighlight": "S100_PR_AlertHighlight",
+    "alertmessage": "S100_PR_AlertMessage",
+    "colourtoken": "S100_PR_ColourToken",
+    "colorutoken": "S100_PR_ColourToken",
+    "colourpalette": "S100_PR_ColourPalette",
+    "alert": "S100_PR_Alert",
+    "paletteitem": "S100_PR_PaletteItem",
+    "font": "S100_PR_Font",
+    "contextparameter": "S100_PR_ContextParameter",
+    "drawingpriority": "S100_PR_DrawingPriority",
+    "displayplane": "S100_PR_DisplayPlane",
+}
+
+
+def _normalize_pr_kind(v: Optional[str]) -> Optional[str]:
+    if not v:
+        return None
+    vv = v.strip()
+    if not vv:
+        return None
+    return _PR_KIND_ALIASES.get(vv, _PR_KIND_ALIASES.get(vv.lower(), vv))
 
 
 def _build_typed_body(kind: str, payload: dict) -> Dict[str, Any]:
@@ -641,6 +679,212 @@ async def convert_concept_to_typed(item_id: str, payload: ConvertFromConceptPayl
         return_document=ReturnDocument.AFTER,
     )
     return _dump_doc(updated)
+
+
+# -------------------------
+# PR Items
+# -------------------------
+
+@router.get("/pr/items")
+async def list_pr_items(
+    page: int = Query(1, ge=1),
+    limit: int = Query(25, ge=1, le=200),
+    q: Optional[str] = None,
+    searchBy: str = "name",  # name|itemIdentifier
+    kind: Optional[str] = None,
+    status: Optional[str] = None,
+    registerId: Optional[str] = None,
+    sortBy: str = "updatedAt",
+    sortOrder: str = "desc",
+):
+    db = get_db()
+
+    flt: Dict[str, Any] = {}
+    if registerId:
+        flt["registerId"] = _oid(registerId)
+
+    kinds = _normalize_kinds(_normalize_pr_kind(kind) if kind and "," not in kind else kind)
+    if kinds:
+        # _normalize_kinds는 DD용이지만 "S100_PR_*"도 그대로 통과
+        flt["kind"] = {"$in": kinds} if len(kinds) > 1 else kinds[0]
+
+    if status:
+        flt["prItem.itemStatus"] = status
+
+    if q:
+        if searchBy == "itemIdentifier":
+            flt["prItem.itemIdentifier"] = str(q).strip()
+        else:
+            flt["prItem.name"] = {"$regex": q, "$options": "i"}
+
+    sort_map = {
+        "itemIdentifier": "prItem.itemIdentifier",
+        "name": "prItem.name",
+        "itemStatus": "prItem.itemStatus",
+        "kind": "kind",
+        "createdAt": "createdAt",
+        "updatedAt": "updatedAt",
+    }
+    sort_field = sort_map.get(sortBy, sortBy)
+    allowed = {"prItem.itemIdentifier", "prItem.name", "prItem.itemStatus", "kind", "createdAt", "updatedAt"}
+    sort_by = _sort_field(sort_field, allowed, "updatedAt")
+    sort_dir = 1 if sortOrder.lower() == "asc" else -1
+
+    total = await db[COLL_PR_ITEMS].count_documents(flt)
+    cursor = (
+        db[COLL_PR_ITEMS]
+        .find(flt)
+        .sort(sort_by, sort_dir)
+        .skip((page - 1) * limit)
+        .limit(limit)
+    )
+    items = [_dump_doc(x) async for x in cursor]
+    return {"items": items, "total": total}
+
+
+@router.post("/pr/items", status_code=201)
+async def create_pr_item(payload: PRRegisterItemCreate):
+    """신규 PR 항목 생성 (MVP).
+
+    - itemIdentifier는 서버가 registerId 단위로 순차 자동할당 (string 저장)
+    - managementInfos는 1개 이상 필수, 저장 후 managementInfoIds로 연결
+    - kindBody는 kind 이름 key로 subdoc에 저장
+    """
+    db = get_db()
+    now = _now()
+
+    body = payload.model_dump(by_alias=True, exclude_none=True)
+    register_oid = _oid(str(body["registerId"]))
+
+    # 1) managementInfos -> managementInfoIds
+    mgmt_infos = body.pop("managementInfos", [])
+    if not mgmt_infos:
+        raise HTTPException(status_code=422, detail="managementInfos must have at least 1 item")
+
+    mgmt_docs: List[dict] = []
+    for mi in mgmt_infos:
+        mi["createdAt"] = now
+        mi["updatedAt"] = now
+        mi["dateProposed"] = _as_utc_dt(mi.get("dateProposed"))
+        mi["dateAccepted"] = _as_utc_dt(mi.get("dateAccepted"))
+        mi["dateAmended"] = _as_utc_dt(mi.get("dateAmended"))
+        mgmt_docs.append(mi)
+    res_mgmt = await db[COLL_MGMT_INFO].insert_many(mgmt_docs)
+    mgmt_ids = res_mgmt.inserted_ids
+
+    # 2) itemIdentifier 자동 할당
+    item_identifier = await _next_item_identifier(db, register_oid)
+
+    # 3) core doc
+    kind_val = _normalize_pr_kind(body.get("kind")) or body.get("kind")
+    pr_item = body.get("prItem") or {}
+    pr_item["itemIdentifier"] = item_identifier
+
+    doc: Dict[str, Any] = {
+        "registerId": register_oid,
+        "kind": kind_val,
+        "prItem": pr_item,
+        "xmlID": body.get("xmlID"),
+        "description": body.get("description") or [],
+        "createdAt": now,
+        "updatedAt": now,
+        "managementInfoIds": mgmt_ids,
+        "referenceIds": [_oid(str(x)) for x in (body.get("referenceIds") or [])],
+    }
+
+    # optional shared relations
+    if body.get("itemSchema"):
+        doc["itemSchema"] = _oid(str(body.get("itemSchema")))
+    if body.get("colourToken"):
+        doc["colourToken"] = [_oid(str(x)) for x in (body.get("colourToken") or [])]
+
+    # kindBody -> subdoc
+    kind_body = body.get("kindBody") or None
+    if kind_body is not None:
+        doc[kind_val] = kind_body
+
+    # clean None
+    if doc.get("xmlID") is None:
+        doc.pop("xmlID", None)
+
+    try:
+        res = await db[COLL_PR_ITEMS].insert_one(doc)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    created = await db[COLL_PR_ITEMS].find_one({"_id": res.inserted_id})
+    return _dump_doc(created)
+
+
+@router.get("/pr/items/{item_id}")
+async def get_pr_item(item_id: str):
+    db = get_db()
+    doc = await db[COLL_PR_ITEMS].find_one({"_id": _oid(item_id)})
+    if not doc:
+        raise HTTPException(status_code=404, detail="PR item not found")
+    return _dump_doc(doc)
+
+
+@router.patch("/pr/items/{item_id}")
+async def patch_pr_item(item_id: str, payload: PRRegisterItemPatch):
+    """PR 항목 부분 수정 + managementInfo 1개 누적."""
+    db = get_db()
+    now = _now()
+
+    existing = await db[COLL_PR_ITEMS].find_one({"_id": _oid(item_id)})
+    if not existing:
+        raise HTTPException(status_code=404, detail="PR item not found")
+
+    body = payload.model_dump(by_alias=True, exclude_none=True)
+    mgmt = body.pop("managementInfo", None)
+    if not mgmt:
+        raise HTTPException(status_code=422, detail="managementInfo is required")
+
+    mgmt["createdAt"] = now
+    mgmt["updatedAt"] = now
+    mgmt["dateProposed"] = _as_utc_dt(mgmt.get("dateProposed"))
+    mgmt["dateAccepted"] = _as_utc_dt(mgmt.get("dateAccepted"))
+    mgmt["dateAmended"] = _as_utc_dt(mgmt.get("dateAmended"))
+    res_mgmt = await db[COLL_MGMT_INFO].insert_one(mgmt)
+    new_mgmt_id = res_mgmt.inserted_id
+
+    updates: Dict[str, Any] = {"updatedAt": now}
+
+    if "prItem" in body:
+        ppatch = body.get("prItem") or {}
+        for k, v in ppatch.items():
+            if k == "itemIdentifier":
+                continue
+            updates[f"prItem.{k}"] = v
+
+    if "xmlID" in body:
+        updates["xmlID"] = body.get("xmlID")
+    if "description" in body:
+        updates["description"] = body.get("description") or []
+
+    if "referenceIds" in body:
+        updates["referenceIds"] = [_oid(str(x)) for x in (body.get("referenceIds") or [])]
+
+    if "itemSchema" in body:
+        updates["itemSchema"] = _oid(str(body.get("itemSchema"))) if body.get("itemSchema") else None
+    if "colourToken" in body:
+        updates["colourToken"] = [_oid(str(x)) for x in (body.get("colourToken") or [])]
+
+    # kindBody: existing.kind 하위로 저장
+    if "kindBody" in body:
+        kind_val = existing.get("kind")
+        if kind_val:
+            updates[kind_val] = body.get("kindBody") or {}
+
+    update_doc = {"$set": updates, "$push": {"managementInfoIds": new_mgmt_id}}
+
+    updated = await db[COLL_PR_ITEMS].find_one_and_update(
+        {"_id": _oid(item_id)},
+        update_doc,
+        return_document=ReturnDocument.AFTER,
+    )
+    return _dump_doc(updated)
+
 # -------------------------
 # Reference Sources
 # -------------------------

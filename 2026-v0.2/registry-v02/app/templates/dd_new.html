@@ -70,6 +70,119 @@
     #conceptCard.convert-mode .convert-notice {
       display: block;
     }
+
+    /* Step Wizard Styles */
+    .step-wizard {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+      gap: 0;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .step-item.active .step-circle {
+      background: var(--primary);
+      color: #fff;
+    }
+    .step-item.completed .step-circle {
+      background: var(--success);
+      color: #fff;
+    }
+    .step-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+    .step-item.active .step-label {
+      color: var(--primary);
+    }
+    .step-item.completed .step-label {
+      color: var(--success);
+    }
+    .step-connector {
+      width: 60px;
+      height: 3px;
+      background: var(--border);
+      margin: 0 12px;
+      transition: background 0.3s ease;
+    }
+    .step-connector.completed {
+      background: var(--success);
+    }
+
+    /* Step Content */
+    .step-content {
+      display: none;
+    }
+    .step-content.active {
+      display: block;
+    }
+
+    /* Step Navigation Buttons */
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .step-nav .btn {
+      min-width: 120px;
+    }
+
+    /* New Source Fields (hidden by default) */
+    .new-source-fields {
+      display: none;
+      grid-column: 1 / -1;
+    }
+    .new-source-fields.show {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Multi-select chips UI */
+    .multi-select-container{position:relative;z-index:10}
+    .multi-select-container:focus-within{z-index:1000}
+    .multi-select-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;transition:all .15s}
+    .multi-select-chips:hover{border-color:rgba(37,99,235,.4)}
+    .multi-select-chips:focus-within{border-color:rgba(37,99,235,.7);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+    .multi-select-chips.empty::after{content:'Click to select...';color:var(--muted);font-size:13px;padding:2px 0}
+    .chip{display:inline-flex;align-items:center;gap:4px;padding:4px 8px 4px 10px;background:rgba(37,99,235,.1);color:var(--primary);border-radius:6px;font-size:13px;font-weight:600;animation:chipIn .15s ease}
+    @keyframes chipIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+    .chip-remove{display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:transparent;border:none;color:var(--primary);cursor:pointer;font-size:14px;line-height:1;transition:all .15s}
+    .chip-remove:hover{background:rgba(37,99,235,.2);color:var(--primary-hover)}
+    .multi-select-dropdown{position:fixed;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.12);z-index:9999;max-height:240px;overflow:hidden;display:none}
+    .multi-select-dropdown.open{display:block;animation:dropIn .15s ease}
+    @keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    .multi-select-search{padding:10px 12px;border-bottom:1px solid var(--border)}
+    .multi-select-search input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px}
+    .multi-select-search input:focus{outline:none;border-color:var(--primary)}
+    .multi-select-options{max-height:180px;overflow-y:auto}
+    .multi-select-option{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;transition:background .1s;font-size:13px}
+    .multi-select-option:hover{background:rgba(37,99,235,.06)}
+    .multi-select-option.selected{background:rgba(37,99,235,.1);color:var(--primary);font-weight:600}
+    .multi-select-option-check{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+    .multi-select-option.selected .multi-select-option-check{background:var(--primary);border-color:var(--primary);color:#fff}
+    .multi-select-empty{padding:16px 12px;text-align:center;color:var(--muted);font-size:13px}
 </style>
 {% endblock %}
 
@@ -83,323 +196,429 @@
 
     <div class="top">
       <div class="title">
-        <h1 id="pageTitle">Create Item</h1>
+        <h1 id="pageTitle">Create Data Dictionary Item</h1>
         <div class="sub" id="pageSub">S-100 Part 2a 스타일: kind + concept + typed body</div>
       </div>
       <div class="actions">
         <a class="btn ghost" href="/ui/dd">Back</a>
-        <button class="btn primary" form="createForm" type="submit" id="submitBtn">Create</button>
       </div>
     </div>
 
     <div class="banner" id="convertBanner" style="display:none;">Convert mode: Concept를 선택한 타입으로 변환합니다. (Convert는 typed body만 추가/변경합니다. Concept 수정/참조 수정은 변환 후 Edit에서 해주세요.)</div>
 
+    <!-- Step Wizard -->
+    <div class="step-wizard">
+      <div class="step-item active" data-step="1">
+        <div class="step-circle">1</div>
+        <span class="step-label">Basic Info</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item" data-step="2">
+        <div class="step-circle">2</div>
+        <span class="step-label">Concept & Type</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item" data-step="3">
+        <div class="step-circle">3</div>
+        <span class="step-label">References</span>
+      </div>
+    </div>
+
     <form id="createForm">
-      <div class="card">
-        <div class="card-h">Basic</div>
-        <div class="card-b">
-          <div class="grid">
-            <div>
-              <label>Register <span class="req">*</span></label>
-              <select id="registerSelect" required></select>
-              <div class="hint">레지스터가 없으면 <a href="/ui/registers/new" style="color:var(--primary);font-weight:900;text-decoration:none;">+ create register</a></div>
-            </div>
-            <div>
-              <label>Kind <span class="req">*</span></label>
-              <select id="kindSelect" required>
-                <option value="S100_Concept">S100_Concept (Concept only)</option>
-                <option value="S100_CD_Feature">S100_CD_Feature</option>
-                <option value="S100_CD_Information">S100_CD_Information</option>
-                <option value="S100_CD_EnumeratedValue">S100_CD_EnumeratedValue</option>
-                <option value="S100_CD_SimpleAttribute">S100_CD_SimpleAttribute</option>
-                <option value="S100_CD_ComplexAttribute">S100_CD_ComplexAttribute</option>
-              </select>
-            </div>
-
-            <!-- Existing Concept Selector (visible when kind != S100_Concept) -->
-            <div id="existingConceptWrap" style="display:none;grid-column:1/-1;">
-              <label>Use Existing Concept</label>
-              <select id="existingConceptSelect">
-                <option value="">-- Create new concept manually --</option>
-              </select>
-              <div class="hint">DDR에 아직 바인딩되지 않은 Concept 목록입니다. 선택하면 아래 폼이 자동으로 채워집니다.</div>
+      <!-- Step 1: Management Information + Basic -->
+      <div class="step-content active" data-step="1">
+        <div class="card">
+          <div class="card-h">Management Information <span style="color:var(--muted);font-weight:800;">(append)</span></div>
+          <div class="card-b">
+            <div class="grid">
+              <div>
+                <label>proposalType <span class="req">*</span></label>
+                <input id="mi_proposalType" required placeholder="e.g., Clarification" />
+              </div>
+              <div>
+                <label>submittingOrganisation <span class="req">*</span></label>
+                <input id="mi_submittingOrganisation" required placeholder="Organisation" />
+              </div>
+              <div style="grid-column:1/-1;">
+                <label>proposedChange <span class="req">*</span></label>
+                <textarea id="mi_proposedChange" required placeholder="What changed / why"></textarea>
+              </div>
+              <div>
+                <label>dateProposed <span class="req">*</span></label>
+                <input id="mi_dateProposed" type="date" required />
+              </div>
+              <div>
+                <label>dateAccepted</label>
+                <input id="mi_dateAccepted" type="date" />
+              </div>
+              <div>
+                <label>proposalStatus</label>
+                <input id="mi_proposalStatus" placeholder="Draft" />
+                <div class="hint">비워두면 itemStatus 값 사용</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="card" id="conceptCard">
-        <div class="card-h">Concept</div>
-        <div class="card-b">
-          <div class="convert-notice">
-            기존 Concept을 사용합니다. Concept 정보는 수정되지 않으며, Typed Body만 추가됩니다.
-          </div>
-          <div class="grid">
-            <div>
-              <label>Item Identifier</label>
-              <input id="itemIdentifier" placeholder="(auto assigned)" disabled />
-              <div class="hint">itemIdentifier는 시스템이 순차 자동할당(불변)됩니다.</div>
-            </div>
-            <div>
-              <label>Item Status <span class="req">*</span></label>
-              <select id="itemStatus" required>
-                <option value="Draft">Draft</option>
-                <option value="Pending">Pending</option>
-                <option value="Valid">Valid</option>
-                <option value="Deprecated">Deprecated</option>
-                <option value="Retired">Retired</option>
-              </select>
-            </div>
+        <div class="card">
+          <div class="card-h">Basic</div>
+          <div class="card-b">
+            <div class="grid">
+              <div>
+                <label>Register <span class="req">*</span></label>
+                <div class="multi-select-container" data-target="registerSelect" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="registerSelect" required style="display:none"></select>
+                <div class="hint">레지스터가 없으면 <a href="/ui/registers/new" style="color:var(--primary);font-weight:900;text-decoration:none;">+ create register</a></div>
+              </div>
+              <div>
+                <label>Kind <span class="req">*</span></label>
+                <div class="multi-select-container" data-target="kindSelect" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="kindSelect" required style="display:none">
+                  <option value="S100_Concept">S100_Concept (Concept only)</option>
+                  <option value="S100_CD_Feature">S100_CD_Feature</option>
+                  <option value="S100_CD_Information">S100_CD_Information</option>
+                  <option value="S100_CD_EnumeratedValue">S100_CD_EnumeratedValue</option>
+                  <option value="S100_CD_SimpleAttribute">S100_CD_SimpleAttribute</option>
+                  <option value="S100_CD_ComplexAttribute">S100_CD_ComplexAttribute</option>
+                </select>
+              </div>
 
-            <div style="grid-column:1/-1;">
-              <label>Name <span class="req">*</span></label>
-              <input id="name" required placeholder="Enter name" />
-            </div>
-
-            <div style="grid-column:1/-1;">
-              <label>CamelCase</label>
-              <input id="camelCase" placeholder="Auto-generate from name" />
-            </div>
-
-            <div style="grid-column:1/-1;">
-              <label>Alias</label>
-              <input id="alias" placeholder="comma separated" />
-            </div>
-
-            <div style="grid-column:1/-1;">
-              <label>Definition</label>
-              <textarea id="definition" placeholder="definition (optional)"></textarea>
-            </div>
-
-            <div style="grid-column:1/-1;">
-              <label>Remarks</label>
-              <textarea id="remarks" placeholder="remarks (optional)"></textarea>
-            </div>
-
-            <div>
-              <label>Definition Source</label>
-              <input id="definitionSource" placeholder="e.g., S-101" />
-            </div>
-            <div>
-              <label>Similarity To Source</label>
-              <input id="similarityToSource" placeholder="optional" />
-            </div>
-
-            <div style="grid-column:1/-1;">
-              <label>Reference</label>
-              <input id="reference" placeholder="optional" />
-            </div>
-
-            <div style="grid-column:1/-1;">
-              <label>Proposed Change</label>
-              <textarea id="proposedChange" placeholder="optional"></textarea>
-            </div>
-
-            <div style="grid-column:1/-1;">
-              <label>Justification</label>
-              <textarea id="justification" placeholder="optional"></textarea>
+              <!-- Existing Concept Selector (visible when kind != S100_Concept) -->
+              <div id="existingConceptWrap" style="display:none;grid-column:1/-1;">
+                <label>Use Existing Concept</label>
+                <div class="multi-select-container" data-target="existingConceptSelect" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="existingConceptSelect" style="display:none">
+                  <option value="">-- Create new concept manually --</option>
+                </select>
+                <div class="hint">DDR에 아직 바인딩되지 않은 Concept 목록입니다. 선택하면 아래 폼이 자동으로 채워집니다.</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="card" id="typedCard">
-        <div class="card-h">Typed Body</div>
-        <div class="card-b">
-          <div class="grid">
-            <div id="featureUseTypeWrap" style="display:none;">
-              <label>featureUseType</label>
-              <select id="featureUseType">
-                <option value="geographic">geographic</option>
-                <option value="meta" selected>meta</option>
-                <option value="cartographic">cartographic</option>
-                <option value="theme">theme</option>
-              </select>
-            </div>
-
-            <div id="numericCodeWrap" style="display:none;">
-              <label>numericCode</label>
-              <input id="numericCode" placeholder="string (e.g., 10)" />
-            </div>
-
-            <div id="valueTypeWrap" style="display:none;">
-              <label>valueType</label>
-              <select id="valueType">
-                <option value="boolean">boolean</option>
-                <option value="enumeration">enumeration</option>
-                <option value="integer">integer</option>
-                <option value="real">real</option>
-                <option value="date">date</option>
-                <option value="text" selected>text</option>
-                <option value="time">time</option>
-                <option value="dateTime">dateTime</option>
-                <option value="URI">URI</option>
-                <option value="URL">URL</option>
-                <option value="URN">URN</option>
-                <option value="S100_CodeList">S100_CodeList</option>
-                <option value="S100_TruncatedDate">S100_TruncatedDate</option>
-              </select>
-            </div>
-
-            <div id="quantityWrap" style="display:none;">
-              <label>quantitySpecification</label>
-              <select id="quantitySpecification">
-                <option value="">(none)</option>
-                <option value="angularVelocity">angularVelocity</option>
-                <option value="area">area</option>
-                <option value="density">density</option>
-                <option value="duration">duration</option>
-                <option value="frequency">frequency</option>
-                <option value="length">length</option>
-                <option value="mass">mass</option>
-                <option value="planeAngle">planeAngle</option>
-                <option value="power">power</option>
-                <option value="pressure">pressure</option>
-                <option value="salinity">salinity</option>
-                <option value="speed">speed</option>
-                <option value="temperature">temperature</option>
-                <option value="volume">volume</option>
-                <option value="weight">weight</option>
-                <option value="otherQuantity">otherQuantity</option>
-              </select>
-            </div>
-
-            <!-- Feature/Information: distinctionIds (0..*) -->
-            <div id="distinctionsWrap" style="display:none;grid-column:1/-1;">
-              <label>Related Features/Information (distinctionIds, 0..*)</label>
-              <div class="dyn">
-                <div class="dyn-h">
-                  <span class="dyn-title">Distinctions</span>
-                  <button class="btn ghost" type="button" id="addDistinctionBtn">+ Add</button>
-                </div>
-                <div class="dyn-b" id="distinctionsBody">
-                  <div class="dyn-empty">No distinctions</div>
-                </div>
-              </div>
-              <div class="hint">개념적으로 유사한 Feature/Information 항목들을 연결합니다.</div>
-            </div>
-
-            <!-- EnumeratedValue: parentSimpleAttributeId (required) -->
-            <div id="parentAttrWrap" style="display:none;grid-column:1/-1;">
-              <label>Parent SimpleAttribute <span class="req">*</span></label>
-              <select id="parentSimpleAttributeId">
-                <option value="">Select SimpleAttribute...</option>
-              </select>
-              <div class="hint">EnumeratedValue는 반드시 하나의 SimpleAttribute에 종속되어야 합니다. (valueType이 enumeration 또는 S100_CodeList인 항목만 표시)</div>
-            </div>
-
-            <!-- SimpleAttribute: attributeConstraints (0..1) -->
-            <div id="constraintsWrap" style="display:none;grid-column:1/-1;">
-              <label>Attribute Constraints (optional)</label>
-              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px;">
-                <div>
-                  <label style="font-size:12px;">stringLength</label>
-                  <input id="ac_stringLength" type="number" placeholder="max chars" />
-                </div>
-                <div>
-                  <label style="font-size:12px;">textPattern</label>
-                  <input id="ac_textPattern" placeholder="regex" />
-                </div>
-                <div>
-                  <label style="font-size:12px;">range</label>
-                  <input id="ac_range" placeholder="e.g., 0..100" />
-                </div>
-                <div>
-                  <label style="font-size:12px;">precision</label>
-                  <input id="ac_precision" type="number" placeholder="decimal places" />
-                </div>
-              </div>
-              <div class="hint">속성 값의 범위/패턴을 제한합니다.</div>
-            </div>
-
-            <!-- ComplexAttribute: subAttributes (1..*) -->
-            <div id="subAttrsWrap" style="display:none;grid-column:1/-1;">
-              <label>Sub Attributes <span class="req">*</span> (1..*)</label>
-              <div class="dyn">
-                <div class="dyn-h">
-                  <span class="dyn-title">Sub Attributes</span>
-                  <button class="btn ghost" type="button" id="addSubAttrBtn">+ Add</button>
-                </div>
-                <div class="dyn-b" id="subAttrsBody">
-                  <div class="dyn-empty">No sub attributes (at least 1 required)</div>
-                </div>
-              </div>
-              <div class="hint">SimpleAttribute 또는 ComplexAttribute를 하위 속성으로 추가합니다.</div>
-            </div>
-
-            <div class="hint" id="typedHint" style="grid-column:1/-1;">Kind에 따라 입력란이 달라집니다.</div>
-          </div>
+        <div class="step-nav">
+          <div></div>
+          <button type="button" class="btn primary" onclick="goToStep(2)">Next →</button>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-h">Management Information <span style="color:var(--muted);font-weight:800;">(append)</span></div>
-        <div class="card-b">
-          <div class="grid">
-            <div>
-              <label>proposalType <span class="req">*</span></label>
-              <input id="mi_proposalType" required placeholder="e.g., Clarification" />
+      <!-- Step 2: Concept + Typed Body -->
+      <div class="step-content" data-step="2">
+        <div class="card" id="conceptCard">
+          <div class="card-h">Concept</div>
+          <div class="card-b">
+            <div class="convert-notice">
+              기존 Concept을 사용합니다. Concept 정보는 수정되지 않으며, Typed Body만 추가됩니다.
             </div>
-            <div>
-              <label>submittingOrganisation <span class="req">*</span></label>
-              <input id="mi_submittingOrganisation" required placeholder="Organisation" />
-            </div>
-            <div style="grid-column:1/-1;">
-              <label>proposedChange <span class="req">*</span></label>
-              <textarea id="mi_proposedChange" required placeholder="What changed / why"></textarea>
-            </div>
-            <div>
-              <label>dateProposed <span class="req">*</span></label>
-              <input id="mi_dateProposed" type="date" required />
-            </div>
-            <div>
-              <label>dateAccepted</label>
-              <input id="mi_dateAccepted" type="date" />
-            </div>
-            <div>
-              <label>proposalStatus</label>
-              <input id="mi_proposalStatus" placeholder="Draft" />
-              <div class="hint">비워두면 itemStatus 값 사용</div>
+            <div class="grid">
+              <div>
+                <label>Item Identifier</label>
+                <input id="itemIdentifier" placeholder="(auto assigned)" disabled />
+                <div class="hint">itemIdentifier는 시스템이 순차 자동할당(불변)됩니다.</div>
+              </div>
+              <div>
+                <label>Item Status <span class="req">*</span></label>
+                <div class="multi-select-container" data-target="itemStatus" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="itemStatus" required style="display:none">
+                  <option value="Draft">Draft</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Valid">Valid</option>
+                  <option value="Deprecated">Deprecated</option>
+                  <option value="Retired">Retired</option>
+                </select>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>Name <span class="req">*</span></label>
+                <input id="name" required placeholder="Enter name" />
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>CamelCase</label>
+                <input id="camelCase" placeholder="Auto-generate from name" />
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>Alias</label>
+                <input id="alias" placeholder="comma separated" />
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>Definition</label>
+                <textarea id="definition" placeholder="definition (optional)"></textarea>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>Remarks</label>
+                <textarea id="remarks" placeholder="remarks (optional)"></textarea>
+              </div>
+
+              <div>
+                <label>Definition Source</label>
+                <input id="definitionSource" placeholder="e.g., S-101" />
+              </div>
+              <div>
+                <label>Similarity To Source</label>
+                <input id="similarityToSource" placeholder="optional" />
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>Reference</label>
+                <input id="reference" placeholder="optional" />
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>Proposed Change</label>
+                <textarea id="proposedChange" placeholder="optional"></textarea>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>Justification</label>
+                <textarea id="justification" placeholder="optional"></textarea>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="card" id="refsCard">
-        <div class="card-h">References</div>
-        <div class="card-b">
-          <div class="grid">
-            <div style="grid-column:1/-1;">
-              <label>Reference Source (0..1)</label>
-              <select id="refSourceSelect">
-                <option value="">(none)</option>
-                <option value="__new__">+ Create new…</option>
-              </select>
-              <div class="hint">Convert mode에서는 참조를 변경하지 않습니다.</div>
-            </div>
-            <div>
-              <label>New Source Name</label>
-              <input id="newRefSourceName" placeholder="e.g., S-101 Ed. X.Y" />
-            </div>
-            <div>
-              <label>New Source Description</label>
-              <input id="newRefSourceDesc" placeholder="optional" />
-            </div>
-
-            <div style="grid-column:1/-1;">
-              <label>References (0..*)</label>
-              <div class="dyn">
-                <div class="dyn-h">
-                  <span class="dyn-title">References</span>
-                  <button class="btn ghost" type="button" id="addRefBtn">+ Add</button>
+        <div class="card" id="typedCard">
+          <div class="card-h">Typed Body</div>
+          <div class="card-b">
+            <div class="grid">
+              <div id="featureUseTypeWrap" style="display:none;">
+                <label>featureUseType</label>
+                <div class="multi-select-container" data-target="featureUseType" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
                 </div>
-                <div class="dyn-b" id="refsBody">
-                  <div class="dyn-empty">No references</div>
-                </div>
+                <select id="featureUseType" style="display:none">
+                  <option value="geographic">geographic</option>
+                  <option value="meta">meta</option>
+                  <option value="cartographic">cartographic</option>
+                  <option value="theme">theme</option>
+                </select>
               </div>
-              <div class="hint">각 Row는 저장 시 Reference 문서로 생성되고, 그 ID들이 Item에 연결됩니다.</div>
+
+              <div id="numericCodeWrap" style="display:none;">
+                <label>numericCode</label>
+                <input id="numericCode" placeholder="string (e.g., 10)" />
+              </div>
+
+              <div id="valueTypeWrap" style="display:none;">
+                <label>valueType</label>
+                <div class="multi-select-container" data-target="valueType" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="valueType" style="display:none">
+                  <option value="boolean">boolean</option>
+                  <option value="enumeration">enumeration</option>
+                  <option value="integer">integer</option>
+                  <option value="real">real</option>
+                  <option value="date">date</option>
+                  <option value="text">text</option>
+                  <option value="time">time</option>
+                  <option value="dateTime">dateTime</option>
+                  <option value="URI">URI</option>
+                  <option value="URL">URL</option>
+                  <option value="URN">URN</option>
+                  <option value="S100_CodeList">S100_CodeList</option>
+                  <option value="S100_TruncatedDate">S100_TruncatedDate</option>
+                </select>
+              </div>
+
+              <div id="quantityWrap" style="display:none;">
+                <label>quantitySpecification</label>
+                <div class="multi-select-container" data-target="quantitySpecification" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="quantitySpecification" style="display:none">
+                  <option value="angularVelocity">angularVelocity</option>
+                  <option value="area">area</option>
+                  <option value="density">density</option>
+                  <option value="duration">duration</option>
+                  <option value="frequency">frequency</option>
+                  <option value="length">length</option>
+                  <option value="mass">mass</option>
+                  <option value="planeAngle">planeAngle</option>
+                  <option value="power">power</option>
+                  <option value="pressure">pressure</option>
+                  <option value="salinity">salinity</option>
+                  <option value="speed">speed</option>
+                  <option value="temperature">temperature</option>
+                  <option value="volume">volume</option>
+                  <option value="weight">weight</option>
+                  <option value="otherQuantity">otherQuantity</option>
+                </select>
+              </div>
+
+              <!-- Feature/Information: distinctionIds (0..*) -->
+              <div id="distinctionsWrap" style="display:none;grid-column:1/-1;">
+                <label>Related Features/Information (distinctionIds, 0..*)</label>
+                <div class="dyn">
+                  <div class="dyn-h">
+                    <span class="dyn-title">Distinctions</span>
+                    <button class="btn ghost" type="button" id="addDistinctionBtn">+ Add</button>
+                  </div>
+                  <div class="dyn-b" id="distinctionsBody">
+                    <div class="dyn-empty">No distinctions</div>
+                  </div>
+                </div>
+                <div class="hint">개념적으로 유사한 Feature/Information 항목들을 연결합니다.</div>
+              </div>
+
+              <!-- EnumeratedValue: parentSimpleAttributeId (required) -->
+              <div id="parentAttrWrap" style="display:none;grid-column:1/-1;">
+                <label>Parent SimpleAttribute <span class="req">*</span></label>
+                <div class="multi-select-container" data-target="parentSimpleAttributeId" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="parentSimpleAttributeId" style="display:none">
+                  <option value="">Select SimpleAttribute...</option>
+                </select>
+                <div class="hint">EnumeratedValue는 반드시 하나의 SimpleAttribute에 종속되어야 합니다. (valueType이 enumeration 또는 S100_CodeList인 항목만 표시)</div>
+              </div>
+
+              <!-- SimpleAttribute: attributeConstraints (0..1) -->
+              <div id="constraintsWrap" style="display:none;grid-column:1/-1;">
+                <label>Attribute Constraints (optional)</label>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px;">
+                  <div>
+                    <label style="font-size:12px;">stringLength</label>
+                    <input id="ac_stringLength" type="number" placeholder="max chars" />
+                  </div>
+                  <div>
+                    <label style="font-size:12px;">textPattern</label>
+                    <input id="ac_textPattern" placeholder="regex" />
+                  </div>
+                  <div>
+                    <label style="font-size:12px;">range</label>
+                    <input id="ac_range" placeholder="e.g., 0..100" />
+                  </div>
+                  <div>
+                    <label style="font-size:12px;">precision</label>
+                    <input id="ac_precision" type="number" placeholder="decimal places" />
+                  </div>
+                </div>
+                <div class="hint">속성 값의 범위/패턴을 제한합니다.</div>
+              </div>
+
+              <!-- ComplexAttribute: subAttributes (1..*) -->
+              <div id="subAttrsWrap" style="display:none;grid-column:1/-1;">
+                <label>Sub Attributes <span class="req">*</span> (1..*)</label>
+                <div class="dyn">
+                  <div class="dyn-h">
+                    <span class="dyn-title">Sub Attributes</span>
+                    <button class="btn ghost" type="button" id="addSubAttrBtn">+ Add</button>
+                  </div>
+                  <div class="dyn-b" id="subAttrsBody">
+                    <div class="dyn-empty">No sub attributes (at least 1 required)</div>
+                  </div>
+                </div>
+                <div class="hint">SimpleAttribute 또는 ComplexAttribute를 하위 속성으로 추가합니다.</div>
+              </div>
+
+              <div class="hint" id="typedHint" style="grid-column:1/-1;">Kind에 따라 입력란이 달라집니다.</div>
             </div>
           </div>
+        </div>
+
+        <div class="step-nav">
+          <button type="button" class="btn ghost" onclick="goToStep(1)">← Back</button>
+          <button type="button" class="btn primary" onclick="goToStep(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: References -->
+      <div class="step-content" data-step="3">
+        <div class="card" id="refsCard">
+          <div class="card-h">References</div>
+          <div class="card-b">
+            <div class="grid">
+              <div style="grid-column:1/-1;">
+                <label>Reference Source (0..1)</label>
+                <div class="multi-select-container" data-target="refSourceSelect" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="refSourceSelect" style="display:none">
+                  <option value="__new__">+ Create new...</option>
+                </select>
+                <div class="hint" id="currentRefSourceHint"></div>
+              </div>
+
+              <!-- New Source Fields - only shown when "+ Create new…" is selected -->
+              <div id="newSourceFields" class="new-source-fields">
+                <div>
+                  <label>New Source Name <span class="req">*</span></label>
+                  <input id="newRefSourceName" placeholder="e.g., S-101 Ed. X.Y" />
+                </div>
+                <div>
+                  <label>New Source Description</label>
+                  <input id="newRefSourceDesc" placeholder="optional" />
+                </div>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>References (0..*)</label>
+                <div class="dyn">
+                  <div class="dyn-h">
+                    <span class="dyn-title">References</span>
+                    <button class="btn ghost" type="button" id="addRefBtn">+ Add</button>
+                  </div>
+                  <div class="dyn-b" id="refsBody">
+                    <div class="dyn-empty">No references</div>
+                  </div>
+                </div>
+                <div class="hint">각 Row는 저장 시 Reference 문서로 생성되고, 그 ID들이 Item에 연결됩니다.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-nav">
+          <button type="button" class="btn ghost" onclick="goToStep(2)">← Back</button>
+          <button class="btn primary" type="submit" id="submitBtn">Create</button>
         </div>
       </div>
 
@@ -412,6 +631,236 @@
 {% block extra_scripts %}
 <script>
     const fromConceptId = "{{ fromConceptId or '' }}".trim();
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    // ========== Multi-Select Chips UI ==========
+    function initMultiSelect(container) {
+      const targetId = container.dataset.target;
+      const hiddenSelect = document.getElementById(targetId);
+      if (!hiddenSelect) return;
+
+      const chipsEl = container.querySelector('.multi-select-chips');
+      const dropdownEl = container.querySelector('.multi-select-dropdown');
+      const searchInput = container.querySelector('.multi-select-search input');
+      const optionsEl = container.querySelector('.multi-select-options');
+
+      if (!chipsEl || !dropdownEl || !searchInput || !optionsEl) return;
+
+      const isSingle = container.dataset.single === 'true';
+
+      const newChipsEl = chipsEl.cloneNode(true);
+      chipsEl.parentNode.replaceChild(newChipsEl, chipsEl);
+      const chipsElement = newChipsEl;
+
+      function buildOptions(filter = '') {
+        optionsEl.innerHTML = '';
+        const opts = Array.from(hiddenSelect.options);
+        const filtered = opts.filter(o => o.value && o.text.toLowerCase().includes(filter.toLowerCase()));
+        
+        if (filtered.length === 0) {
+          optionsEl.innerHTML = '<div class="multi-select-empty">No options found</div>';
+          return;
+        }
+
+        filtered.forEach(opt => {
+          const div = document.createElement('div');
+          div.className = 'multi-select-option' + (opt.selected ? ' selected' : '');
+          div.dataset.value = opt.value;
+          div.innerHTML = `
+            <span class="multi-select-option-check">${opt.selected ? '&#10003;' : ''}</span>
+            <span>${opt.text}</span>
+          `;
+          div.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isSingle) {
+              const wasSelected = opt.selected;
+              Array.from(hiddenSelect.options).forEach(o => o.selected = false);
+              if (!wasSelected) {
+                opt.selected = true;
+              }
+              closeAllDropdowns();
+              // Trigger change event for single select
+              hiddenSelect.dispatchEvent(new Event('change'));
+            } else {
+              opt.selected = !opt.selected;
+            }
+            updateChips();
+            buildOptions(searchInput.value);
+          });
+          optionsEl.appendChild(div);
+        });
+      }
+
+      function updateChips() {
+        const selected = Array.from(hiddenSelect.selectedOptions);
+        chipsElement.innerHTML = '';
+        
+        if (selected.length === 0) {
+          chipsElement.classList.add('empty');
+        } else {
+          chipsElement.classList.remove('empty');
+          selected.forEach(opt => {
+            const chip = document.createElement('span');
+            chip.className = 'chip';
+            chip.innerHTML = `
+              <span class="chip-text">${opt.text}</span>
+              <button type="button" class="chip-remove" data-value="${opt.value}">&times;</button>
+            `;
+            chip.querySelector('.chip-remove').addEventListener('click', (e) => {
+              e.stopPropagation();
+              opt.selected = false;
+              updateChips();
+              buildOptions(searchInput.value);
+              // Trigger change event
+              hiddenSelect.dispatchEvent(new Event('change'));
+            });
+            chipsElement.appendChild(chip);
+          });
+        }
+      }
+
+      chipsElement.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdownEl.classList.contains('open');
+        closeAllDropdowns();
+        if (!isOpen) {
+          const rect = chipsElement.getBoundingClientRect();
+          dropdownEl.style.top = (rect.bottom + 4) + 'px';
+          dropdownEl.style.left = rect.left + 'px';
+          dropdownEl.style.width = rect.width + 'px';
+          dropdownEl.classList.add('open');
+          searchInput.value = '';
+          buildOptions();
+          searchInput.focus();
+        }
+      });
+
+      searchInput.addEventListener('input', () => {
+        buildOptions(searchInput.value);
+      });
+
+      dropdownEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+      if (!container._initialized) {
+        hiddenSelect.selectedIndex = -1;
+        Array.from(hiddenSelect.options).forEach(o => o.selected = false);
+        container._initialized = true;
+      }
+      updateChips();
+
+      container._refresh = () => {
+        buildOptions(searchInput.value);
+        updateChips();
+      };
+    }
+
+    function closeAllDropdowns() {
+      document.querySelectorAll('.multi-select-dropdown.open').forEach(d => d.classList.remove('open'));
+    }
+
+    document.addEventListener('click', closeAllDropdowns);
+
+    function refreshAllMultiSelects() {
+      document.querySelectorAll('.multi-select-container').forEach(container => {
+        initMultiSelect(container);
+      });
+    }
+
+    // Helper to get selected values from hidden select
+    function selectedValues(sel) {
+      return Array.from(sel.selectedOptions).map(o => o.value);
+    }
+    function singleSelectedValue(sel) {
+      const vals = selectedValues(sel);
+      return vals.length > 0 ? vals[0] : null;
+    }
+
+    // Step Navigation
+async function goToStep(step) {
+  if (step < 1 || step > totalSteps) return;
+  
+  // Validate current step before moving forward
+  if (step > currentStep && !validateStep(currentStep)) {
+    return;
+  }
+  
+  currentStep = step;
+  updateStepUI();
+  
+  // Step 3으로 이동 시 Concept의 reference 정보 로드
+  if (step === 3 && selectedConceptId) {
+    const conceptItem = unboundConcepts.find(item => item._id === selectedConceptId);
+    if (conceptItem) {
+      await loadReferencesForConcept(conceptItem);
+    }
+  } else if (step === 3 && !selectedConceptId) {
+    // 새 concept 생성 모드면 references 폼 초기화
+    clearReferencesForm();
+  }
+}
+
+    function validateStep(step) {
+      if (step === 1) {
+        const mi_proposalType = document.getElementById('mi_proposalType').value.trim();
+        const mi_submittingOrganisation = document.getElementById('mi_submittingOrganisation').value.trim();
+        const mi_proposedChange = document.getElementById('mi_proposedChange').value.trim();
+        const mi_dateProposed = document.getElementById('mi_dateProposed').value.trim();
+        const registerSelect = document.getElementById('registerSelect').value.trim();
+        
+        if (!mi_proposalType || !mi_submittingOrganisation || !mi_proposedChange || !mi_dateProposed) {
+          showToast('Management Information 필수 항목을 입력해주세요.', 'error');
+          return false;
+        }
+        if (!registerSelect && !fromConceptId && !selectedConceptId) {
+          showToast('Register를 선택해주세요.', 'error');
+          return false;
+        }
+      }
+      
+      if (step === 2) {
+        const conceptIdToConvert = fromConceptId || selectedConceptId;
+        const name = document.getElementById('name').value.trim();
+        
+        if (!conceptIdToConvert && !name) {
+          showToast('Name은 필수 항목입니다.', 'error');
+          return false;
+        }
+      }
+      
+      return true;
+    }
+
+    function updateStepUI() {
+      // Update step indicators
+      document.querySelectorAll('.step-item').forEach((item, index) => {
+        const stepNum = index + 1;
+        item.classList.remove('active', 'completed');
+        if (stepNum === currentStep) {
+          item.classList.add('active');
+        } else if (stepNum < currentStep) {
+          item.classList.add('completed');
+        }
+      });
+      
+      // Update connectors
+      document.querySelectorAll('.step-connector').forEach((connector, index) => {
+        connector.classList.remove('completed');
+        if (index + 1 < currentStep) {
+          connector.classList.add('completed');
+        }
+      });
+      
+      // Update content visibility
+      document.querySelectorAll('.step-content').forEach(content => {
+        content.classList.remove('active');
+        if (parseInt(content.dataset.step) === currentStep) {
+          content.classList.add('active');
+        }
+      });
+    }
 
     function showToast(msg, type='success'){
       const t = document.getElementById('toast');
@@ -433,6 +882,19 @@
       const cc = name.split(/\s+/).filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join('');
       if (!camelEl.value) camelEl.value = cc;
     });
+
+    // Toggle New Source Fields visibility
+    const refSourceSelect = document.getElementById('refSourceSelect');
+    if (refSourceSelect) {
+      refSourceSelect.addEventListener('change', function() {
+        const newSourceFields = document.getElementById('newSourceFields');
+        if (this.value === '__new__') {
+          newSourceFields.classList.add('show');
+        } else {
+          newSourceFields.classList.remove('show');
+        }
+      });
+    }
 
     function toggleTyped(){
       const kind = document.getElementById('kindSelect').value;
@@ -508,7 +970,7 @@
       if (unboundConceptsLoaded) return;
       
       const sel = document.getElementById('existingConceptSelect');
-      sel.innerHTML = '<option value="">Loading...</option>';
+      sel.innerHTML = '';
       
       try {
         const res = await fetch('/api/dd/items?limit=200&kind=S100_Concept');
@@ -516,17 +978,26 @@
         unboundConcepts = j.items || [];
         unboundConceptsLoaded = true;
         
-        sel.innerHTML = '<option value="">-- Create new concept manually --</option>';
+        // Add "create new" option first
+        const newOpt = document.createElement('option');
+        newOpt.value = '';
+        newOpt.textContent = '-- Create new concept manually --';
+        sel.appendChild(newOpt);
+        
         unboundConcepts.forEach(item => {
           const c = item.concept || {};
           const opt = document.createElement('option');
           opt.value = item._id;
           opt.textContent = `${c.name || '(unnamed)'} (ID: ${c.itemIdentifier || item._id})`;
+          opt.selected = false;
           sel.appendChild(opt);
         });
+        sel.selectedIndex = -1;
+        refreshAllMultiSelects();
       } catch (e) {
         console.error('Failed to load unbound concepts:', e);
-        sel.innerHTML = '<option value="">-- Create new concept manually --</option>';
+        sel.innerHTML = '';
+        refreshAllMultiSelects();
       }
     }
 
@@ -559,39 +1030,176 @@
         regSel.value = conceptItem.registerId;
       }
       
-      showToast('Concept 정보를 불러왔습니다. Typed Body만 입력하세요.', 'success');
-    }
+  showToast('Concept 정보를 불러왔습니다. Typed Body만 입력하세요.', 'success');
+  }
+  
+// API로 Reference Source 조회
+async function fetchSourceById(id) {
+  if (!id) return null;
+  try {
+    const res = await fetch(`/api/reference-sources/${id}`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    console.error('fetchSourceById error:', e);
+    return null;
+  }
+}
 
-    function clearConceptForm(){
-      document.getElementById('name').value = '';
-      document.getElementById('camelCase').value = '';
-      document.getElementById('alias').value = '';
-      document.getElementById('definition').value = '';
-      document.getElementById('remarks').value = '';
-      document.getElementById('definitionSource').value = '';
-      document.getElementById('similarityToSource').value = '';
-      document.getElementById('reference').value = '';
-      document.getElementById('proposedChange').value = '';
-      document.getElementById('justification').value = '';
-      document.getElementById('itemStatus').value = 'Draft';
+// API로 Reference 조회
+async function fetchRefById(id) {
+  try {
+    const res = await fetch(`/api/references/${id}`);
+    if (!res.ok) return { _id: id, title: '(missing)', locator: '' };
+    return await res.json();
+  } catch (e) {
+    return { _id: id, title: '(error)', locator: '' };
+  }
+}
+
+// Step 3 표시 시 Concept의 reference 정보를 API로 로드
+async function loadReferencesForConcept(conceptItem) {
+  if (!conceptItem) {
+    clearReferencesForm();
+    return;
+  }
+  
+  const body = document.getElementById('refsBody');
+  const currentRefSourceHint = document.getElementById('currentRefSourceHint');
+  
+  // Loading 표시
+  body.innerHTML = '<div class="dyn-empty">Loading...</div>';
+  if (currentRefSourceHint) currentRefSourceHint.textContent = '';
+  
+  // 1. Reference Source (0..1) 로드
+  const refSourceId = conceptItem.referenceSourceId;
+  if (refSourceId) {
+    const refSource = await fetchSourceById(refSourceId);
+    if (refSource && refSource.name) {
+      // Current 힌트 표시
+      if (currentRefSourceHint) {
+        currentRefSourceHint.innerHTML = `Current: <strong>${refSource.name}</strong>`;
+      }
+      // 드롭다운에서 선택
+      const refSourceSelect = document.getElementById('refSourceSelect');
+      if (refSourceSelect) {
+        // 기존 옵션에서 찾기
+        let found = false;
+        for (let opt of refSourceSelect.options) {
+          if (opt.value === refSourceId) {
+            refSourceSelect.value = refSourceId;
+            found = true;
+            break;
+          }
+        }
+        // 없으면 추가
+        if (!found) {
+          const newOpt = document.createElement('option');
+          newOpt.value = refSourceId;
+          newOpt.textContent = refSource.name;
+          refSourceSelect.appendChild(newOpt);
+          refSourceSelect.value = refSourceId;
+        }
+      }
     }
+  } else {
+    if (currentRefSourceHint) currentRefSourceHint.textContent = '';
+  }
+  
+  // New Source Fields 숨기기
+  const newSourceFields = document.getElementById('newSourceFields');
+  if (newSourceFields) {
+    newSourceFields.classList.remove('show');
+  }
+  
+  // 2. References (0..*) 로드
+  const refIds = conceptItem.referenceIds || [];
+  if (refIds.length === 0) {
+    body.innerHTML = '<div class="dyn-empty">No references</div>';
+    return;
+  }
+  
+  // 각 reference ID에 대해 API 호출
+  const refs = await Promise.all(refIds.map(id => fetchRefById(id)));
+  
+  body.innerHTML = '';
+  refs.forEach((ref, idx) => {
+    const row = document.createElement('div');
+    row.className = 'dyn-item';
+    row.setAttribute('data-existing-id', ref._id);
+    row.innerHTML = `
+      <div class="num">${idx + 1}</div>
+      <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <label style="display:block;margin-bottom:6px;">title <span class="req">*</span></label>
+          <input data-title placeholder="title" value="${(ref.title || '').replaceAll('"', '&quot;')}" disabled />
+        </div>
+        <div>
+          <label style="display:block;margin-bottom:6px;">locator</label>
+          <input data-locator placeholder="locator" value="${(ref.locator || '').replaceAll('"', '&quot;')}" disabled />
+        </div>
+      </div>
+      <button type="button" class="remove" title="remove">✕</button>
+    `;
+    row.querySelector('.remove').addEventListener('click', () => {
+      row.remove();
+      body.querySelectorAll('.dyn-item').forEach((el, i) => { el.querySelector('.num').textContent = i + 1; });
+      if (body.querySelectorAll('.dyn-item').length === 0) {
+        body.innerHTML = '<div class="dyn-empty">No references</div>';
+      }
+    });
+    body.appendChild(row);
+  });
+}
+
+function clearConceptForm(){
+  document.getElementById('name').value = '';
+  document.getElementById('camelCase').value = '';
+  document.getElementById('alias').value = '';
+  document.getElementById('definition').value = '';
+  document.getElementById('remarks').value = '';
+  document.getElementById('definitionSource').value = '';
+  document.getElementById('similarityToSource').value = '';
+  document.getElementById('reference').value = '';
+  document.getElementById('proposedChange').value = '';
+  document.getElementById('justification').value = '';
+  document.getElementById('itemStatus').value = 'Draft';
+  }
+  
+  function clearReferencesForm(){
+    // Reference Source 초기화
+    const refSourceSelect = document.getElementById('refSourceSelect');
+    if (refSourceSelect) {
+      refSourceSelect.value = '';
+    }
+    // New Source Fields 숨기기
+    const newSourceFields = document.getElementById('newSourceFields');
+    if (newSourceFields) {
+      newSourceFields.classList.remove('show');
+    }
+    document.getElementById('newRefSourceName').value = '';
+    document.getElementById('newRefSourceDesc').value = '';
+    
+    // References 초기화
+    const body = document.getElementById('refsBody');
+    body.innerHTML = '<div class="dyn-empty">No references</div>';
+  }
 
     document.getElementById('existingConceptSelect').addEventListener('change', function(){
       const conceptId = this.value;
       selectedConceptId = conceptId;
       
-      const submitBtn = document.getElementById('submitBtn');
-      const convertBanner = document.getElementById('convertBanner');
-      const conceptCard = document.getElementById('conceptCard');
-      const refsCard = document.getElementById('refsCard');
-      
-      if (!conceptId) {
+  const submitBtn = document.getElementById('submitBtn');
+  const convertBanner = document.getElementById('convertBanner');
+  const conceptCard = document.getElementById('conceptCard');
+  
+  if (!conceptId) {
         // "Create new concept manually" 선택 시 폼 초기화 및 UI 복원
         clearConceptForm();
+        clearReferencesForm();
         submitBtn.textContent = 'Create';
         convertBanner.style.display = 'none';
         conceptCard.classList.remove('convert-mode');
-        refsCard.style.display = '';
         // Concept 필드들 다시 활성화
         setConceptFieldsReadonly(false);
         return;
@@ -601,17 +1209,16 @@
       submitBtn.textContent = 'Convert';
       convertBanner.style.display = '';
       conceptCard.classList.add('convert-mode');
-      // References는 convert에서 변경하지 않으므로 숨김
-      refsCard.style.display = 'none';
       // Concept 필드들 읽기 전용으로 설정
       setConceptFieldsReadonly(true);
       
-      // 선택된 concept 찾기
-      const conceptItem = unboundConcepts.find(item => item._id === conceptId);
-      if (conceptItem) {
-        fillFormFromConcept(conceptItem);
-      }
-    });
+  // 선택된 concept 찾기
+  const conceptItem = unboundConcepts.find(item => item._id === conceptId);
+  if (conceptItem) {
+    fillFormFromConcept(conceptItem);
+    // References는 Step 3로 이동할 때 loadReferencesForConcept로 로드됨
+  }
+  });
 
     function setConceptFieldsReadonly(readonly){
       const fields = [
@@ -630,18 +1237,23 @@
 
     async function loadRegisters(selectedId=''){
       const sel = document.getElementById('registerSelect');
-      sel.innerHTML = '<option value="">Loading…</option>';
+      sel.innerHTML = '';
       const res = await fetch('/api/registers?limit=200');
       const j = await res.json();
       const items = j.items || [];
-      sel.innerHTML = '<option value="">Select…</option>';
       items.forEach(r=>{
         const opt = document.createElement('option');
         opt.value = r._id;
         opt.textContent = r.name + ' (' + r._id + ')';
+        opt.selected = false;
         sel.appendChild(opt);
       });
-      if (selectedId) sel.value = selectedId;
+      sel.selectedIndex = -1;
+      if (selectedId) {
+        const opt = Array.from(sel.options).find(o => o.value === selectedId);
+        if (opt) opt.selected = true;
+      }
+      refreshAllMultiSelects();
     }
 
     // ---------- References helpers (create mode only) ----------
@@ -781,15 +1393,18 @@
     }
 
     function renderParentSimpleAttributeOptions(sel){
-      sel.innerHTML = '<option value="">Select SimpleAttribute...</option>';
+      sel.innerHTML = '';
       parentSimpleAttributes.forEach(item => {
         const c = item.concept || {};
         const sa = item.S100_CD_SimpleAttribute || {};
         const opt = document.createElement('option');
         opt.value = item._id;
         opt.textContent = `${c.name || '(unnamed)'} (${c.itemIdentifier || item._id}) - ${sa.valueType}`;
+        opt.selected = false;
         sel.appendChild(opt);
       });
+      sel.selectedIndex = -1;
+      refreshAllMultiSelects();
     }
 
     // ---------- Sub Attributes (ComplexAttribute) ----------
@@ -926,13 +1541,21 @@
       const res = await fetch('/api/reference-sources?limit=200&sortBy=name&sortOrder=asc');
       const j = await res.json();
       const items = j.items || [];
-      sel.innerHTML = '<option value="">(none)</option><option value="__new__">+ Create new…</option>';
+      sel.innerHTML = '';
+      // Add "Create new" option first
+      const newOpt = document.createElement('option');
+      newOpt.value = '__new__';
+      newOpt.textContent = '+ Create new...';
+      sel.appendChild(newOpt);
       items.forEach(s=>{
         const opt = document.createElement('option');
         opt.value = s._id;
         opt.textContent = s.name + ' (' + s._id + ')';
+        opt.selected = false;
         sel.appendChild(opt);
       });
+      sel.selectedIndex = -1;
+      refreshAllMultiSelects();
     }
 
     async function ensureReferenceSourceId(){
@@ -1040,6 +1663,9 @@
       const dp = document.getElementById('mi_dateProposed');
       dp.value = new Date().toISOString().slice(0,10);
 
+      // Initialize multi-select UI for static options first
+      refreshAllMultiSelects();
+
       await loadReferenceSources();
 
       if (!fromConceptId){
@@ -1048,6 +1674,9 @@
 
       await preloadFromConcept();
       toggleTyped();
+
+      // Refresh after dynamic options are loaded
+      refreshAllMultiSelects();
     })();
 
 

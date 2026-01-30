@@ -48,7 +48,152 @@
     /* Relations styling */
     .rel-section{display:none;grid-column:1/-1;}
     .rel-section.active{display:block}
-    select[multiple]{min-height:120px}
+    /* Kind body sections (separate from relations) */
+    .kb-section{display:none;grid-column:1/-1;}
+    .kb-section.active{display:block}
+
+    /* Multi-select chips UI */
+    .multi-select-container{position:relative;z-index:10}
+    .multi-select-container:focus-within{z-index:1000}
+    .multi-select-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;transition:all .15s}
+    .multi-select-chips:hover{border-color:rgba(37,99,235,.4)}
+    .multi-select-chips:focus-within{border-color:rgba(37,99,235,.7);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+    .multi-select-chips.empty::after{content:'Click to select...';color:var(--muted);font-size:13px;padding:2px 0}
+    .chip{display:inline-flex;align-items:center;gap:4px;padding:4px 8px 4px 10px;background:rgba(37,99,235,.1);color:var(--primary);border-radius:6px;font-size:13px;font-weight:600;animation:chipIn .15s ease}
+    @keyframes chipIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+    .chip-remove{display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:transparent;border:none;color:var(--primary);cursor:pointer;font-size:14px;line-height:1;transition:all .15s}
+    .chip-remove:hover{background:rgba(37,99,235,.2);color:var(--primary-hover)}
+    .multi-select-dropdown{position:fixed;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.12);z-index:9999;max-height:240px;overflow:hidden;display:none}
+    .multi-select-dropdown.open{display:block;animation:dropIn .15s ease}
+    @keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    .multi-select-search{padding:10px 12px;border-bottom:1px solid var(--border)}
+    .multi-select-search input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px}
+    .multi-select-search input:focus{outline:none;border-color:var(--primary)}
+    .multi-select-options{max-height:180px;overflow-y:auto}
+    .multi-select-option{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;transition:background .1s;font-size:13px}
+    .multi-select-option:hover{background:rgba(37,99,235,.06)}
+    .multi-select-option.selected{background:rgba(37,99,235,.1);color:var(--primary);font-weight:600}
+    .multi-select-option-check{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+    .multi-select-option.selected .multi-select-option-check{background:var(--primary);border-color:var(--primary);color:#fff}
+    .multi-select-empty{padding:16px 12px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* File upload styling */
+    .file-upload-section{display:none;grid-column:1/-1;}
+    .file-upload-section.active{display:block}
+    .file-drop{border:2px dashed var(--border);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbff}
+    .file-drop:hover,.file-drop.dragover{border-color:var(--primary);background:rgba(37,99,235,.04)}
+    .file-drop-icon{font-size:32px;color:var(--muted);margin-bottom:8px}
+    .file-drop-text{font-size:14px;color:var(--muted)}
+    .file-drop-text strong{color:var(--primary);cursor:pointer}
+    .file-list{margin-top:12px}
+    .file-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
+    .file-item-info{display:flex;align-items:center;gap:10px}
+    .file-item-icon{width:36px;height:36px;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:16px}
+    .file-item-details{font-size:13px}
+    .file-item-name{font-weight:700;color:var(--text)}
+    .file-item-size{color:var(--muted);font-size:12px}
+    .file-item-status{font-size:12px;padding:4px 8px;border-radius:6px;font-weight:700}
+    .file-item-status.pending{background:#fef3c7;color:#92400e}
+    .file-item-status.uploading{background:#dbeafe;color:#1d4ed8}
+    .file-item-status.done{background:#d1fae5;color:#065f46}
+    .file-item-status.error{background:#fee2e2;color:#991b1b}
+    .file-item-remove{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 8px;font-size:18px}
+    .file-item-remove:hover{color:var(--danger)}
+
+    /* Step Wizard Styles */
+    .step-wizard {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+      gap: 0;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .step-item.active .step-circle {
+      background: var(--primary);
+      color: #fff;
+    }
+    .step-item.completed .step-circle {
+      background: var(--success);
+      color: #fff;
+    }
+    .step-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+    .step-item.active .step-label {
+      color: var(--primary);
+    }
+    .step-item.completed .step-label {
+      color: var(--success);
+    }
+    .step-connector {
+      width: 60px;
+      height: 3px;
+      background: var(--border);
+      margin: 0 12px;
+      transition: background 0.3s ease;
+    }
+    .step-connector.completed {
+      background: var(--success);
+    }
+
+    /* Step Content */
+    .step-content {
+      display: none;
+    }
+    .step-content.active {
+      display: block;
+    }
+
+    /* Step Navigation Buttons */
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .step-nav .btn {
+      min-width: 120px;
+    }
+
+    /* refs */
+    .dyn-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-bottom:1px solid var(--border)}
+    .dyn-item:last-child{border-bottom:none}
+    .num{width:22px;height:22px;border-radius:999px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;flex:0 0 auto;margin-top:2px}
+    .remove{border:none;background:transparent;color:var(--danger);font-weight:900;cursor:pointer;padding:6px 8px;border-radius:8px}
+    .remove:hover{background:rgba(239,68,68,.08)}
+
+    /* New Source Fields (hidden by default) */
+    .new-source-fields {
+      display: none;
+      grid-column: 1 / -1;
+    }
+    .new-source-fields.show {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 </style>
 {% endblock %}
 
@@ -62,58 +207,126 @@
 
     <div class="top">
       <div class="title">
-        <h1>Create PR Item</h1>
+        <h1>Create Portrayal Item</h1>
         <div class="sub">S-100 Portrayal Register item creation</div>
       </div>
       <div class="actions">
         <a class="btn ghost" href="/ui/pr">Back</a>
-        <button class="btn ghost" type="button" id="fillSample">Fill Sample</button>
-        <button class="btn primary" form="form" type="submit">Create</button>
       </div>
     </div>
 
     <div class="banner" id="sampleMsg" style="display:none;"></div>
 
+    <!-- Step Wizard -->
+    <div class="step-wizard">
+      <div class="step-item active" data-step="1">
+        <div class="step-circle">1</div>
+        <span class="step-label">Basic Info</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item" data-step="2">
+        <div class="step-circle">2</div>
+        <span class="step-label">PR Item & Kind</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item" data-step="3">
+        <div class="step-circle">3</div>
+        <span class="step-label">References</span>
+      </div>
+    </div>
+
     <form id="form">
-      <!-- Basic Card -->
-      <div class="card">
-        <div class="card-h">Basic</div>
-        <div class="card-b">
-          <div class="grid">
-            <div>
-              <label>Register <span class="req">*</span></label>
-              <select id="registerId" required>
-                <option value="">(select)</option>
-              </select>
-            </div>
-            <div>
-              <label>Kind <span class="req">*</span></label>
-              <select id="kind" required>
-                <option value="S100_PR_Symbol">S100_PR_Symbol</option>
-                <option value="S100_PR_LineStyle">S100_PR_LineStyle</option>
-                <option value="S100_PR_AreaFill">S100_PR_AreaFill</option>
-                <option value="S100_PR_Pixmap">S100_PR_Pixmap</option>
-                <option value="S100_PR_ItemSchema">S100_PR_ItemSchema</option>
-                <option value="S100_PR_DisplayMode">S100_PR_DisplayMode</option>
-                <option value="S100_PR_ViewingGroupLayer">S100_PR_ViewingGroupLayer</option>
-                <option value="S100_PR_ViewingGroup">S100_PR_ViewingGroup</option>
-                <option value="S100_PR_AlertHighlight">S100_PR_AlertHighlight</option>
-                <option value="S100_PR_AlertMessage">S100_PR_AlertMessage</option>
-                <option value="S100_PR_ColourToken">S100_PR_ColourToken</option>
-                <option value="S100_PR_ColourPalette">S100_PR_ColourPalette</option>
-                <option value="S100_PR_Alert">S100_PR_Alert</option>
-                <option value="S100_PR_PaletteItem">S100_PR_PaletteItem</option>
-                <option value="S100_PR_Font">S100_PR_Font</option>
-                <option value="S100_PR_ContextParameter">S100_PR_ContextParameter</option>
-                <option value="S100_PR_DrawingPriority">S100_PR_DrawingPriority</option>
-                <option value="S100_PR_DisplayPlane">S100_PR_DisplayPlane</option>
-              </select>
+      <!-- Step 1: Management Information + Basic -->
+      <div class="step-content active" data-step="1">
+        <div class="card">
+          <div class="card-h">Management Information</div>
+          <div class="card-b">
+            <div class="grid">
+              <div>
+                <label>Proposal Type</label>
+                <input id="mi_proposalType" value="Addition" />
+              </div>
+              <div>
+                <label>Submitting Organisation</label>
+                <input id="mi_submittingOrganisation" placeholder="Organisation" />
+              </div>
+              <div style="grid-column:1/-1;">
+                <label>Proposed Change</label>
+                <textarea id="mi_proposedChange" placeholder="What changed / why"></textarea>
+              </div>
+              <div>
+                <label>Proposal Status</label>
+                <input id="mi_proposalStatus" value="Draft" />
+              </div>
+              <div style="grid-column:1/-1;">
+                <label>Control Body Notes (one per line)</label>
+                <textarea id="mi_controlBodyNotesText" rows="2" placeholder="note1&#10;note2"></textarea>
+              </div>
             </div>
           </div>
         </div>
+
+        <div class="card">
+          <div class="card-h">Basic</div>
+          <div class="card-b">
+            <div class="grid">
+              <div>
+                <label>Register <span class="req">*</span></label>
+                <div class="multi-select-container" data-target="registerId" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="registerId" required style="display:none"></select>
+              </div>
+              <div>
+                <label>Kind <span class="req">*</span></label>
+                <div class="multi-select-container" data-target="kind" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="kind" required style="display:none">
+                  <option value="S100_PR_Symbol">S100_PR_Symbol</option>
+                  <option value="S100_PR_LineStyle">S100_PR_LineStyle</option>
+                  <option value="S100_PR_AreaFill">S100_PR_AreaFill</option>
+                  <option value="S100_PR_Pixmap">S100_PR_Pixmap</option>
+                  <option value="S100_PR_ItemSchema">S100_PR_ItemSchema</option>
+                  <option value="S100_PR_DisplayMode">S100_PR_DisplayMode</option>
+                  <option value="S100_PR_ViewingGroupLayer">S100_PR_ViewingGroupLayer</option>
+                  <option value="S100_PR_ViewingGroup">S100_PR_ViewingGroup</option>
+                  <option value="S100_PR_AlertHighlight">S100_PR_AlertHighlight</option>
+                  <option value="S100_PR_AlertMessage">S100_PR_AlertMessage</option>
+                  <option value="S100_PR_ColourToken">S100_PR_ColourToken</option>
+                  <option value="S100_PR_ColourPalette">S100_PR_ColourPalette</option>
+                  <option value="S100_PR_Alert">S100_PR_Alert</option>
+                  <option value="S100_PR_PaletteItem">S100_PR_PaletteItem</option>
+                  <option value="S100_PR_Font">S100_PR_Font</option>
+                  <option value="S100_PR_ContextParameter">S100_PR_ContextParameter</option>
+                  <option value="S100_PR_DrawingPriority">S100_PR_DrawingPriority</option>
+                  <option value="S100_PR_DisplayPlane">S100_PR_DisplayPlane</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step Navigation -->
+        <div class="step-nav">
+          <div></div>
+          <button type="button" class="btn primary" onclick="goToStep(2)">Next &rarr;</button>
+        </div>
       </div>
 
-      <!-- PR Item (Common) Card -->
+      <!-- Step 2: PR Item (Common), Top-level PR Fields, Kind Body, Relations -->
+      <div class="step-content" data-step="2">
+        <button type="button" class="btn ghost" id="fillSample" style="margin-bottom:12px;">Fill Sample</button>
+
+        <!-- PR Item (Common) Card -->
       <div class="card">
         <div class="card-h">PR Item (Common)</div>
         <div class="card-b">
@@ -193,22 +406,105 @@
       </div>
 
       <!-- Optional Links (Visual Kinds) Card -->
-      <div class="card">
+      <div class="card" id="optionalLinksCard" style="display:none;">
         <div class="card-h">Optional Links (Visual Kinds)</div>
         <div class="card-b">
           <div class="grid">
             <div>
-              <label>Item Schema</label>
-              <select id="itemSchemaSel">
-                <option value="">(none)</option>
-              </select>
+              <label>Item Schema (0..1)</label>
+              <div class="multi-select-container" data-target="itemSchemaSel" data-single="true">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="itemSchemaSel" style="display:none"></select>
             </div>
             <div>
               <label>Colour Token (multi)</label>
-              <select id="colourTokenSel" multiple></select>
+              <div class="multi-select-container" data-target="colourTokenSel">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="colourTokenSel" multiple style="display:none"></select>
             </div>
           </div>
           <div class="hint">Visual kinds: Symbol / LineStyle / AreaFill / Pixmap</div>
+        </div>
+      </div>
+
+      <!-- File Upload Card (for file-based kinds) -->
+      <div class="card" id="fileUploadCard" style="display:none;">
+        <div class="card-h">
+          <span>File Upload</span>
+          <span class="hint" style="margin:0;font-weight:500;">Required for this kind</span>
+        </div>
+        <div class="card-b">
+          <div class="grid">
+            <!-- itemDetail file -->
+            <div id="fileUpload_itemDetail" class="file-upload-section">
+              <label>Item Detail File <span class="req">*</span></label>
+              <div class="file-drop" data-target="itemDetail">
+                <div class="file-drop-icon">📁</div>
+                <div class="file-drop-text">Drag & drop file here or <strong>browse</strong></div>
+              </div>
+              <input type="file" id="file_itemDetail" style="display:none" />
+              <div class="file-list" id="fileList_itemDetail"></div>
+              <div class="hint">SVG, XML, or binary file for the item detail</div>
+            </div>
+
+            <!-- previewImage file -->
+            <div id="fileUpload_previewImage" class="file-upload-section">
+              <label>Preview Image</label>
+              <div class="file-drop" data-target="previewImage">
+                <div class="file-drop-icon">🖼️</div>
+                <div class="file-drop-text">Drag & drop image or <strong>browse</strong></div>
+              </div>
+              <input type="file" id="file_previewImage" accept="image/*" style="display:none" />
+              <div class="file-list" id="fileList_previewImage"></div>
+              <div class="hint">PNG, JPG, or TIF preview image</div>
+            </div>
+
+            <!-- engineeringImage file -->
+            <div id="fileUpload_engineeringImage" class="file-upload-section">
+              <label>Engineering Image</label>
+              <div class="file-drop" data-target="engineeringImage">
+                <div class="file-drop-icon">🖼️</div>
+                <div class="file-drop-text">Drag & drop image or <strong>browse</strong></div>
+              </div>
+              <input type="file" id="file_engineeringImage" accept="image/*" style="display:none" />
+              <div class="file-list" id="fileList_engineeringImage"></div>
+              <div class="hint">PNG, JPG, or TIF engineering image</div>
+            </div>
+
+            <!-- xmlSchema file (for ItemSchema) -->
+            <div id="fileUpload_xmlSchema" class="file-upload-section">
+              <label>XML Schema File <span class="req">*</span></label>
+              <div class="file-drop" data-target="xmlSchema">
+                <div class="file-drop-icon">📄</div>
+                <div class="file-drop-text">Drag & drop XSD file or <strong>browse</strong></div>
+              </div>
+              <input type="file" id="file_xmlSchema" accept=".xsd,.xml" style="display:none" />
+              <div class="file-list" id="fileList_xmlSchema"></div>
+              <div class="hint">XSD schema file</div>
+            </div>
+
+            <!-- fontFile (for Font) -->
+            <div id="fileUpload_fontFile" class="file-upload-section">
+              <label>Font File <span class="req">*</span></label>
+              <div class="file-drop" data-target="fontFile">
+                <div class="file-drop-icon">🔤</div>
+                <div class="file-drop-text">Drag & drop font file or <strong>browse</strong></div>
+              </div>
+              <input type="file" id="file_fontFile" accept=".ttf,.otf,.woff,.woff2" style="display:none" />
+              <div class="file-list" id="fileList_fontFile"></div>
+              <div class="hint">TTF, OTF, WOFF, or WOFF2 font file</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -217,16 +513,30 @@
         <div class="card-h">Relations (ObjId / ObjId[] fields)</div>
         <div class="card-b">
           <div class="grid">
-            <!-- LineStyle / AreaFill: symbol[] -->
+            <!-- LineStyle / AreaFill: symbol [0..1] -->
             <div id="relLineArea" class="rel-section">
-              <label>Symbol (multi) - For LineStyle / AreaFill</label>
-              <select id="symbolSel" multiple></select>
+              <label>Symbol (0..1) - For LineStyle / AreaFill</label>
+              <div class="multi-select-container" data-target="symbolSel" data-single="true">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="symbolSel" style="display:none"></select>
             </div>
 
             <!-- ViewingGroupLayer: displayMode[] -->
             <div id="relViewingGroupLayer" class="rel-section">
               <label>Display Mode (multi) - For ViewingGroupLayer</label>
-              <select id="displayModeSel" multiple></select>
+              <div class="multi-select-container" data-target="displayModeSel">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="displayModeSel" multiple style="display:none"></select>
             </div>
 
             <!-- ViewingGroup: foundationMode + viewingGroup[] -->
@@ -237,7 +547,14 @@
               </label>
               <div style="margin-top:12px;">
                 <label>Viewing Group Layer (multi)</label>
-                <select id="viewingGroupLayerSel" multiple></select>
+                <div class="multi-select-container" data-target="viewingGroupLayerSel">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="viewingGroupLayerSel" multiple style="display:none"></select>
               </div>
             </div>
 
@@ -250,7 +567,14 @@
               <div class="grid" style="margin-top:12px;">
                 <div>
                   <label>Style</label>
-                  <select id="ah_style">
+                  <div class="multi-select-container" data-target="ah_style" data-single="true">
+                    <div class="multi-select-chips empty" tabindex="0"></div>
+                    <div class="multi-select-dropdown">
+                      <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                      <div class="multi-select-options"></div>
+                    </div>
+                  </div>
+                  <select id="ah_style" style="display:none">
                     <option value="AlarmHighlight">AlarmHighlight</option>
                     <option value="CautionHighlight">CautionHighlight</option>
                   </select>
@@ -258,20 +582,39 @@
               </div>
               <div style="margin-top:12px;">
                 <label>Viewing Group (multi)</label>
-                <select id="ah_viewingGroupSel" multiple></select>
+                <div class="multi-select-container" data-target="ah_viewingGroupSel">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="ah_viewingGroupSel" multiple style="display:none"></select>
               </div>
               <div style="margin-top:12px;">
-                <label>Alert Message (multi)</label>
-                <select id="ah_msgSel" multiple></select>
+                <label>Alert Message (0..1)</label>
+                <div class="multi-select-container" data-target="ah_msgSel" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="ah_msgSel" style="display:none"></select>
               </div>
             </div>
 
             <!-- AlertMessage: icon -->
             <div id="relAlertMessage" class="rel-section">
-              <label>Icon (Symbol)</label>
-              <select id="iconSel">
-                <option value="">(none)</option>
-              </select>
+              <label>Icon (Symbol) (0..1)</label>
+              <div class="multi-select-container" data-target="iconSel" data-single="true">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="iconSel" style="display:none"></select>
             </div>
 
             <!-- ColourToken -->
@@ -281,15 +624,29 @@
                 <input id="ct_token" placeholder="e.g., SAMPLE_TOKEN" />
               </div>
               <div style="margin-top:12px;">
-                <label>Value (PaletteItem) (multi)</label>
-                <select id="ct_valueSel" multiple></select>
+                <label>Value (PaletteItem) (0..1)</label>
+                <div class="multi-select-container" data-target="ct_valueSel" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="ct_valueSel" style="display:none"></select>
               </div>
             </div>
 
             <!-- PaletteItem -->
             <div id="relPaletteItem" class="rel-section">
               <label>Palette (ColourPalette) (multi)</label>
-              <select id="pi_paletteSel" multiple></select>
+              <div class="multi-select-container" data-target="pi_paletteSel">
+                <div class="multi-select-chips empty" tabindex="0"></div>
+                <div class="multi-select-dropdown">
+                  <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                  <div class="multi-select-options"></div>
+                </div>
+              </div>
+              <select id="pi_paletteSel" multiple style="display:none"></select>
             </div>
 
             <div class="hint" style="grid-column:1/-1;">Relations are shown based on selected Kind.</div>
@@ -304,7 +661,7 @@
           <div class="hint" style="margin-bottom:8px;">Kind-specific fields (auto builds kindBody). Relations above will be auto-injected.</div>
 
           <!-- Visual common (Symbol/LineStyle/AreaFill/Pixmap) -->
-          <div id="kb_visual" class="rel-section">
+          <div id="kb_visual" class="kb-section">
             <div class="grid">
               <div>
                 <label>itemDetail (path)</label>
@@ -320,8 +677,14 @@
               </div>
               <div>
                 <label>previewType</label>
-                <select id="kb_previewType">
-                  <option value="">(none)</option>
+                <div class="multi-select-container" data-target="kb_previewType" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="kb_previewType" style="display:none">
                   <option value="jpg">jpg</option>
                   <option value="png">png</option>
                   <option value="tif">tif</option>
@@ -329,8 +692,14 @@
               </div>
               <div>
                 <label>engineeringImageType</label>
-                <select id="kb_engineeringImageType">
-                  <option value="">(none)</option>
+                <div class="multi-select-container" data-target="kb_engineeringImageType" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="kb_engineeringImageType" style="display:none">
                   <option value="jpg">jpg</option>
                   <option value="png">png</option>
                   <option value="tif">tif</option>
@@ -340,11 +709,18 @@
           </div>
 
           <!-- ItemSchema -->
-          <div id="kb_itemSchema" class="rel-section">
+          <div id="kb_itemSchema" class="kb-section">
             <div class="grid">
               <div>
                 <label>schemaKind</label>
-                <select id="kb_schemaKind">
+                <div class="multi-select-container" data-target="kb_schemaKind" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="kb_schemaKind" style="display:none">
                   <option value="S100_PR_SymbolSchema">S100_PR_SymbolSchema</option>
                   <option value="S100_PR_LineStyleSchema">S100_PR_LineStyleSchema</option>
                   <option value="S100_PR_AreaFillSchema">S100_PR_AreaFillSchema</option>
@@ -360,7 +736,7 @@
           </div>
 
           <!-- ViewingGroup -->
-          <div id="kb_viewingGroup" class="rel-section">
+          <div id="kb_viewingGroup" class="kb-section">
             <div class="grid">
               <div>
                 <label style="display:flex;align-items:center;gap:8px;">
@@ -372,7 +748,7 @@
           </div>
 
           <!-- AlertMessage -->
-          <div id="kb_alertMessage" class="rel-section">
+          <div id="kb_alertMessage" class="kb-section">
             <label>text (NationalLanguageString list)</label>
             <div class="dyn" id="amTextDyn">
               <div class="dyn-h">
@@ -387,7 +763,7 @@
           </div>
 
           <!-- ColourToken -->
-          <div id="kb_colourToken" class="rel-section">
+          <div id="kb_colourToken" class="kb-section">
             <div class="grid">
               <div>
                 <label>token</label>
@@ -397,7 +773,7 @@
           </div>
 
           <!-- PaletteItem -->
-          <div id="kb_paletteItem" class="rel-section">
+          <div id="kb_paletteItem" class="kb-section">
             <div class="grid">
               <div>
                 <label>transparency</label>
@@ -431,11 +807,18 @@
           </div>
 
           <!-- ContextParameter -->
-          <div id="kb_contextParameter" class="rel-section">
+          <div id="kb_contextParameter" class="kb-section">
             <div class="grid">
               <div>
                 <label>parameterType</label>
-                <select id="kb_cp_type">
+                <div class="multi-select-container" data-target="kb_cp_type" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="kb_cp_type" style="display:none">
                   <option value="boolean">boolean</option>
                   <option value="integer">integer</option>
                   <option value="double">double</option>
@@ -451,7 +834,7 @@
           </div>
 
           <!-- DrawingPriority -->
-          <div id="kb_drawingPriority" class="rel-section">
+          <div id="kb_drawingPriority" class="kb-section">
             <div class="grid">
               <div>
                 <label>priority</label>
@@ -461,7 +844,7 @@
           </div>
 
           <!-- DisplayPlane -->
-          <div id="kb_displayPlane" class="rel-section">
+          <div id="kb_displayPlane" class="kb-section">
             <div class="grid">
               <div>
                 <label>order</label>
@@ -471,7 +854,7 @@
           </div>
 
           <!-- Alert -->
-          <div id="kb_alert" class="rel-section">
+          <div id="kb_alert" class="kb-section">
             <label>routeMonitor priorities</label>
             <div class="dyn" id="rmDyn">
               <div class="dyn-h">
@@ -500,7 +883,7 @@
           </div>
 
           <!-- Font -->
-          <div id="kb_font" class="rel-section">
+          <div id="kb_font" class="kb-section">
             <div class="grid">
               <div>
                 <label>fontFile (path)</label>
@@ -515,41 +898,67 @@
         </div>
       </div>
 
-      <!-- References Card -->
-      <div class="card">
-        <div class="card-h">References</div>
-        <div class="card-b">
-          <label>Reference IDs (multi)</label>
-          <select id="referenceIdsSel" multiple></select>
+        <!-- Step 2 Navigation -->
+        <div class="step-nav">
+          <button type="button" class="btn ghost" onclick="goToStep(1)">&larr; Back</button>
+          <button type="button" class="btn primary" onclick="goToStep(3)">Next &rarr;</button>
         </div>
       </div>
 
-      <!-- Management Info Card -->
-      <div class="card">
-        <div class="card-h">Initial Management Info <span style="color:var(--muted);font-weight:800;">(required)</span></div>
-        <div class="card-b">
-          <div class="grid">
-            <div>
-              <label>Proposal Type</label>
-              <input id="mi_proposalType" value="Addition" />
-            </div>
-            <div>
-              <label>Submitting Organisation</label>
-              <input id="mi_submittingOrganisation" placeholder="Organisation" />
-            </div>
-            <div style="grid-column:1/-1;">
-              <label>Proposed Change</label>
-              <textarea id="mi_proposedChange" placeholder="What changed / why"></textarea>
-            </div>
-            <div>
-              <label>Proposal Status</label>
-              <input id="mi_proposalStatus" value="Draft" />
-            </div>
-            <div style="grid-column:1/-1;">
-              <label>Control Body Notes (one per line)</label>
-              <textarea id="mi_controlBodyNotesText" rows="2" placeholder="note1&#10;note2"></textarea>
+      <!-- Step 3: References -->
+      <div class="step-content" data-step="3">
+        <div class="card" id="refsCard">
+          <div class="card-h">References</div>
+          <div class="card-b">
+            <div class="grid">
+              <div style="grid-column:1/-1;">
+                <label>Reference Source (0..1)</label>
+                <div class="multi-select-container" data-target="refSourceSelect" data-single="true">
+                  <div class="multi-select-chips empty" tabindex="0"></div>
+                  <div class="multi-select-dropdown">
+                    <div class="multi-select-search"><input type="text" placeholder="Search..." /></div>
+                    <div class="multi-select-options"></div>
+                  </div>
+                </div>
+                <select id="refSourceSelect" style="display:none">
+                  <option value="__new__">+ Create new...</option>
+                </select>
+                <div class="hint" id="currentRefSourceHint"></div>
+              </div>
+
+              <!-- New Source Fields - only shown when "+ Create new…" is selected -->
+              <div id="newSourceFields" class="new-source-fields">
+                <div>
+                  <label>New Source Name <span class="req">*</span></label>
+                  <input id="newRefSourceName" placeholder="e.g., S-101 Ed. X.Y" />
+                </div>
+                <div>
+                  <label>New Source Description</label>
+                  <input id="newRefSourceDesc" placeholder="optional" />
+                </div>
+              </div>
+
+              <div style="grid-column:1/-1;">
+                <label>References (0..*)</label>
+                <div class="dyn">
+                  <div class="dyn-h">
+                    <div class="dyn-title">REFERENCES</div>
+                    <button type="button" class="btn ghost" id="addRefBtn">+ Add</button>
+                  </div>
+                  <div class="dyn-b" id="refsBody">
+                    <div class="dyn-empty">No references</div>
+                  </div>
+                </div>
+                <div class="hint">각 Row는 저장 시 Reference 문서로 생성되고, 그 ID들이 Item에 연결됩니다.</div>
+              </div>
             </div>
           </div>
+        </div>
+
+        <!-- Step 3 Navigation -->
+        <div class="step-nav">
+          <button type="button" class="btn ghost" onclick="goToStep(2)">&larr; Back</button>
+          <button type="submit" class="btn primary" id="submitBtn">Create</button>
         </div>
       </div>
 
@@ -562,12 +971,205 @@
 
 {% block extra_scripts %}
 <script>
+  // Step Wizard Variables
+  let currentStep = 1;
+  const totalSteps = 3;
+
   function showToast(msg, type='success'){
     const t = document.getElementById('toast');
     t.className = 'toast ' + type;
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+
+  // Step Wizard Functions
+  function updateStepUI() {
+    // Update step indicators
+    document.querySelectorAll('.step-item').forEach(item => {
+      const step = parseInt(item.dataset.step);
+      item.classList.remove('active', 'completed');
+      if (step === currentStep) {
+        item.classList.add('active');
+      } else if (step < currentStep) {
+        item.classList.add('completed');
+      }
+    });
+
+    // Update connectors
+    document.querySelectorAll('.step-connector').forEach((connector, idx) => {
+      connector.classList.toggle('completed', idx < currentStep - 1);
+    });
+
+    // Show/hide step content
+    document.querySelectorAll('.step-content').forEach(content => {
+      const step = parseInt(content.dataset.step);
+      content.classList.toggle('active', step === currentStep);
+    });
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function validateStep(step) {
+    if (step === 1) {
+      const registerId = singleSelectedValue(document.getElementById('registerId'));
+      const kind = singleSelectedValue(document.getElementById('kind'));
+      if (!registerId) {
+        showToast('Register를 선택하세요.', 'error');
+        return false;
+      }
+      if (!kind) {
+        showToast('Kind를 선택하세요.', 'error');
+        return false;
+      }
+    }
+    if (step === 2) {
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        showToast('Name은 필수입니다.', 'error');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function goToStep(step) {
+    if (step < 1 || step > totalSteps) return;
+
+    // Validate current step before moving forward
+    if (step > currentStep && !validateStep(currentStep)) {
+      return;
+    }
+
+    currentStep = step;
+    updateStepUI();
+  }
+
+  // API로 Reference Source 조회
+  async function fetchSourceById(id) {
+    if (!id) return null;
+    try {
+      const res = await fetch(`/api/reference-sources/${id}`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) {
+      console.error('fetchSourceById error:', e);
+      return null;
+    }
+  }
+
+  // API로 Reference 조회
+  async function fetchRefById(id) {
+    try {
+      const res = await fetch(`/api/references/${id}`);
+      if (!res.ok) return { _id: id, title: '(missing)', locator: '' };
+      return await res.json();
+    } catch (e) {
+      return { _id: id, title: '(error)', locator: '' };
+    }
+  }
+
+  // Add new reference row
+  function addRefRow(title = '', locator = '', existingId = null) {
+    const body = document.getElementById('refsBody');
+    const empty = body.querySelector('.dyn-empty');
+    if (empty) empty.remove();
+
+    const idx = body.querySelectorAll('.dyn-item').length + 1;
+    const row = document.createElement('div');
+    row.className = 'dyn-item';
+    if (existingId) row.setAttribute('data-existing-id', existingId);
+
+    row.innerHTML = `
+      <div class="num">${idx}</div>
+      <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <label style="display:block;margin-bottom:6px;">title <span class="req">*</span></label>
+          <input data-title placeholder="title" value="${(title || '').replaceAll('"', '&quot;')}" ${existingId ? 'disabled' : ''} />
+        </div>
+        <div>
+          <label style="display:block;margin-bottom:6px;">locator</label>
+          <input data-locator placeholder="locator" value="${(locator || '').replaceAll('"', '&quot;')}" ${existingId ? 'disabled' : ''} />
+        </div>
+      </div>
+      <button type="button" class="remove" title="remove">✕</button>
+    `;
+    row.querySelector('.remove').addEventListener('click', () => {
+      row.remove();
+      body.querySelectorAll('.dyn-item').forEach((el, i) => { el.querySelector('.num').textContent = i + 1; });
+      if (body.querySelectorAll('.dyn-item').length === 0) {
+        body.innerHTML = '<div class="dyn-empty">No references</div>';
+      }
+    });
+    body.appendChild(row);
+  }
+
+  function clearReferencesForm() {
+    // Reference Source 초기화
+    const refSourceSelect = document.getElementById('refSourceSelect');
+    if (refSourceSelect) {
+      refSourceSelect.value = '';
+    }
+    // New Source Fields 숨기기
+    const newSourceFields = document.getElementById('newSourceFields');
+    if (newSourceFields) {
+      newSourceFields.classList.remove('show');
+    }
+    const newRefSourceName = document.getElementById('newRefSourceName');
+    const newRefSourceDesc = document.getElementById('newRefSourceDesc');
+    if (newRefSourceName) newRefSourceName.value = '';
+    if (newRefSourceDesc) newRefSourceDesc.value = '';
+
+    // References 초기화
+    const body = document.getElementById('refsBody');
+    body.innerHTML = '<div class="dyn-empty">No references</div>';
+
+    // Hint 초기화
+    const hint = document.getElementById('currentRefSourceHint');
+    if (hint) hint.textContent = '';
+  }
+
+  // Load reference sources
+  async function loadReferenceSources() {
+    try {
+      const res = await fetch('/api/reference-sources?limit=200');
+      const j = await res.json();
+      const sel = document.getElementById('refSourceSelect');
+      sel.innerHTML = '';
+      // Add "Create new" option first
+      const newOpt = document.createElement('option');
+      newOpt.value = '__new__';
+      newOpt.textContent = '+ Create new...';
+      sel.appendChild(newOpt);
+      (j.items || []).forEach(src => {
+        const opt = document.createElement('option');
+        opt.value = src._id;
+        opt.textContent = src.name || src._id;
+        opt.selected = false;
+        sel.appendChild(opt);
+      });
+      sel.selectedIndex = -1;
+      refreshAllMultiSelects();
+    } catch (e) {
+      console.error('Failed to load reference sources:', e);
+    }
+  }
+
+  // Collect references from form
+  function collectReferences() {
+    const refs = [];
+    document.querySelectorAll('#refsBody .dyn-item').forEach(row => {
+      const existingId = row.getAttribute('data-existing-id');
+      const title = row.querySelector('[data-title]')?.value?.trim() || '';
+      const locator = row.querySelector('[data-locator]')?.value?.trim() || '';
+      if (existingId) {
+        refs.push({ _id: existingId, title, locator, isExisting: true });
+      } else if (title) {
+        refs.push({ title, locator, isExisting: false });
+      }
+    });
+    return refs;
   }
 
   // Dynamic list helpers for language/text rows
@@ -695,6 +1297,19 @@
     return Array.from(sel.selectedOptions || []).map(o => o.value).filter(Boolean);
   }
 
+  function singleSelectedValue(sel) {
+    const vals = selectedValues(sel);
+    return vals.length > 0 ? vals[0] : null;
+  }
+
+  // Helper to set value in hidden select and refresh UI
+  function setSelectValue(sel, value) {
+    Array.from(sel.options).forEach(o => {
+      o.selected = (o.value === value);
+    });
+    refreshAllMultiSelects();
+  }
+  
   function parseJsonField(id, fallback) {
     const raw = document.getElementById(id).value.trim();
     if (!raw) return fallback;
@@ -733,26 +1348,20 @@
 
   async function loadRegisters() {
     const sel = document.getElementById('registerId');
+    sel.innerHTML = '';
     const j = await fetchJson('/api/registers?limit=200');
     (j.items || []).forEach(r => {
       const opt = document.createElement('option');
       opt.value = r._id;
       opt.textContent = `${r.name} (${r._id})`;
+      opt.selected = false;
       sel.appendChild(opt);
     });
+    sel.selectedIndex = -1;
+    refreshAllMultiSelects();
   }
 
-  async function loadReferences() {
-    const sel = document.getElementById('referenceIdsSel');
-    clearSelect(sel, false);
-    const j = await fetchJson('/api/references?limit=200');
-    (j.items || []).forEach(r => {
-      const opt = document.createElement('option');
-      opt.value = r._id;
-      opt.textContent = `${(r.title || r.name || '(reference)')} (${r._id})`;
-      sel.appendChild(opt);
-    });
-  }
+  // loadReferences 함수는 Step 3에서 직접 Reference를 추가하는 방식으로 대체됨
 
   async function loadPrItemsToSelect(sel, kind, registerId, opts) {
     const { keepFirstOption=false } = (opts || {});
@@ -767,17 +1376,388 @@
       const opt = document.createElement('option');
       opt.value = it._id;
       opt.textContent = optionLabel(it);
+      opt.selected = false;  // Explicitly set to false when creating
       sel.appendChild(opt);
     });
+    // Deselect all options after loading (prevent auto-select of first option)
+    sel.selectedIndex = -1;
+    Array.from(sel.options).forEach(o => o.selected = false);
   }
 
   const visualKinds = new Set([
     'S100_PR_Symbol','S100_PR_LineStyle','S100_PR_AreaFill','S100_PR_Pixmap'
   ]);
 
+  // Kinds that require file uploads
+  const fileBasedKinds = new Set([
+    'S100_PR_Symbol','S100_PR_LineStyle','S100_PR_AreaFill','S100_PR_Pixmap',
+    'S100_PR_ItemSchema','S100_PR_Font'
+  ]);
+
+  // Store uploaded file data
+  const uploadedFiles = {
+    itemDetail: null,
+    previewImage: null,
+    engineeringImage: null,
+    xmlSchema: null,
+    fontFile: null
+  };
+
+  // File upload visibility based on kind
+  function setFileUploadVisibility(kind) {
+    const card = document.getElementById('fileUploadCard');
+    const sections = ['itemDetail', 'previewImage', 'engineeringImage', 'xmlSchema', 'fontFile'];
+    
+    // Hide all file upload sections first
+    sections.forEach(s => {
+      const el = document.getElementById('fileUpload_' + s);
+      if (el) el.classList.remove('active');
+    });
+
+    if (!fileBasedKinds.has(kind)) {
+      card.style.display = 'none';
+      return;
+    }
+
+    card.style.display = 'block';
+
+    // Visual kinds: Symbol, LineStyle, AreaFill, Pixmap
+    if (visualKinds.has(kind)) {
+      document.getElementById('fileUpload_itemDetail')?.classList.add('active');
+      document.getElementById('fileUpload_previewImage')?.classList.add('active');
+      document.getElementById('fileUpload_engineeringImage')?.classList.add('active');
+    }
+
+    // ItemSchema
+    if (kind === 'S100_PR_ItemSchema') {
+      document.getElementById('fileUpload_xmlSchema')?.classList.add('active');
+    }
+
+    // Font
+    if (kind === 'S100_PR_Font') {
+      document.getElementById('fileUpload_fontFile')?.classList.add('active');
+    }
+  }
+
+  // Format file size
+  function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  // Render file item in list
+  function renderFileItem(target, file, status='pending') {
+    const listEl = document.getElementById('fileList_' + target);
+    listEl.innerHTML = '';
+
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    item.innerHTML = `
+      <div class="file-item-info">
+        <div class="file-item-icon">📎</div>
+        <div class="file-item-details">
+          <div class="file-item-name">${file.name}</div>
+          <div class="file-item-size">${formatFileSize(file.size)}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="file-item-status ${status}">${status === 'pending' ? 'Ready' : status === 'uploading' ? 'Uploading...' : status === 'done' ? 'Uploaded' : 'Error'}</span>
+        <button type="button" class="file-item-remove" data-target="${target}">&times;</button>
+      </div>
+    `;
+    listEl.appendChild(item);
+
+    // Remove button handler
+    item.querySelector('.file-item-remove').addEventListener('click', () => {
+      uploadedFiles[target] = null;
+      listEl.innerHTML = '';
+      document.getElementById('file_' + target).value = '';
+    });
+  }
+
+  // Handle file selection
+  function handleFileSelect(target, file) {
+    if (!file) return;
+    uploadedFiles[target] = file;
+    renderFileItem(target, file, 'pending');
+  }
+
+  // Initialize file upload handlers
+  function initFileUpload() {
+    const targets = ['itemDetail', 'previewImage', 'engineeringImage', 'xmlSchema', 'fontFile'];
+
+    targets.forEach(target => {
+      const dropZone = document.querySelector(`.file-drop[data-target="${target}"]`);
+      const fileInput = document.getElementById('file_' + target);
+
+      if (!dropZone || !fileInput) return;
+
+      // Click to browse
+      dropZone.addEventListener('click', () => fileInput.click());
+
+      // Drag events
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFileSelect(target, files[0]);
+        }
+      });
+
+      // File input change
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleFileSelect(target, e.target.files[0]);
+        }
+      });
+    });
+  }
+
+  // Upload file to server (returns the path)
+  async function uploadFile(target) {
+    const file = uploadedFiles[target];
+    if (!file) return null;
+
+    const listEl = document.getElementById('fileList_' + target);
+    const statusEl = listEl.querySelector('.file-item-status');
+    if (statusEl) {
+      statusEl.className = 'file-item-status uploading';
+      statusEl.textContent = 'Uploading...';
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/files/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.detail || 'Upload failed');
+
+      if (statusEl) {
+        statusEl.className = 'file-item-status done';
+        statusEl.textContent = 'Uploaded';
+      }
+
+      return result.path || result.url || result.file_path;
+    } catch (err) {
+      if (statusEl) {
+        statusEl.className = 'file-item-status error';
+        statusEl.textContent = 'Error';
+      }
+      throw err;
+    }
+  }
+
+  // Upload all pending files for the current kind
+  async function uploadAllFiles(kind) {
+    const paths = {};
+
+    if (visualKinds.has(kind)) {
+      if (uploadedFiles.itemDetail) {
+        paths.itemDetail = await uploadFile('itemDetail');
+      }
+      if (uploadedFiles.previewImage) {
+        paths.previewImage = await uploadFile('previewImage');
+      }
+      if (uploadedFiles.engineeringImage) {
+        paths.engineeringImage = await uploadFile('engineeringImage');
+      }
+    }
+
+    if (kind === 'S100_PR_ItemSchema' && uploadedFiles.xmlSchema) {
+      paths.xmlSchema = await uploadFile('xmlSchema');
+    }
+
+    if (kind === 'S100_PR_Font' && uploadedFiles.fontFile) {
+      paths.fontFile = await uploadFile('fontFile');
+    }
+
+    return paths;
+  }
+
+  // ========== Multi-Select Chips UI ==========
+  function initMultiSelect(container) {
+    const targetId = container.dataset.target;
+    const hiddenSelect = document.getElementById(targetId);
+    if (!hiddenSelect) return;
+
+    const chipsEl = container.querySelector('.multi-select-chips');
+    const dropdownEl = container.querySelector('.multi-select-dropdown');
+    const searchInput = container.querySelector('.multi-select-search input');
+    const optionsEl = container.querySelector('.multi-select-options');
+
+    if (!chipsEl || !dropdownEl || !searchInput || !optionsEl) return;
+
+    // Check if single select mode (0..1)
+    const isSingle = container.dataset.single === 'true';
+
+    // Remove existing event listeners by cloning
+    const newChipsEl = chipsEl.cloneNode(true);
+    chipsEl.parentNode.replaceChild(newChipsEl, chipsEl);
+    const chipsElement = newChipsEl;
+
+    // Build options from hidden select
+    function buildOptions(filter = '') {
+      optionsEl.innerHTML = '';
+      const opts = Array.from(hiddenSelect.options);
+      const filtered = opts.filter(o => o.value && o.text.toLowerCase().includes(filter.toLowerCase()));
+      
+      if (filtered.length === 0) {
+        optionsEl.innerHTML = '<div class="multi-select-empty">No options found</div>';
+        return;
+      }
+
+      filtered.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'multi-select-option' + (opt.selected ? ' selected' : '');
+        div.dataset.value = opt.value;
+        div.innerHTML = `
+          <span class="multi-select-option-check">${opt.selected ? '&#10003;' : ''}</span>
+          <span>${opt.text}</span>
+        `;
+        div.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isSingle) {
+            // Single mode: deselect all first, then select this one (or deselect if already selected)
+            const wasSelected = opt.selected;
+            Array.from(hiddenSelect.options).forEach(o => o.selected = false);
+            if (!wasSelected) {
+              opt.selected = true;
+            }
+            // Auto close dropdown after selection in single mode
+            closeAllDropdowns();
+          } else {
+            // Multi mode: toggle
+            opt.selected = !opt.selected;
+          }
+          updateChips();
+          buildOptions(searchInput.value);
+        });
+        optionsEl.appendChild(div);
+      });
+    }
+
+    // Update chips display
+    function updateChips() {
+      const selected = Array.from(hiddenSelect.selectedOptions);
+      chipsElement.innerHTML = '';
+      
+      if (selected.length === 0) {
+        chipsElement.classList.add('empty');
+      } else {
+        chipsElement.classList.remove('empty');
+        selected.forEach(opt => {
+          const chip = document.createElement('span');
+          chip.className = 'chip';
+          chip.innerHTML = `
+            <span class="chip-text">${opt.text}</span>
+            <button type="button" class="chip-remove" data-value="${opt.value}">&times;</button>
+          `;
+          chip.querySelector('.chip-remove').addEventListener('click', (e) => {
+            e.stopPropagation();
+            opt.selected = false;
+            updateChips();
+            buildOptions(searchInput.value);
+          });
+          chipsElement.appendChild(chip);
+        });
+      }
+    }
+
+    // Toggle dropdown
+    chipsElement.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdownEl.classList.contains('open');
+      closeAllDropdowns();
+      if (!isOpen) {
+        // Position dropdown below chips (fixed positioning)
+        const rect = chipsElement.getBoundingClientRect();
+        dropdownEl.style.top = (rect.bottom + 4) + 'px';
+        dropdownEl.style.left = rect.left + 'px';
+        dropdownEl.style.width = rect.width + 'px';
+        dropdownEl.classList.add('open');
+        searchInput.value = '';
+        buildOptions();
+        searchInput.focus();
+      }
+    });
+
+    // Search filter
+    searchInput.addEventListener('input', () => {
+      buildOptions(searchInput.value);
+    });
+
+    // Prevent dropdown close when clicking inside
+    dropdownEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Initial render - ensure nothing is pre-selected for new forms
+    // (Only deselect if this is initial load, not refresh after user selection)
+    if (!container._initialized) {
+      hiddenSelect.selectedIndex = -1;
+      Array.from(hiddenSelect.options).forEach(o => o.selected = false);
+      container._initialized = true;
+    }
+    updateChips();
+    
+    // Store refresh function for later use
+    container._refresh = () => {
+      buildOptions(searchInput.value);
+      updateChips();
+    };
+  }
+
+  function closeAllDropdowns() {
+    document.querySelectorAll('.multi-select-dropdown.open').forEach(d => d.classList.remove('open'));
+  }
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', closeAllDropdowns);
+
+  // Refresh all multi-select UIs after loading options
+  function refreshAllMultiSelects() {
+    document.querySelectorAll('.multi-select-container').forEach(container => {
+      initMultiSelect(container);
+    });
+  }
+
+  // Initialize all multi-selects immediately (script runs after DOM is parsed)
+  (function initAllMultiSelects() {
+    document.querySelectorAll('.multi-select-container').forEach(container => {
+      initMultiSelect(container);
+    });
+  })();
+
   function setRelVisibility(kind) {
     document.querySelectorAll('.rel-section').forEach(el => el.classList.remove('active'));
     
+    // Optional Links (Visual Kinds) 카드: S100_PR_Symbol, S100_PR_LineStyle, S100_PR_AreaFill, S100_PR_Pixmap 일 때만 표시
+    const optionalLinksCard = document.getElementById('optionalLinksCard');
+    const visualKinds = ['S100_PR_Symbol', 'S100_PR_LineStyle', 'S100_PR_AreaFill', 'S100_PR_Pixmap'];
+    if (visualKinds.includes(kind)) {
+      optionalLinksCard.style.display = 'block';
+    } else {
+      optionalLinksCard.style.display = 'none';
+    }
+
     if (kind === 'S100_PR_LineStyle' || kind === 'S100_PR_AreaFill') {
       document.getElementById('relLineArea').classList.add('active');
     }
@@ -801,10 +1781,9 @@
     }
   }
 
-  function setKindBodyVisibility(kind){
-    // hide all
-    ['kb_visual','kb_itemSchema','kb_viewingGroup','kb_alertMessage','kb_colourToken','kb_paletteItem','kb_contextParameter','kb_drawingPriority','kb_displayPlane','kb_alert','kb_font']
-      .forEach(id => document.getElementById(id)?.classList.remove('active'));
+function setKindBodyVisibility(kind){
+  // hide all kb-sections
+  document.querySelectorAll('.kb-section').forEach(el => el.classList.remove('active'));
 
     // show by kind
     if (['S100_PR_Symbol','S100_PR_LineStyle','S100_PR_AreaFill','S100_PR_Pixmap'].includes(kind)) {
@@ -827,7 +1806,7 @@
     const kind = document.getElementById('kind').value.trim();
 
     // Visual link selects
-    await loadPrItemsToSelect(document.getElementById('itemSchemaSel'), 'S100_PR_ItemSchema', registerId, {keepFirstOption:true});
+    await loadPrItemsToSelect(document.getElementById('itemSchemaSel'), 'S100_PR_ItemSchema', registerId);
     await loadPrItemsToSelect(document.getElementById('colourTokenSel'), 'S100_PR_ColourToken', registerId);
 
     // Kind relations
@@ -845,7 +1824,7 @@
       await loadPrItemsToSelect(document.getElementById('ah_msgSel'), 'S100_PR_AlertMessage', registerId);
     }
     if (kind === 'S100_PR_AlertMessage') {
-      await loadPrItemsToSelect(document.getElementById('iconSel'), 'S100_PR_Symbol', registerId, {keepFirstOption:true});
+      await loadPrItemsToSelect(document.getElementById('iconSel'), 'S100_PR_Symbol', registerId);
     }
     if (kind === 'S100_PR_ColourToken') {
       await loadPrItemsToSelect(document.getElementById('ct_valueSel'), 'S100_PR_PaletteItem', registerId);
@@ -853,6 +1832,9 @@
     if (kind === 'S100_PR_PaletteItem') {
       await loadPrItemsToSelect(document.getElementById('pi_paletteSel'), 'S100_PR_ColourPalette', registerId);
     }
+
+    // Refresh multi-select chips UI after loading options
+    refreshAllMultiSelects();
   }
 
   function buildDescription(){
@@ -880,12 +1862,12 @@
       out.itemDetail = document.getElementById('kb_itemDetail').value.trim() || null;
       out.previewImage = document.getElementById('kb_previewImage').value.trim() || null;
       out.engineeringImage = document.getElementById('kb_engineeringImage').value.trim() || null;
-      out.previewType = document.getElementById('kb_previewType').value || null;
-      out.engineeringImageType = document.getElementById('kb_engineeringImageType').value || null;
+      out.previewType = singleSelectedValue(document.getElementById('kb_previewType')) || null;
+      out.engineeringImageType = singleSelectedValue(document.getElementById('kb_engineeringImageType')) || null;
     }
 
     if (kind === 'S100_PR_ItemSchema') {
-      out.schemaKind = document.getElementById('kb_schemaKind').value;
+      out.schemaKind = singleSelectedValue(document.getElementById('kb_schemaKind'));
       out.xmlSchema = document.getElementById('kb_xmlSchema').value.trim() || null;
     }
 
@@ -919,7 +1901,7 @@
     }
 
     if (kind === 'S100_PR_ContextParameter') {
-      out.parameterType = document.getElementById('kb_cp_type').value;
+      out.parameterType = singleSelectedValue(document.getElementById('kb_cp_type'));
       out.defaultValue = document.getElementById('kb_cp_default').value.trim() || '';
     }
 
@@ -944,37 +1926,70 @@
     return out;
   }
 
+  // Kind별 연관관계 필드를 top-level로 수집하는 함수
+  // Helper: 0..1 필드에서 첫 번째 선택값만 가져오기
+  function singleSelectedValue(selectEl) {
+    const vals = selectedValues(selectEl);
+    return vals.length > 0 ? vals[0] : null;
+  }
+
+  function collectRelations(kind) {
+    const rel = {};
+
+    // S100_PR_LineStyle, S100_PR_AreaFill: symbol [0..1]
+    if (kind === 'S100_PR_LineStyle' || kind === 'S100_PR_AreaFill') {
+      rel.symbol = singleSelectedValue(document.getElementById('symbolSel'));
+    }
+
+    // S100_PR_ViewingGroupLayer: displayMode [0..*]
+    if (kind === 'S100_PR_ViewingGroupLayer') {
+      rel.displayMode = selectedValues(document.getElementById('displayModeSel'));
+    }
+
+    // S100_PR_ViewingGroup: viewingGroup (ViewingGroupLayer) [0..*]
+    if (kind === 'S100_PR_ViewingGroup') {
+      rel.viewingGroup = selectedValues(document.getElementById('viewingGroupLayerSel'));
+    }
+
+    // S100_PR_AlertHighlight: viewingGroup [0..*], msg [0..1]
+    if (kind === 'S100_PR_AlertHighlight') {
+      rel.viewingGroup = selectedValues(document.getElementById('ah_viewingGroupSel'));
+      rel.msg = singleSelectedValue(document.getElementById('ah_msgSel'));
+    }
+
+    // S100_PR_AlertMessage: icon (Symbol) [0..1]
+    if (kind === 'S100_PR_AlertMessage') {
+      rel.icon = singleSelectedValue(document.getElementById('iconSel'));
+    }
+
+    // S100_PR_ColourToken: value (PaletteItem) [0..1]
+    if (kind === 'S100_PR_ColourToken') {
+      rel.value = singleSelectedValue(document.getElementById('ct_valueSel'));
+    }
+
+    // S100_PR_PaletteItem: palette (ColourPalette) [0..*]
+    if (kind === 'S100_PR_PaletteItem') {
+      rel.palette = selectedValues(document.getElementById('pi_paletteSel'));
+    }
+
+    return rel;
+  }
+
   function injectRelationsIntoKindBody(kind, obj) {
     const out = (obj && typeof obj === 'object') ? JSON.parse(JSON.stringify(obj)) : {};
 
-    if (kind === 'S100_PR_LineStyle') {
-      out.symbol = selectedValues(document.getElementById('symbolSel'));
-    }
-    if (kind === 'S100_PR_AreaFill') {
-      out.symbol = selectedValues(document.getElementById('symbolSel'));
-    }
-    if (kind === 'S100_PR_ViewingGroupLayer') {
-      out.displayMode = selectedValues(document.getElementById('displayModeSel'));
-    }
+    // kindBody에는 연관관계 외의 kind-specific 필드만 유지
+    // 연관관계 필드는 이제 top-level로 저장되므로 kindBody에서 제거
+
     if (kind === 'S100_PR_ViewingGroup') {
       out.foundationMode = !!document.getElementById('foundationMode').checked;
-      out.viewingGroup = selectedValues(document.getElementById('viewingGroupLayerSel'));
     }
     if (kind === 'S100_PR_AlertHighlight') {
       out.optional = !!document.getElementById('ah_optional').checked;
-      out.style = document.getElementById('ah_style').value;
-      out.viewingGroup = selectedValues(document.getElementById('ah_viewingGroupSel'));
-      out.msg = selectedValues(document.getElementById('ah_msgSel'));
-    }
-    if (kind === 'S100_PR_AlertMessage') {
-      out.icon = document.getElementById('iconSel').value || null;
+      out.style = singleSelectedValue(document.getElementById('ah_style'));
     }
     if (kind === 'S100_PR_ColourToken') {
       out.token = document.getElementById('ct_token').value.trim() || out.token || '';
-      out.value = selectedValues(document.getElementById('ct_valueSel'));
-    }
-    if (kind === 'S100_PR_PaletteItem') {
-      out.palette = selectedValues(document.getElementById('pi_paletteSel'));
     }
 
     return out;
@@ -1070,11 +2085,11 @@
       document.getElementById('kb_itemDetail').value = 's3://bucket/path/itemDetail.bin';
       document.getElementById('kb_previewImage').value = 's3://bucket/path/preview.png';
       document.getElementById('kb_engineeringImage').value = 's3://bucket/path/engineering.png';
-      document.getElementById('kb_previewType').value = 'png';
-      document.getElementById('kb_engineeringImageType').value = 'png';
+      setSelectValue(document.getElementById('kb_previewType'), 'png');
+      setSelectValue(document.getElementById('kb_engineeringImageType'), 'png');
     }
     if (kind === 'S100_PR_ItemSchema') {
-      document.getElementById('kb_schemaKind').value = 'S100_PR_SymbolSchema';
+      setSelectValue(document.getElementById('kb_schemaKind'), 'S100_PR_SymbolSchema');
       document.getElementById('kb_xmlSchema').value = 's3://bucket/path/schema.xsd';
     }
     if (kind === 'S100_PR_ViewingGroup') {
@@ -1098,7 +2113,7 @@
       document.getElementById('kb_pi_z').value = '0';
     }
     if (kind === 'S100_PR_ContextParameter') {
-      document.getElementById('kb_cp_type').value = 'string';
+      setSelectValue(document.getElementById('kb_cp_type'), 'string');
       document.getElementById('kb_cp_default').value = 'sample';
     }
     if (kind === 'S100_PR_DrawingPriority') {
@@ -1123,7 +2138,7 @@
     try {
       await refreshAllOptionLists();
 
-      const registerId = document.getElementById('registerId').value.trim();
+      const registerId = singleSelectedValue(document.getElementById('registerId')) || '';
       if (!registerId) {
         banner.textContent = 'Sample filled. (Select a register to load options.)';
         banner.style.display = 'block';
@@ -1145,7 +2160,7 @@
       }
       if (kind === 'S100_PR_AlertHighlight') {
         document.getElementById('ah_optional').checked = false;
-        document.getElementById('ah_style').value = 'AlarmHighlight';
+        setSelectValue(document.getElementById('ah_style'), 'AlarmHighlight');
       }
       if (kind === 'S100_PR_ViewingGroup') {
         document.getElementById('foundationMode').checked = false;
@@ -1159,14 +2174,41 @@
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
-    await loadRegisters();
-    await loadReferences();
+    // Initialize multi-select UI for static options first
+    refreshAllMultiSelects();
 
-    const kind = document.getElementById('kind').value;
+    await loadRegisters();
+    await loadReferenceSources();
+  
+    // Refresh multi-selects after dynamic options are loaded
+    refreshAllMultiSelects();
+
+    const kind = singleSelectedValue(document.getElementById('kind'));
     setRelVisibility(kind);
     setKindBodyVisibility(kind);
-
+    setFileUploadVisibility(kind);
+    initFileUpload();
+  
     document.getElementById('fillSample').addEventListener('click', onFillSample);
+
+    // Add Reference button
+    document.getElementById('addRefBtn').addEventListener('click', () => {
+      addRefRow('', '');
+    });
+
+    // Toggle New Source Fields visibility
+    const refSourceSelect = document.getElementById('refSourceSelect');
+    if (refSourceSelect) {
+      refSourceSelect.addEventListener('change', function() {
+        const newSourceFields = document.getElementById('newSourceFields');
+        const val = singleSelectedValue(this);
+        if (val === '__new__') {
+          newSourceFields.classList.add('show');
+        } else {
+          newSourceFields.classList.remove('show');
+        }
+      });
+    }
 
     // description list
     document.getElementById('descAdd').addEventListener('click', () => {
@@ -1190,10 +2232,11 @@
       }
     });
 
-    document.getElementById('kind').addEventListener('change', async () => {
-      const k = document.getElementById('kind').value;
-      setRelVisibility(k);
-      setKindBodyVisibility(k);
+document.getElementById('kind').addEventListener('change', async () => {
+  const k = singleSelectedValue(document.getElementById('kind'));
+  setRelVisibility(k);
+  setKindBodyVisibility(k);
+  setFileUploadVisibility(k);
       try {
         await refreshAllOptionLists();
       } finally {
@@ -1207,16 +2250,38 @@
     e.preventDefault();
 
     try {
-      const registerId = document.getElementById('registerId').value.trim();
-      const kind = document.getElementById('kind').value.trim();
+      const registerId = singleSelectedValue(document.getElementById('registerId')) || '';
+      const kind = singleSelectedValue(document.getElementById('kind')) || '';
 
-      if (!registerId) {
-        showToast('Register is required.', 'error');
-        return;
-      }
+  if (!registerId) {
+  showToast('Register is required.', 'error');
+  return;
+  }
 
-      const uiKindBody = buildKindBody(kind);
-      const kindBody = injectRelationsIntoKindBody(kind, uiKindBody);
+  // Upload files if needed for file-based kinds
+  let uploadedPaths = {};
+  if (fileBasedKinds.has(kind)) {
+    try {
+      uploadedPaths = await uploadAllFiles(kind);
+    } catch (uploadErr) {
+      showToast('File upload failed: ' + String(uploadErr.message || uploadErr), 'error');
+      return;
+    }
+  }
+  
+  const uiKindBody = buildKindBody(kind);
+
+  // Inject uploaded file paths into kindBody
+  if (uploadedPaths.itemDetail) uiKindBody.itemDetail = uploadedPaths.itemDetail;
+  if (uploadedPaths.previewImage) uiKindBody.previewImage = uploadedPaths.previewImage;
+  if (uploadedPaths.engineeringImage) uiKindBody.engineeringImage = uploadedPaths.engineeringImage;
+  if (uploadedPaths.xmlSchema) uiKindBody.xmlSchema = uploadedPaths.xmlSchema;
+  if (uploadedPaths.fontFile) uiKindBody.fontFile = uploadedPaths.fontFile;
+
+  const kindBody = injectRelationsIntoKindBody(kind, uiKindBody);
+
+      // Kind별 연관관계 필드 수집 (top-level로 전송)
+      const relations = collectRelations(kind);
 
       const payload = {
         registerId,
@@ -1238,8 +2303,31 @@
         description: buildDescription(),
         itemSchema: document.getElementById('itemSchemaSel').value || null,
         colourToken: selectedValues(document.getElementById('colourTokenSel')),
+        // Kind별 연관관계 필드 (top-level)
+        symbol: relations.symbol || null,
+        displayMode: relations.displayMode || [],
+        viewingGroup: relations.viewingGroup || [],
+        msg: relations.msg || null,
+        icon: relations.icon || null,
+        value: relations.value || null,
+        palette: relations.palette || [],
         kindBody: kindBody,
-        referenceIds: selectedValues(document.getElementById('referenceIdsSel')),
+        // References 처리
+        referenceSourceId: (() => {
+          const sel = document.getElementById('refSourceSelect');
+          const val = singleSelectedValue(sel);
+          if (!val || val === '__new__') return null;
+          return val;
+        })(),
+        newReferenceSource: (() => {
+          const sel = document.getElementById('refSourceSelect');
+          if (singleSelectedValue(sel) !== '__new__') return null;
+          const name = document.getElementById('newRefSourceName').value.trim();
+          const desc = document.getElementById('newRefSourceDesc').value.trim();
+          if (!name) return null;
+          return { name, description: desc || null };
+        })(),
+        references: collectReferences(),
         managementInfos: [
           {
             proposalType: document.getElementById('mi_proposalType').value.trim() || 'Addition',

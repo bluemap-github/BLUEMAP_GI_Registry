@@ -314,6 +314,30 @@ class PRRegisterItemCreate(BaseModel):
     itemSchema: Optional[ObjectIdStr] = None
     colourToken: List[ObjectIdStr] = Field(default_factory=list)
 
+    # -------------------------
+    # Kind별 연관관계 필드 (top-level로 저장)
+    # -------------------------
+    # S100_PR_LineStyle, S100_PR_AreaFill: symbol [0..1]
+    symbol: Optional[ObjectIdStr] = None
+
+    # S100_PR_ViewingGroupLayer: displayMode [0..*]
+    displayMode: List[ObjectIdStr] = Field(default_factory=list)
+
+    # S100_PR_ViewingGroup: viewingGroup (ViewingGroupLayer) [0..*]
+    viewingGroup: List[ObjectIdStr] = Field(default_factory=list)
+
+    # S100_PR_AlertHighlight: viewingGroup [0..*] (위와 동일 필드), msg [0..1]
+    msg: Optional[ObjectIdStr] = None
+
+    # S100_PR_AlertMessage: icon (Symbol) [0..1]
+    icon: Optional[ObjectIdStr] = None
+
+    # S100_PR_ColourToken: value (PaletteItem) [0..1]
+    value: Optional[ObjectIdStr] = None
+
+    # S100_PR_PaletteItem: palette (ColourPalette) [0..*]
+    palette: List[ObjectIdStr] = Field(default_factory=list)
+
     # kind별 세부 내용: 그대로 저장 (예: S100_PR_Symbol, S100_PR_ItemSchema 등)
     kindBody: Optional[Dict[str, Any]] = None
 
@@ -329,6 +353,16 @@ class PRRegisterItemPatch(BaseModel):
 
     itemSchema: Optional[ObjectIdStr] = None
     colourToken: Optional[List[ObjectIdStr]] = None
+
+    # Kind별 연관관계 필드
+    symbol: Optional[ObjectIdStr] = None
+    displayMode: Optional[List[ObjectIdStr]] = None
+    viewingGroup: Optional[List[ObjectIdStr]] = None
+    msg: Optional[ObjectIdStr] = None
+    icon: Optional[ObjectIdStr] = None
+    value: Optional[ObjectIdStr] = None
+    palette: Optional[List[ObjectIdStr]] = None
+
     kindBody: Optional[Dict[str, Any]] = None
     referenceIds: Optional[List[ObjectIdStr]] = None
 
@@ -336,7 +370,7 @@ class PRRegisterItemPatch(BaseModel):
     managementInfo: ManagementInfoCreate
 
 # ---------- 3) Reference Sources ----------
-# (현재 UI/API 호환을 위해 MVP 구조 유지)
+# (현재 UI/API 호환��� 위해 MVP 구조 유지)
 class ReferenceSourceCreate(BaseModel):
     name: str
     description: Optional[str] = None

@@ -64,6 +64,144 @@
     margin: 0 auto;
   }
 
+  /* Category Cards Section */
+  .category-section {
+    margin-bottom: 32px;
+  }
+  .category-section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .category-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .category-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    padding: 16px 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .category-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--card-accent, var(--primary));
+  }
+  .category-card:hover {
+    border-color: var(--card-accent, var(--primary));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  .category-card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .category-card-count {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--card-accent, var(--primary));
+  }
+
+  /* Card accent colors - Data Repositories */
+  .category-card.registers { --card-accent: #f59e0b; }
+  .category-card.concepts { --card-accent: #8b5cf6; }
+  .category-card.dd { --card-accent: #06b6d4; }
+  .category-card.pr { --card-accent: #10b981; }
+
+  /* Create New Cards - Second Row */
+  .create-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .create-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 2px dashed var(--border);
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .create-card:hover {
+    border-color: var(--card-accent, var(--primary));
+    border-style: solid;
+    background: rgba(37, 99, 235, 0.02);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  .create-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--card-accent, var(--primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .create-card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .create-card-content {
+    flex: 1;
+  }
+  .create-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .create-card-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Create card accent colors */
+  .create-card.new-dd { --card-accent: #06b6d4; }
+  .create-card.new-pr { --card-accent: #10b981; }
+  .create-card.new-register { --card-accent: #f59e0b; }
+
+  @media (max-width: 1200px) {
+    .category-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .create-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .category-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .create-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 480px) {
+    .category-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* Container */
   .container {
     max-width: 1400px;
@@ -236,11 +374,77 @@
   </div>
 </section>
 
-<!-- Recently Added Section -->
+<!-- Category Cards Section -->
 <div class="container">
+  <!-- First Row: Data Repositories -->
+  <div class="category-section">
+    <div class="category-section-label">Data Repositories</div>
+    <section class="category-cards">
+      <a href="/ui/registers" class="category-card registers">
+        <div class="category-card-title">GI Registers</div>
+        <div class="category-card-count" id="count-registers">-</div>
+      </a>
+      <a href="/ui/concepts" class="category-card concepts">
+        <div class="category-card-title">Concepts</div>
+        <div class="category-card-count" id="count-concepts">-</div>
+      </a>
+      <a href="/ui/dd" class="category-card dd">
+        <div class="category-card-title">Data Dictionary</div>
+        <div class="category-card-count" id="count-dd">-</div>
+      </a>
+      <a href="/ui/pr" class="category-card pr">
+        <div class="category-card-title">Portrayal</div>
+        <div class="category-card-count" id="count-pr">-</div>
+      </a>
+    </section>
+  </div>
+
+  <!-- Second Row: Create New Items -->
+  <div class="category-section">
+    <div class="category-section-label">Create New</div>
+    <section class="create-cards">
+      <a href="/ui/dd/new" class="create-card new-dd">
+        <div class="create-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </div>
+        <div class="create-card-content">
+          <div class="create-card-title">New Data Dictionary Item</div>
+          <div class="create-card-desc">Create a new DD entry</div>
+        </div>
+      </a>
+      <a href="/ui/pr/new" class="create-card new-pr">
+        <div class="create-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </div>
+        <div class="create-card-content">
+          <div class="create-card-title">New Portrayal Item</div>
+          <div class="create-card-desc">Create a new PR entry</div>
+        </div>
+      </a>
+      <a href="/ui/registers/new" class="create-card new-register">
+        <div class="create-card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </div>
+        <div class="create-card-content">
+          <div class="create-card-title">New Register</div>
+          <div class="create-card-desc">Create a new GI Register</div>
+        </div>
+      </a>
+    </section>
+  </div>
+</div>
+
+<!-- Recently Added Section -->
+<div class="container" style="padding-top: 0;">
   <header class="section-header">
     <h2 class="section-title">Recently Added</h2>
-    <a href="/ui/dd/list" class="view-all-link">
+    <a href="/ui/dd" class="view-all-link">
       View All
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="9 18 15 12 9 6"></polyline>

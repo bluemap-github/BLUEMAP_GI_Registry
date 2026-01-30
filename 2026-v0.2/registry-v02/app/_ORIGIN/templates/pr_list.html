@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}Portrayal Register{% endblock %}
+
+{% block extra_styles %}
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root { --primary:#2563eb; --primary-hover:#1d4ed8; --bg:#f8fafc; --card-bg:#fff; --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0; --success:#10b981; --warning:#f59e0b; --info:#06b6d4; --danger:#ef4444; --radius:8px; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .container { max-width:1400px; margin:0 auto; padding:24px; }
+  .page-header { margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .breadcrumb { display:flex; align-items:center; gap:8px; font-size:14px; color:var(--text-muted); margin-bottom:16px; }
+  .breadcrumb a { color:var(--text-muted); text-decoration:none; transition:color .2s; }
+  .breadcrumb a:hover { color:var(--primary); }
+  .breadcrumb .current { color:var(--primary); font-weight:500; }
+  .page-title { font-size:28px; font-weight:700; color:var(--text); }
+
+  .filter-section { background:var(--card-bg); border-radius:var(--radius); padding:20px; margin-bottom:24px; border:1px solid var(--border); }
+  .filter-row { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; }
+  .filter-group { display:flex; flex-direction:column; gap:6px; min-width:150px; }
+  .filter-group label { font-size:13px; font-weight:500; color:var(--text-muted); }
+  .filter-group select,.filter-group input { padding:10px 14px; border:1px solid var(--border); border-radius:var(--radius); font-size:14px; background:var(--card-bg); color:var(--text); transition:all .2s; }
+  .filter-group select:focus,.filter-group input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,.1); }
+  .search-wrapper { position:relative; flex:1; min-width:200px; }
+  .search-wrapper svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); }
+  .search-wrapper input { padding-left:40px; width:100%; }
+
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:var(--radius); font-size:14px; font-weight:500; cursor:pointer; transition:all .2s; border:1px solid transparent; }
+  .btn svg { width:16px; height:16px; }
+  .btn-primary { background:var(--primary); color:#fff; }
+  .btn-primary:hover { background:var(--primary-hover); }
+  .btn-outline { background:transparent; border-color:var(--border); color:var(--text); }
+  .btn-outline:hover { background:var(--bg); border-color:var(--primary); color:var(--primary); }
+  .btn-success { background:var(--success); color:#fff; }
+  .btn-success:hover { background:#059669; }
+
+  .table-section { background:var(--card-bg); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+  .table-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .table-info { color:var(--text-muted); font-size:14px; }
+  .table-container { overflow:auto; }
+  table { width:100%; border-collapse:collapse; }
+  thead th { text-align:left; padding:14px 16px; font-size:13px; color:var(--text-muted); font-weight:600; background:var(--bg); border-bottom:1px solid var(--border); white-space:nowrap; }
+  tbody td { padding:14px 16px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  tbody tr { cursor:pointer; transition:background .2s; }
+  tbody tr:hover { background:rgba(37,99,235,.04); }
+  .badge { display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; }
+  .badge.draft { background:rgba(6,182,212,.15); color:var(--info); }
+  .badge.valid { background:rgba(16,185,129,.15); color:var(--success); }
+  .badge.deprecated { background:rgba(239,68,68,.15); color:var(--danger); }
+  .empty-state { padding:36px 16px; text-align:center; color:var(--text-muted); }
+
+  /* Kind Cards */
+  .kind-section { margin-bottom:24px; }
+  .kind-cards { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:12px; }
+  .kind-card { 
+    flex:1; min-width:140px; max-width:200px;
+    background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius);
+    padding:14px 16px; cursor:pointer; transition:all .2s; position:relative;
+    border-left:4px solid var(--card-color, var(--primary));
+  }
+  .kind-card:hover { border-color:var(--card-color, var(--primary)); box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  .kind-card.active { border-color:var(--card-color, var(--primary)); background:rgba(37,99,235,.04); box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  .kind-card-label { font-size:13px; color:var(--text-muted); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .kind-card-count { font-size:22px; font-weight:700; color:var(--card-color, var(--primary)); }
+  .kind-toggle { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--primary); cursor:pointer; background:none; border:none; padding:8px 0; }
+  .kind-toggle:hover { text-decoration:underline; }
+  .kind-toggle svg { transition:transform .2s; }
+  .kind-toggle.expanded svg { transform:rotate(180deg); }
+  .kind-cards-hidden { display:none; }
+  .kind-cards-hidden.show { display:flex; flex-wrap:wrap; gap:12px; margin-top:12px; }
+
+  @media (max-width:768px){ 
+    .container{padding:16px} 
+    .page-title{font-size:22px} 
+    .filter-row{flex-direction:column} 
+    .filter-group{width:100%} 
+    .search-wrapper{width:100%} 
+    .page-header{flex-direction:column; align-items:flex-start}
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <header class="page-header">
+    <div>
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/ui/registers">GI Registers</a>
+        <span>/</span>
+        <span class="current">Portrayal Register</span>
+      </nav>
+      <h1 class="page-title">Portrayal Register</h1>
+    </div>
+    <button class="btn btn-success" id="btnNew">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      New PR Item
+    </button>
+  </header>
+
+  <!-- Kind Filter Cards -->
+  <section class="kind-section">
+    <div class="kind-cards" id="kindCardsMain"></div>
+    <button class="kind-toggle" id="kindToggle">
+      <span id="kindToggleText">Show more</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+    <div class="kind-cards-hidden" id="kindCardsMore"></div>
+  </section>
+
+  <!-- Filters -->
+  <section class="filter-section">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="registerSelect">Register</label>
+        <select id="registerSelect">
+          <option value="">(all)</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="searchBy">Search By</label>
+        <select id="searchBy">
+          <option value="name">Name</option>
+          <option value="itemIdentifier">Item ID</option>
+        </select>
+      </div>
+
+      <div class="filter-group search-wrapper">
+        <label for="q">Search</label>
+        <div class="search-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="q" type="text" placeholder="Search items..." />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label for="status">Status</label>
+        <select id="status">
+          <option value="">All Status</option>
+          <option value="Draft">Draft</option>
+          <option value="Valid">Valid</option>
+          <option value="Pending">Pending</option>
+          <option value="Deprecated">Deprecated</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" id="btnLoad">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        Load
+      </button>
+    </div>
+  </section>
+
+  <!-- Data Table -->
+  <section class="table-section">
+    <div class="table-header">
+      <div class="table-info" id="meta">Loading...</div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Name</th>
+            <th>Kind</th>
+            <th>Status</th>
+            <th>Updated At</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Kind definitions with colors
+  const KIND_LIST = [
+    { value: '', label: 'All', color: '#2563eb' },
+    { value: 'S100_PR_Symbol', label: 'Symbol', color: '#7c3aed' },
+    { value: 'S100_PR_LineStyle', label: 'LineStyle', color: '#f59e0b' },
+    { value: 'S100_PR_AreaFill', label: 'AreaFill', color: '#10b981' },
+    { value: 'S100_PR_Pixmap', label: 'Pixmap', color: '#ef4444' },
+    { value: 'S100_PR_ItemSchema', label: 'ItemSchema', color: '#06b6d4' },
+    { value: 'S100_PR_DisplayMode', label: 'DisplayMode', color: '#8b5cf6' },
+    { value: 'S100_PR_ViewingGroupLayer', label: 'ViewingGroupLayer', color: '#ec4899' },
+    { value: 'S100_PR_ViewingGroup', label: 'ViewingGroup', color: '#14b8a6' },
+    { value: 'S100_PR_AlertHighlight', label: 'AlertHighlight', color: '#f97316' },
+    { value: 'S100_PR_AlertMessage', label: 'AlertMessage', color: '#6366f1' },
+    { value: 'S100_PR_ColourToken', label: 'ColourToken', color: '#84cc16' },
+    { value: 'S100_PR_ColourPalette', label: 'ColourPalette', color: '#0ea5e9' },
+    { value: 'S100_PR_Alert', label: 'Alert', color: '#dc2626' },
+    { value: 'S100_PR_PaletteItem', label: 'PaletteItem', color: '#a855f7' },
+    { value: 'S100_PR_Font', label: 'Font', color: '#64748b' },
+    { value: 'S100_PR_ContextParameter', label: 'ContextParameter', color: '#059669' },
+    { value: 'S100_PR_DrawingPriority', label: 'DrawingPriority', color: '#d946ef' },
+    { value: 'S100_PR_DisplayPlane', label: 'DisplayPlane', color: '#0284c7' }
+  ];
+
+  const VISIBLE_COUNT = 6;
+  let selectedKind = '';
+  let kindCounts = {};
+
+  function escapeHtml(s) {
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function fmtDate(v) {
+    if (!v) return '';
+    try {
+      const d = new Date(v);
+      if (isNaN(d.getTime())) return String(v);
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    } catch (e) {
+      return String(v);
+    }
+  }
+
+  function getStatusClass(status) {
+    const s = String(status || '').toLowerCase();
+    if (s === 'draft') return 'draft';
+    if (s === 'valid') return 'valid';
+    if (s === 'deprecated') return 'deprecated';
+    return 'draft';
+  }
+
+  function createKindCard(kind, isActive) {
+    const count = kindCounts[kind.value] ?? 0;
+    const activeClass = isActive ? 'active' : '';
+    return `
+      <div class="kind-card ${activeClass}" data-kind="${escapeHtml(kind.value)}" style="--card-color:${kind.color}">
+        <div class="kind-card-label">${escapeHtml(kind.label)}</div>
+        <div class="kind-card-count">${count}</div>
+      </div>
+    `;
+  }
+
+  function renderKindCards() {
+    const mainContainer = document.getElementById('kindCardsMain');
+    const moreContainer = document.getElementById('kindCardsMore');
+    const toggleBtn = document.getElementById('kindToggle');
+
+    const mainKinds = KIND_LIST.slice(0, VISIBLE_COUNT);
+    const moreKinds = KIND_LIST.slice(VISIBLE_COUNT);
+
+    mainContainer.innerHTML = mainKinds.map(k => createKindCard(k, selectedKind === k.value)).join('');
+    moreContainer.innerHTML = moreKinds.map(k => createKindCard(k, selectedKind === k.value)).join('');
+
+    // Show/hide toggle button
+    toggleBtn.style.display = moreKinds.length > 0 ? 'flex' : 'none';
+
+    // Add click handlers
+    document.querySelectorAll('.kind-card').forEach(card => {
+      card.addEventListener('click', () => {
+        selectedKind = card.dataset.kind;
+        document.querySelectorAll('.kind-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        loadItems();
+      });
+    });
+  }
+
+  async function loadKindCounts() {
+    try {
+      const res = await fetch('/api/pr/items?limit=1000');
+      const j = await res.json();
+      const items = j.items || [];
+      
+      // Reset counts
+      kindCounts = { '': items.length };
+      KIND_LIST.forEach(k => {
+        if (k.value) kindCounts[k.value] = 0;
+      });
+
+      // Count by kind
+      items.forEach(item => {
+        const kind = item.kind || '';
+        if (kindCounts.hasOwnProperty(kind)) {
+          kindCounts[kind]++;
+        }
+      });
+
+      renderKindCards();
+    } catch (e) {
+      console.error(e);
+      renderKindCards();
+    }
+  }
+
+  // Toggle more kinds
+  document.getElementById('kindToggle').addEventListener('click', function() {
+    const moreContainer = document.getElementById('kindCardsMore');
+    const toggleText = document.getElementById('kindToggleText');
+    const isExpanded = moreContainer.classList.toggle('show');
+    this.classList.toggle('expanded', isExpanded);
+    toggleText.textContent = isExpanded ? 'Show less' : 'Show more';
+  });
+
+  async function loadRegisters() {
+    const sel = document.getElementById('registerSelect');
+    try {
+      const res = await fetch('/api/registers?limit=200');
+      const j = await res.json();
+      const items = j.items || [];
+      for (const r of items) {
+        const opt = document.createElement('option');
+        opt.value = r._id;
+        opt.textContent = `${r.name} (${r._id})`;
+        sel.appendChild(opt);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function buildParams() {
+    const params = new URLSearchParams();
+    params.set('page', '1');
+    params.set('limit', '100');
+
+    const registerId = document.getElementById('registerSelect').value.trim();
+    const q = document.getElementById('q').value.trim();
+    const searchBy = document.getElementById('searchBy').value;
+    const status = document.getElementById('status').value;
+
+    if (registerId) params.set('registerId', registerId);
+    if (selectedKind) params.set('kind', selectedKind);
+    if (q) params.set('q', q);
+    if (searchBy) params.set('searchBy', searchBy);
+    if (status) params.set('status', status);
+
+    params.set('sortBy', 'updatedAt');
+    params.set('sortOrder', 'desc');
+
+    return params;
+  }
+
+  async function loadItems() {
+    const tbody = document.getElementById('tbody');
+    const meta = document.getElementById('meta');
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5">
+          <div class="empty-state">Loading...</div>
+        </td>
+      </tr>
+    `;
+
+    const params = buildParams();
+    const url = '/api/pr/items?' + params.toString();
+
+    try {
+      const res = await fetch(url);
+      const j = await res.json();
+      const items = j.items || [];
+      const total = j.total ?? items.length;
+      meta.innerHTML = `Showing <strong>${items.length}</strong> of <strong>${total}</strong> items`;
+
+      if (items.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">No items found</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = items.map(it => {
+        const id = it._id;
+        const itemIdentifier = (it.prItem && it.prItem.itemIdentifier) ? it.prItem.itemIdentifier : '';
+        const name = (it.prItem && it.prItem.name) ? it.prItem.name : '';
+        const status = (it.prItem && it.prItem.itemStatus) ? it.prItem.itemStatus : '';
+        const statusClass = getStatusClass(status);
+        return `
+          <tr data-id="${escapeHtml(id)}">
+            <td>${escapeHtml(itemIdentifier)}</td>
+            <td>${escapeHtml(name)}</td>
+            <td>${escapeHtml(it.kind || '')}</td>
+            <td><span class="badge ${statusClass}">${escapeHtml(status)}</span></td>
+            <td>${escapeHtml(fmtDate(it.updatedAt))}</td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.querySelectorAll('tr').forEach(tr => {
+        tr.addEventListener('click', () => {
+          const id = tr.getAttribute('data-id');
+          if (id) window.location.href = '/ui/pr/' + id;
+        });
+      });
+
+    } catch (e) {
+      console.error(e);
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5">
+            <div class="empty-state">Failed to load items</div>
+          </td>
+        </tr>
+      `;
+      meta.textContent = 'Error loading data';
+    }
+  }
+
+  // Enter key support for search
+  document.getElementById('q').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') loadItems();
+  });
+
+  document.getElementById('btnLoad').addEventListener('click', loadItems);
+  document.getElementById('btnNew').addEventListener('click', () => {
+    window.location.href = '/ui/pr/new';
+  });
+
+  // Initialize
+  Promise.all([loadRegisters(), loadKindCounts()]).then(() => {
+    loadItems();
+  });
+</script>
+{% endblock %}
